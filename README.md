@@ -11,4 +11,13 @@ The game will be played between two or more players locally. Initially, the game
 
 This project is of interest to me since *Scrabble* was one of my favorite board games as a kid, and I still enjoy it. Furthermore, I dislike how the online or mobile application versions of *Scrabble* I have used automatically indicate to the user whether the word they have played is valid. This fundamentally changes how the game is played compared to the version with a physical board since it allows players to guess and check words as many times as they would like without any consequence.
 
+## User Stories
+1. As a user I want to be able to create a new board.
 
+2. As a user I want to be able to move letters from my tile rack onto the board.
+
+3. As a user I want to have the appropriate number of letters added to my rack at the start of my first turn, or after I play a word.
+
+4. As a user I want to be able to view the remaining quantity of each letter tile, combined between my opponents' tile racks and the draw bag.
+
+5. As a user, when I play a word I want to have it added to my history of words played, including its letters, start and end coordinates and its points.
