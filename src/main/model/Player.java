@@ -9,10 +9,13 @@ public class Player {
 // Initializes a player with given name, zero points, no history of moves,
 //   an empty tile rack, zero remaining tiles, the board they will play on.
 //      Their next turn will be their first.
-    public Player() {
+    public Player(String name) {
 
     }
-
+    public int getNumTilesOnRack() {
+        return 0;
+    }
+    
     public String getPlayerName() {
         return "";
     }

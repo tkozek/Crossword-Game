@@ -5,7 +5,7 @@ public class ScrabbleApp {
 
 
     //EFFECTS: Creates desired number of players and assigns
-    //       them each to a common board
+    //       them each to a common board and tile bag
     public ScrabbleApp() {
 
     }
