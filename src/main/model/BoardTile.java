@@ -31,4 +31,11 @@ public class BoardTile implements Tile {
         return false;
     }
 
+    public int getRow() {
+        return 0;
+    }
+    public int getCol() {
+        return 0;
+    }
+
 }
