@@ -7,9 +7,28 @@ package model;
 public class BoardTile implements Tile {
 
 
-    // Makes BoardTile with specified special tile properties
+    // Makes BoardTile with specified special tile properties,
+    // at specified (row, column) index of this board
     
-    public BoardTile() {
-
+    public BoardTile(int row, int col, boolean doubleLetter, boolean doubleWord,
+     boolean tripleLetter,boolean tripleWord) {
+        
     }
+
+    public boolean checkIsDoubleLetter() {
+        return false;
+    }
+
+    public boolean checkIsDoubleWord() {
+        return false;
+    }
+
+    public boolean checkIsTripleLetter() {
+        return false;
+    }
+
+    public boolean checkIsTripleWord() {
+        return false;
+    }
+
 }
