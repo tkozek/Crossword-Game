@@ -5,7 +5,7 @@ package model;
 public class LetterTile implements Tile {
 
     //Creates a new tile of specified letter and point value
-    public LetterTile() {
+    public LetterTile(char character, int points) {
         
     }
 
