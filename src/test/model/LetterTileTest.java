@@ -43,8 +43,8 @@ public class LetterTileTest {
     @Test
     void testGetCharacterAsString() {
         assertEquals("A", testTileA.getCharacterAsString());
-        assertEquals("Q", testTileQ.getCharacter());
-        assertEquals("_", testBlankTile.getCharacter());           
+        assertEquals("Q", testTileQ.getCharacterAsString());
+        assertEquals("_", testBlankTile.getCharacterAsString());           
     }
 
 }

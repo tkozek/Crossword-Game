@@ -30,7 +30,7 @@ public class TileBag {
     //EFFECTS: Removes random tile from tile bag and returns it,
     //            null if empty
     public LetterTile drawTile() {
-        return new LetterTile();
+        return new LetterTile('A', 1);
     }
 
 }

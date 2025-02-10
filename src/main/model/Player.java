@@ -54,7 +54,7 @@ public class Player {
 
     }
     
-    public List<Move> getPlayerMoves() {
+    public List<PlayerMove> getPlayerMoves() {
         return null;
     }
 

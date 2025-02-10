@@ -4,21 +4,25 @@ package model;
 
 public class LetterTile implements Tile {
 
+    private char character;
+    private int points;
+
     //Creates a new tile of specified letter and point value
     public LetterTile(char character, int points) {
-        
+        this.character = character;
+        this.points = points;
     }
 
 
     public char getCharacter() {
-        return '_';
+        return this.character;
     }
     public int getLetterPoints() {
-        return 0;
+        return this.points;
     }
 
     //EFFECTS: casts tile's character as a String type
     public String getCharacterAsString() {
-        return "";
+        return "" + this.character;
     }
 }
