@@ -6,36 +6,47 @@ package model;
 // which impact scoring
 public class BoardTile implements Tile {
 
+    private int row;
+    private int col;
+    private boolean doubleLetter;
+    private boolean doubleWord;
+    private boolean tripleLetter;
+    private boolean tripleWord;
 
     // Makes BoardTile with specified special tile properties,
     // at specified (row, column) index of this board
     
     public BoardTile(int row, int col, boolean doubleLetter, boolean doubleWord,
      boolean tripleLetter,boolean tripleWord) {
-        
+        this.row = row;
+        this.col = col;
+        this.doubleLetter = doubleLetter;
+        this.doubleWord = doubleWord;
+        this.tripleLetter = tripleLetter;
+        this.tripleWord = tripleWord;
     }
 
     public boolean checkIsDoubleLetter() {
-        return false;
+        return this.doubleLetter;
     }
 
     public boolean checkIsDoubleWord() {
-        return false;
+        return this.doubleWord;
     }
 
     public boolean checkIsTripleLetter() {
-        return false;
+        return this.tripleLetter;
     }
 
     public boolean checkIsTripleWord() {
-        return false;
+        return this.tripleWord ;
     }
 
     public int getRow() {
-        return 0;
+        return this.row;
     }
     public int getCol() {
-        return 0;
+        return this.col;
     }
 
 }
