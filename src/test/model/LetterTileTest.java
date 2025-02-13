@@ -1,7 +1,5 @@
 package model;
 
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
@@ -26,14 +24,14 @@ public class LetterTileTest {
         testTileD = new LetterTile('D',2);
         testTileK = new LetterTile('K',5);
         testTileQ = new LetterTile('Q',10);
-        testBlankTile = new LetterTile('_',0);
+        testBlankTile = new LetterTile('-',0);
     }
 
     @Test
     void testConstructor() {
         assertEquals('A', testTileA.getCharacter());
         assertEquals('Q', testTileQ.getCharacter());
-        assertEquals('_', testBlankTile.getCharacter());
+        assertEquals('-', testBlankTile.getCharacter());
         
         assertEquals(1, testTileA.getLetterPoints());
         assertEquals(10, testTileQ.getLetterPoints());
@@ -42,9 +40,9 @@ public class LetterTileTest {
 
     @Test
     void testGetCharacterAsString() {
-        assertEquals("A", testTileA.getCharacterAsString());
-        assertEquals("Q", testTileQ.getCharacterAsString());
-        assertEquals("_", testBlankTile.getCharacterAsString());           
+        assertEquals("A", testTileA.getStringToDisplay());
+        assertEquals("Q", testTileQ.getStringToDisplay());
+        assertEquals("-", testBlankTile.getStringToDisplay());           
     }
 
 }

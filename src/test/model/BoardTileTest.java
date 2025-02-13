@@ -56,6 +56,12 @@ public class BoardTileTest {
         assertEquals(5,tripleLetterTile.getRow());
         assertEquals(1,tripleLetterTile.getCol());
     }
-
+    @Test
+    void testgetStringToDisplay() {
+        assertEquals("DW", doubleWordTile.getStringToDisplay());
+        assertEquals("TW", tripleWordTile.getStringToDisplay());
+        assertEquals("DL", doubleLetterTile.getStringToDisplay());
+        assertEquals("TL", tripleLetterTile.getStringToDisplay());
+    }
 }
 

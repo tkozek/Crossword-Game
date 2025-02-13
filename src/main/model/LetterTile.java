@@ -21,8 +21,9 @@ public class LetterTile implements Tile {
         return this.points;
     }
 
-    //EFFECTS: casts tile's character as a String type
-    public String getCharacterAsString() {
-        return "" + this.character;
+    //EFFECTS: casts tile's character as a String type for display
+    @Override
+    public String getStringToDisplay() {
+        return String.valueOf(this.character);
     }
 }

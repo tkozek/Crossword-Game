@@ -16,6 +16,10 @@ public class BoardTile implements Tile {
     // Makes BoardTile with specified special tile properties,
     // at specified (row, column) index of this board
     
+    // REQUIRES: At most one of doubleLetter, doubleWord, tripleLetter, 
+    //            or tripleWord may be true.
+    //           AND 
+    //           
     public BoardTile(int row, int col, boolean doubleLetter, boolean doubleWord,
      boolean tripleLetter,boolean tripleWord) {
         this.row = row;
@@ -47,6 +51,21 @@ public class BoardTile implements Tile {
     }
     public int getCol() {
         return this.col;
+    }
+
+    @Override
+    public String getStringToDisplay() {
+        if (this.doubleLetter) {
+            return "DL";
+        } else if (this.doubleWord) {
+            return "DW";
+        } else if (this.tripleLetter) {
+            return "TL";
+        } else if (this.tripleWord) {
+            return "TW";
+        } else {
+            return "_";
+        }
     }
 
 }
