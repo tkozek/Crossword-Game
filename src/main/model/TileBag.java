@@ -13,7 +13,7 @@ public class TileBag {
 
     //REQUIRES: Tile Bag is empty
     //MODIFIES: this
-    //EFFECTS: Adds correct number of each letter tile
+    //EFFECTS: Adds correct number of each letter
     // and blank tile to the tile bag.
     private void initializeTiles() {
 
@@ -32,5 +32,8 @@ public class TileBag {
     public LetterTile drawTile() {
         return new LetterTile('A', 1);
     }
-
+    // EFFECTS: Number of tiles left in tile bag
+    public int numTilesRemaining() {
+        return 0;
+    }
 }

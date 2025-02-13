@@ -16,8 +16,7 @@ public class Board {
     private void initializeBoard() {
 
     }
-    // REQUIRES: row < BOARD_HEIGHT and col < BOARD_WIDTH
-    //            and both row and col >= 0
+    // REQUIRES: 0 <= row < BOARD_HEIGHT AND 0 <= col < BOARD_WIDTH
     // EFFECTS: returns true if and only if 
     // all tiles in the desired section are BoardTiles
     public boolean isSectionOccupied() {
