@@ -21,7 +21,7 @@ public class Player {
     }
 
     public void setPlayerName() {
-
+    
     }
 
     public int getPointsThisGame() {
@@ -56,6 +56,10 @@ public class Player {
     
     public List<PlayerMove> getPlayerMoves() {
         return null;
+    }
+    public void playTurn() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'playTurn'");
     }
 
 }
