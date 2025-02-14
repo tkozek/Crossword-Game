@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
+
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Set;
@@ -22,7 +23,7 @@ public class TileBagTest {
     @Test
     void testConstructor() {
         //100 tiles initially
-        assertEquals(testBag.size(), 100);
+        assertEquals(testBag.numTilesRemaining(), 100);
     }
 
     @Test
