@@ -12,6 +12,7 @@ import java.util.Random;
 public class TileBag {
     private static final  Map<Character, Integer> LETTER_FREQUENCIES = new HashMap<>();
     private static final  Map<Character, Integer> LETTER_POINTS = new HashMap<>();
+    public static final int TOTAL_LETTERS_INITIALLY = 100;
     private List<LetterTile> drawPile;
     private Random randomIndexGenerator;
     
@@ -70,20 +71,36 @@ public class TileBag {
         }
     }
 
-    //MODIFIES: this
-    //EFFECTS: Removes random tile from tile bag and returns it,
-    //            null if empty
-    public LetterTile drawTile() {
+    //MODIFIES: this, player
+    //EFFECTS: Removes LetterTiles from the tile bag until
+    //     player's tile rack has 7 tiles, or the tile bag
+    //     is empty. Returns number of tiles drawn.
+    //     OR
+    //     Returns -1 if drawPile is empty before removing any tiles
+    public int drawTiles(Player player) {
         if (drawPile.size() == 0) {
-            return null;
+            return -1;
         }
-        int nextTileIndex = randomIndexGenerator.nextInt(this.numTilesRemaining());
-        LetterTile nextTile = drawPile.get(nextTileIndex);
-        drawPile.remove(nextTile);
-        return nextTile;
+        int numTilesAdded = 0;
+        int nextTileIndex;
+        LetterTile nextTile;
+        while (player.getNumTilesOnRack() < Player.MAX_NUM_TILES && !drawPile.isEmpty()) {
+            nextTileIndex = randomIndexGenerator.nextInt(this.numTilesRemaining());
+            nextTile = drawPile.get(nextTileIndex);
+            drawPile.remove(nextTile);
+            player.addTile(nextTile);
+            numTilesAdded++;
+        }
+        return numTilesAdded;
     }
     // EFFECTS: Number of tiles left in tile bag
     public int numTilesRemaining() {
         return drawPile.size();
     }
-}
+
+    //EFFECTS: Empties the draw pile so there are
+    // no letter tiles in it
+    public void emptyDrawPile() {
+        drawPile.clear();
+    }
+}  

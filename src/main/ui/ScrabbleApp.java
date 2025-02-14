@@ -43,7 +43,8 @@ public class ScrabbleApp {
         System.out.println("Please enter the number of players [1,4]");
         int numPlayers = this.scanner.nextInt();
         String numPlayerConfirmation = Integer.toString(numPlayers);
-        System.out.println("You entered " + numPlayerConfirmation + "players. Is that correct? Press (Y) to confirm or (N) to cancel and re-enter");
+        System.out.println("You entered " + numPlayerConfirmation + " players. Is that correct? Press (Y) to confirm or (N) to cancel and re-enter");
+        scanner.nextLine();
         String confirmOrCancel = this.scanner.nextLine();
         printoutSpacer();
         if (confirmOrCancel.equals("Y")) {
@@ -67,8 +68,8 @@ public class ScrabbleApp {
             System.out.println("You entered " + inputPlayerName + ". Press (Y) to confirm or (N) to cancel and re-enter");
             String confirmName = scanner.nextLine();
             if (confirmName.equals("Y")) {
-                Player p = new Player(inputPlayerName, board, tileBag);
-                players.add(p);
+                player = new Player(inputPlayerName, board, tileBag);
+                players.add(player);
             } else if (confirmName.equals("N")) {
                 System.out.println("Okay, name wasn't saved. Please re-enter the correct name");
             } else {
@@ -87,9 +88,9 @@ public class ScrabbleApp {
 
     // EFFECTS: Prints a separator to the console
     public void printoutSpacer() {
-        System.out.println("---S-C-R-A-B-B-L-E--I-N--J-A-V-A---");
+        System.out.println("---------------------------------------");
     }
-    
+
     // MODIFIES: this
     // EFFECTS: Ends the Scrabble Game
     public void endGame() {

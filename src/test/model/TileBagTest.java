@@ -15,9 +15,17 @@ import java.util.HashSet;
 public class TileBagTest {
     private TileBag testBag;
     private Set<Character> set;
+    private Player testPlayer;
+    private Player testPlayer2;
+    private Board testBoard;
+    private HashSet<Character> chars;
     @BeforeEach
     void runBefore() {
          testBag = new TileBag();
+         testBoard = new Board();
+         testPlayer = new Player("tester", testBoard, testBag);
+         testPlayer2 = new Player("otherTester", testBoard,testBag);
+         
     }
 
     @Test
@@ -27,57 +35,41 @@ public class TileBagTest {
     }
 
     @Test
-    void testDrawTile() {
-        //100 tiles initially
-        LetterTile firstTile = testBag.drawTile();
-        // 1 gets removed
-        assertEquals(testBag.numTilesRemaining(), 99);
-        char firstTileChar = firstTile.getCharacter();
-        boolean isValid = ((firstTileChar <= 'Z' && 
-        firstTileChar >='A') || firstTileChar=='-');
-        //is it one of the values we meant to initialize
-        assertTrue(isValid);
-    }
-    @Test
-    void testDrawMultipleTiles() {
-        //100 tiles initially
-        LetterTile firstTile = testBag.drawTile();
-        LetterTile secondTile = testBag.drawTile();
-        LetterTile thirdTile = testBag.drawTile();
-        // 1 gets removed
-        assertEquals(testBag.numTilesRemaining(), 97);
-
-        char firstTileChar = firstTile.getCharacter();
-        char secondTileChar = secondTile.getCharacter();
-        char thirdTileChar = thirdTile.getCharacter();
-
-        boolean isValidFirst = ((firstTileChar <= 'Z' && 
-        firstTileChar >='A') || firstTileChar=='-');
-
-        boolean isValidSecond = ((secondTileChar <= 'Z' && 
-        secondTileChar >='A') || secondTileChar=='-');
-
-        boolean isValidThird = ((thirdTileChar <= 'Z' && 
-        thirdTileChar >='A') || thirdTileChar=='-');
-
-        //is it one of the values we meant to initialize
-        assertTrue(isValidFirst);
-        assertTrue(isValidSecond);
-        assertTrue(isValidThird);
+    void testDrawTileStartGameCase() {
+        //0 tiles on rack initially
+        assertEquals(testPlayer.getNumTilesOnRack(),0);
+        //No tiles removed yet
+        assertEquals(testBag.numTilesRemaining(), TileBag.TOTAL_LETTERS_INITIALLY);
+        // Enough tiles removed from bag to fill player's rack
+        assertEquals(testBag.drawTiles(testPlayer), Player.MAX_NUM_TILES);
+        //Enough tiles removed from bag to fill player's rack
+        assertEquals(testBag.numTilesRemaining(), TileBag.TOTAL_LETTERS_INITIALLY -  Player.MAX_NUM_TILES);
+        // MAX_NUM_TILES get added to rack
+        assertEquals(testPlayer.getNumTilesOnRack(), Player.MAX_NUM_TILES);
+        //Cannot draw more tiles 
+        assertEquals(0, testBag.drawTiles(testPlayer));
     }
     @Test
     void testNotAllTheSameTile() {
-        List<Character> letters = new ArrayList<>();
-        LetterTile curLetter;
-        // 'E' is the most common character, and it occurs 12 times
-        for (int i = 0; i < 13; i++) {
-            curLetter = testBag.drawTile();
-            letters.add(curLetter.getCharacter());
-        }
-        set = new HashSet<>(letters);
-        // At least two non duplicate characters must exist
-        assertTrue(set.size() > 1);
-        assertEquals(testBag.numTilesRemaining(), 100-13);
+        testBag.drawTiles(testPlayer);
+        testBag.drawTiles(testPlayer2);
+        
+        List<Character> p1Letters = testPlayer.getLettersOnRack();
+        List<Character> p2Letters = testPlayer2.getLettersOnRack();
+        p1Letters.addAll(p2Letters);
+        assertEquals(p1Letters.size(), 14);
+        chars = new HashSet<>(p1Letters);
+        // Most occurent character is E with 12 occurences in a new game
+        // so 14 tiles must have at least two unique characters.
+        assertTrue(chars.size() >= 2);
+
+    }
+    @Test
+    void testEmptyDrawPile() {
+        testBag.emptyDrawPile();
+        assertEquals(0, testBag.numTilesRemaining());
+        assertEquals(-1, testBag.drawTiles(testPlayer));
+        
     }
 }
 

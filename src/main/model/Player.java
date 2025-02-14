@@ -6,6 +6,7 @@ import java.util.List;
 
 public class Player {
  
+    public static final int MAX_NUM_TILES = 7;
 // Initializes a player with given name, zero points, no history of moves,
 //   an empty tile rack, zero remaining tiles, the board they will play on.
 //      Their next turn will be their first.
@@ -27,11 +28,18 @@ public class Player {
     public int getPointsThisGame() {
         return 0;
     }
-    //REQUIRES:
-    //MODIFIES:
-    //EFFECTS:
+    //REQUIRES: 
+    //MODIFIES: this, tileBag
+    //EFFECTS: Draws tiles from player's tile bag 
+    //         until getNumTilesOnRack() == MAX_NUM_TILES
     public void drawTiles() {
-    
+        
+    }
+    // REQUIRES: getNumTilesOnRack() < MAX_NUM_TILES
+    // MODIFIES: this
+    //EFFECTS: Adds drawnLetter to player's tile rack
+    public void addTile(LetterTile drawnLetter) {
+
     }
 
 
@@ -44,6 +52,11 @@ public class Player {
     //         the tile bag.
     public void playWord() {
 
+    }
+    //EFFECTS: returns chars corresponding to letters 
+    //      on the player's tile rack
+    public List<Character> getLettersOnRack() {
+        return null;
     }
     //REQUIRES: tilesToSwap.size() <= remainingTiles and tilesToSwap.size() <= tileBag.size()
     //            and tilesToSwap.size() >= 0
