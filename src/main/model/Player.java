@@ -21,7 +21,7 @@ public class Player {
         return "";
     }
 
-    public void setPlayerName() {
+    public void setPlayerName(String name) {
     
     }
 
@@ -41,12 +41,31 @@ public class Player {
     public void addTile(LetterTile drawnLetter) {
 
     }
+    public void makeWord() {
 
+    }
+    // REQUIRES: index <     public int getNumTilesOnRack() {
+    // EFFECTS: returns true if tile at index
+    //          was successfully selected
+    public boolean selectTile(int index) {
+        return false;
+    }
+
+    public List<LetterTile> getSelectedTiles() {
+        return null;
+    }
+
+    // MODIFIES: this
+    // EFFECTS: returns true if there were tiles to clear
+    //          false if player's rack was already empty.
+    public boolean clearSelectedTiles() {
+        return false;
+    }
 
     //REQUIRES: letters must only be played on available board locations
     //          (multiple letters can't be placed on the same space)
     //MODIFIES: this, board
-    //EFFECTS: Places letters on board beginning at start position
+    //EFFECTS: Places selected letters on board beginning at start position
     //         and going in specified direction. Players points
     //         are updated and player is marked as next to draw from
     //         the tile bag.
@@ -55,21 +74,23 @@ public class Player {
     }
     //EFFECTS: returns chars corresponding to letters 
     //      on the player's tile rack
-    public List<Character> getLettersOnRack() {
+    public List<LetterTile> getTilesOnRack() {
         return null;
     }
-    //REQUIRES: tilesToSwap.size() <= remainingTiles and tilesToSwap.size() <= tileBag.size()
+    //REQUIRES: tileRack must contain every entry of lettersToSwap
+    //       and lettersToSwap.size() <= tileBag.size()
     //            and tilesToSwap.size() >= 0
     //MODIFIES: this, tileBag
     //EFFECTS: Adds specified tiles back to common draw bag, then replaces
-    //          same number of tiles with random letters from draw bag.
-    public void swapTiles() {
+    //          same number of tiles with random tiles from draw bag.
+    public void swapTiles(List<LetterTile> lettersToSwap) {
 
     }
     
     public List<PlayerMove> getPlayerMoves() {
         return null;
     }
+    
     public void playTurn() {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'playTurn'");

@@ -19,14 +19,14 @@ public class Board {
     // REQUIRES: 0 <= row < BOARD_HEIGHT AND 0 <= col < BOARD_WIDTH
     // EFFECTS: returns true if and only if 
     // all tiles in the desired section are BoardTiles
-    public boolean isSectionOccupied() {
+    public boolean sectionIsAvailable() {
         return false;
     }
 
     // REQUIRES: 0 <= row < BOARD_HEIGHT and 0 <= col < BOARD_WIDTH
     // EFFECTS: returns true if board[row][col] is a BoardTile
     //    returns false if board[row][col] is a LetterTile
-    public boolean isTileOccupied() {
+    public boolean squareIsAvailable(int row, int col) {
         return false;
     }
 

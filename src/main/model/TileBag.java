@@ -103,4 +103,11 @@ public class TileBag {
     public void emptyDrawPile() {
         drawPile.clear();
     }
+
+    // EFFECTS: returns true if the tile bag
+    //  has the specific tile object
+    //   (for test purposes)
+    public boolean contains(LetterTile tile) {
+        return false;
+    }
 }  

@@ -1,7 +1,5 @@
 package model;
 
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
@@ -49,13 +47,15 @@ public class TileBagTest {
         //Cannot draw more tiles 
         assertEquals(0, testBag.drawTiles(testPlayer));
     }
+
+/*     will test through playe
     @Test
     void testNotAllTheSameTile() {
         testBag.drawTiles(testPlayer);
         testBag.drawTiles(testPlayer2);
         
-        List<Character> p1Letters = testPlayer.getLettersOnRack();
-        List<Character> p2Letters = testPlayer2.getLettersOnRack();
+        List<LetterTile> p1Letters = testPlayer.getTilesOnRack();
+        List<LetterTile> p2Letters = testPlayer2.getTilesOnRack();
         p1Letters.addAll(p2Letters);
         assertEquals(p1Letters.size(), 14);
         chars = new HashSet<>(p1Letters);
@@ -63,13 +63,13 @@ public class TileBagTest {
         // so 14 tiles must have at least two unique characters.
         assertTrue(chars.size() >= 2);
 
-    }
+    } */
     @Test
     void testEmptyDrawPile() {
         testBag.emptyDrawPile();
         assertEquals(0, testBag.numTilesRemaining());
         assertEquals(-1, testBag.drawTiles(testPlayer));
-        
+
     }
 }
 
