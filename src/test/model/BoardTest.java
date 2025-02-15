@@ -20,7 +20,7 @@ public class BoardTest {
     private Board testBoard;
     private HashMap<Character, Integer> preSwapChars;
     private HashMap<Character, Integer> postSwapChars;
-    
+    private List<LetterTile>  letters;
 
     @BeforeEach
     void runBefore() {
@@ -32,6 +32,99 @@ public class BoardTest {
         postSwapChars = new HashMap<>();
     }
 
+
+    @Test 
+    public void testSquareIsAvailable() {
+        assertTrue(board.squareIsAvailable(0, 0));
+        assertTrue(board.squareIsAvailable(14, 14));
+        assertTrue(board.squareIsAvailable(7, 7));
+        assertTrue(board.squareIsAvailable(8, 1));
+        assertTrue(board.squareIsAvailable(1, 13));
+
+    }
+    @Test 
+    public void testSectionIsAvailableNothingAddedGoingRight() {
+        testBag.drawTiles(testPlayer);
+        letters = testPlayer.getTilesOnRack();
+
+        boolean isAvailable = board.sectionIsAvailable(letters, 7,7,Direction.RIGHT);
+        assertTrue(isAvailable);
+    }
+    @Test 
+    public void testSectionIsAvailableAboveAndBelowWordGoingRight() {
+        testBag.drawTiles(testPlayer);
+        letters = testPlayer.getTilesOnRack();
+
+        boolean isAvailable = board.sectionIsAvailable(letters, 7,7,Direction.RIGHT);
+        assertTrue(isAvailable);
+        board.playWord(letters, 7, 7, Direction.RIGHT);
+        isAvailable = board.sectionIsAvailable(letters, 7,7,Direction.RIGHT);
+        assertFalse(isAvailable);
+
+        testBag.drawTiles(testPlayer);
+        letters = testPlayer.getTilesOnRack();
+        boolean isAvailableBelow = board.sectionIsAvailable(letters, 8,7,Direction.RIGHT);
+        assertTrue(isAvailableBelow);
+        boolean isAvailableAbove = board.sectionIsAvailable(letters, 6,7,Direction.RIGHT);
+        assertTrue(isAvailableAbove);
+    }
+
+    @Test
+    void testInBoundsRight() {
+        testBag.drawTiles(testPlayer);
+        letters = testPlayer.getTilesOnRack();
+        //
+        assertTrue(board.inBounds(letters, 7,3, Direction.RIGHT));
+        assertTrue(board.inBounds(letters, 7,2, Direction.RIGHT));
+        assertTrue(board.inBounds(letters, 7,1, Direction.RIGHT));
+
+        assertTrue(board.inBounds(letters, 14,7, Direction.RIGHT));
+        assertTrue(board.inBounds(letters, 14,8, Direction.RIGHT));
+        assertFalse(board.inBounds(letters, 14,9, Direction.RIGHT));
+        assertFalse(board.inBounds(letters, 14,10, Direction.RIGHT));
+
+        assertTrue(board.inBounds(letters, 0,5, Direction.RIGHT));
+        assertTrue(board.inBounds(letters, 0,6, Direction.RIGHT));
+        assertTrue(board.inBounds(letters, 0,7, Direction.RIGHT));
+
+    }
+    @Test
+    void testInBoundsDown() {
+        testBag.drawTiles(testPlayer);
+        letters = testPlayer.getTilesOnRack();
+        //
+        assertTrue(board.inBounds(letters, 7,7, Direction.DOWN));
+        assertTrue(board.inBounds(letters, 8,7, Direction.DOWN));
+        assertFalse(board.inBounds(letters, 9,7, Direction.DOWN));
+
+        assertTrue(board.inBounds(letters, 7,14, Direction.DOWN));
+        assertTrue(board.inBounds(letters, 8,14, Direction.DOWN));
+        assertFalse(board.inBounds(letters, 9,14, Direction.DOWN));
+
+        assertTrue(board.inBounds(letters, 7,0, Direction.DOWN));
+        assertTrue(board.inBounds(letters, 8,0, Direction.DOWN));
+        assertFalse(board.inBounds(letters, 9,0, Direction.DOWN));
+
+    }
+    @Test
+    void testInBoundsStartOOBMoveDownIntoBounds() {
+        testBag.drawTiles(testPlayer);
+        letters = testPlayer.getTilesOnRack();
+        //
+        assertFalse(board.inBounds(letters, -1,0, Direction.DOWN));
+        assertFalse(board.inBounds(letters, -1,14, Direction.DOWN));
+        assertFalse(board.inBounds(letters, -2,7, Direction.DOWN));
+    }
+
+    @Test
+    void testInBoundsStartOOBMoveRightUntilInBounds() {
+        testBag.drawTiles(testPlayer);
+        letters = testPlayer.getTilesOnRack();
+        //
+        assertFalse(board.inBounds(letters, 0,-2, Direction.RIGHT));
+        assertFalse(board.inBounds(letters, 7,-1, Direction.RIGHT));
+        assertFalse(board.inBounds(letters, 14,-1, Direction.RIGHT));
+    }
     @Test 
     void testPlayWord() {
         testBag.drawTiles(testPlayer);

@@ -28,7 +28,7 @@ public class Board {
     // REQUIRES: inBounds(letters,startRow,startCol, direction) is true
     // EFFECTS: returns true if and only if 
     // all tiles in the desired section are BoardTiles
-    public boolean sectionIsAvailable() {
+    public boolean sectionIsAvailable(List<LetterTile> letters, int startRow, int startCol, Direction dir) {
         return false;
     }
 
