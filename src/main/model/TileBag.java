@@ -70,10 +70,20 @@ public class TileBag {
             drawPile.add(new LetterTile(letter,points));
         }
     }
+    // MODIFIES: this
+    // EFFECTS: Adds already existing tiles back to draw pile
+    public void addTiles(List<LetterTile> lettersToAdd) {
+        drawPile.addAll(lettersToAdd);
+        //for (LetterTile letter : lettersToAdd) {
+         //   drawPile.add(letter);
+        //}
+    }
+
 
     //MODIFIES: this, player
     //EFFECTS: Removes LetterTiles from the tile bag until
-    //     player's tile rack has 7 tiles, or the tile bag
+    //     player's tile rack has Player.MAX_NUM_TILES tiles, 
+    //     or the tile bag
     //     is empty. Returns number of tiles drawn.
     //     OR
     //     Returns -1 if drawPile is empty before removing any tiles

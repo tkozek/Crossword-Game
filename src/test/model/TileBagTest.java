@@ -48,7 +48,7 @@ public class TileBagTest {
         assertEquals(0, testBag.drawTiles(testPlayer));
     }
 
-/*     will test through playe
+/*     will test through player
     @Test
     void testNotAllTheSameTile() {
         testBag.drawTiles(testPlayer);

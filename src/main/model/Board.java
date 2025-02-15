@@ -1,5 +1,8 @@
 package model;
 
+import java.util.List;
+import java.util.ArrayList;
+
 // Represents a Scrabble Game Board
 public class Board {
 
@@ -16,7 +19,13 @@ public class Board {
     private void initializeBoard() {
 
     }
-    // REQUIRES: 0 <= row < BOARD_HEIGHT AND 0 <= col < BOARD_WIDTH
+    // EFFECTS: Returns true if all letters will fit within the boundaries
+    // of the board, starting at [startRow][startCol] and proceeding in direction
+    // until all letters are placed
+    public boolean inBounds(List<LetterTile> letters, int startRow, int startCol, Direction dir) {
+        return false;
+    }
+    // REQUIRES: inBounds(letters,startRow,startCol, direction) is true
     // EFFECTS: returns true if and only if 
     // all tiles in the desired section are BoardTiles
     public boolean sectionIsAvailable() {
@@ -29,6 +38,13 @@ public class Board {
     public boolean squareIsAvailable(int row, int col) {
         return false;
     }
-
+    //REQUIRES: inBounds() && sectionIsAvailable() for given arguments
+    //MODIFIES: this
+    //EFFECTS: Places selected letters on board beginning at start position
+    //         and going in specified direction. 
+    //         returns points earned from the word
+    public int playWord(List<LetterTile> letters, int startRow, int startCol, Direction dir) {
+        return 0;
+    }
 
 }
