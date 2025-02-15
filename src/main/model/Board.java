@@ -5,7 +5,7 @@ import java.util.ArrayList;
 
 // Represents a Scrabble Game Board
 public class Board {
-
+    public static final int BOARD_LENGTH = 15;
     // Initializes a new Board, with standard
     // placement of Double word, Triple Word,
     // Double Letter, Triple Letter Tiles
