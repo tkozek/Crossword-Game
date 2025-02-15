@@ -63,7 +63,7 @@ public class Player {
     public void makeMove(List<LetterTile> letters, int startRow, int startCol, int pointsEarned) {
         //Player, Board, List<LetterTile> , Start Row, Start Col, Points Earned
         Move move = new Move(this, board, letters, startRow, startCol, pointsEarned);
-        this.moveHistory.add(move);
+        this.history.addMove(move);
     }
     // REQUIRES: 0 <= index <     public int getNumTilesOnRack() {
     // EFFECTS: returns true if tile at index
