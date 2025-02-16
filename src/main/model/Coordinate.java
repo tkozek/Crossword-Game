@@ -3,20 +3,22 @@ import java.util.Objects;
 
 // Represents a (row,column) coordinate on a board
 public class Coordinate {
-    
+    private int row;
+    private int column;
     // Creates a new coordinate with row, and column
     // REQUIRES: Both row and column are >= 0 and 
     // <= Board.BOARD_LENGTH
 
-    public Coordinate() {
-
+    public Coordinate(int row, int column) {
+        this.row = row;
+        this.column = column;
     }
 
     public int getRow() {
-        return 0;
+        return this.row;
     }
     public int getColumn() {
-        return 0;
+        return this.column;
     }
 
     @Override
@@ -24,7 +26,10 @@ public class Coordinate {
     // this.getRow() == coord.getRow()
     // AND this.getColumn() == coord.getColumn()
     public boolean equals(Object coord) {
-        return false;
+        Coordinate toCompareCoord = (Coordinate) coord;
+        return row == toCompareCoord.row && column == toCompareCoord.column;
+        
+        
     }
     @Override
     // EFFECTS: hashes the coordinate object
@@ -32,7 +37,7 @@ public class Coordinate {
     // so that HashSet can be used to initialize 
     // the board's special tiles
     public int hashCode() {
-        return 0;
+        return Objects.hash(row,column);
     }
     
 }

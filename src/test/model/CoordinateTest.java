@@ -19,7 +19,35 @@ public class CoordinateTest {
     void runBefore() {
         
     }
+    @Test
+    public void testGetRow() {
+        c1= new Coordinate(0,1);
+        assertEquals(c1.getRow(), 0);
 
+        c1= new Coordinate(10,3);
+        assertEquals(c1.getRow(), 10);
+
+        c2 = new Coordinate(4,2);
+        assertEquals(4, c2.getRow());
+
+        c2 = new Coordinate(8,5);
+        assertEquals(8, c2.getRow());
+    }
+
+    @Test
+    public void testGetColumn() {
+        c1= new Coordinate(0,1);
+        assertEquals(c1.getColumn(), 1);
+
+        c1= new Coordinate(10,3);
+        assertEquals(c1.getColumn(), 3);
+
+        c2 = new Coordinate(4,2);
+        assertEquals(2, c2.getColumn());
+
+        c2 = new Coordinate(8,5);
+        assertEquals(5, c2.getColumn());
+    }
 
     @Test 
     public void testEqualsEqual() {
@@ -203,7 +231,6 @@ public class CoordinateTest {
         assertEquals(c1.hashCode(),c2.hashCode());
     }
 
-    /////////////////////////
     @Test
     public void testHashCodeNotSameRow() {
         c1 = new Coordinate(1,0);
