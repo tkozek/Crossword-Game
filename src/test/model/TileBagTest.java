@@ -71,5 +71,17 @@ public class TileBagTest {
         assertEquals(-1, testBag.drawTiles(testPlayer));
 
     }
+    @Test
+    void testDrawTilesEmptyPile() {
+        testBag.emptyDrawPile();
+        LetterTile letter = new LetterTile('A', 1);
+        testBag.addTile(letter);
+        assertTrue(testPlayer.getNumTilesOnRack() + 1 < Player.MAX_NUM_TILES);
+        // the single A we added will be drawn, then 
+        // loop stops executing since the pile is empty, even though Player still 
+        // doesnt have a full rack
+        assertEquals(testBag.drawTiles(testPlayer), 1);
+
+    }
 }
 

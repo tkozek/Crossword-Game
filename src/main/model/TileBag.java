@@ -120,5 +120,10 @@ public class TileBag {
     public boolean contains(LetterTile tile) {
         return false;
     }
+    // EFFECTS: adds tile to draw pile for testing
+    //   purposes
+    public void addTile(LetterTile tileToAdd) {
+        drawPile.add(tileToAdd);
+    }
     
 }  
