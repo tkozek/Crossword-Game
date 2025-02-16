@@ -8,10 +8,7 @@ public class BoardTile implements Tile {
 
     private int row;
     private int col;
-    private boolean doubleLetter;
-    private boolean doubleWord;
-    private boolean tripleLetter;
-    private boolean tripleWord;
+    private TileType tileType;
 
     // Makes BoardTile with specified special tile properties,
     // at specified (row, column) index of this board
@@ -20,30 +17,18 @@ public class BoardTile implements Tile {
     //            or tripleWord may be true.
     //           AND 
     //           
-    public BoardTile(int row, int col, boolean doubleLetter, boolean doubleWord,
-     boolean tripleLetter,boolean tripleWord) {
+    public BoardTile(int row, int col, TileType tileType) {
         this.row = row;
         this.col = col;
-        this.doubleLetter = doubleLetter;
-        this.doubleWord = doubleWord;
-        this.tripleLetter = tripleLetter;
-        this.tripleWord = tripleWord;
+        this.tileType = tileType;
     }
 
-    public boolean checkIsDoubleLetter() {
-        return this.doubleLetter;
+    public boolean checkIsTileType(TileType tileType) {
+        return this.tileType.equals(tileType);
     }
 
-    public boolean checkIsDoubleWord() {
-        return this.doubleWord;
-    }
-
-    public boolean checkIsTripleLetter() {
-        return this.tripleLetter;
-    }
-
-    public boolean checkIsTripleWord() {
-        return this.tripleWord ;
+    public boolean isSpecial() {
+        return this.tileType != TileType.NORMAL;
     }
 
     public int getRow() {
@@ -55,13 +40,13 @@ public class BoardTile implements Tile {
 
     @Override
     public String getStringToDisplay() {
-        if (this.doubleLetter) {
+        if (this.tileType.equals(TileType.DOUBLE_LETTER)) {
             return "DL";
-        } else if (this.doubleWord) {
+        } else if (this.tileType.equals(TileType.DOUBLE_WORD)) {
             return "DW";
-        } else if (this.tripleLetter) {
+        } else if (this.tileType.equals(TileType.TRIPLE_LETTER)) {
             return "TL";
-        } else if (this.tripleWord) {
+        } else if (this.tileType.equals(TileType.TRIPLE_WORD)) {
             return "TW";
         } else {
             return "_";

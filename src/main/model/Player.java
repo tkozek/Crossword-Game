@@ -121,8 +121,4 @@ public class Player {
     public History getHistory() {
         return this.history;
     }
-
-    
-    
-
 }

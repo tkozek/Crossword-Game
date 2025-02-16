@@ -1,7 +1,5 @@
 package model;
 
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
@@ -13,48 +11,44 @@ public class BoardTileTest {
     BoardTile doubleLetterTile;
     BoardTile tripleWordTile;
     BoardTile tripleLetterTile;
-
+    BoardTile regularTile;
 
     @BeforeEach
     void runBefore() {
-         doubleWordTile = new BoardTile(1,1,false,true,false,false);
-        tripleWordTile = new BoardTile(0,0,false,false,false,true);
-        doubleLetterTile= new BoardTile(0,3,true,false,false,false);
-        tripleLetterTile= new BoardTile(5,1,false,false,true,false);
-
+        doubleWordTile = new BoardTile(1,1,TileType.DOUBLE_WORD);
+        tripleWordTile = new BoardTile(0,0,TileType.TRIPLE_WORD);
+        doubleLetterTile= new BoardTile(0,3,TileType.DOUBLE_LETTER);
+        tripleLetterTile= new BoardTile(5,1,TileType.TRIPLE_LETTER);
+        regularTile = new BoardTile(0,1, TileType.NORMAL);
     }
 
     @Test
     void testConstructor() {
-        assertTrue(doubleWordTile.checkIsDoubleWord());
-        assertFalse(doubleWordTile.checkIsTripleWord());
-        assertFalse(doubleWordTile.checkIsDoubleLetter());
-        assertFalse(doubleWordTile.checkIsTripleLetter());
+        assertTrue(doubleWordTile.isSpecial());
+        assertTrue(tripleWordTile.isSpecial());
+        assertTrue(tripleLetterTile.isSpecial());
+        assertTrue(doubleLetterTile.isSpecial());
+
+        assertFalse(regularTile.isSpecial());
+
+        assertTrue(doubleLetterTile.checkIsTileType(TileType.DOUBLE_LETTER));
+        assertFalse(doubleLetterTile.checkIsTileType(TileType.TRIPLE_WORD));
+        
         assertEquals(1,doubleWordTile.getRow());
         assertEquals(1,doubleWordTile.getCol());
 
-        assertTrue(tripleWordTile.checkIsTripleWord());
-        assertFalse(tripleWordTile.checkIsDoubleWord());
-        assertFalse(tripleWordTile.checkIsDoubleLetter());
-        assertFalse(tripleWordTile.checkIsTripleLetter());
+        assertTrue(tripleWordTile.checkIsTileType(TileType.TRIPLE_WORD));
+        
         assertEquals(0,tripleWordTile.getRow());
         assertEquals(0,tripleWordTile.getCol());
 
 
-        assertTrue(doubleLetterTile.checkIsDoubleLetter());
-        assertFalse(doubleLetterTile.checkIsTripleLetter());
-        assertFalse(doubleLetterTile.checkIsDoubleWord());
-        assertFalse(doubleLetterTile.checkIsTripleWord());
+        assertTrue(tripleLetterTile.checkIsTileType(TileType.TRIPLE_LETTER));
+        assertFalse(doubleLetterTile.checkIsTileType(TileType.TRIPLE_WORD));
+       
         assertEquals(0,doubleLetterTile.getRow());
         assertEquals(3,doubleLetterTile.getCol());
 
-
-        assertTrue(tripleLetterTile.checkIsTripleLetter());
-        assertFalse(tripleLetterTile.checkIsTripleWord());
-        assertFalse(tripleLetterTile.checkIsDoubleLetter());
-        assertFalse(tripleLetterTile.checkIsDoubleLetter());
-        assertEquals(5,tripleLetterTile.getRow());
-        assertEquals(1,tripleLetterTile.getCol());
     }
     @Test
     void testgetStringToDisplay() {
@@ -62,6 +56,8 @@ public class BoardTileTest {
         assertEquals("TW", tripleWordTile.getStringToDisplay());
         assertEquals("DL", doubleLetterTile.getStringToDisplay());
         assertEquals("TL", tripleLetterTile.getStringToDisplay());
+        assertEquals("_", regularTile.getStringToDisplay());
+
     }
 }
 

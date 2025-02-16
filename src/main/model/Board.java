@@ -46,5 +46,15 @@ public class Board {
     public int playWord(List<LetterTile> letters, int startRow, int startCol, Direction dir) {
         return 0;
     }
+    //REQUIRES: sectionIsAvailable() is true with same arguments
+    //EFFECTS:  returns true if board[row][col] contains a board tile of given tile type
+    public boolean sectionContainsTileType(List<LetterTile> letters, int startRow, int startCol, Direction dir, TileType tileType) {
+        return false;
+    }
 
+    //REQUIRES: squareIsAvailable() is true with same arguments
+    //EFFECTS: returns true if board[row][col] contains a board tile of given tile type
+    public boolean squareisTileType(int row, int col, TileType tileType) {
+        return false;
+    }
 }
