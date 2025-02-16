@@ -25,27 +25,92 @@ public class TileBag {
         initializeTiles();
         randomIndexGenerator = new Random();
     }
+    
     private void initializeMaps() {
-        LETTER_FREQUENCIES.put('A', 9); LETTER_FREQUENCIES.put('B', 2); LETTER_FREQUENCIES.put('C', 2);
-        LETTER_FREQUENCIES.put('D', 4); LETTER_FREQUENCIES.put('E', 12); LETTER_FREQUENCIES.put('F', 2);
-        LETTER_FREQUENCIES.put('G', 3); LETTER_FREQUENCIES.put('H', 2); LETTER_FREQUENCIES.put('I', 9);
-        LETTER_FREQUENCIES.put('J', 1); LETTER_FREQUENCIES.put('K', 1); LETTER_FREQUENCIES.put('L', 4);
-        LETTER_FREQUENCIES.put('M', 2); LETTER_FREQUENCIES.put('N', 6); LETTER_FREQUENCIES.put('O', 8);
-        LETTER_FREQUENCIES.put('P', 2); LETTER_FREQUENCIES.put('Q', 1); LETTER_FREQUENCIES.put('R', 6);
-        LETTER_FREQUENCIES.put('S', 4); LETTER_FREQUENCIES.put('T', 6); LETTER_FREQUENCIES.put('U', 4);
-        LETTER_FREQUENCIES.put('V', 2); LETTER_FREQUENCIES.put('W', 2); LETTER_FREQUENCIES.put('X', 1);
-        LETTER_FREQUENCIES.put('Y', 2); LETTER_FREQUENCIES.put('Z', 1); LETTER_FREQUENCIES.put('-', 2);
-
-        LETTER_POINTS.put('A', 1); LETTER_POINTS.put('B', 3); LETTER_POINTS.put('C', 3);
-        LETTER_POINTS.put('D', 2); LETTER_POINTS.put('E', 1); LETTER_POINTS.put('F', 4);
-        LETTER_POINTS.put('G', 2); LETTER_POINTS.put('H', 4); LETTER_POINTS.put('I', 1);
-        LETTER_POINTS.put('J', 8); LETTER_POINTS.put('K', 5); LETTER_POINTS.put('L', 1);
-        LETTER_POINTS.put('M', 3); LETTER_POINTS.put('N', 1); LETTER_POINTS.put('O', 1);
-        LETTER_POINTS.put('P', 3); LETTER_POINTS.put('Q', 10); LETTER_POINTS.put('R', 1);
-        LETTER_POINTS.put('S', 1); LETTER_POINTS.put('T', 1); LETTER_POINTS.put('U', 1);
-        LETTER_POINTS.put('V', 4); LETTER_POINTS.put('W', 4); LETTER_POINTS.put('X', 8);
-        LETTER_POINTS.put('Y', 4); LETTER_POINTS.put('Z', 10); LETTER_POINTS.put('-', 0);
+        initializeFrequenciesAThroughM();
+        initializeFrequenciesNThroughBlank();
+        initializeLetterPointsAThroughM();
+        initializeLetterPointsNThroughBlank();
     }
+
+    // EFFECTS: Adds Tile Frequencies to 
+    //   Frequency map for Letters A, B, C,....,M
+    //     inclusive
+    private void initializeFrequenciesAThroughM() {
+        LETTER_FREQUENCIES.put('A', 9); 
+        LETTER_FREQUENCIES.put('B', 2); 
+        LETTER_FREQUENCIES.put('C', 2);
+        LETTER_FREQUENCIES.put('D', 4); 
+        LETTER_FREQUENCIES.put('E', 12); 
+        LETTER_FREQUENCIES.put('F', 2);
+        LETTER_FREQUENCIES.put('G', 3); 
+        LETTER_FREQUENCIES.put('H', 2); 
+        LETTER_FREQUENCIES.put('I', 9);
+        LETTER_FREQUENCIES.put('J', 1); 
+        LETTER_FREQUENCIES.put('K', 1); 
+        LETTER_FREQUENCIES.put('L', 4);
+        LETTER_FREQUENCIES.put('M', 2); 
+    }
+
+    // EFFECTS: Adds Tile Frequencies to 
+    //   Frequency map for Letters N, O,....,Z,_,
+    //     inclusive
+    private void initializeFrequenciesNThroughBlank() {
+        LETTER_FREQUENCIES.put('N', 6); 
+        LETTER_FREQUENCIES.put('O', 8);
+        LETTER_FREQUENCIES.put('P', 2); 
+        LETTER_FREQUENCIES.put('Q', 1); 
+        LETTER_FREQUENCIES.put('R', 6);
+        LETTER_FREQUENCIES.put('S', 4); 
+        LETTER_FREQUENCIES.put('T', 6); 
+        LETTER_FREQUENCIES.put('U', 4);
+        LETTER_FREQUENCIES.put('V', 2); 
+        LETTER_FREQUENCIES.put('W', 2); 
+        LETTER_FREQUENCIES.put('X', 1);
+        LETTER_FREQUENCIES.put('Y', 2); 
+        LETTER_FREQUENCIES.put('Z', 1); 
+        LETTER_FREQUENCIES.put('-', 2);
+    }
+
+    // EFFECTS: Adds Tile Point Values to 
+    //   Point map for Letters A, B, C,....,M
+    //     inclusive
+    private void initializeLetterPointsAThroughM() {
+        LETTER_POINTS.put('A', 1); 
+        LETTER_POINTS.put('B', 3); 
+        LETTER_POINTS.put('C', 3);
+        LETTER_POINTS.put('D', 2); 
+        LETTER_POINTS.put('E', 1); 
+        LETTER_POINTS.put('F', 4);
+        LETTER_POINTS.put('G', 2); 
+        LETTER_POINTS.put('H', 4); 
+        LETTER_POINTS.put('I', 1);
+        LETTER_POINTS.put('J', 8); 
+        LETTER_POINTS.put('K', 5); 
+        LETTER_POINTS.put('L', 1);
+        LETTER_POINTS.put('M', 3);
+    }
+
+    // EFFECTS: Adds Tile Point Values to 
+    //   Point map for Letters N, O,....,Z,_,
+    //     inclusive
+    private void initializeLetterPointsNThroughBlank() {
+        LETTER_POINTS.put('N', 1); 
+        LETTER_POINTS.put('O', 1);
+        LETTER_POINTS.put('P', 3); 
+        LETTER_POINTS.put('Q', 10); 
+        LETTER_POINTS.put('R', 1);
+        LETTER_POINTS.put('S', 1); 
+        LETTER_POINTS.put('T', 1); 
+        LETTER_POINTS.put('U', 1);
+        LETTER_POINTS.put('V', 4); 
+        LETTER_POINTS.put('W', 4); 
+        LETTER_POINTS.put('X', 8);
+        LETTER_POINTS.put('Y', 4); 
+        LETTER_POINTS.put('Z', 10); 
+        LETTER_POINTS.put('-', 0);
+    }
+
     //REQUIRES: Tile Bag is empty
     //MODIFIES: this
     //EFFECTS: Adds correct number of each letter
@@ -70,6 +135,7 @@ public class TileBag {
             drawPile.add(new LetterTile(letter,points));
         }
     }
+
     // MODIFIES: this
     // EFFECTS: Adds already existing tiles back to draw pile
     public void addTiles(List<LetterTile> lettersToAdd) {
@@ -78,7 +144,6 @@ public class TileBag {
          //   drawPile.add(letter);
         //}
     }
-
 
     //MODIFIES: this, player
     //EFFECTS: Removes LetterTiles from the tile bag until
@@ -103,6 +168,7 @@ public class TileBag {
         }
         return numTilesAdded;
     }
+
     // EFFECTS: Number of tiles left in tile bag
     public int numTilesRemaining() {
         return drawPile.size();
@@ -120,6 +186,7 @@ public class TileBag {
     public boolean contains(LetterTile tile) {
         return false;
     }
+    
     // EFFECTS: adds tile to draw pile for testing
     //   purposes
     public void addTile(LetterTile tileToAdd) {

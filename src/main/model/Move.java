@@ -16,7 +16,7 @@ public class Move {
 
     // Constructor if the player played a word on a board
     public Move(Player player, Board board, List<LetterTile> letters, 
-    int startRow, int startCol, int pointsEarned, Direction direction) {
+                int startRow, int startCol, int pointsEarned, Direction direction) {
         this.moveType = MoveType.PLAY_WORD;
         this.player = player;
         this.board = board;
@@ -25,7 +25,6 @@ public class Move {
         this.startRow = startRow;
         this.startCol = startCol;
         this.direction = direction;
-
     }
 
     // Constructor if the player swapped letters
@@ -37,12 +36,12 @@ public class Move {
         swappedLetters.addAll(receivedLetters);
         this.lettersInvolved = swappedLetters;
         this.pointsForMove = 0;
-
     }
 
     // Constructor for end of game where last player gains points from unplayed tiles on opponent racks
     // REQUIRES: Exchanged points >= 0;
-    public Move(Player player, Board board, boolean wasLastToPlay, List<LetterTile> unplayedLetters, int exchangedPoints) {
+    public Move(Player player, Board board, boolean wasLastToPlay,
+            List<LetterTile> unplayedLetters, int exchangedPoints) {
         if (wasLastToPlay) {
             this.moveType = MoveType.END_GAME_WINNER;
             this.pointsForMove = exchangedPoints;
@@ -52,21 +51,24 @@ public class Move {
         }
         this.player = player;
         this.board = board;
-        this.lettersInvolved = unplayedLetters;
-        
+        this.lettersInvolved = unplayedLetters;  
 
     }
+
     public Player getPlayer() {
         return this.player;
     }
+
     public MoveType getMoveType() {
         return this.moveType;
     }
+
     // EFFECTS: returns points gained OR lost
     // in a move, 0 for a swap
     public int getPointsForMove() {
         return this.pointsForMove;
     }
+
     // EFFECTS: returns list of letters played, swapped,
     //  or involved in point adjustments at end game
     public List<LetterTile> getLettersInvolved() {
@@ -81,12 +83,15 @@ public class Move {
     public Direction getDirection() {
         return this.direction;
     }
+
     public int getStartRow() {
         return this.startRow;
     }
+
     public int getStartColumn() {
         return this.startCol;
     }
+
     // REQUIRES: getMoveType() == MoveType.PLAY_WORD, letter is 
     // uppercase between 'A' to 'Z' or '-'
     // EFFECTS: returns true if at least one 

@@ -1,4 +1,5 @@
 package model;
+
 import java.util.Objects;
 
 // Represents a (row,column) coordinate on a board
@@ -17,6 +18,7 @@ public class Coordinate {
     public int getRow() {
         return this.row;
     }
+
     public int getColumn() {
         return this.column;
     }
@@ -28,9 +30,9 @@ public class Coordinate {
     public boolean equals(Object coord) {
         Coordinate toCompareCoord = (Coordinate) coord;
         return row == toCompareCoord.row && column == toCompareCoord.column;
-        
-        
+          
     }
+    
     @Override
     // EFFECTS: hashes the coordinate object
     // based on row and column values

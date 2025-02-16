@@ -19,12 +19,14 @@ public class Board {
     private void initializeBoard() {
 
     }
+
     // EFFECTS: Returns true if all letters will fit within the boundaries
     // of the board, starting at [startRow][startCol] and proceeding in direction
     // until all letters are placed
     public boolean inBounds(List<LetterTile> letters, int startRow, int startCol, Direction dir) {
         return false;
     }
+
     // REQUIRES: inBounds(letters,startRow,startCol, direction) is true
     // EFFECTS: returns true if and only if 
     // all tiles in the desired section are BoardTiles
@@ -38,6 +40,7 @@ public class Board {
     public boolean squareIsAvailable(int row, int col) {
         return false;
     }
+
     //REQUIRES: inBounds() && sectionIsAvailable() for given arguments
     //MODIFIES: this
     //EFFECTS: Places selected letters on board beginning at start position
@@ -46,9 +49,11 @@ public class Board {
     public int playWord(List<LetterTile> letters, int startRow, int startCol, Direction dir) {
         return 0;
     }
+
     //REQUIRES: sectionIsAvailable() is true with same arguments
     //EFFECTS:  returns true if board[row][col] contains a board tile of given tile type
-    public boolean sectionContainsTileType(List<LetterTile> letters, int startRow, int startCol, Direction dir, TileType tileType) {
+    public boolean sectionContainsTileType(List<LetterTile> letters, int startRow, 
+                int startCol, Direction dir, TileType tileType) {
         return false;
     }
 

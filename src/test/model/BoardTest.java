@@ -42,6 +42,7 @@ public class BoardTest {
         assertTrue(board.squareIsAvailable(1, 13));
 
     }
+
     @Test 
     public void testSectionIsAvailableNothingAddedGoingRight() {
         testBag.drawTiles(testPlayer);
@@ -50,6 +51,7 @@ public class BoardTest {
         boolean isAvailable = board.sectionIsAvailable(letters, 7,7,Direction.RIGHT);
         assertTrue(isAvailable);
     }
+
     @Test 
     public void testSectionIsAvailableAboveAndBelowWordGoingRight() {
         testBag.drawTiles(testPlayer);
@@ -88,6 +90,7 @@ public class BoardTest {
         assertTrue(board.inBounds(letters, 0,7, Direction.RIGHT));
 
     }
+
     @Test
     void testInBoundsDown() {
         testBag.drawTiles(testPlayer);
@@ -106,6 +109,7 @@ public class BoardTest {
         assertFalse(board.inBounds(letters, 9,0, Direction.DOWN));
 
     }
+
     @Test
     void testInBoundsStartOOBMoveDownIntoBounds() {
         testBag.drawTiles(testPlayer);
@@ -125,6 +129,7 @@ public class BoardTest {
         assertFalse(board.inBounds(letters, 7,-1, Direction.RIGHT));
         assertFalse(board.inBounds(letters, 14,-1, Direction.RIGHT));
     }
+
     @Test 
     void testPlayWord() {
         testBag.drawTiles(testPlayer);
@@ -153,7 +158,5 @@ public class BoardTest {
         assertTrue(testPlayer.getSelectedTiles().isEmpty());
         //New move should be added
         assertEquals(testPlayer.getHistory().getMoves().size(),1);
-
-
     }
 }

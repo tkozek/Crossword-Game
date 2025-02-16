@@ -4,25 +4,17 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
-import java.util.List;
-import java.util.ArrayList;
-import java.util.Set;
-import java.util.HashSet;
 
 
 public class TileBagTest {
     private TileBag testBag;
-    private Set<Character> set;
     private Player testPlayer;
-    private Player testPlayer2;
     private Board testBoard;
-    private HashSet<Character> chars;
     @BeforeEach
     void runBefore() {
          testBag = new TileBag();
          testBoard = new Board();
          testPlayer = new Player("tester", testBoard, testBag);
-         testPlayer2 = new Player("otherTester", testBoard,testBag);
          
     }
 

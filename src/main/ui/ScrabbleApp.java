@@ -39,11 +39,14 @@ public class ScrabbleApp {
             handleGameplay();
         }
     }
+
     public void initializePlayers() {
         System.out.println("Please enter the number of players [1,4]");
         int numPlayers = this.scanner.nextInt();
         String numPlayerConfirmation = Integer.toString(numPlayers);
-        System.out.println("You entered " + numPlayerConfirmation + " players. Is that correct? Press (Y) to confirm or (N) to cancel and re-enter");
+        System.out.println("You entered " 
+                + numPlayerConfirmation 
+                + " players. Is that correct? Press (Y) to confirm or (N) to cancel and re-enter");
         scanner.nextLine();
         String confirmOrCancel = this.scanner.nextLine();
         printoutSpacer();
@@ -56,16 +59,19 @@ public class ScrabbleApp {
             System.out.println("Invalid entry. Press (Y) to confirm or (N) to cancel and re-enter");
         }
     }
+    
     // REQUIRES: First move of the game hasn't been played.
     // MODIFIES: this
     // EFFECTS: Prompts player to enter players' names
     //         in the desired order of play.
     public void requestPlayerNames(int numPlayers) {
         players = new ArrayList<>();
-        System.out.println("Please enter each player's name, wrapped in \"\" separately, in the order you want to play");
+        System.out.println(
+                "Please enter each player's name, wrapped in \"\" separately, in the order you want to play");
         while (players.size() < numPlayers) {
             String inputPlayerName = scanner.nextLine();
-            System.out.println("You entered " + inputPlayerName + ". Press (Y) to confirm or (N) to cancel and re-enter");
+            System.out.println("You entered " 
+                    + inputPlayerName + ". Press (Y) to confirm or (N) to cancel and re-enter");
             String confirmName = scanner.nextLine();
             if (confirmName.equals("Y")) {
                 player = new Player(inputPlayerName, board, tileBag);

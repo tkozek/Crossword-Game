@@ -17,6 +17,7 @@ public class LetterTile implements Tile {
     public char getCharacter() {
         return this.character;
     }
+    
     public int getLetterPoints() {
         return this.points;
     }

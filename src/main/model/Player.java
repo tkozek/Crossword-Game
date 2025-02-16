@@ -1,4 +1,5 @@
 package model;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,6 +30,7 @@ public class Player {
         this.points = 0;
         
     }
+
     public int getNumTilesOnRack() {
         return tileRack.size();
     }
@@ -49,6 +51,7 @@ public class Player {
     public int getPointsThisGame() {
         return this.points;
     }
+
 ////
     //REQUIRES: 
     //MODIFIES: this, tileBag
@@ -65,11 +68,13 @@ public class Player {
     public void addTile(LetterTile drawnLetter) {
         this.tileRack.add(drawnLetter);
     }
+
     public void makeMove(List<LetterTile> letters, int startRow, int startCol, int pointsEarned) {
         //Player, Board, List<LetterTile> , Start Row, Start Col, Points Earned
         Move move = new Move(this, board, letters, startRow, startCol, pointsEarned);
         this.history.addMove(move);
     }
+
     // REQUIRES: 0 <= index <     public int getNumTilesOnRack() {
     // EFFECTS: returns true if tile at index
     //          was successfully selected
@@ -102,6 +107,7 @@ public class Player {
     public List<LetterTile> getTilesOnRack() {
         return this.tileRack;
     }
+
     //REQUIRES: lettersToSwap must contain all and only selectedTiles
     //       and lettersToSwap.size() <= tileBag.size()
     //            and tilesToSwap.size() >= 0
@@ -123,6 +129,7 @@ public class Player {
         this.selectedTiles.remove(letter);
         this.tileRack.remove(letter);
     }
+
     public History getHistory() {
         return this.history;
     }

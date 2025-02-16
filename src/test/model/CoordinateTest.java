@@ -4,11 +4,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
-import java.util.List;
-import java.util.ArrayList;
-import java.util.Set;
-import java.util.HashSet;
-import java.util.HashMap;
 
 public class CoordinateTest {
     
@@ -19,6 +14,7 @@ public class CoordinateTest {
     void runBefore() {
         
     }
+
     @Test
     public void testGetRow() {
         c1= new Coordinate(0,1);
@@ -204,6 +200,7 @@ public class CoordinateTest {
         assertFalse(c2.equals(c1));
 
     }
+
     @Test 
     public void testHashCodeSameRowSameRow() {
         c1 = new Coordinate(0,0);
@@ -253,6 +250,7 @@ public class CoordinateTest {
 
         assertNotEquals(c1.hashCode(),c2.hashCode());
     }
+
     @Test
     public void testHashCodeNotSameCols() {
         c1 = new Coordinate(0,1);
@@ -308,6 +306,7 @@ public class CoordinateTest {
 
         assertNotEquals(c1.hashCode(),c2.hashCode());
     }
+
     @Test
     public void testHashCodeDiffRowsDiffColumns() {
         c1 = new Coordinate(3,14);
@@ -329,6 +328,5 @@ public class CoordinateTest {
         c1 = new Coordinate(6,9);
         c2 = new Coordinate(12,4);
         assertNotEquals(c1.hashCode(),c2.hashCode());
-
     }
 }

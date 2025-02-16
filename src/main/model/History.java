@@ -15,7 +15,6 @@ public class History {
     public History(String name) {
         this.name = name;
         this.moveHistory = new ArrayList<>();
-
     }
 
     public String getName() {
@@ -25,6 +24,7 @@ public class History {
     public List<Move> getMoves() {
         return this.moveHistory;
     }
+
     // REQUIRES: Move was made user with this.name
     // MODIFIES: this
     // EFFECTS: adds move to this history
@@ -35,7 +35,6 @@ public class History {
     // EFFECTS: Filters player's move history and returns
     // moves in order least to most recent, only including
     // moves which used the given letter at least once
-    
     public List<Move> getListOfMovesContainingLetter(char letter) {
         List<Move> movesWithLetter = new ArrayList<>();
         for (Move move : this.moveHistory) {
