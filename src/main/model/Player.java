@@ -41,6 +41,11 @@ public class Player {
         this.name = name;
     }
 
+    //EFFECTS: sets points for testing purposes
+    public void setPoints(int points) {
+        this.points = points;
+    }
+
     public int getPointsThisGame() {
         return this.points;
     }
