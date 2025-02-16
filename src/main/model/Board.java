@@ -1,11 +1,19 @@
 package model;
 
 import java.util.List;
+import java.util.Set;
 import java.util.ArrayList;
+import java.util.HashSet;
 
 // Represents a Scrabble Game Board
 public class Board {
     public static final int BOARD_LENGTH = 15;
+    private Set<Coordinate> doubleLetterCoordinates = new HashSet<>();
+    private Set<Coordinate> doubleWordCoordinates = new HashSet<>();
+    private Set<Coordinate> tripleLetterCoordinates = new HashSet<>();
+    private Set<Coordinate> tripleWordCoordinates = new HashSet<>();
+    private List<Tile> boardTiles;
+
     // Initializes a new Board, with standard
     // placement of Double word, Triple Word,
     // Double Letter, Triple Letter Tiles
@@ -17,6 +25,30 @@ public class Board {
     // MODIFIES: this
     // EFFECTS: Places special tiles at appropriate positions on board
     private void initializeBoard() {
+
+    }
+
+    // MODIFIES: this
+    // EFFECTS: Places double letter squares at appropriate Coordinates on board
+    private void initializeDoubleLetterSquares() {
+
+    }
+
+    // MODIFIES: this
+    // EFFECTS: Places triple word squares at appropriate Coordinates on board
+    private void initializeTripleLetterSquares() {
+
+    }
+
+    // MODIFIES: this
+    // EFFECTS: Places double word squares at appropriate Coordinates on board
+    private void initializeDoubleWordSquares() {
+
+    }
+
+    // MODIFIES: this
+    // EFFECTS: Places triple word squares at appropriate Coordinates on board
+    private void initializeTripleWordSquares() {
 
     }
 
@@ -41,7 +73,13 @@ public class Board {
         return false;
     }
 
-    //REQUIRES: inBounds() && sectionIsAvailable() for given arguments
+    // EFFECTS: returns true if inBounds()
+    // AND section is sectionIsAvailable()
+    public boolean canPlay() {
+        return false;
+    }
+
+    //REQUIRES: canPlay() is true for given arguments
     //MODIFIES: this
     //EFFECTS: Places selected letters on board beginning at start position
     //         and going in specified direction. 
@@ -62,4 +100,6 @@ public class Board {
     public boolean squareisTileType(int row, int col, TileType tileType) {
         return false;
     }
+
+    
 }

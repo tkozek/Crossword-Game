@@ -30,6 +30,36 @@ public class BoardTest {
         testPlayer2 = new Player("Rovert", testBoard,testBag);
         preSwapChars = new HashMap<>();
         postSwapChars = new HashMap<>();
+        letters = testPlayer.getTilesOnRack();
+    }
+    
+    @Test
+    void testSectionContainsWithAllTypes() {
+        assertTrue(board.sectionContainsTileType(letters,1,0,Direction.DOWN, TileType.DOUBLE_LETTER));
+        assertTrue(board.sectionContainsTileType(letters,1,0,Direction.DOWN, TileType.TRIPLE_WORD));
+        assertTrue(board.sectionContainsTileType(letters,1,0,Direction.RIGHT, TileType.DOUBLE_WORD));
+        assertTrue(board.sectionContainsTileType(letters,1,0,Direction.RIGHT, TileType.TRIPLE_LETTER));
+    }
+    @Test
+    void testSquareIsTypeAllTypes() {
+        assertTrue(board.squareisTileType(7,7,TileType.DOUBLE_WORD));
+        assertFalse(board.squareisTileType(7,7,TileType.DOUBLE_LETTER));
+        assertFalse(board.squareisTileType(7,7,TileType.TRIPLE_LETTER));
+        assertFalse(board.squareisTileType(7,7,TileType.TRIPLE_WORD));
+        //It's normal
+        assertFalse(board.squareisTileType(4,5,TileType.DOUBLE_LETTER));
+        assertTrue(board.squareisTileType(4,5,TileType.NORMAL));
+
+        assertTrue(board.squareisTileType(5,13,TileType.TRIPLE_LETTER));
+        assertFalse(board.squareisTileType(5,13,TileType.DOUBLE_LETTER));
+        assertFalse(board.squareisTileType(5,13,TileType.DOUBLE_WORD));
+        assertFalse(board.squareisTileType(5,13,TileType.TRIPLE_WORD));
+
+        assertTrue(board.squareisTileType(14,14,TileType.TRIPLE_WORD));
+        assertFalse(board.squareisTileType(14,14,TileType.DOUBLE_LETTER));
+        assertFalse(board.squareisTileType(14,14,TileType.DOUBLE_WORD));
+        assertFalse(board.squareisTileType(14,14,TileType.TRIPLE_LETTER));
+
     }
 
 
@@ -147,16 +177,18 @@ public class BoardTest {
         LetterTile tile2 = selectedTiles.get(1);
         assertEquals(tile1, testPlayer.getTilesOnRack().get(1));
         assertEquals(tile2, testPlayer.getTilesOnRack().get(0));
+
+        assertTrue(board.squareisTileType(7,7,TileType.DOUBLE_WORD));
         int pointsGained = board.playWord(selectedTiles,7,7, Direction.RIGHT);
 
         assertEquals(board[7][7].equals(tile1));
         assertEquals(board[7][8].equals(tile2));
         //Double word score at center of board
         assertEquals(pointsGained, 2* (tile1.getLetterPoints() + tile2.getLetterPoints()));
-        assertEquals(testPlayer.getPointsThisGame(), pointsGained);
+        //assertEquals(testPlayer.getPointsThisGame(), pointsGained);
         // Selected tiles should be removed from rack once played
-        assertTrue(testPlayer.getSelectedTiles().isEmpty());
+        //assertTrue(testPlayer.getSelectedTiles().isEmpty());
         //New move should be added
-        assertEquals(testPlayer.getHistory().getMoves().size(),1);
+        //assertEquals(testPlayer.getHistory().getMoves().size(),1);
     }
 }

@@ -5,14 +5,15 @@ import java.util.ArrayList;
 import java.util.Map;
 import java.util.Random;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Random;
 
 // Represents the draw bag of Letter Tiles in 
 // a Scrabble Game
 public class TileBag {
-    private static final  Map<Character, Integer> LETTER_FREQUENCIES = new HashMap<>();
-    private static final  Map<Character, Integer> LETTER_POINTS = new HashMap<>();
     public static final int TOTAL_LETTERS_INITIALLY = 100;
+    private Map<Character, Integer> LETTER_FREQUENCIES = new HashMap<>();
+    private Map<Character, Integer> LETTER_POINTS = new HashMap<>();
     private List<LetterTile> drawPile;
     private Random randomIndexGenerator;
     
