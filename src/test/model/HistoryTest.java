@@ -91,20 +91,20 @@ public class HistoryTest {
         Move doesntHaveZ = new Move(testPlayer, board, playedLetters, 7,9, 8,Direction.RIGHT);
         history.addMove(doesntHaveZ);
 
-        playedLetters.clear();
-        playedLetters.add(A);
-        playedLetters.add(Z); //AZ
+        List<LetterTile> playedLetters2 = new ArrayList<>();
+        playedLetters2.add(A);
+        playedLetters2.add(Z); //AZ
 
-        Move doesntHaveB = new Move(testPlayer, board, playedLetters, 3, 5, 13, Direction.DOWN);
+        Move doesntHaveB = new Move(testPlayer, board, playedLetters2, 3, 5, 13, Direction.DOWN);
         history.addMove(doesntHaveB);
         assertEquals(history.getMoves().size(), 2);
         //BOTH HAVE A
         assertEquals(history.getListOfMovesContainingLetter('A').size(), 2);
         //One has B and One has Z
-        assertEquals(history.getListOfMovesContainingLetter('B'),1);
-        assertEquals(history.getListOfMovesContainingLetter('Z'),1);
+        assertEquals(history.getListOfMovesContainingLetter('B').size(),1);
+        assertEquals(history.getListOfMovesContainingLetter('Z').size(),1);
         // Neither have Q
-        assertEquals(history.getListOfMovesContainingLetter('Q'),1);
+        assertEquals(history.getListOfMovesContainingLetter('Q').size(),0);
 
         assertEquals(doesntHaveB, history.getListOfMovesContainingLetter('A').get(1));
         assertEquals(doesntHaveZ, history.getListOfMovesContainingLetter('A').get(0));
