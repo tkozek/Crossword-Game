@@ -15,6 +15,10 @@ public class History {
     public History(String name) {
 
     }
+
+    public String getName() {
+        return "";
+    }
     
     public List<Move> getMoves() {
         return null;
@@ -29,6 +33,7 @@ public class History {
     // EFFECTS: Filters player's move history and returns
     // moves in order least to most recent, only including
     // moves which used the given letter at least once
+    
     public List<Move> getListOfMovesContainingLetter(char letter) {
         return null;
     }
