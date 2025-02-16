@@ -23,7 +23,7 @@ public class Player {
         this.name = name;
         this.board = board;
         this.tileBag = tileBag;
-        this.history = new History();
+        this.history = new History(this.name);
         this.tileRack = new ArrayList<>();
         this.selectedTiles = new ArrayList<>();
         this.points = 0;

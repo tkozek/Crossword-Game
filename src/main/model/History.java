@@ -14,12 +14,15 @@ public class History {
     // and its associated player's name
     public History(String name) {
 
-        
     }
+    
     public List<Move> getMoves() {
         return null;
     }
-    public void addMove() {
+    // REQUIRES: Move was made user with this.name
+    // MODIFIES: this
+    // EFFECTS: adds move to this history
+    public void addMove(Move move) {
 
     }
 
