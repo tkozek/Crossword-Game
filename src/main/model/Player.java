@@ -69,9 +69,9 @@ public class Player {
         this.tileRack.add(drawnLetter);
     }
 
-    public void makeMove(List<LetterTile> letters, int startRow, int startCol, int pointsEarned) {
+    public void makeMove(List<LetterTile> letters, int startRow, int startCol, int pointsEarned, Direction dir) {
         //Player, Board, List<LetterTile> , Start Row, Start Col, Points Earned
-        Move move = new Move(this, board, letters, startRow, startCol, pointsEarned);
+        Move move = new Move(this, board, letters, startRow, startCol, pointsEarned, dir);
         this.history.addMove(move);
     }
 
@@ -108,27 +108,21 @@ public class Player {
         return this.tileRack;
     }
 
-    //REQUIRES: lettersToSwap must contain all and only selectedTiles
-    //       and lettersToSwap.size() <= tileBag.size()
-    //            and tilesToSwap.size() >= 0
+    //REQUIRES: getSelectedTiles.size() <= tileBag.size()
     //MODIFIES: this, tileBag
     //EFFECTS: Adds specified tiles back to common draw bag, then replaces
     //          same number of tiles with random tiles from draw bag.
-    public void swapTiles(List<LetterTile> lettersToSwap) {
-        for (LetterTile letter : lettersToSwap) {
-            this.removeLetterFromPlayer(letter);
+    public void swapTiles() {
+        List<LetterTile> copy = new ArrayList<>(this.getSelectedTiles());
+        this.tileBag.addTiles(getSelectedTiles());
+        for (LetterTile letter : this.getSelectedTiles()) {
+            this.tileRack.remove(letter);
         }
-        this.tileBag.addTiles(lettersToSwap);
+        this.clearSelectedTiles();
         this.tileBag.drawTiles(this);
     }
 
-    //MODIFIES: this
-    //EFFECTS : removes letter from player's selected
-    // letters and from their tile rack
-    public void removeLetterFromPlayer(LetterTile letter) {
-        this.selectedTiles.remove(letter);
-        this.tileRack.remove(letter);
-    }
+    
 
     public History getHistory() {
         return this.history;

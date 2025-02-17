@@ -5,8 +5,7 @@ import java.util.ArrayList;
 import java.util.Map;
 import java.util.Random;
 import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Random;
+import java.util.Collections;
 
 // Represents the draw bag of Letter Tiles in 
 // a Scrabble Game
@@ -163,8 +162,8 @@ public class TileBag {
         while (player.getNumTilesOnRack() < Player.MAX_NUM_TILES && !drawPile.isEmpty()) {
             nextTileIndex = randomIndexGenerator.nextInt(this.numTilesRemaining());
             nextTile = drawPile.get(nextTileIndex);
-            drawPile.remove(nextTile);
             player.addTile(nextTile);
+            drawPile.remove(nextTile);
             numTilesAdded++;
         }
         return numTilesAdded;

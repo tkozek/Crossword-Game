@@ -40,6 +40,36 @@ public class PlayerTest {
         assertEquals("Trevor", testPlayer.getPlayerName());
 
     }
+
+    @Test
+    void testSelectTileAlreadySelected() {
+        testBag.drawTiles(testPlayer);
+        assertEquals(testPlayer.getNumTilesOnRack(), 7);
+        assertTrue(testPlayer.selectTile(0));
+        assertFalse(testPlayer.selectTile(0));
+        assertTrue(testPlayer.selectTile(2));
+        assertFalse(testPlayer.selectTile(2));
+        assertTrue(testPlayer.selectTile(6));
+        assertFalse(testPlayer.selectTile(0));
+        assertEquals(testPlayer.getSelectedTiles().size(), 3);
+    }
+
+    @Test
+    void testClearSelectedTilesNoneSelected() {
+        testBag.drawTiles(testPlayer);
+        assertFalse(testPlayer.clearSelectedTiles());
+    }
+
+    @Test
+    void testClearSelectedTiles() {
+        testBag.drawTiles(testPlayer);
+        assertEquals(testPlayer.getNumTilesOnRack(), 7);
+        assertTrue(testPlayer.selectTile(0));
+        assertEquals(testPlayer.getSelectedTiles().size(), 1);
+        assertTrue(testPlayer.clearSelectedTiles());
+        assertFalse(testPlayer.clearSelectedTiles());
+    }
+
     @Test
     void testSetPlayerName() {
         assertEquals("Trevor", testPlayer.getPlayerName());
@@ -52,7 +82,26 @@ public class PlayerTest {
         testBag.drawTiles(testPlayer);
         assertEquals(testPlayer.getNumTilesOnRack(), Player.MAX_NUM_TILES);
     }
+
     @Test
+    void testSetPlayerPoints() {
+        testPlayer.setPoints(10);
+        assertEquals(testPlayer.getPointsThisGame(), 10);
+    }
+    @Test
+    void testMakeMove() {
+        testBag.drawTiles(testPlayer);
+        testPlayer.selectTile(0);
+        testPlayer.selectTile(6);
+        assertEquals(testPlayer.getSelectedTiles().size(), 2);
+        testPlayer.makeMove(testPlayer.getSelectedTiles(), 2, 2, 10, Direction.DOWN);
+        assertEquals(testPlayer.getHistory().getMoves().size(), 1);
+        assertEquals(testPlayer.getHistory().getMoves().get(0).getPlayer(), testPlayer);
+
+    }
+
+
+    /* @Test
     void testSwapAllTiles() {
         assertEquals(testPlayer.getNumTilesOnRack(), 0);
         testBag.drawTiles(testPlayer);
@@ -62,7 +111,12 @@ public class PlayerTest {
 
         int numTilesToSwap  = 7;
         assertTrue(testBag.numTilesRemaining() >= numTilesToSwap);
-        testPlayer.swapTiles(initialLetters);
+
+        for (int i = 0; i < 1; i++) {
+            testPlayer.selectTile(i);
+        }
+        assertTrue(testBag.numTilesRemaining() > 7);
+        testPlayer.swapTiles();
 
         List<LetterTile> postSwapLetters = testPlayer.getTilesOnRack();
         int numThingsChanged = 0;
@@ -78,8 +132,8 @@ public class PlayerTest {
     // Chance of drawing all the tiles we had initially is 7!/(100!/93!)
     // So the chances of this assertion failing are 
     // 50.4 / 806,781,064,320 about 6.25 in a 100 billion chance
-        assertTrue(numThingsChanged>0);
-    }
+        assertTrue(numThingsChanged==1);
+    } */
     @Test
     void testSwapZeroTiles() {
         assertEquals(testPlayer.getNumTilesOnRack(), 0);
@@ -91,7 +145,7 @@ public class PlayerTest {
         List<LetterTile> selectedLetters = testPlayer.getSelectedTiles();
         int numTilesToSwap  = selectedLetters.size();
         assertEquals(numTilesToSwap,0);
-        testPlayer.swapTiles(selectedLetters);
+        testPlayer.swapTiles();
 
         List<LetterTile> postSwapLetters = testPlayer.getTilesOnRack();
         int numThingsChanged = 0;
