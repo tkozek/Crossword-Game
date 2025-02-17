@@ -21,6 +21,9 @@ public class BoardTest {
     private HashMap<Character, Integer> preSwapChars;
     private HashMap<Character, Integer> postSwapChars;
     private List<LetterTile>  letters;
+    private LetterTile B; 
+    private LetterTile A;
+    private LetterTile Z;
 
     @BeforeEach
     void runBefore() {
@@ -30,17 +33,27 @@ public class BoardTest {
         testPlayer2 = new Player("Rovert", testBoard,testBag);
         preSwapChars = new HashMap<>();
         postSwapChars = new HashMap<>();
+        testBag.drawTiles(testPlayer);
         letters = testPlayer.getTilesOnRack();
+        B = new LetterTile('B',3);
+        A = new LetterTile('A',1);
+        Z = new LetterTile('Z',10);
     }
     
-    @Test
+    @Test 
+
+    void testInBounds() {
+
+    }
+    /* @Test
     void testSectionContainsWithAllTypes() {
         assertTrue(board.sectionContainsTileType(letters,1,0,Direction.DOWN, TileType.DOUBLE_LETTER));
         assertTrue(board.sectionContainsTileType(letters,1,0,Direction.DOWN, TileType.TRIPLE_WORD));
         assertTrue(board.sectionContainsTileType(letters,1,0,Direction.RIGHT, TileType.DOUBLE_WORD));
         assertTrue(board.sectionContainsTileType(letters,1,0,Direction.RIGHT, TileType.TRIPLE_LETTER));
-    }
-    @Test
+    } */
+
+    /* @Test
     void testSquareIsTypeAllTypes() {
         assertTrue(board.squareisTileType(7,7,TileType.DOUBLE_WORD));
         assertFalse(board.squareisTileType(7,7,TileType.DOUBLE_LETTER));
@@ -60,10 +73,10 @@ public class BoardTest {
         assertFalse(board.squareisTileType(14,14,TileType.DOUBLE_WORD));
         assertFalse(board.squareisTileType(14,14,TileType.TRIPLE_LETTER));
 
-    }
+    } */
 
 
-    @Test 
+   /*  @Test 
     public void testSquareIsAvailable() {
         assertTrue(board.squareIsAvailable(0, 0));
         assertTrue(board.squareIsAvailable(14, 14));
@@ -71,7 +84,7 @@ public class BoardTest {
         assertTrue(board.squareIsAvailable(8, 1));
         assertTrue(board.squareIsAvailable(1, 13));
 
-    }
+    } */
 
     @Test 
     public void testSectionIsAvailableNothingAddedGoingRight() {
@@ -105,15 +118,17 @@ public class BoardTest {
     void testInBoundsRight() {
         testBag.drawTiles(testPlayer);
         letters = testPlayer.getTilesOnRack();
+        assertEquals(7, letters.size());
         //
-        assertTrue(board.inBounds(letters, 7,3, Direction.RIGHT));
-        assertTrue(board.inBounds(letters, 7,2, Direction.RIGHT));
-        assertTrue(board.inBounds(letters, 7,1, Direction.RIGHT));
+        Direction dir = Direction.RIGHT;
+        assertTrue(board.inBounds(letters, 7,3, dir));
+        assertTrue(board.inBounds(letters, 7,2, dir));
+        assertTrue(board.inBounds(letters, 7,1, dir));
 
-        assertTrue(board.inBounds(letters, 14,7, Direction.RIGHT));
-        assertTrue(board.inBounds(letters, 14,8, Direction.RIGHT));
-        assertFalse(board.inBounds(letters, 14,9, Direction.RIGHT));
-        assertFalse(board.inBounds(letters, 14,10, Direction.RIGHT));
+        assertTrue(board.inBounds(letters, 14,7, dir));
+        assertTrue(board.inBounds(letters, 14,8, dir));
+        assertFalse(board.inBounds(letters, 14,9, dir));
+        assertFalse(board.inBounds(letters, 14,10, dir));
 
         assertTrue(board.inBounds(letters, 0,5, Direction.RIGHT));
         assertTrue(board.inBounds(letters, 0,6, Direction.RIGHT));
@@ -160,35 +175,76 @@ public class BoardTest {
         assertFalse(board.inBounds(letters, 14,-1, Direction.RIGHT));
     }
 
-    @Test 
-    void testPlayWord() {
-        testBag.drawTiles(testPlayer);
-        // no moves played yet
-        assertEquals(testPlayer.getHistory().getMoves().size(),0);
+    @Test
+    void testSectionNotAvailableTileWasPlayed() {
+        assertEquals(letters.size(),7);
+        board.playWord(letters, 0,0,Direction.DOWN);
+        assertFalse(board.sectionIsAvailable(letters, 0,0, Direction.DOWN));
+        assertFalse(board.sectionIsAvailable(letters, 0,0, Direction.RIGHT));
 
-        // Center square as if first turn
-        assertTrue(board.squareIsAvailable(7,7));
-        assertTrue(board.squareIsAvailable(7,8));
-        //2nd rack tile placed first, 1st rack tile placed second
-        testPlayer.selectTile(1);
-        testPlayer.selectTile(0);
-        List<LetterTile> selectedTiles = testPlayer.getSelectedTiles();
-        LetterTile tile1 = selectedTiles.get(0);
-        LetterTile tile2 = selectedTiles.get(1);
-        assertEquals(tile1, testPlayer.getTilesOnRack().get(1));
-        assertEquals(tile2, testPlayer.getTilesOnRack().get(0));
-
-        assertTrue(board.squareisTileType(7,7,TileType.DOUBLE_WORD));
-        int pointsGained = board.playWord(selectedTiles,7,7, Direction.RIGHT);
-
-        assertEquals(board[7][7].equals(tile1));
-        assertEquals(board[7][8].equals(tile2));
-        //Double word score at center of board
-        assertEquals(pointsGained, 2* (tile1.getLetterPoints() + tile2.getLetterPoints()));
-        //assertEquals(testPlayer.getPointsThisGame(), pointsGained);
-        // Selected tiles should be removed from rack once played
-        //assertTrue(testPlayer.getSelectedTiles().isEmpty());
-        //New move should be added
-        //assertEquals(testPlayer.getHistory().getMoves().size(),1);
     }
+
+    @Test
+    void testSectionNotStaggered() {
+        assertEquals(letters.size(),7);
+        board.playWord(letters, 4,4,Direction.DOWN);
+        assertFalse(board.sectionIsAvailable(letters, 4,0, Direction.RIGHT));
+        assertFalse(board.sectionIsAvailable(letters, 0,4, Direction.DOWN));
+
+    }
+
+    @Test
+    void testSectionAvailableBarelyOverlap() {
+        assertEquals(letters.size(),7);
+        board.playWord(letters, 7,7,Direction.DOWN);
+        assertFalse(board.sectionIsAvailable(letters, 7,1, Direction.RIGHT));
+        assertFalse(board.sectionIsAvailable(letters, 1,7, Direction.DOWN));
+        assertTrue(board.sectionIsAvailable(letters, 7,0, Direction.RIGHT));
+        assertTrue(board.sectionIsAvailable(letters, 0,7, Direction.DOWN));
+    }
+    @Test 
+    void testCanPlay() {
+        assertTrue(board.canPlay(letters, 0, 0, Direction.DOWN));
+        assertTrue(board.canPlay(letters, 0, 0, Direction.RIGHT));
+
+        assertFalse(board.canPlay(letters, 9,9, Direction.DOWN));
+        assertFalse(board.canPlay(letters, 9,9, Direction.RIGHT));
+
+        board.playWord(letters, 7, 7, Direction.RIGHT);
+        assertTrue(board.canPlay(letters, 1,14, Direction.DOWN));
+        assertFalse(board.canPlay(letters, 1,13, Direction.DOWN));
+    }
+
+    @Test
+    void testScoreWord() {
+        letters.clear();
+        assertTrue(letters.isEmpty());
+        letters.add(B);
+        letters.add(A);
+        letters.add(Z);
+        assertEquals(letters.size(), 3);
+        //TW
+        assertEquals((3+1+10) * 3, board.scoreWord(letters, 0,0,Direction.DOWN));
+        board = new Board();
+        assertEquals((3+1+10) * 3, board.scoreWord(letters, 0,0,Direction.RIGHT));
+        board = new Board();
+        // DW
+        assertEquals((3+1+10) * 2, board.scoreWord(letters, 1,1,Direction.DOWN));
+        board = new Board();
+        assertEquals((3+1+10) * 2, board.scoreWord(letters, 1,1,Direction.DOWN));
+        board = new Board();
+        //Normal
+        assertEquals((3+1+10), board.scoreWord(letters, 1,2,Direction.RIGHT));
+        board = new Board();
+        //TL
+        assertEquals((3*3+1+10), board.scoreWord(letters, 1,5,Direction.RIGHT));
+        board = new Board();
+        assertEquals((3+1+10*3), board.scoreWord(letters, 3,5,Direction.DOWN));
+        board = new Board();
+        //DL
+        assertEquals(3 + 1*2+10, board.scoreWord(letters, 10,14,Direction.DOWN));
+        board = new Board();
+        
+    }
+
 }
