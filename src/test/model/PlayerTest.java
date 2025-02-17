@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.List;
+import java.util.Map;
 import java.util.ArrayList;
 import java.util.Set;
 import java.util.HashSet;
@@ -157,6 +158,17 @@ public class PlayerTest {
         assertEquals(numThingsChanged,0);
     
 
+    }
+
+
+    @Test
+    void testGetNumCharOnRackZeroChars() {
+        Player playerTest = new Player("name", board, testBag);
+        Map<Character,Integer> counts = testPlayer.getNumEachCharOnMyRack();
+        for (int count : counts.values()) {
+            assertEquals(count, 0);
+        }
+    
     }
     @Test
     void testAddtile() {

@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.List;
+import java.util.Map;
 import java.util.ArrayList;
 import java.util.Set;
 import java.util.HashSet;
@@ -245,6 +246,15 @@ public class BoardTest {
         assertEquals(3 + 1*2+10, board.scoreWord(letters, 10,14,Direction.DOWN));
         board = new Board();
         
+    }
+
+    @Test
+    void testGetNumCharOnBoard() {
+        Map<Character,Integer> counts = board.getNumEachCharOnBoard();
+        for (int count : counts.values()) {
+            assertEquals(count, 0);
+        }
+    
     }
 
 }
