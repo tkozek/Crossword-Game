@@ -192,5 +192,10 @@ public class TileBag {
     public void addTile(LetterTile tileToAdd) {
         drawPile.add(tileToAdd);
     }
+
+
+    public Map<Character, Integer> getInitialLetterFrequencies() {
+        return LETTER_FREQUENCIES;
+    }
     
 }  

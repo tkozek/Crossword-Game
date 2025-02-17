@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.Set;
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.HashMap;
+import java.util.Map;
 
 // Represents a Scrabble Game Board
 public class Board {
@@ -277,5 +279,23 @@ public class Board {
         }
     } */
 
-    
-}
+
+    //EFFECTS: returns Chacters 'A' to 'Z' and '_'
+    //   mapped to their number of occurences on board
+    public Map<Character, Integer> getNumEachCharOnBoard() {
+        Map<Character, Integer> charCounts = new HashMap<>();
+        for (int i = 0; i < 15; i++) {
+            for (int j = 0; j < 15; j++) {
+                if (boardTiles[i][j] instanceof BoardTile) {
+                    continue;
+                } else if (boardTiles[i][j] instanceof LetterTile) {
+                    LetterTile tile = (LetterTile) boardTiles[i][j];
+                    char letterChar = tile.getCharacter();
+                    charCounts.put(letterChar, charCounts.getOrDefault(letterChar,0) + 1);
+                }
+                }
+            }
+        return charCounts;
+        }
+    }
+

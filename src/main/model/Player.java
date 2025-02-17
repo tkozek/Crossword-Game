@@ -1,8 +1,9 @@
 package model;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
-
+import java.util.Map;
 
 // Represents a player in the Scrabble Game
 
@@ -121,8 +122,32 @@ public class Player {
         this.clearSelectedTiles();
         this.tileBag.drawTiles(this);
     }
+    //EFFECTS: returns Chacters 'A' to 'Z' and '_'
+    //   mapped to their number of occurences on tile rack
+    public Map<Character, Integer> getNumEachCharOnMyRack() {
+        HashMap<Character,Integer> playerCharCounts = new HashMap<>();
+        List<LetterTile> letters = this.getTilesOnRack();
+        for (LetterTile letter : letters) {
+            char letterChar = letter.getCharacter();
+            playerCharCounts.put(letterChar, playerCharCounts.getOrDefault(letterChar,0) + 1);
+        }
+        return playerCharCounts;
+    }
 
-    
+    // EFFECTS: Adds up total occurences of every character on board,
+    // and on this player's rack. Combines those and subtracts from
+    //  initial counts in draw pile to get remaining number of each
+    // letter between the draw pile and opponents' racks
+    public Map<Character, Integer> getNumEachCharInBagAndOpponents() {
+        Map<Character, Integer> tileBagCounts = tileBag.getInitialLetterFrequencies();
+        Map<Character, Integer> playerCharCounts = this.getNumEachCharOnMyRack();
+        Map<Character, Integer> boardCounts = board.getNumEachCharOnBoard();
+        for (Character key : tileBagCounts.keySet()) {
+            int valueToSubtract = playerCharCounts.getOrDefault(key,0) + boardCounts.getOrDefault(key,0);
+            tileBagCounts.put(key, tileBagCounts.get(key) - valueToSubtract);
+        }
+        return tileBagCounts;
+    }
 
     public History getHistory() {
         return this.history;
