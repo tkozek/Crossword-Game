@@ -3,6 +3,7 @@ package ui;
 import java.util.Scanner;
 import java.util.List;
 import java.util.Map;
+import java.nio.channels.Pipe.SourceChannel;
 import java.util.ArrayList;
 import model.*;
 
@@ -65,7 +66,7 @@ public class ScrabbleApp {
     public void requestPlayerNames(int numPlayers) {
         players = new ArrayList<>();
         System.out.println(
-                "Please enter each player's name, wrapped in \"\" separately, in the order you want to play");
+                "Please enter each player's name separately, in the order you want to play");
         while (players.size() < numPlayers) {
             String inputPlayerName = scanner.nextLine();
             System.out.println("You entered " 
@@ -87,40 +88,108 @@ public class ScrabbleApp {
         for (int i = 0; i < numPlayers; i++) {
             Player playerToPlayNext = players.get(i);
             tileBag.drawTiles(playerToPlayNext);
-            System.out.println("Enter P to print out number of remaining tiles in draw pile and opponent racks");
-            scanner.nextLine();
-            String viewTiles = this.scanner.nextLine();
-            if (viewTiles.equals("P")) {
-                getRemainingCharacterCounts(playerToPlayNext);
-            }
-            while (true) {
-                System.out.println("Enter the index of the tiles you'd like to play, in the order they form your word " + 
-                "or enter C to confirm");
-                if (scanner.hasNextInt()) {
-                    int index = scanner.nextInt();
-                    playerToPlayNext.selectTile(i);
-                    scanner.nextLine();
-                } else if (scanner.hasNext("C")) {
-                    System.out.println("Enter the row index you'd like to start your word at");
-                    int row = scanner.nextInt();
-                    scanner.nextLine();
-                    System.out.println("Enter the column index you'd like to start your word at");
-                    int col = scanner.nextInt();
-                    scanner.nextLine();
-                    System.out.println("Now enter direction (D)own or (R)ight");
-                    String direction = scanner.nextLine();
-                    Direction dir;
-                    if (direction.equals("D")) {
-                        dir = Direction.DOWN;
-                    } else {
-                        dir = Direction.RIGHT;
-                    }
-                    if (board.canPlay(playerToPlayNext.getSelectedTiles(), row,col, dir)) {
-                        board.playWord(playerToPlayNext.getSelectedTiles(), row,col, dir);
-                    }
+            System.out.println("Here are your tiles: " + playerToPlayNext.getPlayerName());
+            getTilePrintOut(playerToPlayNext);
+            handleTurn(playerToPlayNext);
+        }
+    }
+
+    public void handleTurn(Player p) {
+        System.out.println("Type whether you'd like to (P)lay, (S)wap, S(k)ip");
+        
+        switch (scanner.nextLine()) {
+            case "P":
+                handlePlay(p);
+                break;
+            case "S":
+                handleSwap();
+                break;
+            case "K":
+                handleSkip();
+                break;
+        }
+    }
+
+    public void handlePlay(Player player) {
+        while (true) {
+            System.out.println("Enter the index of the tiles you'd like to play, in the order they form your word "
+                    + "or enter C to confirm");
+            if (scanner.hasNextInt()) {
+                player.selectTile(scanner.nextInt());
+                System.out.println("So far you've selected: ");
+                printSelectedTiles(player);
+            } else if (scanner.hasNext("C")) {
+                scanner.nextLine();
+                System.out.println("Enter the row index you'd like to start your word at \n ");
+                scanner.nextLine();
+                int row = scanner.nextInt();
+
+                System.out.println("Enter the column index you'd like to start your word at");
+                int col = scanner.nextInt();
+                scanner.nextLine();
+                System.out.println("Now enter direction (R)ight or (D)own (default)");
+                Direction dir = (scanner.nextLine().equals("R")) ? Direction.RIGHT : Direction.DOWN;
+                if (board.canPlay(player.getSelectedTiles(), row, col, dir)) {
+                    board.playWord(player.getSelectedTiles(), row, col, dir);
+                    player.removeSelectedTiles();
+                    break;
+                } else {
+                    System.out.println("Can't play that word there");
                 }
             }
         }
+    }
+
+
+    public void handleSwap() {
+        while (true) {
+            System.out.println("Enter the index of the tiles you'd like to swap or enter \"C\" to confirm");
+            if (scanner.hasNextInt()) {
+                player.selectTile(scanner.nextInt());
+                System.out.println("So far you've selected: ");
+                printSelectedTiles(player);
+            } else if (scanner.hasNext("C")) {
+                player.swapTiles();
+                System.out.println("Your new tiles are: ");
+                getTilePrintOut(player);
+                break;
+            } else {
+                System.out.println("Invalid entry, try again");
+            }
+        }
+    }
+
+    public void handleSkip() {
+        player.clearSelectedTiles();
+        player.swapTiles();
+        System.out.println("You've skipped your turn");
+    }
+
+    //EFFECTS: Prints out selected tiles
+    // for player
+    public void printSelectedTiles(Player p) {
+        String tilePrintOut = "";
+        List<LetterTile> playersSelectedLetters = p.getSelectedTiles();
+        for (LetterTile letter : playersSelectedLetters) {
+            tilePrintOut += getLetterString(letter);
+        }
+        System.out.println(tilePrintOut + "\n");
+    }
+
+    //EFFECTS: Prints out all tiles on the
+    // player's tile rack
+    public void getTilePrintOut(Player p) {
+        String tilePrintOut = "";
+        List<LetterTile> playersLetters = p.getTilesOnRack();
+        for (LetterTile letter : playersLetters) {
+            tilePrintOut += getLetterString(letter);
+        }
+        System.out.println(tilePrintOut + "\n");
+    }
+
+    public String getLetterString(LetterTile letter) {
+        char character = letter.getCharacter();
+        return String.valueOf(character);
     }
 
     // EFFECTS: Prints remaining character counts

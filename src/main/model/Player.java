@@ -114,15 +114,16 @@ public class Player {
     //EFFECTS: Adds specified tiles back to common draw bag, then replaces
     //          same number of tiles with random tiles from draw bag.
     public void swapTiles() {
+        List<LetterTile> original = this.getSelectedTiles();
         List<LetterTile> copy = new ArrayList<>(this.getSelectedTiles());
-        this.tileBag.addTiles(getSelectedTiles());
-        for (LetterTile letter : this.getSelectedTiles()) {
+        this.tileBag.addTiles(copy);
+        this.clearSelectedTiles();
+        for (LetterTile letter : original) {
             this.tileRack.remove(letter);
         }
-        this.clearSelectedTiles();
         this.tileBag.drawTiles(this);
     }
-    
+
     //EFFECTS: returns Chacters 'A' to 'Z' and '_'
     //   mapped to their number of occurences on tile rack
     public Map<Character, Integer> getNumEachCharOnMyRack() {
@@ -152,5 +153,16 @@ public class Player {
 
     public History getHistory() {
         return this.history;
+    }
+
+    // MODIFIES: this
+    // EFFECTS: removes all selected tiles
+    // from tile rack, and clears selected tiles
+    public void removeSelectedTiles() {
+        List<LetterTile> selectedTiles = this.getSelectedTiles();
+        for (LetterTile letter : selectedTiles) {
+            tileRack.remove(letter);
+        }
+        clearSelectedTiles();
     }
 }
