@@ -115,10 +115,13 @@ public class Player {
     //          same number of tiles with random tiles from draw bag.
     public void swapTiles() {
         List<LetterTile> original = this.getSelectedTiles();
-        List<LetterTile> copy = new ArrayList<>(this.getSelectedTiles());
+        List<LetterTile> copy = new ArrayList<>();
+        for (LetterTile letter : original) {
+            copy.add(letter);
+        }
         this.tileBag.addTiles(copy);
         this.clearSelectedTiles();
-        for (LetterTile letter : original) {
+        for (LetterTile letter : copy) {
             this.tileRack.remove(letter);
         }
         this.tileBag.drawTiles(this);

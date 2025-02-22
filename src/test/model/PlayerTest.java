@@ -149,15 +149,18 @@ public class PlayerTest {
         testPlayer.swapTiles();
 
         List<LetterTile> postSwapLetters = testPlayer.getTilesOnRack();
-        int numThingsChanged = 0;
-        for (int i = 0; i < Player.MAX_NUM_TILES; i++) {
-            if (!initialLetters.contains(postSwapLetters.get(i))) {
-                numThingsChanged++;
-            }
-    }
-        assertEquals(numThingsChanged,0);
+        
+        assertEquals(postSwapLetters,initialLetters);
     
 
+    }
+
+    @Test
+    void testSwapTiles() {
+        testBag.drawTiles(testPlayer);
+        testPlayer.selectTile(0);
+        testPlayer.selectTile(5);
+        testPlayer.swapTiles();
     }
 
 
@@ -165,9 +168,7 @@ public class PlayerTest {
     void testGetNumCharOnRackZeroChars() {
         Player playerTest = new Player("name", board, testBag);
         Map<Character,Integer> counts = testPlayer.getNumEachCharOnMyRack();
-        for (int count : counts.values()) {
-            assertEquals(count, 0);
-        }
+        assertTrue(counts.values().isEmpty());
     
     }
     @Test
@@ -225,6 +226,52 @@ public class PlayerTest {
         assertTrue(counts.equals(drawPileCounts));
         
     }
+
+    @Test
+    void testGetNumEachCharOnMyRackEmptyRack() {
+        assertEquals(0, testPlayer.getTilesOnRack().size());
+        Map<Character, Integer> rackCharCounts = testPlayer.getNumEachCharOnMyRack();
+        assertTrue(rackCharCounts.keySet().isEmpty());
+        assertTrue(rackCharCounts.values().isEmpty());
+    }
+    @Test
+    void testGetNumEachCharOnMyRackFullRack() {
+        testBag.drawTiles(testPlayer);
+        assertEquals(Player.MAX_NUM_TILES, testPlayer.getTilesOnRack().size());
+        Map<Character, Integer> rackCharCounts = testPlayer.getNumEachCharOnMyRack();
+        assertFalse(rackCharCounts.keySet().isEmpty());
+        assertFalse(rackCharCounts.values().isEmpty());
+        int totalCounts = 0;
+        for (int charCount : rackCharCounts.values()) {
+            totalCounts += charCount;
+        }
+        assertEquals(Player.MAX_NUM_TILES, totalCounts);
+    }
+
+    @Test
+    void testRemoveSelectedTiles() {
+        testBag.drawTiles(testPlayer);
+        testPlayer.selectTile(0);
+        testPlayer.selectTile(5);
+        List<LetterTile> selectedTilesTemp = testPlayer.getSelectedTiles();
+        List<LetterTile> selectedTiles = new ArrayList<>();
+        for (LetterTile letter : selectedTilesTemp) {
+            selectedTiles.add(letter);
+        }
+        assertEquals(selectedTiles.size(), 2);
+        for (LetterTile selectedTile : selectedTiles) {
+            assertTrue(testPlayer.getTilesOnRack().contains(selectedTile));
+        }
+        testPlayer.removeSelectedTiles();
+        //TileRack wont' contain these anymore
+        assertEquals(selectedTiles.size(), 2);
+        for (LetterTile selectedTile : selectedTiles) {
+            assertFalse(testPlayer.getTilesOnRack().contains(selectedTile));
+        }
+        //Selected tiles are empty now
+        assertEquals(testPlayer.getSelectedTiles().size(), 0);
+    }
+
 
 }
 

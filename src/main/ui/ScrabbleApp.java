@@ -123,7 +123,6 @@ public class ScrabbleApp {
                 System.out.println("Enter the row index you'd like to start your word at \n ");
                 scanner.nextLine();
                 int row = scanner.nextInt();
-
                 System.out.println("Enter the column index you'd like to start your word at");
                 int col = scanner.nextInt();
                 scanner.nextLine();
@@ -228,6 +227,10 @@ public class ScrabbleApp {
     // EFFECTS: Ends the Scrabble Game
     public void endGame() {
         this.gameRunning = false;
+    }
+
+    public void getBoardPrintOut(Board board){
+        
     }
 
     // Play the game
