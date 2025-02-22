@@ -2,6 +2,7 @@ package model;
 
 import java.util.List;
 import java.util.Set;
+
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.HashMap;
@@ -145,7 +146,6 @@ public class Board {
     // of the board, starting at [startRow][startCol] and proceeding in direction
     // until all letters are placed
     public boolean inBounds(List<LetterTile> letters, int startRow, int startCol, Direction dir) {
-        
         int length = letters.size();
         if (startRow < 0 || startCol < 0) {
             return false;
@@ -212,23 +212,38 @@ public class Board {
         for (int i = 0; i < letters.size(); i++) {
             int letterPoints = letters.get(i).getLetterPoints();
             Coordinate coord = new Coordinate(startRow + i * rowInc, startCol + i * colInc);
-            if (doubleLetterCoordinates.contains(coord)) {
-                letterPoints *= 2;
-                doubleLetterCoordinates.remove(coord);
-            } else if (doubleWordCoordinates.contains(coord)) {
-                wordMultiplier *= 2;
-                doubleWordCoordinates.remove(coord);
-            } else if (tripleLetterCoordinates.contains(coord)) {
-                letterPoints *= 3;
-                tripleLetterCoordinates.remove(coord);
-            } else if (tripleWordCoordinates.contains(coord)) {
-                wordMultiplier = 3;
-                tripleWordCoordinates.remove(coord);
-            }
+            int tempWordMultiplier = findWordMultiplier(coord);
+            int tempLetterMultiplier = findLetterMultiplier(coord);
+            letterPoints *= tempLetterMultiplier;
+            wordMultiplier *= tempWordMultiplier;
             total += letterPoints;
         }
         return total * wordMultiplier;
     }
+
+    public int findWordMultiplier(Coordinate coord) {
+        if (doubleWordCoordinates.contains(coord)) {
+            doubleWordCoordinates.remove(coord);
+            return 2;
+        } else if (tripleWordCoordinates.contains(coord)) {
+            tripleWordCoordinates.remove(coord);
+            return 3;
+        } else {
+            return 1;
+        }
+    }
+
+    public int findLetterMultiplier(Coordinate coord) {
+        if (doubleLetterCoordinates.contains(coord)) {
+            doubleLetterCoordinates.remove(coord);
+            return 2;
+        } else if (tripleLetterCoordinates.contains(coord)) {
+            tripleLetterCoordinates.remove(coord);
+            return 3;
+        } else {
+            return 1;
+        }
+        }
 
     public void placeWord(List<LetterTile> letters, int startRow, int startCol, Direction dir) {
         int length = letters.size();
@@ -238,6 +253,7 @@ public class Board {
             int row = startRow + i * rowIncrement;
             int col = startCol + i * colIncrement;
             boardTiles[row][col] = letters.get(i);
+            
         }
     }
 
@@ -288,14 +304,15 @@ public class Board {
             for (int j = 0; j < 15; j++) {
                 if (boardTiles[i][j] instanceof BoardTile) {
                     continue;
-                } else if (boardTiles[i][j] instanceof LetterTile) {
+                } else { //(boardTiles[i][j] instanceof LetterTile) {
                     LetterTile tile = (LetterTile) boardTiles[i][j];
                     char letterChar = tile.getCharacter();
                     charCounts.put(letterChar, charCounts.getOrDefault(letterChar,0) + 1);
-                }
-                }
+                } 
             }
-        return charCounts;
         }
+        return charCounts;
+        
     }
+}
 

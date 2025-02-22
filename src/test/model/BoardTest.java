@@ -249,12 +249,86 @@ public class BoardTest {
     }
 
     @Test
-    void testGetNumCharOnBoard() {
+    void testGetNumCharOnBoardNoLettersPlaced() {
         Map<Character,Integer> counts = board.getNumEachCharOnBoard();
-        for (int count : counts.values()) {
-            assertEquals(count, 0);
-        }
-    
+        // Every board position should be a board tile, 
+        // so the Map will be empty, since nothing is put into it since
+        // the loop continues if it views a board tile.
+        assertTrue(counts.values().isEmpty());
+        assertTrue(counts.keySet().isEmpty());
     }
+
+    @Test
+    void testGetNumCharOnBoardOneTilePlaced() {
+        List<LetterTile> toAdd = new ArrayList<>();
+        // Add lettertile B to toAdd
+        toAdd.add(B);
+        // Play word "B" at 7,7 (direction is arbitrary)
+        board.playWord(toAdd,7,7, Direction.DOWN);
+        // Now our Map shouldnt be empty
+        Map<Character,Integer> counts = board.getNumEachCharOnBoard();
+
+        // one key and one value, both for B
+        assertEquals(1, counts.values().size());
+        assertEquals(1, counts.keySet().size());
+
+        // Check they're the right entries
+        assertEquals(counts.get('B'), 1);
+    }
+
+    @Test
+    void testGetNumCharOnBoardFewWordsPlaced() {
+        List<LetterTile> toAdd = new ArrayList<>();
+        List<LetterTile> toAdd2 = new ArrayList<>();
+        // Add lettertile B to toAdd
+        toAdd.add(A);
+        toAdd.add(Z);
+        // Play word "AZ" at 7,7 ; 7,8
+        board.playWord(toAdd,7,7, Direction.RIGHT);
+        toAdd2.add(B);
+        board.playWord(toAdd2, 0,0, Direction.DOWN);
+        // Now our Map should have A, B, Z keys
+        Map<Character,Integer> counts = board.getNumEachCharOnBoard();
+
+        // one key and one value, both for B
+        assertEquals(3, counts.values().size());
+        assertEquals(3, counts.keySet().size());
+
+        // Check they're the right entries
+        assertEquals(counts.get('A'), 1);
+        assertEquals(counts.get('B'), 1);
+        assertEquals(counts.get('Z'), 1);
+        // didn't add d so it should not be in the map
+        assertEquals(counts.get('D'), null);
+    }
+
+    @Test
+    void testGetNumCharOnBoardSameLetterAddedMoreThanOnce() {
+        LetterTile A2 = new LetterTile('A', 1);
+        List<LetterTile> toAdd = new ArrayList<>();
+        List<LetterTile> toAdd2 = new ArrayList<>();
+        // Add lettertile B to toAdd
+        toAdd.add(A);
+        toAdd.add(A2);
+        toAdd.add(Z);
+        // Play word "AZ" at 7,7 ; 7,8
+        board.playWord(toAdd,6,8, Direction.RIGHT);
+        toAdd2.add(B);
+        board.playWord(toAdd2, 0,0, Direction.DOWN);
+        // Now our Map should have A, B, Z keys
+        Map<Character,Integer> counts = board.getNumEachCharOnBoard();
+
+        // one key and one value, both for B
+        assertEquals(3, counts.values().size());
+        assertEquals(3, counts.keySet().size());
+
+        // Check they're the right entries
+        assertEquals(counts.get('A'), 2);
+        assertEquals(counts.get('B'), 1);
+        assertEquals(counts.get('Z'), 1);
+        // didn't add d so it should not be in the map
+        assertEquals(counts.get('_'), null);
+    }
+
 
 }

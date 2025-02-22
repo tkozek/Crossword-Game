@@ -24,7 +24,6 @@ public class ScrabbleApp {
         System.out.println("Welcome to Scrabble in Java");
         printoutSpacer();
         initializeGame();
-
     }
     
     public void initializeGame() {
