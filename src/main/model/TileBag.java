@@ -195,7 +195,7 @@ public class TileBag {
 
 
     public Map<Character, Integer> getInitialLetterFrequencies() {
-        return LETTER_FREQUENCIES;
+        return (Map<Character,Integer>) LETTER_FREQUENCIES;
     }
     
 }  

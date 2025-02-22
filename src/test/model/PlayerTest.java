@@ -26,7 +26,7 @@ public class PlayerTest {
     @BeforeEach
     void runBefore() {
         testBag = new TileBag();
-        board =  new Board();
+        testBoard =  new Board();
         testPlayer = new Player("Trevor", testBoard,testBag);
         testPlayer2 = new Player("Rovert", testBoard,testBag);
         preSwapChars = new HashMap<>();
@@ -209,6 +209,21 @@ public class PlayerTest {
         testPlayer.clearSelectedTiles();
         assertTrue(testPlayer.getSelectedTiles().isEmpty());
 
+    }
+
+    @Test 
+    void testGetNumEachCharInBagAndOpponentsNoLettersOnRackOrBoard() {
+        //List<LetterTile> letters = new ArrayList<>();
+        Map<Character, Integer> counts = testPlayer.getNumEachCharInBagAndOpponents();
+        Map<Character, Integer> drawPileCounts = testBag.getInitialLetterFrequencies();
+        
+        // Both should have all keys
+        assertEquals(counts.keySet().size(), drawPileCounts.keySet().size());
+        
+        //.equals for Map should compare that all keys and values are the same
+        // in each map by default. which is the expected behaviour for this test
+        assertTrue(counts.equals(drawPileCounts));
+        
     }
 
 }
