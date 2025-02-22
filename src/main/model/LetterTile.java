@@ -13,7 +13,6 @@ public class LetterTile implements Tile {
         this.points = points;
     }
 
-
     public char getCharacter() {
         return this.character;
     }

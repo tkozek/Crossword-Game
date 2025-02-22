@@ -204,6 +204,10 @@ public class Board {
         return score;
     }
 
+
+    // REQUIRES: canPlay() is true for given arguments
+    // EFFECTS: Returns the score earned for playing letters in the given direction
+    // beginning at starting coordinates
     public int scoreWord(List<LetterTile> letters, int startRow, int startCol, Direction dir) {
         int wordMultiplier = 1;
         int total = 0;
@@ -221,6 +225,10 @@ public class Board {
         return total * wordMultiplier;
     }
 
+    // MODIFIES: this
+    // EFFECTS: returns the word multiplier for the
+    // board space at coord, removes multiplier from 
+    // that coordinate so that it isn't used a second time
     public int findWordMultiplier(Coordinate coord) {
         if (doubleWordCoordinates.contains(coord)) {
             doubleWordCoordinates.remove(coord);
@@ -233,6 +241,10 @@ public class Board {
         }
     }
 
+    // MODIFIES: this
+    // EFFECTS: returns the letter multiplier for the
+    // board space at coord, removes multiplier from 
+    // that coordinate so that it isn't used a second time
     public int findLetterMultiplier(Coordinate coord) {
         if (doubleLetterCoordinates.contains(coord)) {
             doubleLetterCoordinates.remove(coord);
@@ -243,8 +255,12 @@ public class Board {
         } else {
             return 1;
         }
-        }
+    }
 
+
+    // REQUIRES: canPlay() is true for given arguments
+    // EFFECTS: places letters onto board in the given direction
+    // beginning at starting coordinates
     public void placeWord(List<LetterTile> letters, int startRow, int startCol, Direction dir) {
         int length = letters.size();
         int rowIncrement = (dir == Direction.DOWN) ? 1 : 0;

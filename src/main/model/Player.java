@@ -122,6 +122,7 @@ public class Player {
         this.clearSelectedTiles();
         this.tileBag.drawTiles(this);
     }
+    
     //EFFECTS: returns Chacters 'A' to 'Z' and '_'
     //   mapped to their number of occurences on tile rack
     public Map<Character, Integer> getNumEachCharOnMyRack() {

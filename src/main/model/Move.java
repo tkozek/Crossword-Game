@@ -28,7 +28,6 @@ public class Move {
     }
 
     // Constructor if the player swapped letters
-
     public Move(Player player, Board board, List<LetterTile> swappedLetters, List<LetterTile> receivedLetters) {
         this.moveType = MoveType.SWAP_TILES;
         this.player = player;
