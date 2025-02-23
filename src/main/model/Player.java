@@ -175,4 +175,12 @@ public class Player {
     public void addPoints(int points) {
         this.points += points;
     }
+
+    public List<LetterTile> copySelectedTiles() {
+        List<LetterTile> copiedLetters = new ArrayList<>();
+        for (LetterTile letter : this.getSelectedTiles()) {
+            copiedLetters.add(letter);
+        }
+        return copiedLetters;
+    }
 }

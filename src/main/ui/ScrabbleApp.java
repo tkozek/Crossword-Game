@@ -84,7 +84,6 @@ public class ScrabbleApp {
     }
 
     public void handleGameplay() {
-        
         for (int i = 0; i < numPlayers; i++) {
             getBoardPrintOut(board);
             Player playerToPlayNext = players.get(i);
@@ -97,16 +96,18 @@ public class ScrabbleApp {
 
     public void handleTurn(Player p) {
         System.out.println("Type whether you'd like to (P)lay, (S)wap, S(k)ip");
-        
         switch (scanner.nextLine()) {
             case "P":
+            case "p":
                 handlePlay(p);
                 break;
             case "S":
-                handleSwap();
+            case "s":
+                handleSwap(p);
                 break;
             case "K":
-                handleSkip();
+            case "k":
+                handleSkip(p);
                 break;
         }
     }
@@ -120,52 +121,64 @@ public class ScrabbleApp {
                 System.out.println("So far you've selected: ");
                 printSelectedTiles(player);
             } else if (scanner.hasNext("C")) {
-                scanner.nextLine();
-                System.out.println("Enter the row index you'd like to start your word at \n ");
-                scanner.nextLine();
-                int row = scanner.nextInt();
-                System.out.println("Enter the column index you'd like to start your word at");
-                int col = scanner.nextInt();
-                scanner.nextLine();
-                System.out.println("Now enter direction (R)ight or (D)own (default)");
-                Direction dir = (scanner.nextLine().equals("R")) ? Direction.RIGHT : Direction.DOWN;
-                if (board.canPlay(player.getSelectedTiles(), row, col, dir)) {
-                    int score = board.playWord(player.getSelectedTiles(), row, col, dir);
-                    player.removeSelectedTiles();
-                    System.out.println(player.getPlayerName() + " earned " + score + " points!");
-                    player.addPoints(score);
-                    System.err.println(player.getPlayerName() + " now has " + player.getPointsThisGame() + " points");
-                    break;
-                } else {
-                    System.out.println("Can't play that word there");
-                }
+                handlePositionAndDirectionSelection(player);
+                break;
+            } else {
+                System.out.println("Invalid entry");
+                break;
             }
         }
     }
 
+    public void handlePositionAndDirectionSelection(Player player) {
+        scanner.nextLine();
+        System.out.println("Enter the row index you'd like to start your word at \n ");
+        scanner.nextLine();
+        int row = scanner.nextInt();
+        System.out.println("Enter the column index you'd like to start your word at");
+        int col = scanner.nextInt();
+        scanner.nextLine();
+        System.out.println("Now enter direction (R)ight or (D)own (default)");
+        Direction dir = (scanner.nextLine().equals("R")) ? Direction.RIGHT : Direction.DOWN;
+        if (board.canPlay(player.getSelectedTiles(), row, col, dir)) {
+            int score = board.playWord(player.getSelectedTiles(), row, col, dir);
+            player.removeSelectedTiles();
+            System.out.println(player.getPlayerName() + " earned " + score + " points!");
+            player.addPoints(score);
+            System.out.println(player.getPlayerName() + " now has " + player.getPointsThisGame() + " points \n");
+        } else {
+            System.out.println("Can't play that word there");
+            player.clearSelectedTiles();
+            handlePlay(player);
+        }
+    }
 
-    public void handleSwap() {
+    public void handleSwap(Player player) {
         while (true) {
-            System.out.println("Enter the index of the tiles you'd like to swap or enter \"C\" to confirm");
+            System.out.println("Enter indices for tiles to swap, C to confirm, or any other character to cancel");
             if (scanner.hasNextInt()) {
                 player.selectTile(scanner.nextInt());
                 System.out.println("So far you've selected: ");
                 printSelectedTiles(player);
             } else if (scanner.hasNext("C")) {
+               // List<LetterTile> copyTiles = player.copySelectedTiles();
+              //  Move move = new Move(player, board, copyTiles, )
+              //Need to get NEW tiles
                 player.swapTiles();
                 System.out.println("Your new tiles are: ");
                 getTilePrintOut(player);
                 break;
             } else {
-                System.out.println("Invalid entry, try again");
+                player.clearSelectedTiles();
+                break;
             }
         }
     }
 
-    public void handleSkip() {
+    public void handleSkip(Player player) {
         player.clearSelectedTiles();
-        player.swapTiles();
-        System.out.println("You've skipped your turn");
+        //player.swapTiles();
+        System.out.println(player.getPlayerName() + " skipped their turn \n");
     }
 
     //EFFECTS: Prints out selected tiles
@@ -217,7 +230,7 @@ public class ScrabbleApp {
         return toDisplay;
     } 
 
-
+    //!!!
     public boolean validateWord(List<LetterTile> letters, int row, int col, Direction dir) {
         return board.canPlay(letters, row,col, dir);
     }
@@ -240,7 +253,7 @@ public class ScrabbleApp {
     public void getBoardPrintOut(Board board){
         String rowPrintOut;
         String header = "|";
-        for (int i = 0; i <=9; i++) {
+        for (int i = 0; i <= 9; i++) {
             header += "_" + Integer.toString(i) + "_| ";
         }
         for (int i = 10; i < Board.BOARD_LENGTH; i++){
@@ -255,7 +268,7 @@ public class ScrabbleApp {
                 if (tile instanceof BoardTile) {
                     BoardTile boardTile = (BoardTile) tile;
                     TileType type = boardTile.getTileType();
-                    switch(type) {
+                    switch (type) {
                         case NORMAL:
                             rowPrintOut += "___| ";
                             break;
@@ -269,19 +282,18 @@ public class ScrabbleApp {
                             rowPrintOut += "TLS| ";
                             break;
                         case TRIPLE_WORD:
-                            rowPrintOut += "TWS|.....>>>>...>>> ";
+                            rowPrintOut += "TWS| ";
                             break;
                     }
-                    } else {
-                        LetterTile letter = (LetterTile) tile;
-                        rowPrintOut += "_" + getLetterString(letter) + "_; ";
-                    }
+                } else {
+                    LetterTile letter = (LetterTile) tile;
+                    rowPrintOut += "_" + getLetterString(letter) + "_; ";
                 }
-                System.out.println(rowPrintOut + "|" + Integer.toString(i) +  "\n");
             }
+            System.out.println(rowPrintOut + "|" + Integer.toString(i) +  "\n");
         }
+    }
     
-
     // Play the game
     public static void main(String[] args) {
         //!!! 

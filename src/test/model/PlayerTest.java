@@ -272,6 +272,24 @@ public class PlayerTest {
         assertEquals(testPlayer.getSelectedTiles().size(), 0);
     }
 
+    @Test
+    void testAddPoints() {
+        assertEquals(0, testPlayer.getPointsThisGame());
+        testPlayer.addPoints(10);
+        assertEquals(10, testPlayer.getPointsThisGame());
+        testPlayer.addPoints(30);
+        assertEquals(40, testPlayer.getPointsThisGame());
+
+    }
+    @Test 
+    void testCopySelectedTiles() {
+        testBag.drawTiles(testPlayer);
+        testPlayer.selectTile(0);
+        List<LetterTile> copy = testPlayer.copySelectedTiles();
+        assertEquals(copy.size(), 1);
+        assertTrue(copy.get(0).equals(testPlayer.getSelectedTiles().get(0)));
+    }
+
 
 }
 
