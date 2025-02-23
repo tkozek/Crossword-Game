@@ -70,9 +70,14 @@ public class Player {
         this.tileRack.add(drawnLetter);
     }
 
-    public void makeMove(List<LetterTile> letters, int startRow, int startCol, int pointsEarned, Direction dir) {
+    public void makeMove(Board board, int startRow, int startCol, int pointsEarned, Direction dir) {
         //Player, Board, List<LetterTile> , Start Row, Start Col, Points Earned
-        Move move = new Move(this, board, letters, startRow, startCol, pointsEarned, dir);
+        List<LetterTile> letters = this.getSelectedTiles();
+        List<LetterTile> copy = new ArrayList<>();
+        for (LetterTile letter : letters) {
+            copy.add(new LetterTile(letter));
+        }
+        Move move = new Move(this, board, copy, startRow, startCol, pointsEarned, dir);
         this.history.addMove(move);
     }
 

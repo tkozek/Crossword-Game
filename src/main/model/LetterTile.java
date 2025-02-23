@@ -13,6 +13,13 @@ public class LetterTile implements Tile {
         this.points = points;
     }
 
+    // EFFECTS: Creates deep copy of 
+    // letter
+    public LetterTile(LetterTile letter) {
+        this.character = letter.getCharacter();
+        this.points = letter.getLetterPoints();
+    }
+
     public char getCharacter() {
         return this.character;
     }

@@ -142,6 +142,7 @@ public class ScrabbleApp {
         Direction dir = (scanner.nextLine().equals("R")) ? Direction.RIGHT : Direction.DOWN;
         if (board.canPlay(player.getSelectedTiles(), row, col, dir)) {
             int score = board.playWord(player.getSelectedTiles(), row, col, dir);
+            player.makeMove(board, row,col, score, dir);
             player.removeSelectedTiles();
             System.out.println(player.getPlayerName() + " earned " + score + " points!");
             player.addPoints(score);
@@ -287,7 +288,7 @@ public class ScrabbleApp {
                     }
                 } else {
                     LetterTile letter = (LetterTile) tile;
-                    rowPrintOut += "_" + getLetterString(letter) + "_; ";
+                    rowPrintOut += "_" + getLetterString(letter) + "_| ";
                 }
             }
             System.out.println(rowPrintOut + "|" + Integer.toString(i) +  "\n");

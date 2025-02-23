@@ -39,6 +39,44 @@ public class LetterTileTest {
     }
 
     @Test
+    void testDeepCopyConstructor() {
+        LetterTile copyLetter = new LetterTile(testTileB);
+        assertEquals('B', copyLetter.getCharacter());
+        assertEquals(3, copyLetter.getLetterPoints());
+        assertFalse(copyLetter==testTileB);
+        testTileB = null;
+        assertFalse(copyLetter==null);
+        assertEquals('B', copyLetter.getCharacter());
+        assertEquals(3, copyLetter.getLetterPoints());
+        assertTrue(testTileB==null);
+    }
+
+    @Test
+    void testDeepCopyConstructorMultipleTiles() {
+        LetterTile copyLetter = new LetterTile(testTileB);
+        LetterTile copyQ = new LetterTile(testTileQ);
+        assertEquals('Q', copyQ.getCharacter());
+        assertEquals(10, copyQ.getLetterPoints());
+
+        assertEquals('B', copyLetter.getCharacter());
+        assertEquals(3, copyLetter.getLetterPoints());
+
+        assertFalse(copyQ == testTileQ);
+        assertFalse(copyLetter == testTileB);
+        testTileQ = null;
+        testTileB = null;
+        assertFalse(copyLetter == null);
+        assertEquals('B', copyLetter.getCharacter());
+        assertEquals(3, copyLetter.getLetterPoints());
+        assertTrue(testTileB==null);
+
+        assertFalse(copyQ == null);
+        assertEquals('Q', copyQ.getCharacter());
+        assertEquals(10, copyQ.getLetterPoints());
+        assertTrue(testTileQ==null);
+    }
+
+    @Test
     void testGetCharacterAsString() {
         assertEquals("A", testTileA.getStringToDisplay());
         assertEquals("Q", testTileQ.getStringToDisplay());
