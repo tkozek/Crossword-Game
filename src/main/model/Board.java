@@ -330,5 +330,9 @@ public class Board {
         return charCounts;
         
     }
+
+    public Tile getTileAtPositionOnBoard(int row, int column) {
+        return boardTiles[row][column];
+    }
 }
 

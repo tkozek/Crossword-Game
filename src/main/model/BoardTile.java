@@ -57,4 +57,8 @@ public class BoardTile implements Tile {
         }
     }
 
+    public TileType getTileType() {
+        return this.tileType;
+    }
+
 }

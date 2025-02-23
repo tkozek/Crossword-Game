@@ -85,7 +85,9 @@ public class ScrabbleApp {
     }
 
     public void handleGameplay() {
+        
         for (int i = 0; i < numPlayers; i++) {
+            getBoardPrintOut(board);
             Player playerToPlayNext = players.get(i);
             tileBag.drawTiles(playerToPlayNext);
             System.out.println("Here are your tiles: " + playerToPlayNext.getPlayerName());
@@ -230,8 +232,40 @@ public class ScrabbleApp {
     }
 
     public void getBoardPrintOut(Board board){
-        
-    }
+        String rowPrintOut;
+        for (int i = 0; i < Board.BOARD_LENGTH; i++) {
+            rowPrintOut = "";
+            for (int j = 0; j < Board.BOARD_LENGTH; j++) {
+                Tile tile = board.getTileAtPositionOnBoard(i,j);
+                if (tile instanceof BoardTile) {
+                    BoardTile boardTile = (BoardTile) tile;
+                    TileType type = boardTile.getTileType();
+                    switch(type) {
+                        case NORMAL:
+                            rowPrintOut += "____; ";
+                            break;
+                        case DOUBLE_LETTER:
+                            rowPrintOut += "DLS; ";     
+                            break;                       
+                        case DOUBLE_WORD:
+                            rowPrintOut += "DWS; ";
+                            break;
+                        case TRIPLE_LETTER:
+                            rowPrintOut += "TLS; ";
+                            break;
+                        case TRIPLE_WORD:
+                            rowPrintOut += "TWS; ";
+                            break;
+                    }
+                    } else {
+                        LetterTile letter = (LetterTile) tile;
+                        rowPrintOut += " _" + getLetterString(letter) + "_ ";
+                    }
+                }
+                System.out.println(rowPrintOut + "\n");
+            }
+        }
+    
 
     // Play the game
     public static void main(String[] args) {
