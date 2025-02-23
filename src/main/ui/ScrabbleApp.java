@@ -3,7 +3,6 @@ package ui;
 import java.util.Scanner;
 import java.util.List;
 import java.util.Map;
-import java.nio.channels.Pipe.SourceChannel;
 import java.util.ArrayList;
 import model.*;
 
@@ -131,8 +130,11 @@ public class ScrabbleApp {
                 System.out.println("Now enter direction (R)ight or (D)own (default)");
                 Direction dir = (scanner.nextLine().equals("R")) ? Direction.RIGHT : Direction.DOWN;
                 if (board.canPlay(player.getSelectedTiles(), row, col, dir)) {
-                    board.playWord(player.getSelectedTiles(), row, col, dir);
+                    int score = board.playWord(player.getSelectedTiles(), row, col, dir);
                     player.removeSelectedTiles();
+                    System.out.println(player.getPlayerName() + " earned " + score + " points!");
+                    player.addPoints(score);
+                    System.err.println(player.getPlayerName() + " now has " + player.getPointsThisGame() + " points");
                     break;
                 } else {
                     System.out.println("Can't play that word there");
@@ -222,7 +224,11 @@ public class ScrabbleApp {
 
     // EFFECTS: Prints a separator to the console
     public void printoutSpacer() {
-        System.out.println("---------------------------------------");
+        String spacer = "";
+        for (int i = 0; i < 74; i++) {
+            spacer += "-";
+        }
+        System.out.println(spacer);
     }
 
     // MODIFIES: this
@@ -233,6 +239,15 @@ public class ScrabbleApp {
 
     public void getBoardPrintOut(Board board){
         String rowPrintOut;
+        String header = "|";
+        for (int i = 0; i <=9; i++) {
+            header += "_" + Integer.toString(i) + "_| ";
+        }
+        for (int i = 10; i < Board.BOARD_LENGTH; i++){
+            header += Integer.toString(i) + "_| ";
+        }
+        System.out.println(header);
+        printoutSpacer();
         for (int i = 0; i < Board.BOARD_LENGTH; i++) {
             rowPrintOut = "";
             for (int j = 0; j < Board.BOARD_LENGTH; j++) {
@@ -242,27 +257,27 @@ public class ScrabbleApp {
                     TileType type = boardTile.getTileType();
                     switch(type) {
                         case NORMAL:
-                            rowPrintOut += "____; ";
+                            rowPrintOut += "___| ";
                             break;
                         case DOUBLE_LETTER:
-                            rowPrintOut += "DLS; ";     
+                            rowPrintOut += "DLS| ";     
                             break;                       
                         case DOUBLE_WORD:
-                            rowPrintOut += "DWS; ";
+                            rowPrintOut += "DWS| ";
                             break;
                         case TRIPLE_LETTER:
-                            rowPrintOut += "TLS; ";
+                            rowPrintOut += "TLS| ";
                             break;
                         case TRIPLE_WORD:
-                            rowPrintOut += "TWS; ";
+                            rowPrintOut += "TWS|.....>>>>...>>> ";
                             break;
                     }
                     } else {
                         LetterTile letter = (LetterTile) tile;
-                        rowPrintOut += " _" + getLetterString(letter) + "_ ";
+                        rowPrintOut += "_" + getLetterString(letter) + "_; ";
                     }
                 }
-                System.out.println(rowPrintOut + "\n");
+                System.out.println(rowPrintOut + "|" + Integer.toString(i) +  "\n");
             }
         }
     

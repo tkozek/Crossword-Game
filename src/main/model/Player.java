@@ -168,4 +168,11 @@ public class Player {
         }
         clearSelectedTiles();
     }
+
+    // MODFIFIES: this
+    // EFFECTS: Adds specified number of points to 
+    // players points
+    public void addPoints(int points) {
+        this.points += points;
+    }
 }

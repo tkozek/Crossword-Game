@@ -119,6 +119,7 @@ public class Board {
         doubleWordCoordinates.add(new Coordinate(3, 11));
         doubleWordCoordinates.add(new Coordinate(4, 4));
         doubleWordCoordinates.add(new Coordinate(4, 10));
+        doubleWordCoordinates.add(new Coordinate(7, 7));
         doubleWordCoordinates.add(new Coordinate(10, 4));
         doubleWordCoordinates.add(new Coordinate(10, 10));
         doubleWordCoordinates.add(new Coordinate(11, 3));
