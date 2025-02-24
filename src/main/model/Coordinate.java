@@ -6,10 +6,9 @@ import java.util.Objects;
 public class Coordinate {
     private int row;
     private int column;
-    // Creates a new coordinate with row, and column
+
     // REQUIRES: Both row and column are >= 0 and 
     // <= Board.BOARD_LENGTH
-
     public Coordinate(int row, int column) {
         this.row = row;
         this.column = column;
@@ -24,7 +23,8 @@ public class Coordinate {
     }
 
     @Override
-    //EFFECTS: returns true if 
+    // REQUIRES: coord is of type Coordinate.
+    // EFFECTS: returns true if 
     // this.getRow() == coord.getRow()
     // AND this.getColumn() == coord.getColumn()
     public boolean equals(Object coord) {
