@@ -93,13 +93,13 @@ public class Player {
     // MODIFIES: this
     // EFFECTS: Adds a new skipped turn to player's move history
     public void logSkippedTurn(Board board) {
-
+        history.addMove(new Move(this, board));
     }
 
     // MODIFIES: this
     // EFFECTS: Adds a new swap to player's move history
-    public void logSwap(Board board, List<LetterTile> swappedLetters, List<LetterTile> receivedLetters) {
-
+    public void logSwap(Board board, List<LetterTile> swappedLetters, List<LetterTile> postSwapLetters) {
+        history.addMove(new Move(this, board, swappedLetters, postSwapLetters));
     }
 
     // REQUIRES: 0 <= index <     public int getNumTilesOnRack() {

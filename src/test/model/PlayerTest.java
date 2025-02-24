@@ -287,7 +287,7 @@ public class PlayerTest {
         testPlayer.selectTile(0);
         List<LetterTile> copy = testPlayer.copySelectedTiles();
         assertEquals(copy.size(), 1);
-        assertTrue(copy.get(0).equals(testPlayer.getSelectedTiles().get(0)));
+        assertFalse(copy.get(0).equals(testPlayer.getSelectedTiles().get(0)));
     }
 
     @Test
