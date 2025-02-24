@@ -21,3 +21,7 @@ This project is of interest to me since *Scrabble* was one of my favorite board 
 4. As a user I want to be able to view the remaining quantity of each letter tile, combined between my opponents' tile racks and the draw bag.
 
 5. As a user, when I play a word I want to have it added to my history of words played, including its letters, start and end coordinates and its points.
+
+6. As a user I'd like to have the option to quit my game, and be prompted to see if I want to save it.
+
+7. As a user when I run the application I'd like to have the choice between continuing a previous, unfinished game, or starting a new game.
