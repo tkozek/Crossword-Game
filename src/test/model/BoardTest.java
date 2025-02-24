@@ -8,14 +8,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.ArrayList;
 import java.util.Set;
-import java.util.HashSet;
 import java.util.HashMap;
 
 public class BoardTest {
     
     private Board board;
     private TileBag testBag;
-    private Set<Character> set;
     private Player testPlayer;
     private Player testPlayer2;
     private Board testBoard;

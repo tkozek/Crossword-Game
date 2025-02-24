@@ -1,7 +1,6 @@
 package model;
 
 import java.util.List;
-import java.util.ArrayList;
 
 // A move made by a player, either a word played or a swap
 public class Move {
@@ -28,7 +27,6 @@ public class Move {
     }
 
     // Constructor if the player swapped letters
-
     public Move(Player player, Board board, List<LetterTile> swappedLetters, List<LetterTile> postSwapLetters) {
         this.moveType = MoveType.SWAP_TILES;
         this.player = player;
@@ -39,13 +37,13 @@ public class Move {
     }
 
     // Constructor if the player skipped turn
-
     public Move(Player player, Board board) {
         this.moveType = MoveType.SKIP;
         this.player = player;
         this.board = board;
         this.pointsForMove = 0;
     }
+
     // Constructor for end of game where last player gains points from unplayed tiles on opponent racks
     // REQUIRES: Exchanged points >= 0;
     public Move(Player player, Board board, boolean wasLastToPlay,
