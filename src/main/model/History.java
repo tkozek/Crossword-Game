@@ -53,7 +53,8 @@ public class History {
     // moves which used the given letter at least once
     public List<Move> getListOfWordsPlayedContainingLetter(char letter) {
         List<Move> movesWithLetter = new ArrayList<>();
-        for (Move move : this.moveHistory) {
+        List<Move> playedWords = this.getMovesWithWordPlayed();
+        for (Move move : playedWords) {
             if (move.moveContainsLetter(letter)) {
                 movesWithLetter.add(move);
             }
