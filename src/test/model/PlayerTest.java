@@ -290,6 +290,23 @@ public class PlayerTest {
         assertTrue(copy.get(0).equals(testPlayer.getSelectedTiles().get(0)));
     }
 
+    @Test
+    void testLogSwappedAndLogSkippedTurn() {
+        testPlayer.logSkippedTurn(testBoard);
+        assertEquals(testPlayer.getHistory().getMoves().size(), 1);
+        assertEquals(testPlayer.getHistory().getMoves().get(0).getMoveType(), MoveType.SKIP);
+        testBag.drawTiles(testPlayer);
+        testPlayer.selectTile(0);
+        testPlayer.selectTile(1);
+        List<LetterTile> lettersToSwap = testPlayer.getSelectedTiles();
+        assertEquals(testPlayer.getHistory().getMoves().get(0).getPointsForMove(), 0);
+        testBoard.playWord(lettersToSwap, 0, 0, Direction.DOWN);
+        List<LetterTile> tilesAfterSwap = testPlayer.getTilesOnRack();
+        testPlayer.logSwap(board, lettersToSwap, tilesAfterSwap);
+        assertEquals(testPlayer.getHistory().getMoves().size(), 2);
+        assertEquals(testPlayer.getHistory().getMoves().get(1).getMoveType(), MoveType.SWAP_TILES);
+        assertEquals(testPlayer.getHistory().getMoves().get(1).getPointsForMove(), 0);
+    }
 
 }
 

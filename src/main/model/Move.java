@@ -29,11 +29,11 @@ public class Move {
 
     // Constructor if the player swapped letters
 
-    public Move(Player player, Board board, List<LetterTile> swappedLetters, List<LetterTile> receivedLetters) {
+    public Move(Player player, Board board, List<LetterTile> swappedLetters, List<LetterTile> postSwapLetters) {
         this.moveType = MoveType.SWAP_TILES;
         this.player = player;
         this.board = board;
-        swappedLetters.addAll(receivedLetters);
+        swappedLetters.addAll(postSwapLetters);
         this.lettersInvolved = swappedLetters;
         this.pointsForMove = 0;
     }
