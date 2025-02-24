@@ -140,25 +140,22 @@ public class HistoryTest {
         assertEquals(wordsPlayed.get(2).getPointsForMove(), 5);
     }
 
-    /* @Test
-    void testGetAllWordsPlayed() {
-        List<Move> wordsPlayed = testPlayer.getHistory().getMovesWithWordPlayed();
-        assertTrue(wordsPlayed.isEmpty());
-        // uses selected tiles within player, doesn't need non null tiles selected to make a move
-        testPlayer.logWord(board, 7, 7, 10, Direction.RIGHT);
-        wordsPlayed = testPlayer.getHistory().getMovesWithWordPlayed();
-        assertEquals(wordsPlayed.size(), 1);
-
-        testPlayer.logWord(board, 0, 4, 15, Direction.RIGHT);
-
+    @Test
+    void testGetMovesWithWordsPlayedSomeAreSwapsAndSkips() {
+        // Adds move that isn't a word played [1]
+        testPlayer.logSkippedTurn(board);
+        assertTrue(testPlayer.getHistory().getMovesWithWordPlayed().isEmpty());
         testBag.drawTiles(testPlayer);
-        testPlayer.selectTile(1);
-
-        wordsPlayed = testPlayer.getHistory().getMovesWithWordPlayed();
-        assertEquals(wordsPlayed.get(0).getMoveType(), MoveType.PLAY_WORD);
-        assertEquals(wordsPlayed.get(0).getPointsForMove(), 10);
-
-        
-    } */
+        //logs word played [1]
+        testPlayer.logWord(board, 7,7,10,Direction.DOWN);
+        assertEquals(testPlayer.getHistory().getMovesWithWordPlayed().size(), 1);
+        // Adds move that isn't a word played [2]
+        testPlayer.logSkippedTurn(board);
+        // Adds move that isn't a word played [3]
+        testPlayer.logSkippedTurn(board);
+        //logs word played [2]
+        testPlayer.logWord(board, 9, 9, 14, Direction.RIGHT);
+        assertEquals(testPlayer.getHistory().getMovesWithWordPlayed().size(), 2);
+    }   
     
 }
