@@ -29,7 +29,14 @@ public class History {
     // played. Excludes any turns which were swaps
     // or skips
     public List<Move> getMovesWithWordPlayed() {
-        return null;
+        List<Move> allMoves = this.moveHistory;
+        List<Move> wordsPlayed = new ArrayList<>();
+        for (Move move : allMoves) {
+            if (move.getMoveType() == MoveType.PLAY_WORD) {
+                wordsPlayed.add(move);
+            }
+        }
+        return wordsPlayed;
     }
 
     // REQUIRES: Move was made user with this.name
