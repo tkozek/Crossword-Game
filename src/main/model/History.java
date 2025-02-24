@@ -25,7 +25,7 @@ public class History {
         return this.moveHistory;
     }
 
-    // Returns only the moves where a word was 
+    // EFFECTS: Returns only the moves where a word was 
     // played. Excludes any turns which were swaps
     // or skips
     public List<Move> getMovesWithWordPlayed() {
@@ -39,17 +39,19 @@ public class History {
         return wordsPlayed;
     }
 
-    // REQUIRES: Move was made user with this.name
+    // REQUIRES: Move was made by user with this.getName()
     // MODIFIES: this
     // EFFECTS: adds move to this history
     public void addMove(Move move) {
         this.moveHistory.add(move);
     }
 
-    // EFFECTS: Filters player's move history and returns
-    // moves in order least to most recent, only including
+    // REQUIRES: letter is uppercase,
+    //      between 'A' to 'Z' or '-'
+    // EFFECTS: Filters player's words played and returns
+    // them in order least to most recent, only including
     // moves which used the given letter at least once
-    public List<Move> getListOfMovesContainingLetter(char letter) {
+    public List<Move> getListOfWordsPlayedContainingLetter(char letter) {
         List<Move> movesWithLetter = new ArrayList<>();
         for (Move move : this.moveHistory) {
             if (move.moveContainsLetter(letter)) {

@@ -49,7 +49,7 @@ public class HistoryTest {
     void testConstructor() {
         assertEquals(history.getName(), "Trevor");
         assertTrue(history.getMoves().isEmpty());
-        assertTrue(history.getListOfMovesContainingLetter('A').isEmpty());
+        assertTrue(history.getListOfWordsPlayedContainingLetter('A').isEmpty());
     }
     @Test
     void testAddMoveOneMove() {
@@ -79,9 +79,9 @@ public class HistoryTest {
         Move doesntHaveB = new Move(testPlayer, board, playedLetters, 3, 5, 13, Direction.DOWN);
         history.addMove(doesntHaveB);
         assertEquals(history.getMoves().size(), 1);
-        assertEquals(0, history.getListOfMovesContainingLetter('B').size());
-        assertEquals(1, history.getListOfMovesContainingLetter('A').size());
-        assertEquals(1, history.getListOfMovesContainingLetter('Z').size());
+        assertEquals(0, history.getListOfWordsPlayedContainingLetter('B').size());
+        assertEquals(1, history.getListOfWordsPlayedContainingLetter('A').size());
+        assertEquals(1, history.getListOfWordsPlayedContainingLetter('Z').size());
     }
     @Test
     void testGetListOfMoveContainingLetterTwoMoves() {
@@ -99,17 +99,17 @@ public class HistoryTest {
         history.addMove(doesntHaveB);
         assertEquals(history.getMoves().size(), 2);
         //BOTH HAVE A
-        assertEquals(history.getListOfMovesContainingLetter('A').size(), 2);
+        assertEquals(history.getListOfWordsPlayedContainingLetter('A').size(), 2);
         //One has B and One has Z
-        assertEquals(history.getListOfMovesContainingLetter('B').size(),1);
-        assertEquals(history.getListOfMovesContainingLetter('Z').size(),1);
+        assertEquals(history.getListOfWordsPlayedContainingLetter('B').size(),1);
+        assertEquals(history.getListOfWordsPlayedContainingLetter('Z').size(),1);
         // Neither have Q
-        assertEquals(history.getListOfMovesContainingLetter('Q').size(),0);
+        assertEquals(history.getListOfWordsPlayedContainingLetter('Q').size(),0);
 
-        assertEquals(doesntHaveB, history.getListOfMovesContainingLetter('A').get(1));
-        assertEquals(doesntHaveZ, history.getListOfMovesContainingLetter('A').get(0));
+        assertEquals(doesntHaveB, history.getListOfWordsPlayedContainingLetter('A').get(1));
+        assertEquals(doesntHaveZ, history.getListOfWordsPlayedContainingLetter('A').get(0));
 
-        assertEquals(history.getListOfMovesContainingLetter('B').get(0), doesntHaveZ);
+        assertEquals(history.getListOfWordsPlayedContainingLetter('B').get(0), doesntHaveZ);
 
     }
 
