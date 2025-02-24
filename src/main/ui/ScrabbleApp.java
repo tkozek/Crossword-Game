@@ -209,7 +209,7 @@ public class ScrabbleApp {
         Direction dir = (scanner.nextLine().equals("R")) ? Direction.RIGHT : Direction.DOWN;
         if (board.canPlay(player.getSelectedTiles(), row, col, dir)) {
             int score = board.playWord(player.getSelectedTiles(), row, col, dir);
-            player.logWord(board, row,col, score, dir);
+            player.logWord(board, row, col, score, dir);
             player.removeSelectedTiles();
             System.out.println(player.getPlayerName() + " earned " + score + " points!");
             player.addPoints(score);
@@ -232,7 +232,10 @@ public class ScrabbleApp {
                // List<LetterTile> copyTiles = player.copySelectedTiles();
               //  Move move = new Move(player, board, copyTiles, )
               //Need to get NEW tiles
+                List<LetterTile> preSwapLetters = player.copyLetterTiles(player.getTilesOnRack());
                 player.swapTiles();
+                List<LetterTile> postSwapLetters = player.copyLetterTiles(player.getTilesOnRack());
+                player.logSwap(board,preSwapLetters,postSwapLetters);
                 System.out.println("Your new tiles are: ");
                 getTilePrintOut(player);
                 break;
@@ -248,6 +251,7 @@ public class ScrabbleApp {
 
     public void handleSkip(Player player) {
         player.clearSelectedTiles();
+        player.logSkippedTurn(board);
         //player.swapTiles();
         System.out.println(player.getPlayerName() + " skipped their turn \n");
     }
