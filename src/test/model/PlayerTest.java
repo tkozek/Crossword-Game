@@ -95,7 +95,7 @@ public class PlayerTest {
         testPlayer.selectTile(0);
         testPlayer.selectTile(6);
         assertEquals(testPlayer.getSelectedTiles().size(), 2);
-        testPlayer.makeWord(board, 2, 2, 10, Direction.DOWN);
+        testPlayer.logWord(board, 2, 2, 10, Direction.DOWN);
         assertEquals(testPlayer.getHistory().getMoves().size(), 1);
         assertEquals(testPlayer.getHistory().getMoves().get(0).getPlayer(), testPlayer);
 

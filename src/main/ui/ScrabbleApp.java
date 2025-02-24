@@ -209,7 +209,7 @@ public class ScrabbleApp {
         Direction dir = (scanner.nextLine().equals("R")) ? Direction.RIGHT : Direction.DOWN;
         if (board.canPlay(player.getSelectedTiles(), row, col, dir)) {
             int score = board.playWord(player.getSelectedTiles(), row, col, dir);
-            player.makeWord(board, row,col, score, dir);
+            player.logWord(board, row,col, score, dir);
             player.removeSelectedTiles();
             System.out.println(player.getPlayerName() + " earned " + score + " points!");
             player.addPoints(score);

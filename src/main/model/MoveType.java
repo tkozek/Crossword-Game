@@ -5,5 +5,5 @@ package model;
 // or subtracting unplayed letters from score at the end of the 
 // game
 public enum MoveType {
- PLAY_WORD, SWAP_TILES, END_GAME_WINNER, END_GAME_LOSER
+ PLAY_WORD, SWAP_TILES, SKIP, END_GAME_WINNER, END_GAME_LOSER
 }

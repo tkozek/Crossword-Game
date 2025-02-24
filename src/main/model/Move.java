@@ -38,6 +38,14 @@ public class Move {
         this.pointsForMove = 0;
     }
 
+    // Constructor if the player skipped turn
+
+    public Move(Player player, Board board) {
+        this.moveType = MoveType.SKIP;
+        this.player = player;
+        this.board = board;
+        this.pointsForMove = 0;
+    }
     // Constructor for end of game where last player gains points from unplayed tiles on opponent racks
     // REQUIRES: Exchanged points >= 0;
     public Move(Player player, Board board, boolean wasLastToPlay,

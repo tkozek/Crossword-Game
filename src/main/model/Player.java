@@ -70,7 +70,10 @@ public class Player {
         this.tileRack.add(drawnLetter);
     }
 
-    public void makeWord(Board board, int startRow, int startCol, int pointsEarned, Direction dir) {
+
+    // MODIFIES: this
+    // EFFECTS: Adds a new word played to player's move history
+    public void logWord(Board board, int startRow, int startCol, int pointsEarned, Direction dir) {
         //Player, Board, List<LetterTile> , Start Row, Start Col, Points Earned
         List<LetterTile> letters = this.getSelectedTiles();
         List<LetterTile> copy = new ArrayList<>();
@@ -79,6 +82,18 @@ public class Player {
         }
         Move move = new Move(this, board, copy, startRow, startCol, pointsEarned, dir);
         this.history.addMove(move);
+    }
+
+    // MODIFIES: this
+    // EFFECTS: Adds a new skipped turn to player's move history
+    public void logSkippedTurn(Board board) {
+
+    }
+
+    // MODIFIES: this
+    // EFFECTS: Adds a new swap to player's move history
+    public void logSwap(Board board, List<LetterTile> swappedLetters, List<LetterTile> receivedLetters) {
+
     }
 
     // REQUIRES: 0 <= index <     public int getNumTilesOnRack() {
