@@ -25,6 +25,7 @@ public class TileBag {
         randomIndexGenerator = new Random();
     }
     
+    // MODIFIES: this
     // EFFECTS: Puts appropriate frequencies 
     // and points values in point and frequency 
     // maps, for each valid character in Scrabble
@@ -35,6 +36,7 @@ public class TileBag {
         initializeLetterPointsNThroughBlank();
     }
 
+    // MODIFIES: this
     // EFFECTS: Adds Tile Frequencies to 
     //   Frequency map for Letters A, B, C,....,M
     //     inclusive
@@ -53,7 +55,8 @@ public class TileBag {
         letterFrequencyMap.put('L', 4);
         letterFrequencyMap.put('M', 2); 
     }
-
+    
+    // MODIFIES: this
     // EFFECTS: Adds Tile Frequencies to 
     //   Frequency map for Letters N, O,....,Z,_,
     //     inclusive
@@ -74,6 +77,7 @@ public class TileBag {
         letterFrequencyMap.put('-', 2);
     }
 
+    // MODIFIES: this
     // EFFECTS: Adds Tile Point Values to 
     //   Point map for Letters A, B, C,....,M
     //     inclusive
@@ -93,6 +97,7 @@ public class TileBag {
         letterPointsMap.put('M', 3);
     }
 
+    // MODIFIES: this
     // EFFECTS: Adds Tile Point Values to 
     //   Point map for Letters N, O,....,Z,_,
     //     inclusive
@@ -129,9 +134,7 @@ public class TileBag {
 
     //MODIFIES: this
     //EFFECTS: Adds a new Letter Tile to the tile bag
-    //          the specified number of times, for
-    //  example when a player wants to trade in tiles 
-    //  and skip their turn
+    //  the specified number of times.
     private void addTiles(char letter, int points, int numberToAdd) {
         for (int i = 0; i < numberToAdd; i++) {
             drawPile.add(new LetterTile(letter,points));
@@ -143,9 +146,6 @@ public class TileBag {
     public void addTiles(List<LetterTile> lettersToAdd) {
         for (LetterTile letter : lettersToAdd)
         drawPile.add(letter);
-        //for (LetterTile letter : lettersToAdd) {
-         //   drawPile.add(letter);
-        //}
     }
 
     //MODIFIES: this, player
@@ -154,7 +154,7 @@ public class TileBag {
     //     or the tile bag
     //     is empty. Returns number of tiles drawn.
     //     OR
-    //     Returns -1 if drawPile is empty before removing any tiles
+    //     Returns -1 if draw pile is empty before removing any tiles
     public int drawTiles(Player player) {
         if (drawPile.size() == 0) {
             return -1;
@@ -172,13 +172,13 @@ public class TileBag {
         return numTilesAdded;
     }
 
-    // EFFECTS: Number of tiles left in tile bag
+    // EFFECTS: returns number of tiles left in tile bag
     public int numTilesRemaining() {
         return drawPile.size();
     }
 
     // MODIFIES: this
-    //EFFECTS: Empties the draw pile so there are
+    // EFFECTS: Empties the draw pile so there are
     // no letter tiles in it
     public void emptyDrawPile() {
         drawPile.clear();
@@ -188,7 +188,7 @@ public class TileBag {
     //  has the specific tile object
     //   (for test purposes)
     public boolean contains(LetterTile tile) {
-        return false;
+        return drawPile.contains(tile);
     }
     
     // EFFECTS: adds tile to draw pile for testing
@@ -197,7 +197,8 @@ public class TileBag {
         drawPile.add(tileToAdd);
     }
 
-
+    // EFFECTS: returns each game character mapped to how many 
+    // occurences it has in the draw pile of a new game
     public Map<Character, Integer> getInitialLetterFrequencies() {
         return (Map<Character,Integer>) letterFrequencyMap;
     }
