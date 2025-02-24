@@ -42,21 +42,6 @@ public class BoardTile implements Tile {
         return this.col;
     }
 
-    @Override
-    public String getStringToDisplay() {
-        if (this.tileType.equals(TileType.DOUBLE_LETTER)) {
-            return "DL";
-        } else if (this.tileType.equals(TileType.DOUBLE_WORD)) {
-            return "DW";
-        } else if (this.tileType.equals(TileType.TRIPLE_LETTER)) {
-            return "TL";
-        } else if (this.tileType.equals(TileType.TRIPLE_WORD)) {
-            return "TW";
-        } else {
-            return "_";
-        }
-    }
-
     public TileType getTileType() {
         return this.tileType;
     }

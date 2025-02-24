@@ -76,12 +76,12 @@ public class LetterTileTest {
         assertTrue(testTileQ==null);
     }
 
-    @Test
+   /*  @Test
     void testGetCharacterAsString() {
         assertEquals("A", testTileA.getStringToDisplay());
         assertEquals("Q", testTileQ.getStringToDisplay());
         assertEquals("-", testBlankTile.getStringToDisplay());           
-    }
+    } */
 
 }
 

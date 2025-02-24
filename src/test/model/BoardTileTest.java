@@ -50,14 +50,14 @@ public class BoardTileTest {
         assertEquals(3,doubleLetterTile.getCol());
 
     }
-    @Test
+    /* @Test
     void testgetStringToDisplay() {
         assertEquals("DW", doubleWordTile.getStringToDisplay());
         assertEquals("TW", tripleWordTile.getStringToDisplay());
         assertEquals("DL", doubleLetterTile.getStringToDisplay());
         assertEquals("TL", tripleLetterTile.getStringToDisplay());
         assertEquals("_", regularTile.getStringToDisplay());
-    }
+    } */
     
     @Test
     void testGetTileTypeAllTypes() {
