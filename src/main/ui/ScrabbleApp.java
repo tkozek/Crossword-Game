@@ -38,6 +38,8 @@ public class ScrabbleApp {
         }
     }
 
+    // EFFECTS: Prompts input for number of player's
+    // and requests their names
     public void initializePlayers() {
         System.out.println("Please enter the number of players [1,4]");
         int numPlayers = this.scanner.nextInt();
@@ -88,14 +90,14 @@ public class ScrabbleApp {
             getBoardPrintOut(board);
             Player playerToPlayNext = players.get(i);
             tileBag.drawTiles(playerToPlayNext);
-            System.out.println("Here are your tiles: " + playerToPlayNext.getPlayerName());
-            getTilePrintOut(playerToPlayNext);
             handleTurn(playerToPlayNext);
         }
     }
 
     public void handleTurn(Player p) {
-        System.out.println("Type whether you'd like to (P)lay, (S)wap, S(k)ip");
+        System.out.println("Here are your tiles: " + p.getPlayerName());
+        getTilePrintOut(p);
+        System.out.println("Type whether you'd like to (P)lay, (S)wap, S(k)ip, or (V)iew something");
         switch (scanner.nextLine()) {
             case "P":
             case "p":
@@ -109,9 +111,73 @@ public class ScrabbleApp {
             case "k":
                 handleSkip(p);
                 break;
+            case "V":
+                handleViewings(p);
+                break;
+            default:
+                handleTurn(p);
         }
     }
 
+    // EFFECTS: 
+    public void handleViewings(Player p) {
+        System.out.println("Type whether you'd like to view current (b)oard, (W)ords played, all (m)oves,"
+                + " (r)emaining tile counts, or anything else to cancel");
+        switch (scanner.nextLine()) {
+            case "B":
+            case "b":
+                getBoardPrintOut(board);
+                handleTurn(p);
+                break;
+            case "W":
+            case "w":
+                printWordsPlayed(p);
+                break;
+            case "M":
+            case "m":
+                //printAllMoves(p);
+                break;
+            case "R":
+            case "r":
+                getRemainingCharacterCounts(p);
+                handleTurn(p);
+                break;
+        }
+    }
+
+    // EFFECTS: Prints all player moves
+    // in order, including playing words,
+    // swaps, skips
+    public void printAllMovesSummary() {
+
+    }
+
+    //EFFECTS: Prints summary of player swap
+    public void printSwapSummary() {
+
+    }
+
+    // EFFECTS: Prints summary of player skip
+    public void printSkipSummary() {
+
+    }
+
+    public void printWordsPlayed(Player p) {
+        List<Move> wordsPlayed = p.getHistory().getMoves(); //get words needs to filter
+        for (Move word : wordsPlayed) {
+            getWordPrintout(word);
+        }
+    }
+
+    // EFFECTS: prints summary of word played
+    public void getWordPrintout(Move word) {
+        String printout = "";
+       // printout += "On board " + word.getBoard
+    }
+
+    // MODIFIES: player, board, tileBag
+    //EFFECTS: Prompts player to input directions
+    // to place a word on the board
     public void handlePlay(Player player) {
         while (true) {
             System.out.println("Enter the index of the tiles you'd like to play, in the order they form your word "
@@ -125,7 +191,8 @@ public class ScrabbleApp {
                 break;
             } else {
                 System.out.println("Invalid entry");
-                break;
+                handleTurn(player);
+                
             }
         }
     }
@@ -170,8 +237,11 @@ public class ScrabbleApp {
                 getTilePrintOut(player);
                 break;
             } else {
+                scanner.nextLine();
+                scanner.nextLine();
                 player.clearSelectedTiles();
-                break;
+                handleTurn(player);
+                return;
             }
         }
     }
@@ -216,6 +286,7 @@ public class ScrabbleApp {
         for (Map.Entry<Character, Integer> entry : remainingCounts.entrySet()) {
             System.out.println(entry.getKey() + "" + entry.getValue());
         }
+        printoutSpacer();
     }
 
 
