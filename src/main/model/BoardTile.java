@@ -11,18 +11,15 @@ public class BoardTile implements Tile {
     private TileType tileType;
 
     // Makes BoardTile with specified special tile properties,
-    // at specified (row, column) index of this board
-    
-    // REQUIRES: At most one of doubleLetter, doubleWord, tripleLetter, 
-    //            or tripleWord may be true.
-    //           AND 
-    //           
+    // at specified (row, column) index of this board        
     public BoardTile(int row, int col, TileType tileType) {
         this.row = row;
         this.col = col;
         this.tileType = tileType;
     }
 
+    // EFFECTS: returns true if and only if this has 
+    //   the desired tileType
     public boolean checkIsTileType(TileType tileType) {
         return this.tileType.equals(tileType);
     }
