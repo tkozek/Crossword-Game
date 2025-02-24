@@ -40,6 +40,9 @@ public class Player {
         return this.name;
     }
 
+    // EFFECTS: updates player's name, does
+    // not update their entries in history or
+    // history name
     public void setPlayerName(String name) {
         this.name = name;
     }
@@ -103,6 +106,7 @@ public class Player {
     }
 
     // REQUIRES: 0 <= index <     public int getNumTilesOnRack() {
+    // MODIFIES: this
     // EFFECTS: returns true if tile at index
     //          was successfully selected
     public boolean selectTile(int index) {
@@ -118,8 +122,9 @@ public class Player {
     }
 
     // MODIFIES: this
-    // EFFECTS: returns true if there were tiles to clear
-    //          false if player's rack was already empty.
+    // EFFECTS: clears selected tiles if any were selected
+    // returns true if there were tiles to clear 
+    // false if player's rack was already empty.
     public boolean clearSelectedTiles() {
         if (this.selectedTiles.isEmpty()) {
             return false;
