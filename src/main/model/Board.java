@@ -39,8 +39,7 @@ public class Board {
 
     // MODIFIES: this
     // EFFECTS: populates the board with Board Tiles
-    //         assigns special squares at appropriate 
-    //          coordinates
+    // assigns special squares at appropriate coordinates
     private void fillBoardTiles() {
         TileType tileType;
         for (int i = 0; i < BOARD_LENGTH; i++) {
@@ -62,6 +61,7 @@ public class Board {
         }
     }
     
+    // MODIFIES: this
     // EFFECTS: Indicates coordinates where a Double Letter Square
     //          should exist at the start of the game
     private void initializeDoubleLetterSquares() {
@@ -90,6 +90,7 @@ public class Board {
         doubleLetterCoordinates.add(new Coordinate(14, 11));
     }
 
+    // MODIFIES: this
     // EFFECTS: Indicates coordinates where a Triple Letter Square
     //          should exist at the start of the game
     private void initializeTripleLetterSquares() {
@@ -107,6 +108,7 @@ public class Board {
         tripleLetterCoordinates.add(new Coordinate(13, 9));
     }
 
+    // MODIFIES: this
     // EFFECTS: Indicates coordinates where a Double Word Square
     //          should exist at the start of the game
     private void initializeDoubleWordSquares() {
@@ -129,6 +131,7 @@ public class Board {
         doubleWordCoordinates.add(new Coordinate(13, 13));
     }
 
+    // MODIFIES: this
     // EFFECTS: Indicates coordinates where a Triple Word Square
     //          should exist at the start of the game
     private void initializeTripleWordSquares() {
@@ -257,8 +260,8 @@ public class Board {
         }
     }
 
-
     // REQUIRES: canPlay() is true for given arguments
+    // MODIFIES: this
     // EFFECTS: places letters onto board in the given direction
     // beginning at starting coordinates
     public void placeWord(List<LetterTile> letters, int startRow, int startCol, Direction dir) {
@@ -269,7 +272,6 @@ public class Board {
             int row = startRow + i * rowIncrement;
             int col = startCol + i * colIncrement;
             boardTiles[row][col] = letters.get(i);
-            
         }
     }
 
@@ -328,7 +330,6 @@ public class Board {
             }
         }
         return charCounts;
-        
     }
 
     public Tile getTileAtPositionOnBoard(int row, int column) {
