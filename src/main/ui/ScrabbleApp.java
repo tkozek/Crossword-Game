@@ -26,6 +26,9 @@ public class ScrabbleApp {
         initializeGame();
     }
     
+    // MODIFIES: player, board, tileBag
+    // EFFECTS: loads assets for a new game and prompts user input
+    // for setup parameters
     public void initializeGame() {
         board = new Board();
         tileBag = new TileBag();
@@ -38,6 +41,7 @@ public class ScrabbleApp {
         }
     }
 
+    // MODIFIES: players
     // EFFECTS: Prompts input for number of player's
     // and requests their names
     public void initializePlayers() {
@@ -85,6 +89,10 @@ public class ScrabbleApp {
         }
     }
 
+    // MODIFIES: player, board, tileBag
+    // EFFECTS: Manages order of turn taking, 
+    // and ensures player's draw new tiles
+    // when they are supposed to
     public void handleGameplay() {
         for (int i = 0; i < numPlayers; i++) {
             getBoardPrintOut(board);
@@ -94,6 +102,10 @@ public class ScrabbleApp {
         }
     }
 
+    // MODIFIES: player, board, tileBag
+    // EFFECTS: prompts player to decide which 
+    // type their next move will be, or if they
+    // want to view something
     public void handleTurn(Player p) {
         System.out.println("Here are your tiles: " + p.getPlayerName());
         getTilePrintOut(p);
@@ -119,7 +131,9 @@ public class ScrabbleApp {
         }
     }
 
-    // EFFECTS: 
+    // EFFECTS: Prompts user for what they
+    // would like to view about the game,
+    // displays that.
     public void handleViewings(Player p) {
         System.out.println("Type whether you'd like to view current (b)oard, (W)ords played, all (m)oves,"
                 + " (r)emaining tile counts, or anything else to cancel");
@@ -181,6 +195,8 @@ public class ScrabbleApp {
         System.out.println(p.getPlayerName() + " skipped their turn");
     }
 
+    // EFFECTS: prints summary of all
+    // words played by the player.
     public void printWordsPlayed(Player p) {
         List<Move> wordsPlayed = p.getHistory().getMovesWithWordPlayed();
         for (Move word : wordsPlayed) {
@@ -188,6 +204,8 @@ public class ScrabbleApp {
         }
     }
 
+    // EFFECTS: merges letters' characters into one
+    // string in their original order
     public String getWordString(List<LetterTile> letters) {
         String toDisplay = "";
         for (LetterTile letter : letters) {
@@ -196,7 +214,7 @@ public class ScrabbleApp {
         return toDisplay;
     }
 
-    // EFFECTS: prints summary of word played
+    // EFFECTS: prints summary of a word played
     public void getWordPrintout(Move word, Player p) {
         String printout = p.getPlayerName() + " played ";
         String wordString = getWordString(word.getLettersInvolved());
@@ -211,7 +229,7 @@ public class ScrabbleApp {
     }
 
     // MODIFIES: player, board, tileBag
-    //EFFECTS: Prompts player to input directions
+    // EFFECTS: Prompts player to input directions
     // to place a word on the board
     public void handlePlay(Player player) {
         while (true) {
@@ -232,6 +250,13 @@ public class ScrabbleApp {
         }
     }
 
+    // MODIFIES: player, board, tileBag
+    // EFFECTS: Prompts player for position and direction 
+    // instructions, then places and logs the turn
+    // their selected tiles as directed 
+    // OR 
+    // prints error message if instructions
+    // were invalid
     public void handlePositionAndDirectionSelection(Player player) {
         scanner.nextLine();
         System.out.println("Enter the row index you'd like to start your word at \n ");
@@ -256,6 +281,10 @@ public class ScrabbleApp {
         }
     }
 
+    // MODIFIES: player, tileBag
+    // EFFECTS: Prompts player to 
+    // select tiles to swap, swaps and displays 
+    // new tiles on confirmation, logs the swap
     public void handleSwap(Player player) {
         while (true) {
             System.out.println("Enter indices for tiles to swap, C to confirm, or any other character to cancel");
@@ -284,6 +313,9 @@ public class ScrabbleApp {
         }
     }
 
+    // MODIFIES: player
+    // EFFECTS: deselects players tiles
+    // logs the skipped turn and prints confirmation
     public void handleSkip(Player player) {
         player.clearSelectedTiles();
         player.logSkippedTurn(board);
@@ -314,7 +346,8 @@ public class ScrabbleApp {
     }
 
     
-
+    // EFFECTS: returns string representing
+    // a letter's character such as "A".
     public String getLetterString(LetterTile letter) {
         char character = letter.getCharacter();
         return String.valueOf(character);
@@ -332,12 +365,6 @@ public class ScrabbleApp {
         printoutSpacer();
     }
 
-
-    //!!!
-    public boolean validateWord(List<LetterTile> letters, int row, int col, Direction dir) {
-        return board.canPlay(letters, row,col, dir);
-    }
-
     // EFFECTS: Prints a separator to the console
     public void printoutSpacer() {
         String spacer = "";
@@ -353,6 +380,7 @@ public class ScrabbleApp {
         this.gameRunning = false;
     }
 
+    // EFFECTS: prints out the current board
     public void getBoardPrintOut(Board board) {
         printHeader();
         for (int i = 0; i < Board.BOARD_LENGTH; i++) {
@@ -372,6 +400,8 @@ public class ScrabbleApp {
         }
     }
 
+    // EFFECTS: returns a string representing
+    // the type of given board tile.
     public String getBoardTileSymbol(BoardTile boardTile) {
         TileType type = boardTile.getTileType();
         switch (type) {
@@ -390,6 +420,7 @@ public class ScrabbleApp {
         }
     }
 
+    // EFFECTS: prints header for board display
     public void printHeader() {
         String header = "|";
         for (int i = 0; i <= 9; i++) {
@@ -402,14 +433,9 @@ public class ScrabbleApp {
         printoutSpacer();
     }
 
-    public void printBoardBody() {
-
-    }
     
     // Play the game
     public static void main(String[] args) {
-        //!!! 
-        //Update later to prompt number of players and use scanner
         new ScrabbleApp();
     }
 }
