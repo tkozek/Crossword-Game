@@ -308,5 +308,7 @@ public class PlayerTest {
         assertEquals(testPlayer.getHistory().getMoves().get(1).getPointsForMove(), 0);
     }
 
+    
+
 }
 

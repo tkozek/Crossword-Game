@@ -76,12 +76,18 @@ public class Player {
     public void logWord(Board board, int startRow, int startCol, int pointsEarned, Direction dir) {
         //Player, Board, List<LetterTile> , Start Row, Start Col, Points Earned
         List<LetterTile> letters = this.getSelectedTiles();
-        List<LetterTile> copy = new ArrayList<>();
-        for (LetterTile letter : letters) {
-            copy.add(new LetterTile(letter));
-        }
+        List<LetterTile> copy = copyLetterTiles(letters);
         Move move = new Move(this, board, copy, startRow, startCol, pointsEarned, dir);
         this.history.addMove(move);
+    }
+
+    // EFFECTS: returns deep copy of given list of letters.
+    public List<LetterTile> copyLetterTiles(List<LetterTile> lettersToCopy) {
+        List<LetterTile> copiedLetters = new ArrayList<>();
+        for (LetterTile letter : lettersToCopy) {
+            copiedLetters.add(new LetterTile(letter));
+        }
+        return copiedLetters;
     }
 
     // MODIFIES: this
@@ -196,11 +202,9 @@ public class Player {
         this.points += points;
     }
 
+    //EFFECTS: returns deep copy of player's
+    // selected tiles
     public List<LetterTile> copySelectedTiles() {
-        List<LetterTile> copiedLetters = new ArrayList<>();
-        for (LetterTile letter : this.getSelectedTiles()) {
-            copiedLetters.add(letter);
-        }
-        return copiedLetters;
+        return copyLetterTiles(this.getSelectedTiles());
     }
 }
