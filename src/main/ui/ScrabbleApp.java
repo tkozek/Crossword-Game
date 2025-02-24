@@ -163,16 +163,32 @@ public class ScrabbleApp {
     }
 
     public void printWordsPlayed(Player p) {
-        List<Move> wordsPlayed = p.getHistory().getMoves(); //get words needs to filter
+        List<Move> wordsPlayed = p.getHistory().getMovesWithWordPlayed();
         for (Move word : wordsPlayed) {
-            getWordPrintout(word);
+            getWordPrintout(word, p);
         }
     }
 
+    public String getWordString(List<LetterTile> letters) {
+        String toDisplay = "";
+        for (LetterTile letter : letters) {
+            toDisplay += getLetterString(letter);
+        }
+        return toDisplay;
+    }
+
     // EFFECTS: prints summary of word played
-    public void getWordPrintout(Move word) {
-        String printout = "";
-       // printout += "On board " + word.getBoard
+    public void getWordPrintout(Move word, Player p) {
+        String printout = p.getPlayerName() + " played ";
+        String wordString = getWordString(word.getLettersInvolved());
+        String startRow = String.valueOf(word.getStartRow());
+        String startCol = String.valueOf(word.getStartColumn());
+        String coordinates = "(" + startRow + "," + startCol + ")";
+        String direction = (word.getDirection() == Direction.RIGHT) ? "to the right" : "down";
+        String points = String.valueOf(word.getPointsForMove());
+        printout += wordString + " starting at " + coordinates + " and moving " 
+                + direction + " earning " + points + " points";
+        System.out.println(printout);
     }
 
     // MODIFIES: player, board, tileBag
@@ -278,6 +294,8 @@ public class ScrabbleApp {
         System.out.println(tilePrintOut + "\n");
     }
 
+    
+
     public String getLetterString(LetterTile letter) {
         char character = letter.getCharacter();
         return String.valueOf(character);
@@ -293,18 +311,6 @@ public class ScrabbleApp {
         printoutSpacer();
     }
 
-
-    //EFFECTS: returns a string combining
-    // all player's tiles in their rack
-    // in order
-    public String getTilesOnRack(Player p) {
-        List<LetterTile> letters = p.getTilesOnRack();
-        String toDisplay = "";
-        for (LetterTile letter : letters) {
-            toDisplay += letter.getStringToDisplay();
-        }
-        return toDisplay;
-    } 
 
     //!!!
     public boolean validateWord(List<LetterTile> letters, int row, int col, Direction dir) {
@@ -326,13 +332,13 @@ public class ScrabbleApp {
         this.gameRunning = false;
     }
 
-    public void getBoardPrintOut(Board board){
+    public void getBoardPrintOut(Board board) {
         String rowPrintOut;
         String header = "|";
         for (int i = 0; i <= 9; i++) {
             header += "_" + Integer.toString(i) + "_| ";
         }
-        for (int i = 10; i < Board.BOARD_LENGTH; i++){
+        for (int i = 10; i < Board.BOARD_LENGTH; i++) {
             header += Integer.toString(i) + "_| ";
         }
         System.out.println(header);
