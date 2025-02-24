@@ -90,5 +90,14 @@ public class MoveTest {
         assertEquals(endGameWinner.getMoveType(),MoveType.END_GAME_WINNER);
         assertEquals(endGameWinner.getBoard(),board);
     }
+
+    @Test
+    void testConstructorSkip() {
+        Move skip = new Move(testPlayer, testBoard);
+        assertEquals(skip.getPointsForMove(), 0);
+        assertEquals(skip.getMoveType(), MoveType.SKIP);
+        assertEquals(skip.getBoard(), testBoard);
+        assertEquals(skip.getPlayer(),testPlayer);
+    }
     
 }
