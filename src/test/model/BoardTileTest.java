@@ -57,7 +57,14 @@ public class BoardTileTest {
         assertEquals("DL", doubleLetterTile.getStringToDisplay());
         assertEquals("TL", tripleLetterTile.getStringToDisplay());
         assertEquals("_", regularTile.getStringToDisplay());
-
+    }
+    
+    @Test
+    void testGetTileTypeAllTypes() {
+        assertEquals(doubleWordTile.getTileType(), TileType.DOUBLE_WORD);
+        assertEquals(doubleLetterTile.getTileType(), TileType.DOUBLE_LETTER);
+        assertEquals(tripleLetterTile.getTileType(), TileType.TRIPLE_LETTER);
+        assertEquals(tripleWordTile.getTileType(), TileType.TRIPLE_WORD);
     }
 }
 

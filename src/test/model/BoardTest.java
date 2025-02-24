@@ -329,6 +329,20 @@ public class BoardTest {
         // didn't add d so it should not be in the map
         assertEquals(counts.get('_'), null);
     }
+    @Test
+    void testGetTileAtPositionOnBoard() {
+        BoardTile boardTile = (BoardTile) board.getTileAtPositionOnBoard(7,7);
+        assertEquals(boardTile.getTileType(), TileType.DOUBLE_WORD);
 
+
+        BoardTile twTile = (BoardTile) board.getTileAtPositionOnBoard(7,0);
+        assertEquals(twTile.getTileType(), TileType.TRIPLE_WORD);
+
+        BoardTile tLTile = (BoardTile) board.getTileAtPositionOnBoard(1,5);
+        assertEquals(tLTile.getTileType(), TileType.TRIPLE_LETTER);
+
+        BoardTile dLTile = (BoardTile) board.getTileAtPositionOnBoard(0,3);
+        assertEquals(dLTile.getTileType(), TileType.DOUBLE_LETTER);
+    }
 
 }
