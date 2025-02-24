@@ -135,7 +135,7 @@ public class ScrabbleApp {
                 break;
             case "M":
             case "m":
-                //printAllMoves(p);
+                printAllMovesSummary(p);
                 break;
             case "R":
             case "r":
@@ -149,17 +149,36 @@ public class ScrabbleApp {
     // in order, including playing words,
     // swaps, skips
     public void printAllMovesSummary(Player p) {
-
+        List<Move> allMoves = p.getHistory().getMoves();
+        MoveType moveType;
+        for (Move move : allMoves) {
+            moveType = move.getMoveType();
+            if (moveType == MoveType.PLAY_WORD) {
+                getWordPrintout(move, p);
+            } else if (moveType == MoveType.SWAP_TILES) {
+                printSwapSummary(move, p);
+            } else if (moveType == MoveType.SKIP) {
+                printSkipSummary(move, p);
+            }
+        }
     }
 
     //EFFECTS: Prints summary of a player swap
-    public void printSwapSummary(Player p) {
-
+    public void printSwapSummary(Move swap, Player p) {
+        String printout = p.getPlayerName() + " swapped tiles. ";
+        String preAndPostLetters = getWordString(swap.getLettersInvolved());
+        int halfLength = preAndPostLetters.length()/2;
+        String preSwapLetters = preAndPostLetters.substring(0, halfLength);
+        String postSwapLetters = preAndPostLetters.substring(halfLength);
+        String points = String.valueOf(swap.getPointsForMove());
+        printout += "Their tiles before swapping were: " + preSwapLetters + " and their tiles after swapping were " 
+                 + postSwapLetters + ", earning " + points + " points.";
+        System.out.println(printout);
     }
 
     // EFFECTS: Prints summary of a skipped turn
-    public void printSkipSummary(Player p) {
-
+    public void printSkipSummary(Move skip, Player p) {
+        System.out.println(p.getPlayerName() + " skipped their turn");
     }
 
     public void printWordsPlayed(Player p) {
@@ -187,7 +206,7 @@ public class ScrabbleApp {
         String direction = (word.getDirection() == Direction.RIGHT) ? "to the right" : "down";
         String points = String.valueOf(word.getPointsForMove());
         printout += wordString + " starting at " + coordinates + " and moving " 
-                + direction + " earning " + points + " points";
+                + direction + " earning " + points + " points.";
         System.out.println(printout);
     }
 
@@ -304,9 +323,11 @@ public class ScrabbleApp {
     // EFFECTS: Prints remaining character counts
     // for tiles not on the board or the player's tile rack
     public void getRemainingCharacterCounts(Player p) {
+        printoutSpacer();
+        System.out.println("The remaining tile counts in the format 'Letter : Count' are:");
         Map<Character, Integer> remainingCounts = p.getNumEachCharInBagAndOpponents();
         for (Map.Entry<Character, Integer> entry : remainingCounts.entrySet()) {
-            System.out.println(entry.getKey() + "" + entry.getValue());
+            System.out.println(entry.getKey() + " : " + entry.getValue());
         }
         printoutSpacer();
     }
