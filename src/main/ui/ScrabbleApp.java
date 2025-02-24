@@ -148,17 +148,17 @@ public class ScrabbleApp {
     // EFFECTS: Prints all player moves
     // in order, including playing words,
     // swaps, skips
-    public void printAllMovesSummary() {
+    public void printAllMovesSummary(Player p) {
 
     }
 
-    //EFFECTS: Prints summary of player swap
-    public void printSwapSummary() {
+    //EFFECTS: Prints summary of a player swap
+    public void printSwapSummary(Player p) {
 
     }
 
-    // EFFECTS: Prints summary of player skip
-    public void printSkipSummary() {
+    // EFFECTS: Prints summary of a skipped turn
+    public void printSkipSummary(Player p) {
 
     }
 
@@ -209,7 +209,7 @@ public class ScrabbleApp {
         Direction dir = (scanner.nextLine().equals("R")) ? Direction.RIGHT : Direction.DOWN;
         if (board.canPlay(player.getSelectedTiles(), row, col, dir)) {
             int score = board.playWord(player.getSelectedTiles(), row, col, dir);
-            player.makeMove(board, row,col, score, dir);
+            player.makeWord(board, row,col, score, dir);
             player.removeSelectedTiles();
             System.out.println(player.getPlayerName() + " earned " + score + " points!");
             player.addPoints(score);

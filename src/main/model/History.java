@@ -25,6 +25,13 @@ public class History {
         return this.moveHistory;
     }
 
+    // Returns only the moves where a word was 
+    // played. Excludes any turns which were swaps
+    // or skips
+    public List<Move> getMovesWithWordPlayed() {
+        return null;
+    }
+
     // REQUIRES: Move was made user with this.name
     // MODIFIES: this
     // EFFECTS: adds move to this history

@@ -70,7 +70,7 @@ public class Player {
         this.tileRack.add(drawnLetter);
     }
 
-    public void makeMove(Board board, int startRow, int startCol, int pointsEarned, Direction dir) {
+    public void makeWord(Board board, int startRow, int startCol, int pointsEarned, Direction dir) {
         //Player, Board, List<LetterTile> , Start Row, Start Col, Points Earned
         List<LetterTile> letters = this.getSelectedTiles();
         List<LetterTile> copy = new ArrayList<>();

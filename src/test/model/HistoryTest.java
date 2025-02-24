@@ -112,4 +112,22 @@ public class HistoryTest {
         assertEquals(history.getListOfMovesContainingLetter('B').get(0), doesntHaveZ);
 
     }
+
+    @Test
+    void testGetAllWordsPlayed() {
+        List<Move> wordsPlayed = testPlayer.getHistory().getMovesWithWordPlayed();
+        assertTrue(wordsPlayed.isEmpty());
+        // uses selected tiles within player, doesn't need non null tiles selected to make a move
+        testPlayer.makeWord(board, 7, 7, 10, Direction.DOWN);
+        wordsPlayed = testPlayer.getHistory().getMovesWithWordPlayed();
+        assertEquals(wordsPlayed.size(), 1);
+
+        testPlayer.makeWord(board, 0, 4, 15, Direction.RIGHT);
+
+        assertEquals(wordsPlayed.size(), 2);
+        assertEquals(wordsPlayed.get(1).getPointsForMove(), 15);
+        
+    }
+
+    
 }
