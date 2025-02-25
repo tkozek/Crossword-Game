@@ -3,12 +3,16 @@ package model;
 import java.util.List;
 import java.util.Set;
 
+import org.json.JSONObject;
+
+import persistance.Writable;
+
 import java.util.HashSet;
 import java.util.HashMap;
 import java.util.Map;
 
 // Represents a Scrabble Game Board
-public class Board {
+public class Board implements Writable {
     public static final int BOARD_LENGTH = 15;
     private Set<Coordinate> doubleLetterCoordinates = new HashSet<>();
     private Set<Coordinate> doubleWordCoordinates = new HashSet<>();
@@ -334,6 +338,12 @@ public class Board {
 
     public Tile getTileAtPositionOnBoard(int row, int column) {
         return boardTiles[row][column];
+    }
+
+    @Override
+    public JSONObject toJSON() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'toJSON'");
     }
 }
 

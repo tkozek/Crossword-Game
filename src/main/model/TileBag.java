@@ -4,11 +4,16 @@ import java.util.List;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.Random;
+
+import org.json.JSONObject;
+
+import persistance.Writable;
+
 import java.util.HashMap;
 
 // Represents the draw bag of Letter Tiles in 
 // a Scrabble Game
-public class TileBag {
+public class TileBag implements Writable {
     public static final int TOTAL_LETTERS_INITIALLY = 100;
     private Map<Character, Integer> letterFrequencyMap = new HashMap<>();
     private Map<Character, Integer> letterPointsMap = new HashMap<>();
@@ -205,6 +210,12 @@ public class TileBag {
         initializeFrequenciesAThroughM(copy);
         initializeFrequenciesNThroughBlank(copy);
         return (Map<Character,Integer>) copy;
+    }
+
+    @Override
+    public JSONObject toJSON() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'toJSON'");
     }
     
 }  

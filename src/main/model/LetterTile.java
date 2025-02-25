@@ -1,8 +1,12 @@
 package model;
 
+import org.json.JSONObject;
+
+import persistance.Writable;
+
 //Represents the playable tiles in a Scrabble Game
 
-public class LetterTile implements Tile {
+public class LetterTile implements Tile, Writable {
 
     private char character;
     private int points;
@@ -26,6 +30,12 @@ public class LetterTile implements Tile {
     
     public int getLetterPoints() {
         return this.points;
+    }
+
+    @Override
+    public JSONObject toJSON() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'toJSON'");
     }
 
 }

@@ -7,9 +7,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.json.JSONObject;
+
+import persistance.Writable;
+
 // Represents a player in the Scrabble Game
 
-public class Player {
+public class Player implements Writable {
  
     public static final int MAX_NUM_TILES = 7;
     private String name;
@@ -213,5 +217,11 @@ public class Player {
     // selected tiles
     public List<LetterTile> copySelectedTiles() {
         return copyLetterTiles(this.getSelectedTiles());
+    }
+
+    @Override
+    public JSONObject toJSON() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'toJSON'");
     }
 }

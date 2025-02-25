@@ -1,5 +1,8 @@
 package persistance;
 
-public interface Writable {
+import org.json.JSONObject;
 
+public interface Writable {
+    //EFFECTS: returns this as JSON object
+    JSONObject toJSON();
 }

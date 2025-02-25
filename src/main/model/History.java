@@ -3,9 +3,13 @@ package model;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.json.JSONObject;
+
+import persistance.Writable;
+
 // Represents a Player's history, which includes
 // a list of their moves across their games
-public class History {
+public class History implements Writable {
 
     private String name;
     private List<Move> moveHistory;
@@ -60,5 +64,11 @@ public class History {
             }
         }
         return movesWithLetter;
+    }
+
+    @Override
+    public JSONObject toJSON() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'toJSON'");
     }
 }

@@ -2,8 +2,12 @@ package model;
 
 import java.util.List;
 
+import org.json.JSONObject;
+
+import persistance.Writable;
+
 // A move made by a player, either a word played or a swap
-public class Move {
+public class Move implements Writable {
     private MoveType moveType;
     private int pointsForMove;
     private List<LetterTile> lettersInvolved;
@@ -109,6 +113,12 @@ public class Move {
             }
         }
         return false;
+    }
+
+    @Override
+    public JSONObject toJSON() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'toJSON'");
     }
 
 
