@@ -144,8 +144,9 @@ public class TileBag {
     // MODIFIES: this
     // EFFECTS: Adds already existing tiles back to draw pile
     public void addTiles(List<LetterTile> lettersToAdd) {
-        for (LetterTile letter : lettersToAdd)
-        drawPile.add(letter);
+        for (LetterTile letter : lettersToAdd) {
+            drawPile.add(letter);
+        }
     }
 
     //MODIFIES: this, player
