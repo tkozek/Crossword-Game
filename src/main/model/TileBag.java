@@ -30,17 +30,17 @@ public class TileBag {
     // and points values in point and frequency 
     // maps, for each valid character in Scrabble
     private void initializeMaps() {
-        initializeFrequenciesAThroughM();
-        initializeFrequenciesNThroughBlank();
-        initializeLetterPointsAThroughM();
-        initializeLetterPointsNThroughBlank();
+        initializeFrequenciesAThroughM(letterFrequencyMap);
+        initializeFrequenciesNThroughBlank(letterFrequencyMap);
+        initializeLetterPointsAThroughM(letterFrequencyMap);
+        initializeLetterPointsNThroughBlank(letterFrequencyMap);
     }
 
     // MODIFIES: this
     // EFFECTS: Adds Tile Frequencies to 
     //   Frequency map for Letters A, B, C,....,M
     //     inclusive
-    private void initializeFrequenciesAThroughM() {
+    private void initializeFrequenciesAThroughM(Map<Character, Integer> letterFrequencyMap) {
         letterFrequencyMap.put('A', 9); 
         letterFrequencyMap.put('B', 2); 
         letterFrequencyMap.put('C', 2);
@@ -60,7 +60,7 @@ public class TileBag {
     // EFFECTS: Adds Tile Frequencies to 
     //   Frequency map for Letters N, O,....,Z,_,
     //     inclusive
-    private void initializeFrequenciesNThroughBlank() {
+    private void initializeFrequenciesNThroughBlank(Map<Character, Integer> letterFrequencyMap) {
         letterFrequencyMap.put('N', 6); 
         letterFrequencyMap.put('O', 8);
         letterFrequencyMap.put('P', 2); 
@@ -81,7 +81,7 @@ public class TileBag {
     // EFFECTS: Adds Tile Point Values to 
     //   Point map for Letters A, B, C,....,M
     //     inclusive
-    private void initializeLetterPointsAThroughM() {
+    private void initializeLetterPointsAThroughM(Map<Character, Integer> letterFrequencyMap) {
         letterPointsMap.put('A', 1); 
         letterPointsMap.put('B', 3); 
         letterPointsMap.put('C', 3);
@@ -101,7 +101,7 @@ public class TileBag {
     // EFFECTS: Adds Tile Point Values to 
     //   Point map for Letters N, O,....,Z,_,
     //     inclusive
-    private void initializeLetterPointsNThroughBlank() {
+    private void initializeLetterPointsNThroughBlank(Map<Character, Integer> letterFrequencyMap) {
         letterPointsMap.put('N', 1); 
         letterPointsMap.put('O', 1);
         letterPointsMap.put('P', 3); 
@@ -200,7 +200,10 @@ public class TileBag {
     // EFFECTS: returns each game character mapped to how many 
     // occurences it has in the draw pile of a new game
     public Map<Character, Integer> getInitialLetterFrequencies() {
-        return (Map<Character,Integer>) letterFrequencyMap;
+        Map<Character, Integer> copy = new HashMap<>();
+        initializeFrequenciesAThroughM(copy);
+        initializeFrequenciesNThroughBlank(copy);
+        return (Map<Character,Integer>) copy;
     }
     
 }  

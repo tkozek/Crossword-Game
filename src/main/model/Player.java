@@ -2,8 +2,10 @@ package model;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 // Represents a player in the Scrabble Game
 
@@ -162,7 +164,7 @@ public class Player {
     //   mapped to their number of occurences on tile rack
     public Map<Character, Integer> getNumEachCharOnMyRack() {
         HashMap<Character,Integer> playerCharCounts = new HashMap<>();
-        List<LetterTile> letters = this.getTilesOnRack();
+        Set<LetterTile> letters = new HashSet<>(this.getTilesOnRack());
         for (LetterTile letter : letters) {
             char letterChar = letter.getCharacter();
             playerCharCounts.put(letterChar, playerCharCounts.getOrDefault(letterChar,0) + 1);
