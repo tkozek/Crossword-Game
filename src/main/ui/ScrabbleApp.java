@@ -16,7 +16,8 @@ public class ScrabbleApp {
     private Scanner scanner;
     private List<Player> players;
     private int numPlayers; 
-
+    private ScrabbleGame scrabbleGame;
+    
     //EFFECTS: Creates new ScrabbleApp with
     //        a board and tile bag
     public ScrabbleApp() {        
@@ -33,6 +34,7 @@ public class ScrabbleApp {
         board = new Board();
         tileBag = new TileBag();
         scanner = new Scanner(System.in);
+        scrabbleGame = new ScrabbleGame("", board, tileBag);
         this.gameRunning = true;
         initializePlayers();
 

@@ -12,6 +12,7 @@ public class JsonReader {
 
     // EFFECTS: constructs reader that reads 
     // from data stored in file at source
+    // Citation: Based on WorkRoom example on edX
     public JsonReader(String source) {
 
     }
