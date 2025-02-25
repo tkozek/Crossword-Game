@@ -1,0 +1,112 @@
+{
+    "tileBagLetters" : [
+        {
+            "letter": "A",
+            "numRemaining": 9
+        },
+        {
+            "letter": "B",
+            "numRemaining": 2
+        },
+        {
+            "letter": "C",
+            "numRemaining": 2
+        },
+        {
+            "letter": "D",
+            "numRemaining": 4
+        },
+        {
+            "letter": "E",
+            "numRemaining": 12
+        },
+        {
+            "letter": "F",
+            "numRemaining": 2
+        },
+        {
+            "letter": "G",
+            "numRemaining": 3
+        },
+        {
+            "letter": "H",
+            "numRemaining": 2
+        },
+        {
+            "letter": "I",
+            "numRemaining": 9
+        },
+        {
+            "letter": "J",
+            "numRemaining": 1
+        },
+        {
+            "letter": "K",
+            "numRemaining": 1
+        },
+        {
+            "letter": "L",
+            "numRemaining": 4
+        },
+        {
+            "letter": "M",
+            "numRemaining": 2
+        },
+        {
+            "letter": "N",
+            "numRemaining": 6
+        },
+        {
+            "letter": "O",
+            "numRemaining": 8
+        },
+        {
+            "letter": "P",
+            "numRemaining": 2
+        },
+        {
+            "letter": "Q",
+            "numRemaining": 1
+        },
+        {
+            "letter": "R",
+            "numRemaining": 6
+        },
+        {
+            "letter": "S",
+            "numRemaining": 4
+        },
+        {
+            "letter": "T",
+            "numRemaining": 6
+        },
+        {
+            "letter": "U",
+            "numRemaining": 4
+        },
+        {
+            "letter": "V",
+            "numRemaining": 2
+        },
+        {
+            "letter": "W",
+            "numRemaining": 2
+        },
+        {
+            "letter": "X",
+            "numRemaining": 1
+        },
+        {
+            "letter": "Y",
+            "numRemaining": 2
+        },
+        {
+            "letter": "Z",
+            "numRemaining": 1
+        },
+        {
+            "letter": "-",
+            "numRemaining": 2
+        }
+    ]
+}

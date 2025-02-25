@@ -1,0 +1,34 @@
+{
+    "players": [
+
+    ],
+
+    "boardSquares": [
+        {
+            "display": "DWS"
+        },
+
+        {
+            "display": "-"
+        },
+        {
+
+        }
+            
+
+    ],
+    "tileBagLetters" : [
+        {
+            "letter": "A",
+            "numRemaining": 3
+        },
+        {
+            "letter": "B",
+            "numRemaining": 2
+        }
+    ],
+    
+
+    "name": "test"
+}
+
