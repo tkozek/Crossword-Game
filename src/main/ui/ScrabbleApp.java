@@ -236,7 +236,7 @@ public class ScrabbleApp {
             System.out.println("Enter the index of the tiles you'd like to play, in the order they form your word "
                     + "or enter C to confirm");
             if (scanner.hasNextInt()) {
-                player.selectTile(scanner.nextInt());
+                player.selectTile(scanner.nextInt() - 1);
                 System.out.println("So far you've selected: ");
                 printSelectedTiles(player);
             } else if (scanner.hasNext("C")) {
