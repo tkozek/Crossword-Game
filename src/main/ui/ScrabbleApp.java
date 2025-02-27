@@ -3,12 +3,17 @@ package ui;
 import java.util.Scanner;
 import java.util.List;
 import java.util.Map;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
 import model.*;
+import persistance.JsonReader;
+import persistance.JsonWriter;
 
+// Citation: Saving and loading are based on JSON example from edX
 // Represents a game of Scrabble
-
 public class ScrabbleApp {
+    private static final String JSON_STORE = "./data/game.json";
     private Player player;
     private Board board;
     private TileBag tileBag;
@@ -17,6 +22,8 @@ public class ScrabbleApp {
     private List<Player> players;
     private int numPlayers; 
     private ScrabbleGame scrabbleGame;
+    private JsonWriter jsonWriter;
+    private JsonReader jsonReader;
     
     //EFFECTS: Creates new ScrabbleApp with
     //        a board and tile bag
@@ -24,23 +31,55 @@ public class ScrabbleApp {
         printoutSpacer();
         System.out.println("Welcome to Scrabble in Java");
         printoutSpacer();
-        initializeGame();
+        scanner = new Scanner(System.in);
+        jsonWriter = new JsonWriter(JSON_STORE);
+        jsonReader = new JsonReader(JSON_STORE);
+        System.out.println("(L)oad your old game or (p)lay a new one?");
+        switch (scanner.nextLine()) {
+            case "P":
+            case "p":
+                initializeNewGame();
+                break;
+            case "L":
+            case "l":
+                loadOldGame();
+                break;
+            /* default:
+                initializeNewGame(); */
+        }
+        this.gameRunning = true;
+        handleGameplay();
+
+        
     }
     
     // MODIFIES: player, board, tileBag
-    // EFFECTS: loads assets for a new game and prompts user input
+    // EFFECTS: creates assets for a new game and prompts user input
     // for setup parameters
-    public void initializeGame() {
+    public void initializeNewGame() {
         board = new Board();
         tileBag = new TileBag();
-        scanner = new Scanner(System.in);
         scrabbleGame = new ScrabbleGame("", board, tileBag);
         this.gameRunning = true;
         initializePlayers();
+    }
 
-        while (gameRunning) {
-            handleGameplay();
+    // MODIFIES: scrabbleGame, players, tileBag, board, numPlayers
+    // EFFECTS: loads assets from previously saved game
+    private void loadOldGame() {
+        this.gameRunning = true;
+        try {
+            scrabbleGame = jsonReader.read();
+            this.players = scrabbleGame.getPlayers();
+            this.board = scrabbleGame.getBoard();
+            this.tileBag = scrabbleGame.getTileBag();
+            this.numPlayers = players.size();
+            System.out.println("Loaded " + scrabbleGame.getName() + " with " + String.valueOf(numPlayers) 
+                    + " players from " + JSON_STORE);
+        } catch (IOException e) {
+            System.out.println("Unable to read game from file: " + JSON_STORE);
         }
+
     }
 
     // MODIFIES: players
@@ -97,11 +136,13 @@ public class ScrabbleApp {
     // and ensures player's draw new tiles
     // when they are supposed to
     public void handleGameplay() {
-        for (int i = 0; i < numPlayers; i++) {
-            getBoardPrintOut(board);
-            Player playerToPlayNext = players.get(i);
-            tileBag.drawTiles(playerToPlayNext);
-            handleTurn(playerToPlayNext);
+        while (gameRunning) {
+            for (int i = 0; i < numPlayers; i++) {
+                getBoardPrintOut(board);
+                Player playerToPlayNext = players.get(i);
+                tileBag.drawTiles(playerToPlayNext);
+                handleTurn(playerToPlayNext);
+            }
         }
     }
 
@@ -112,7 +153,7 @@ public class ScrabbleApp {
     public void handleTurn(Player p) {
         System.out.println("Here are your tiles: " + p.getPlayerName());
         getTilePrintOut(p);
-        System.out.println("Type whether you'd like to (P)lay, (S)wap, S(k)ip, or (V)iew something");
+        System.out.println("Type whether you'd like to (P)lay, (S)wap, S(k)ip, (V)iew something, or s(a)ve and quit");
         switch (scanner.nextLine()) {
             case "P":
             case "p":
@@ -127,8 +168,13 @@ public class ScrabbleApp {
                 handleSkip(p);
                 break;
             case "V":
+            case "v":
                 handleViewings(p);
                 break;
+            case "A":
+            case "a":
+                handleSave();
+                this.gameRunning = false;
             default:
                 handleTurn(p);
         }
@@ -159,6 +205,19 @@ public class ScrabbleApp {
                 getRemainingCharacterCounts(p);
                 handleTurn(p);
                 break;
+        }
+    }
+
+    // EFFECTS: Saves game to file
+    private void handleSave() {
+        try {
+            jsonWriter.open();
+            jsonWriter.write(scrabbleGame);
+            jsonWriter.close();
+            System.out.println("Saved" + scrabbleGame.getName() + " with " + String.valueOf(numPlayers)
+                + " players to " + JSON_STORE);
+        } catch (FileNotFoundException e) {
+            System.out.println("Unable to write to file " + JSON_STORE);
         }
     }
 

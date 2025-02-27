@@ -21,9 +21,24 @@ public class ScrabbleGame implements Writable {
         
     }
 
+    // EFFECTS: Names this game
+    public void setName() {
+
+    }
+
     // EFFECTS: returns this game's name
     public String getName() {
         return "";
+    }
+
+    // EFFECTS: returns board
+    public Board getBoard() {
+        return null;
+    }
+    
+    // EFFECTS: returns tile bag
+    public TileBag getTileBag() {
+        return null;
     }
 
     // EFFECTS: returns number of players
@@ -68,4 +83,5 @@ public class ScrabbleGame implements Writable {
         return null;
     }
 
+    
 }
