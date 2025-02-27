@@ -153,7 +153,7 @@ public class ScrabbleApp {
     public void handleTurn(Player p) {
         System.out.println("Here are your tiles: " + p.getPlayerName());
         getTilePrintOut(p);
-        System.out.println("Type whether you'd like to (P)lay, (S)wap, S(k)ip, (V)iew something, or s(a)ve and quit");
+        System.out.println("Type whether you'd like to (P)lay, (S)wap, S(k)ip, or (o)ther.");
         switch (scanner.nextLine()) {
             case "P":
             case "p":
@@ -167,6 +167,21 @@ public class ScrabbleApp {
             case "k":
                 handleSkip(p);
                 break;
+            case "O":
+            case "o":
+                handleNonPlayOptions(p);
+                break;
+            default:
+                handleTurn(p);
+        }
+    }
+
+    // MODIFIES: this
+    // EFFECTS: Let's player decide to view
+    // game related info, or save and quit
+    public void handleNonPlayOptions(Player p) {
+        System.out.println("Type whether you'd like to (v)iew something, or s(a)ve and quit");
+        switch (scanner.nextLine()) {
             case "V":
             case "v":
                 handleViewings(p);
@@ -176,7 +191,7 @@ public class ScrabbleApp {
                 handleSave();
                 this.gameRunning = false;
             default:
-                handleTurn(p);
+                handleNonPlayOptions(p);
         }
     }
 
@@ -215,7 +230,7 @@ public class ScrabbleApp {
             jsonWriter.write(scrabbleGame);
             jsonWriter.close();
             System.out.println("Saved" + scrabbleGame.getName() + " with " + String.valueOf(numPlayers)
-                + " players to " + JSON_STORE);
+                    + " players to " + JSON_STORE);
         } catch (FileNotFoundException e) {
             System.out.println("Unable to write to file " + JSON_STORE);
         }
