@@ -14,7 +14,6 @@ public class HistoryTest {
     
     private Board board;
     private TileBag testBag;
-    private Set<Character> set;
     private Player testPlayer;
     private Player testPlayer2;
     private Board testBoard;
@@ -26,14 +25,15 @@ public class HistoryTest {
     private LetterTile B; 
     private LetterTile A;
     private LetterTile Z;
-    
+    private ScrabbleGame game;
 
     @BeforeEach
     void runBefore() {
         testBag = new TileBag();
         board =  new Board();
-        testPlayer = new Player("Trevor", testBoard,testBag);
-        testPlayer2 = new Player("Rovert", testBoard,testBag);
+        game = new ScrabbleGame("alphabet", board, testBag);
+        testPlayer = new Player("Trevor", testBoard, testBag, game);
+        testPlayer2 = new Player("Rovert", testBoard, testBag, game);
         p1Letters = testPlayer.getTilesOnRack();
         p2Letters = testPlayer2.getTilesOnRack();
         B = new LetterTile('B',3);

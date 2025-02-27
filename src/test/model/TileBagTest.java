@@ -10,11 +10,14 @@ public class TileBagTest {
     private TileBag testBag;
     private Player testPlayer;
     private Board testBoard;
+    private ScrabbleGame game;
+    
     @BeforeEach
     void runBefore() {
          testBag = new TileBag();
          testBoard = new Board();
-         testPlayer = new Player("tester", testBoard, testBag);
+         game = new ScrabbleGame("alphabet", testBoard, testBag);
+         testPlayer = new Player("tester", testBoard, testBag, game);
          
     }
 

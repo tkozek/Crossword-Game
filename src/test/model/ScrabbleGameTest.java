@@ -17,12 +17,12 @@ public class ScrabbleGameTest {
         board = new Board();
         tileBag = new TileBag();
         game = new ScrabbleGame("test", board, tileBag);
-        player = new Player("player", board, tileBag);
+        player = new Player("player", board, tileBag, game);
 
     }
 
     @Test
-    void testConstructor() {
+    public void testConstructor() {
         assertEquals("test", game.getName());
         game.addPlayer(player);
         assertEquals(game.getNumPlayers(), 1);

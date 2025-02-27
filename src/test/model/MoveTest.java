@@ -20,14 +20,15 @@ public class MoveTest {
     private Move endGameWinner;
     private Move endGameLoser;
     private String alphabet;
-    
+    private ScrabbleGame game;
 
     @BeforeEach
     void runBefore() {
         testBag = new TileBag();
         board =  new Board();
-        testPlayer = new Player("Trevor", testBoard,testBag);
-        testPlayer2 = new Player("Rovert", testBoard,testBag);
+        game = new ScrabbleGame("alphabet", board, testBag);
+        testPlayer = new Player("Trevor", testBoard,testBag, game);
+        testPlayer2 = new Player("Rovert", testBoard,testBag, game);
         testBag.drawTiles(testPlayer);
         testBag.drawTiles(testPlayer2);
         p1Letters = testPlayer.getTilesOnRack();

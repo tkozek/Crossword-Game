@@ -23,13 +23,15 @@ public class BoardTest {
     private LetterTile B; 
     private LetterTile A;
     private LetterTile Z;
+    private ScrabbleGame game;
 
     @BeforeEach
     void runBefore() {
         testBag = new TileBag();
         board =  new Board();
-        testPlayer = new Player("Trevor", testBoard,testBag);
-        testPlayer2 = new Player("Rovert", testBoard,testBag);
+        game = new ScrabbleGame("alphabet", board, testBag);
+        testPlayer = new Player("Trevor", testBoard, testBag, game);
+        testPlayer2 = new Player("Rovert", testBoard, testBag, game);
         preSwapChars = new HashMap<>();
         postSwapChars = new HashMap<>();
         testBag.drawTiles(testPlayer);

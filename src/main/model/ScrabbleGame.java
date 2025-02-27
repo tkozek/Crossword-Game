@@ -38,6 +38,10 @@ public class ScrabbleGame implements Writable {
 
     }
 
+    public void addMove(Move move) {
+        
+    }
+
     // EFFECTS: returns the history of all
     // moves played by players during this game
     public History getHistory() {

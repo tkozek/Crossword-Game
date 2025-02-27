@@ -80,8 +80,9 @@ public class ScrabbleApp {
                     + inputPlayerName + ". Press (Y) to confirm or (N) to cancel and re-enter");
             String confirmName = scanner.nextLine();
             if (confirmName.equals("Y")) {
-                player = new Player(inputPlayerName, board, tileBag);
+                player = new Player(inputPlayerName, board, tileBag, scrabbleGame);
                 players.add(player);
+                scrabbleGame.addPlayer(player);
             } else if (confirmName.equals("N")) {
                 System.out.println("Okay, name wasn't saved. Please re-enter the correct name");
             } else {
@@ -291,7 +292,7 @@ public class ScrabbleApp {
         while (true) {
             System.out.println("Enter indices for tiles to swap, C to confirm, or any other character to cancel");
             if (scanner.hasNextInt()) {
-                player.selectTile(scanner.nextInt());
+                player.selectTile(scanner.nextInt() - 1);
                 System.out.println("So far you've selected: ");
                 printSelectedTiles(player);
             } else if (scanner.hasNext("C")) {

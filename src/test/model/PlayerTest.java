@@ -7,30 +7,21 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.util.List;
 import java.util.Map;
 import java.util.ArrayList;
-import java.util.Set;
-import java.util.HashSet;
-import java.util.HashMap;
 
 public class PlayerTest {
     
     private Board board;
     private TileBag testBag;
-    private Set<Character> set;
     private Player testPlayer;
-    private Player testPlayer2;
     private Board testBoard;
-    private HashMap<Character, Integer> preSwapChars;
-    private HashMap<Character, Integer> postSwapChars;
+    private ScrabbleGame game;
     
-
     @BeforeEach
     void runBefore() {
         testBag = new TileBag();
         testBoard =  new Board();
-        testPlayer = new Player("Trevor", testBoard,testBag);
-        testPlayer2 = new Player("Rovert", testBoard,testBag);
-        preSwapChars = new HashMap<>();
-        postSwapChars = new HashMap<>();
+        game = new ScrabbleGame("n", board, testBag);
+        testPlayer = new Player("Trevor", testBoard,testBag, game);
     }
 
     @Test
@@ -166,8 +157,8 @@ public class PlayerTest {
 
     @Test
     void testGetNumCharOnRackZeroChars() {
-        Player playerTest = new Player("name", board, testBag);
-        Map<Character,Integer> counts = testPlayer.getNumEachCharOnMyRack();
+        Player playerTest = new Player("name", board, testBag, game);
+        Map<Character,Integer> counts = playerTest.getNumEachCharOnMyRack();
         assertTrue(counts.values().isEmpty());
     
     }

@@ -19,6 +19,7 @@ public class Player implements Writable {
     private String name;
     private History history;
     private List<LetterTile> tileRack;
+    private ScrabbleGame scrabbleGame;
     private List<LetterTile> selectedTiles;
     private TileBag tileBag;
     private Board board;
@@ -27,10 +28,11 @@ public class Player implements Writable {
 // Initializes a player with given name, zero points, no history of moves,
 //   an empty tile rack, no selected tiles, zero remaining tiles, the board they will play on.
 //      Their next turn will be their first.
-    public Player(String name, Board board, TileBag tileBag) {
+    public Player(String name, Board board, TileBag tileBag, ScrabbleGame scrabbleGame) {
         this.name = name;
         this.board = board;
         this.tileBag = tileBag;
+        this.scrabbleGame = scrabbleGame;
         this.history = new History(this.name);
         this.tileRack = new ArrayList<>();
         this.selectedTiles = new ArrayList<>();
@@ -88,6 +90,7 @@ public class Player implements Writable {
         List<LetterTile> copy = copyLetterTiles(letters);
         Move move = new Move(this, board, copy, startRow, startCol, pointsEarned, dir);
         this.history.addMove(move);
+        scrabbleGame.addMove(move);
     }
 
     // EFFECTS: returns deep copy of given list of letters.
