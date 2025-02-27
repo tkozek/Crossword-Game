@@ -212,6 +212,17 @@ public class TileBag implements Writable {
         return (Map<Character,Integer>) copy;
     }
 
+    // EFFECTS: returns each game character mapped to how many 
+    // occurences it has remaining in the draw pile
+    public Map<Character, Integer> getCurrentLetterFrequencies() {
+        Map<Character,Integer> curCounts = new HashMap<>();
+        for (LetterTile letter : drawPile) {
+            char character = letter.getCharacter();
+            curCounts.put(character, curCounts.getOrDefault(character,0) + 1);
+        }
+        return curCounts;
+    }
+
     @Override
     public JSONObject toJSON() {
         // TODO Auto-generated method stub
