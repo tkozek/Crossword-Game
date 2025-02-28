@@ -97,6 +97,15 @@ public class Player implements Writable {
         scrabbleGame.addMove(move);
     }
 
+    // MODIFIES: this
+    // EFFECTS: Adds a new word played to player's move history
+    public void logWord(Board board, List<LetterTile> letters, int startRow, int startCol, int points, Direction dir) {
+        List<LetterTile> copy = copyLetterTiles(letters);
+        Move move = new Move(this, board, copy, startRow, startCol, points, dir);
+        this.history.addMove(move);
+        scrabbleGame.addMove(move);
+    }
+
     // EFFECTS: returns deep copy of given list of letters.
     public List<LetterTile> copyLetterTiles(List<LetterTile> lettersToCopy) {
         List<LetterTile> copiedLetters = new ArrayList<>();

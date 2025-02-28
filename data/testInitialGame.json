@@ -30,10 +30,33 @@
             "score": 0,
             "tileRack": [
                 {
-                    
+
                 }
             ]
         }
     ],
-    "History": []
+    "History": [
+        {
+            "MoveType": "SKIP",
+            "PlayerName": "Trevor"
+
+        },
+
+        {
+            "MoveType": "SWAP",
+            "PlayerName": "Joe",
+            "InitialLetters": "ABCDEFG",
+            "AfterSwapLetters": "HIJKLMN"
+
+        },
+        {
+            "MoveType": "PLAY",
+            "PlayerName": "Mike",
+            "LettersPlayed": "XI",
+            "Row":1,
+            "Col":2,
+            "Points": 11,
+            "Direction": "D"
+        }
+    ]
 }

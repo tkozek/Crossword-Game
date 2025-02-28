@@ -16,8 +16,8 @@ public class LetterTileTest {
     LetterTile testTileD;
     LetterTile testTileK;
     LetterTile testTileQ;
-
     LetterTile testBlankTile;
+    TileBag bag;
 
     @BeforeEach
     void runBefore() {
@@ -28,6 +28,7 @@ public class LetterTileTest {
         testTileK = new LetterTile('K',5);
         testTileQ = new LetterTile('Q',10);
         testBlankTile = new LetterTile('-',0);
+        bag = new TileBag();
     }
 
     @Test
@@ -85,6 +86,13 @@ public class LetterTileTest {
         assertEquals("Q", testTileQ.getStringToDisplay());
         assertEquals("-", testBlankTile.getStringToDisplay());           
     } */
+
+    @Test
+    void testCharacterOnlyConstructor() {
+        // Works as long as some instance of TileBag has been instantiated
+        LetterTile c = new LetterTile('C');
+        assertEquals(c.getLetterPoints(), 3);
+    }
 
 }
 

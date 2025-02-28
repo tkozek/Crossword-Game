@@ -17,7 +17,7 @@ import java.util.HashMap;
 public class TileBag implements Writable {
     public static final int TOTAL_LETTERS_INITIALLY = 100;
     private Map<Character, Integer> letterFrequencyMap = new HashMap<>();
-    private Map<Character, Integer> letterPointsMap = new HashMap<>();
+    private static Map<Character, Integer> letterPointsMap = new HashMap<>();
     private List<LetterTile> drawPile;
     private Random randomIndexGenerator;
     
@@ -229,6 +229,10 @@ public class TileBag implements Writable {
     public JSONObject toJson() {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'toJSON'");
+    }
+
+    public static int getPointsForLetter(char letter) {
+        return letterPointsMap.get(letter);
     }
     
 }  

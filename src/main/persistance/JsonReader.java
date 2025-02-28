@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -15,8 +16,10 @@ import org.json.JSONObject;
 import model.Player;
 import model.ScrabbleGame;
 import model.board.Board;
+import model.move.Move;
 import model.tile.LetterTile;
 import model.tile.TileBag;
+import model.Direction;
 
 public class JsonReader {
 
@@ -56,6 +59,7 @@ public class JsonReader {
         updateTileBagToStoredState(tileBag, jsonObject);
         ScrabbleGame game = new ScrabbleGame(gameName, board, tileBag);
         addPlayers(game, jsonObject);
+        addGameHistory(game, jsonObject);
         return game;
     }
 
@@ -140,26 +144,55 @@ public class JsonReader {
     // EFFECTS: parses full game history (all player histories combined)
     // from JSON object and adds it to the Scrabble Game
     private void addGameHistory(ScrabbleGame game, JSONObject jsonObject) {
-        
+        JSONArray historyArray = jsonObject.getJSONArray("History");
+        String moveType;
+        String name;
+        Player player;
+        Board board = game.getBoard();
+        for (int i = 0; i < historyArray.length(); i++) {
+            JSONObject moveObject = historyArray.getJSONObject(i);
+            moveType = moveObject.getString("MoveType");
+            name = moveObject.getString("PlayerName");
+            player = game.getPlayerByName(name);
+            switch(moveType) {
+                case "PLAY":
+                    addWordPlayed(board, moveObject, player);
+                    break;        
+                case "SWAP":
+                    addSwap(board, moveObject, player);
+                    break;  
+                case "SKIP":
+                    player.logSkippedTurn(game.getBoard());
+                    break;  
+            }
+        }
     }
 
-    // MODIFIES: game
-    // EFFECTS: parses a player's history from JSON object and adds it to 
-    // the Scrabble Game
-    private void addPlayerHistory(ScrabbleGame game, JSONObject jsonObject) {
-        
+    private List<LetterTile> getLettersFromString(String string) {
+        List<LetterTile> letters = new ArrayList<>();
+        LetterTile letter;
+        for (int i = 0; i < string.length(); i++) {
+            letter = new LetterTile(string.charAt(i));
+            letters.add(letter);
+        }
+        return letters;
+    }
+    
+    private void addWordPlayed(Board board, JSONObject moveObject, Player player) {
+        int points = moveObject.getInt("Points");
+        int row = moveObject.getInt("Row");
+        int col = moveObject.getInt("Col");
+        Direction dir = (moveObject.getString("Direction").equals("D")) ? Direction.DOWN : Direction.RIGHT;
+        String lettersString = moveObject.getString("LettersPlayed");
+        List<LetterTile> letters = getLettersFromString(lettersString);
+        player.logWord(board, letters, row, col, points, dir);
     }
 
-    // MODIFIES: game
-    // EFFECTS: parses player tiles from JSON object and adds it to 
-    // the player in the Scrabble Game
-    private void addPlayerTiles(ScrabbleGame game, JSONObject jsonObject) {
-        
+    private void addSwap(Board board, JSONObject moveObject, Player player) {
+        String lettersString = moveObject.getString("InitialLetters");
+        List<LetterTile> initialLetters = getLettersFromString(lettersString);
+        lettersString = moveObject.getString("AfterSwapLetters");
+        List<LetterTile> postSwapLetters = getLettersFromString(lettersString);
+        player.logSwap(board, initialLetters, postSwapLetters);
     }
-
-
-
-
-
-
 }
