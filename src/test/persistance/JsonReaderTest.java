@@ -5,10 +5,10 @@ import java.util.List;
 
 import org.junit.Test;
 
-import model.Board;
 import model.Player;
 import model.ScrabbleGame;
-import model.TileBag; 
+import model.board.Board;
+import model.tile.TileBag;
 
 import static org.junit.jupiter.api.Assertions.*;
 

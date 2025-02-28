@@ -1,10 +1,14 @@
-package model;
+package model.board;
 
 import java.util.List;
 import java.util.Set;
 
 import org.json.JSONObject;
 
+import model.Direction;
+import model.tile.LetterTile;
+import model.tile.Tile;
+import model.tile.TileType;
 import persistance.Writable;
 
 import java.util.HashSet;

@@ -1,4 +1,4 @@
-package model;
+package model.move;
 
 // Represents the type of move performed. A move can either be
 // playing a word, swapping between 0 and Player.MAX_NUM_TILES, 

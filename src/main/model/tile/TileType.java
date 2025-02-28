@@ -1,4 +1,4 @@
-package model;
+package model.tile;
 
 // Categorizes board tiles' ability to multiply letter or word scores
 // NORMAL doesn't change anything

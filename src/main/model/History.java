@@ -5,6 +5,8 @@ import java.util.List;
 
 import org.json.JSONObject;
 
+import model.move.Move;
+import model.move.MoveType;
 import persistance.Writable;
 
 // Represents a Player's history, which includes

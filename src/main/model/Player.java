@@ -9,6 +9,10 @@ import java.util.Set;
 
 import org.json.JSONObject;
 
+import model.board.Board;
+import model.move.Move;
+import model.tile.LetterTile;
+import model.tile.TileBag;
 import persistance.Writable;
 
 // Represents a player in the Scrabble Game

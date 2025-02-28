@@ -5,6 +5,9 @@ import java.util.List;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import model.board.Board;
+import model.move.Move;
+import model.tile.TileBag;
 import persistance.Writable;
 
 public class ScrabbleGame implements Writable {

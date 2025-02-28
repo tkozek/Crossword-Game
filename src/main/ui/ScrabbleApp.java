@@ -7,6 +7,14 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import model.*;
+import model.board.Board;
+import model.board.BoardTile;
+import model.move.Move;
+import model.move.MoveType;
+import model.tile.LetterTile;
+import model.tile.Tile;
+import model.tile.TileBag;
+import model.tile.TileType;
 import persistance.JsonReader;
 import persistance.JsonWriter;
 

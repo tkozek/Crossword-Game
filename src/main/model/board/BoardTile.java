@@ -1,4 +1,7 @@
-package model;
+package model.board;
+
+import model.tile.Tile;
+import model.tile.TileType;
 
 //Represents a space on the Scrabble board which
 // has not been played on yet. May have special properties

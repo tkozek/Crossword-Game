@@ -1,7 +1,17 @@
-package model;
+package model.board;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
+import model.Direction;
+import model.Player;
+import model.ScrabbleGame;
+import model.board.Board;
+import model.board.BoardTile;
+import model.tile.LetterTile;
+import model.tile.TileBag;
+import model.tile.TileType;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.List;

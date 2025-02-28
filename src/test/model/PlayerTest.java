@@ -2,6 +2,12 @@ package model;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
+import model.board.Board;
+import model.move.MoveType;
+import model.tile.LetterTile;
+import model.tile.TileBag;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.List;

@@ -1,4 +1,4 @@
-package model;
+package model.tile;
 
 import org.json.JSONObject;
 

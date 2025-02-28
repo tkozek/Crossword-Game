@@ -1,4 +1,4 @@
-package model;
+package model.tile;
 
 import java.util.List;
 import java.util.ArrayList;
@@ -7,6 +7,7 @@ import java.util.Random;
 
 import org.json.JSONObject;
 
+import model.Player;
 import persistance.Writable;
 
 import java.util.HashMap;

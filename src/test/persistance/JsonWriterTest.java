@@ -3,15 +3,15 @@ package persistance;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import model.Board;
 import model.Direction;
 import model.History;
-import model.LetterTile;
-import model.Move;
-import model.MoveType;
 import model.Player;
 import model.ScrabbleGame;
-import model.TileBag;
+import model.board.Board;
+import model.move.Move;
+import model.move.MoveType;
+import model.tile.LetterTile;
+import model.tile.TileBag;
 
 import static org.junit.jupiter.api.Assertions.*;
 

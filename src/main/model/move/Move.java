@@ -1,9 +1,13 @@
-package model;
+package model.move;
 
 import java.util.List;
 
 import org.json.JSONObject;
 
+import model.Direction;
+import model.Player;
+import model.board.Board;
+import model.tile.LetterTile;
 import persistance.Writable;
 
 // A move made by a player, either a word played or a swap

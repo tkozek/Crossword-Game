@@ -5,16 +5,18 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.stream.Stream;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import model.Board;
-import model.LetterTile;
+import model.Player;
 import model.ScrabbleGame;
-import model.TileBag;
+import model.board.Board;
+import model.tile.LetterTile;
+import model.tile.TileBag;
 
 public class JsonReader {
 
@@ -52,6 +54,9 @@ public class JsonReader {
         updateBoardToStoredState(board, jsonObject);
         TileBag tileBag = new TileBag();
         updateTileBagToStoredState(tileBag, jsonObject);
+        ScrabbleGame game = new ScrabbleGame(gameName, board, tileBag);
+        
+        List<Player> players = addPlayers(game, jsonObject);
         return null;
     }
 
@@ -89,8 +94,8 @@ public class JsonReader {
     // MODIFIES: game
     // EFFECTS: parses players (LetterTile or BoardTile) from JSON object and adds it to 
     // the Scrabble Game
-    private void addPlayers(ScrabbleGame game, JSONObject jsonObject) {
-        
+    private List<Player> addPlayers(ScrabbleGame game, JSONObject jsonObject) {
+        return null;
     }
 
     // MODIFIES: game
