@@ -42,7 +42,7 @@ public class ScrabbleGame implements Writable {
     // EFFECTS: returns player with given name
     // in this game
     public Player getPlayerByName(String name) {
-        for (Player p : players) {
+        for (Player p : this.players) {
             if (p.getPlayerName().equals(name)) {
                 return p;
             }

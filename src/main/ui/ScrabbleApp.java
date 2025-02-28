@@ -21,7 +21,7 @@ import persistance.JsonWriter;
 // Citation: Saving and loading are based on JSON example from edX
 // Represents a game of Scrabble
 public class ScrabbleApp {
-    private static final String JSON_STORE = "./data/game.json";
+    private static final String JSON_STORE = "./data/savedGame.json";
     private Player player;
     private Board board;
     private TileBag tileBag;
@@ -157,21 +157,24 @@ public class ScrabbleApp {
     // type their next move will be, or if they
     // want to view something
     public void handleTurn(Player p) {
-        System.out.println("Here are your tiles: " + p.getPlayerName());
+        System.out.println("\n Here are your tiles: " + p.getPlayerName());
         getTilePrintOut(p);
         System.out.println("Type whether you'd like to (P)lay, (S)wap, S(k)ip, or (o)ther.");
         switch (scanner.nextLine()) {
             case "P":
             case "p":
                 handlePlay(p);
+                scanner.nextLine();
                 break;
             case "S":
             case "s":
                 handleSwap(p);
+                scanner.nextLine();
                 break;
             case "K":
             case "k":
                 handleSkip(p);
+                scanner.nextLine();
                 break;
             case "O":
             case "o":
@@ -179,6 +182,7 @@ public class ScrabbleApp {
                 break;
             default:
                 handleTurn(p);
+                
         }
     }
 
@@ -186,7 +190,7 @@ public class ScrabbleApp {
     // EFFECTS: Let's player decide to view
     // game related info, or save and quit
     public void handleNonPlayOptions(Player p) {
-        System.out.println("Type whether you'd like to (v)iew something, or s(a)ve and quit, "
+        System.out.println("\nType whether you'd like to (v)iew something, or s(a)ve and quit, "
                 + "or (q)uit without saving");
         switch (scanner.nextLine()) {
             case "V":
@@ -209,13 +213,12 @@ public class ScrabbleApp {
     // would like to view about the game,
     // displays that.
     public void handleViewings(Player p) {
-        System.out.println("Type whether you'd like to view current (b)oard, (W)ords played, all (m)oves,"
+        System.out.println("\n Type whether you'd like to view current (b)oard, (W)ords played, all (m)oves,"
                 + " (r)emaining tile counts, or anything else to cancel");
         switch (scanner.nextLine()) {
             case "B":
             case "b":
                 getBoardPrintOut(board);
-                handleTurn(p);
                 break;
             case "W":
             case "w":
@@ -228,9 +231,9 @@ public class ScrabbleApp {
             case "R":
             case "r":
                 getRemainingCharacterCounts(p);
-                handleTurn(p);
                 break;
         }
+        handleTurn(p);
     }
 
     // EFFECTS: Saves game to file
@@ -266,7 +269,7 @@ public class ScrabbleApp {
 
     //EFFECTS: Prints summary of a player swap
     public void printSwapSummary(Move swap, Player p) {
-        String printout = p.getPlayerName() + " swapped tiles. ";
+        String printout = "\n" + p.getPlayerName() + " swapped tiles. ";
         String preAndPostLetters = getWordString(swap.getLettersInvolved());
         int halfLength = preAndPostLetters.length() / 2;
         String preSwapLetters = preAndPostLetters.substring(0, halfLength);
@@ -279,7 +282,7 @@ public class ScrabbleApp {
 
     // EFFECTS: Prints summary of a skipped turn
     public void printSkipSummary(Move skip, Player p) {
-        System.out.println(p.getPlayerName() + " skipped their turn");
+        System.out.println("\n" + p.getPlayerName() + " skipped their turn");
     }
 
     // EFFECTS: prints summary of all
@@ -303,7 +306,7 @@ public class ScrabbleApp {
 
     // EFFECTS: prints summary of a word played
     public void getWordPrintout(Move word, Player p) {
-        String printout = p.getPlayerName() + " played ";
+        String printout = "\n" + p.getPlayerName() + " played ";
         String wordString = getWordString(word.getLettersInvolved());
         String startRow = String.valueOf(word.getStartRow());
         String startCol = String.valueOf(word.getStartColumn());
@@ -380,15 +383,14 @@ public class ScrabbleApp {
                 System.out.println("So far you've selected: ");
                 printSelectedTiles(player);
             } else if (scanner.hasNext("C")) {
-               // List<LetterTile> copyTiles = player.copySelectedTiles();
-              //  Move move = new Move(player, board, copyTiles, )
-              //Need to get NEW tiles
                 List<LetterTile> preSwapLetters = player.copyLetterTiles(player.getTilesOnRack());
                 player.swapTiles();
                 List<LetterTile> postSwapLetters = player.copyLetterTiles(player.getTilesOnRack());
                 player.logSwap(board,preSwapLetters,postSwapLetters);
-                System.out.println("Your new tiles are: ");
+                System.out.println("\n Your new tiles are: ");
                 getTilePrintOut(player);
+                scanner.nextLine();
+                scanner.nextLine();
                 break;
             } else {
                 scanner.nextLine();

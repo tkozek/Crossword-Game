@@ -15,6 +15,7 @@ import model.tile.TileBag;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -39,9 +40,9 @@ public class JsonWriterTest extends JsonTest{
     @Test
     void testWriterInvalidFile() {
         try {
-            JsonWriter writer = new JsonWriter("./data/illegal:fileName.json");
+            JsonWriter writer = new JsonWriter("./data/my\0illegal:fileName.json");
             writer.open();
-            fail("IOException expected for illegal file name");
+            fail("FileNotFoundException expected for illegal file name");
         } catch (IOException e) {
             // passes test
         }

@@ -26,7 +26,25 @@
     },
     "Players": [
         {
-            "name": "testPlay",
+            "name": "Trevor",
+            "score": 0,
+            "tileRack": [
+                {
+
+                }
+            ]
+        },
+        {
+            "name": "Joe",
+            "score": 0,
+            "tileRack": [
+                {
+
+                }
+            ]
+        },
+        {
+            "name": "Mike",
             "score": 0,
             "tileRack": [
                 {
@@ -39,7 +57,6 @@
         {
             "MoveType": "SKIP",
             "PlayerName": "Trevor"
-
         },
 
         {

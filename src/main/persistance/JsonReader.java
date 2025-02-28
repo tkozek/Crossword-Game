@@ -89,6 +89,7 @@ public class JsonReader {
             int value = tiles.getInt(key);
             oldTileCounts.put(key.charAt(0), value);
         }
+        tileBag.emptyDrawPile();
         tileBag.initializeTiles(oldTileCounts);
     }
 
@@ -162,6 +163,8 @@ public class JsonReader {
                 case "SKIP":
                     player.logSkippedTurn(board);
                     break;  
+                default:
+                    break;
             }
         }
     }

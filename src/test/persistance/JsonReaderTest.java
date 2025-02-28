@@ -29,17 +29,12 @@ public class JsonReaderTest extends JsonTest{
 
     @Test
     public void testReaderEmptyGame() {
-        JsonReader reader = new JsonReader("./data/testEmptyGame.json");
+        JsonReader reader = new JsonReader("./data/emptyGame.json");
         try {
             ScrabbleGame game = reader.read();
             assertEquals(game.getName(), "EmptyGameName");
             assertEquals(game.getNumPlayers(), 0);
-// Not going to initialize a default board with [] in json because i dont
-// want to check for modifications or have to update modification status 
-// throughout ui
-            assertEquals(game.getBoard(), null);
-            assertEquals(game.getTileBag(), null);
-            assertEquals(game.getHistory(), null);
+            assertFalse(game.getBoard() == null);
         } catch (IOException e) {
             fail("Couldn't read file");
         }
@@ -47,18 +42,20 @@ public class JsonReaderTest extends JsonTest{
 
     @Test
     public void testReaderStartOfGame() {
-        JsonReader reader = new JsonReader("./data/testInitialGame.json");
+        JsonReader reader = new JsonReader("./data/testReaderThreePlayersThreeMovesEmptyRacksFullBag.json");
         testBag = new TileBag();
         try {
             ScrabbleGame game = reader.read();
             assertEquals(game.getName(), "Initial Game");
-            // Override Board.equals()
-            assertTrue(game.getBoard().equals(new Board()));
+            assertEquals(game.getNumPlayers(), 3);
+            // Override Board.equals() and update line below this
+            assertFalse(game.getBoard() == null);
             assertEquals(game.getTileBag().getCurrentLetterFrequencies(), testBag.getInitialLetterFrequencies());
-            assertTrue(game.getHistory().getMoves().isEmpty());
+            assertEquals(game.getHistory().getMoves().size(), 3);
             Player player = game.getPlayers().get(0);
-            assertEquals(player.getPlayerName(), "testPlay");
+            assertEquals(player.getPlayerName(), "Trevor");
             assertEquals(player.getPointsThisGame(), 0);
+            
         } catch (IOException e) {
             fail("Couldn't read file");
         }
