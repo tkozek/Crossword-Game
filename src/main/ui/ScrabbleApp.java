@@ -180,7 +180,8 @@ public class ScrabbleApp {
     // EFFECTS: Let's player decide to view
     // game related info, or save and quit
     public void handleNonPlayOptions(Player p) {
-        System.out.println("Type whether you'd like to (v)iew something, or s(a)ve and quit");
+        System.out.println("Type whether you'd like to (v)iew something, or s(a)ve and quit, "
+                + "or (q)uit without saving");
         switch (scanner.nextLine()) {
             case "V":
             case "v":
@@ -189,6 +190,9 @@ public class ScrabbleApp {
             case "A":
             case "a":
                 handleSave();
+                this.gameRunning = false;
+            case "Q":
+            case "q":
                 this.gameRunning = false;
             default:
                 handleNonPlayOptions(p);

@@ -6,6 +6,7 @@ import java.util.List;
 import org.junit.Test;
 
 import model.Board;
+import model.Player;
 import model.ScrabbleGame;
 import model.TileBag; 
 
@@ -55,6 +56,9 @@ public class JsonReaderTest extends JsonTest{
             assertTrue(game.getBoard().equals(new Board()));
             assertEquals(game.getTileBag().getCurrentLetterFrequencies(), testBag.getInitialLetterFrequencies());
             assertTrue(game.getHistory().getMoves().isEmpty());
+            Player player = game.getPlayers().get(0);
+            assertEquals(player.getPlayerName(), "testPlay");
+            assertEquals(player.getPointsThisGame(), 0);
         } catch (IOException e) {
             fail("Couldn't read file");
         }
