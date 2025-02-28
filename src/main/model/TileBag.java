@@ -224,7 +224,7 @@ public class TileBag implements Writable {
     }
 
     @Override
-    public JSONObject toJSON() {
+    public JSONObject toJson() {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'toJSON'");
     }

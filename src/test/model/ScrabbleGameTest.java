@@ -1,8 +1,13 @@
-/* package model;
+package model;
 
-import org.junit.Test;
+import org.json.JSONObject;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+
 import static org.junit.jupiter.api.Assertions.*;
+
+import java.util.List;
 
 public class ScrabbleGameTest {
 
@@ -22,12 +27,33 @@ public class ScrabbleGameTest {
     }
 
     @Test
-    public void testConstructor() {
+    void testConstructor() {
         assertEquals("test", game.getName());
         game.addPlayer(player);
         assertEquals(game.getNumPlayers(), 1);
         assertEquals(game.getPlayers().get(0), player);
         assertTrue(game.getHistory().getMoves().isEmpty());        
+        assertEquals(game.getBoard(), board);
+        assertEquals(game.getTileBag(), tileBag);
+    }
+
+    @Test
+    void testSetName() {
+        game.setName("Trevor's game");
+        assertEquals(game.getName(), "Trevor's game");
+        tileBag.drawTiles(player);
+        List<LetterTile> lettersToPlay = player.getTilesOnRack();
+
+        Move play = new Move(player, board, lettersToPlay, 7, 7, 10, Direction.DOWN);
+        game.addMove(play);
+        List<Move> moves = game.getHistory().getMoves();
+        assertEquals(moves.size(), 1);
+        assertEquals(moves.get(0), play);
+        Move skip = new Move(player, board);
+        game.addMove(skip);
+        moves = game.getHistory().getMoves();
+        assertEquals(moves.size(), 2);
+        assertEquals(moves.get(1), skip);
+        assertEquals(moves.get(0), play);
     }
 }
- */

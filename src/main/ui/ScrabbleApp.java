@@ -44,13 +44,11 @@ public class ScrabbleApp {
             case "l":
                 loadOldGame();
                 break;
-            /* default:
-                initializeNewGame(); */
+            default:
+                initializeNewGame();
         }
         this.gameRunning = true;
         handleGameplay();
-
-        
     }
     
     // MODIFIES: player, board, tileBag

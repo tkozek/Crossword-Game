@@ -16,8 +16,9 @@ import static org.junit.jupiter.api.Assertions.*;
 public class JsonReaderTest extends JsonTest{
 
     private TileBag testBag;
+
     @Test
-    void testReaderNonExistentFile() {
+    public void testReaderNonExistentFile() {
         JsonReader reader = new JsonReader("./data/iwillnevernameafilethis.json");
         try {
             ScrabbleGame game = reader.read();
@@ -28,7 +29,7 @@ public class JsonReaderTest extends JsonTest{
     }
 
     @Test
-    void testReaderEmptyGame() {
+    public void testReaderEmptyGame() {
         JsonReader reader = new JsonReader("./data/testEmptyGame.json");
         try {
             ScrabbleGame game = reader.read();
@@ -46,7 +47,7 @@ public class JsonReaderTest extends JsonTest{
     }
 
     @Test
-    void testReaderStartOfGame() {
+    public void testReaderStartOfGame() {
         JsonReader reader = new JsonReader("./data/testInitialGame.json");
         testBag = new TileBag();
         try {

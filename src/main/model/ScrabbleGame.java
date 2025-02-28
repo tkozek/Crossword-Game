@@ -22,7 +22,7 @@ public class ScrabbleGame implements Writable {
     }
 
     // EFFECTS: Names this game
-    public void setName() {
+    public void setName(String name) {
 
     }
 
@@ -72,7 +72,7 @@ public class ScrabbleGame implements Writable {
     // EFFECTS: Creates a JSONObject
     // from the ScrabbleGame state
     @Override
-    public JSONObject toJSON() {
+    public JSONObject toJson() {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'toJSON'");
     }

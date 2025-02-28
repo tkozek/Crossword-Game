@@ -33,7 +33,7 @@ public class LetterTile implements Tile, Writable {
     }
 
     @Override
-    public JSONObject toJSON() {
+    public JSONObject toJson() {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'toJSON'");
     }
