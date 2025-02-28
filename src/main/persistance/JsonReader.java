@@ -83,7 +83,7 @@ public class JsonReader {
             int value = tiles.getInt(key);
             oldTileCounts.put(key.charAt(0), value);
         }
-        tileBag.initializeWithProvidedFrequencies(oldTileCounts);
+        tileBag.initializeTiles(oldTileCounts);
     }
 
     // MODIFIES: game

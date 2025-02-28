@@ -26,7 +26,7 @@ public class TileBag implements Writable {
     public TileBag() {
         drawPile = new ArrayList<>();
         initializeMaps();
-        initializeTiles();
+        initializeTiles(letterFrequencyMap);
         randomIndexGenerator = new Random();
     }
     
@@ -127,7 +127,7 @@ public class TileBag implements Writable {
     //MODIFIES: this
     //EFFECTS: Adds correct number of each letter
     // and blank tile to the tile bag.
-    private void initializeTiles() {
+    public void initializeTiles(Map<Character, Integer> letterFrequencyMap) {
         for (Map.Entry<Character, Integer> entry : letterFrequencyMap.entrySet()) {
             char letter = entry.getKey();
             int frequency = entry.getValue();
@@ -223,13 +223,6 @@ public class TileBag implements Writable {
         return curCounts;
     }
 
-    // MODIFIES: this
-    // EFFECTS: updates draw pile to include 
-    // the characters in input map, at the 
-    // corresponding frequency
-    public void initializeWithProvidedFrequencies(Map<Character, Integer> frequencies) {
-        for ()
-    }
 
     @Override
     public JSONObject toJson() {
