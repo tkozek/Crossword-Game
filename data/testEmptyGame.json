@@ -1,0 +1,10 @@
+{
+    "GameName": "EmptyGameName",
+    "Board": [],
+    "TileBag": {
+        "Tiles": []
+    }
+    ,
+    "Players": [],
+    "History": []
+}
