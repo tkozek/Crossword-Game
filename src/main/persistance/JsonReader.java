@@ -4,13 +4,17 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.stream.Stream;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import model.Board;
+import model.LetterTile;
 import model.ScrabbleGame;
+import model.TileBag;
 
 public class JsonReader {
 
@@ -45,10 +49,15 @@ public class JsonReader {
     private ScrabbleGame parseGame(JSONObject jsonObject) {
         String gameName = jsonObject.getString("GameName");
         Board board = new Board();
-
+        updateBoardToStoredState(board, jsonObject);
+        TileBag tileBag = new TileBag();
+        updateTileBagToStoredState(tileBag, jsonObject);
         return null;
     }
 
+    // MODIFIES: game
+    // EFFECTS: parses board state from JSON object and adds it to 
+    // the Scrabble Game
     private void updateBoardToStoredState(Board board, JSONObject jsonObject) {
         JSONArray boardArray = jsonObject.getJSONArray("Board");
         for (int i = 0; i < boardArray.length(); i++) {
@@ -60,30 +69,21 @@ public class JsonReader {
             if (isOneCharacter && isNotSpace) {
                 board.updatePositionToMatchOldBoard(new LetterTile(valueChar), i / 15, i % 15);
             }
-
         }
     }
 
 
     // MODIFIES: game
-    // EFFECTS: parses board state from JSON object and adds it to 
-    // the Scrabble Game
-    private void addBoard(ScrabbleGame game, JSONObject jsonObject) {
-
-    }
-
-    // MODIFIES: game
-    // EFFECTS: parses board space (LetterTile or BoardTile) from JSON object and adds it to 
-    // the Scrabble Game
-    private void addBoardSpace(ScrabbleGame game, JSONObject jsonObject) {
-
-    }
-
-    // MODIFIES: game
     // EFFECTS: parses tile bag from JSON object and adds it to 
     // the Scrabble Game
-    private void addTileBag(ScrabbleGame game, JSONObject jsonObject) {
-        
+    private void updateTileBagToStoredState(TileBag tileBag, JSONObject jsonObject) {
+        Map<Character, Integer> oldTileCounts = new HashMap<>();
+        JSONObject tiles = jsonObject.getJSONObject("TileBag");
+        for (String key : tiles.keySet()) { 
+            int value = tiles.getInt(key);
+            oldTileCounts.put(key.charAt(0), value);
+        }
+        tileBag.initializeWithProvidedFrequencies(oldTileCounts);
     }
 
     // MODIFIES: game

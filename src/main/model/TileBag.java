@@ -223,6 +223,14 @@ public class TileBag implements Writable {
         return curCounts;
     }
 
+    // MODIFIES: this
+    // EFFECTS: updates draw pile to include 
+    // the characters in input map, at the 
+    // corresponding frequency
+    public void initializeWithProvidedFrequencies(Map<Character, Integer> frequencies) {
+        
+    }
+
     @Override
     public JSONObject toJson() {
         // TODO Auto-generated method stub
