@@ -55,9 +55,8 @@ public class JsonReader {
         TileBag tileBag = new TileBag();
         updateTileBagToStoredState(tileBag, jsonObject);
         ScrabbleGame game = new ScrabbleGame(gameName, board, tileBag);
-        
-        List<Player> players = addPlayers(game, jsonObject);
-        return null;
+        addPlayers(game, jsonObject);
+        return game;
     }
 
     // MODIFIES: game
@@ -94,13 +93,12 @@ public class JsonReader {
     // MODIFIES: game
     // EFFECTS: parses players (LetterTile or BoardTile) from JSON object and adds it to 
     // the Scrabble Game
-    private List<Player> addPlayers(ScrabbleGame game, JSONObject jsonObject) {
+    private void addPlayers(ScrabbleGame game, JSONObject jsonObject) {
         JSONArray jsonArray = jsonObject.getJSONArray("Players");
         for (Object json : jsonArray) {
             JSONObject nextPlayer = (JSONObject) json;
             addPlayer(game, nextPlayer);
         }
-        return null;
     }
 
     // MODIFIES: game
@@ -112,7 +110,7 @@ public class JsonReader {
         Player player = new Player(name, game.getBoard(), game.getTileBag(), game);
         player.setPoints(score);
         addTilesFromSavedRack(player, nextPlayer);
-        
+        game.addPlayer(player);
     }
 
     // MODIFIES: player
