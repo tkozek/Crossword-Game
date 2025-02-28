@@ -279,6 +279,19 @@ public class Board implements Writable {
         }
     }
 
+    // MODIFIES: this
+    // EFFECTS: updates board at given position to the given letter
+    // removes position from any special scoring squares list
+    // (since it was already used)
+    public void updatePositionToMatchOldBoard(LetterTile letter, int row, int col) {
+        boardTiles[row][col] = new LetterTile(letter);
+        Coordinate coord = new Coordinate(row, col);
+        doubleLetterCoordinates.remove(coord);
+        doubleWordCoordinates.remove(coord);
+        tripleLetterCoordinates.remove(coord);
+        tripleWordCoordinates.remove(coord);
+    }
+
    /*  //REQUIRES: sectionIsAvailable() is true with same arguments
     //EFFECTS:  returns true if board[row][col] contains a board tile of given tile type
     public boolean sectionContainsTileType(List<LetterTile> letters, int startRow, 
