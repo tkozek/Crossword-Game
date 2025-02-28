@@ -203,6 +203,13 @@ public class Player implements Writable {
     }
 
     // MODIFIES: this
+    // EFFECTS: adds move to this player's
+    // history
+    public void addToPlayerHistory(Move move) {
+        this.history.addMove(move);
+    }
+
+    // MODIFIES: this
     // EFFECTS: removes all selected tiles
     // from tile rack, and clears selected tiles
     public void removeSelectedTiles() {

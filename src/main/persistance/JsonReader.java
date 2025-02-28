@@ -95,14 +95,47 @@ public class JsonReader {
     // EFFECTS: parses players (LetterTile or BoardTile) from JSON object and adds it to 
     // the Scrabble Game
     private List<Player> addPlayers(ScrabbleGame game, JSONObject jsonObject) {
+        JSONArray jsonArray = jsonObject.getJSONArray("Players");
+        for (Object json : jsonArray) {
+            JSONObject nextPlayer = (JSONObject) json;
+            addPlayer(game, nextPlayer);
+        }
         return null;
     }
 
     // MODIFIES: game
     // EFFECTS: parses player (LetterTile or BoardTile) from JSON object and adds it to 
     // the Scrabble Game
-    private void addPlayer(ScrabbleGame game, JSONObject jsonObject) {
+    private void addPlayer(ScrabbleGame game, JSONObject nextPlayer) {
+        String name = nextPlayer.getString("name");
+        int score = nextPlayer.getInt("score");
+        Player player = new Player(name, game.getBoard(), game.getTileBag(), game);
+        player.setPoints(score);
+        addTilesFromSavedRack(player, nextPlayer);
         
+    }
+
+    // MODIFIES: player
+    // EFFECTS: adds tiles from player's saved
+    // tile rack to their current rack
+    private void addTilesFromSavedRack(Player player, JSONObject jsonObject) {
+        JSONArray tileRack = jsonObject.getJSONArray("tileRack");
+        for (Object json : tileRack) {
+            JSONObject tile = (JSONObject) json;
+            addTileFromSavedRack(player, tile);
+            
+        }
+    }
+
+    // MODIFIES: player
+    // EFFECTS: adds a new Letter Tile to player's rack
+    // where the only key in tile is the character,
+    private void addTileFromSavedRack(Player player, JSONObject tile) {
+        // Loop executes exactly once
+        for (String key : tile.keySet()) { 
+            int value = tile.getInt(key);
+            player.addTile(new LetterTile(key.charAt(0), value));
+        }
     }
 
     // MODIFIES: game

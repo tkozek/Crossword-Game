@@ -28,7 +28,11 @@
         {
             "name": "testPlay",
             "score": 0,
-            "tileRack": []
+            "tileRack": [
+                {
+                    
+                }
+            ]
         }
     ],
     "History": []
