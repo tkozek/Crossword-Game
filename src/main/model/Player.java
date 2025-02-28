@@ -109,13 +109,17 @@ public class Player implements Writable {
     // MODIFIES: this
     // EFFECTS: Adds a new skipped turn to player's move history
     public void logSkippedTurn(Board board) {
-        history.addMove(new Move(this, board));
+        Move move = new Move(this, board);
+        history.addMove(move);
+        scrabbleGame.addMove(move);
     }
 
     // MODIFIES: this
     // EFFECTS: Adds a new swap to player's move history
     public void logSwap(Board board, List<LetterTile> swappedLetters, List<LetterTile> postSwapLetters) {
-        history.addMove(new Move(this, board, swappedLetters, postSwapLetters));
+        Move move = new Move(this, board, swappedLetters, postSwapLetters);
+        history.addMove(move);
+        scrabbleGame.addMove(move);
     }
 
     // REQUIRES: 0 <= index <     public int getNumTilesOnRack() {
