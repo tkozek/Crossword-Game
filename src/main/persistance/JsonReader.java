@@ -79,7 +79,6 @@ public class JsonReader {
         }
     }
 
-
     // MODIFIES: game
     // EFFECTS: parses tile bag from JSON object and adds it to 
     // the Scrabble Game
@@ -161,12 +160,14 @@ public class JsonReader {
                     addSwap(board, moveObject, player);
                     break;  
                 case "SKIP":
-                    player.logSkippedTurn(game.getBoard());
+                    player.logSkippedTurn(board);
                     break;  
             }
         }
     }
 
+    // EFFECTS: returns list of letter tiles
+    // based on input string
     private List<LetterTile> getLettersFromString(String string) {
         List<LetterTile> letters = new ArrayList<>();
         LetterTile letter;
@@ -177,6 +178,10 @@ public class JsonReader {
         return letters;
     }
     
+
+    // MODIFIES: player, game
+    // EFFECTS: adds move of type PLAY to 
+    // both player and game history
     private void addWordPlayed(Board board, JSONObject moveObject, Player player) {
         int points = moveObject.getInt("Points");
         int row = moveObject.getInt("Row");
@@ -187,6 +192,9 @@ public class JsonReader {
         player.logWord(board, letters, row, col, points, dir);
     }
 
+    // MODIFIES: player, game
+    // EFFECTS: adds move of type SWAP to 
+    // both player and game history
     private void addSwap(Board board, JSONObject moveObject, Player player) {
         String lettersString = moveObject.getString("InitialLetters");
         List<LetterTile> initialLetters = getLettersFromString(lettersString);
