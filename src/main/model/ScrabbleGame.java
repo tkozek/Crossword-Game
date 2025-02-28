@@ -21,17 +21,20 @@ public class ScrabbleGame implements Writable {
     // including the current board, tile bag, 
     // move history, players involved
     public ScrabbleGame(String name, Board board, TileBag tileBag) {
-        
+        this.name = name;
+        this.board = board;
+        this.tileBag = tileBag;
+        this.history = new History(name);
     }
 
     // EFFECTS: Names this game
     public void setName(String name) {
-
+        this.name = name;
     }
 
     // EFFECTS: returns this game's name
     public String getName() {
-        return "";
+        return this.name;
     }
 
     // EFFECTS: returns player with given name
@@ -47,40 +50,44 @@ public class ScrabbleGame implements Writable {
 
     // EFFECTS: returns board
     public Board getBoard() {
-        return null;
+        return this.board;
     }
     
     // EFFECTS: returns tile bag
     public TileBag getTileBag() {
-        return null;
+        return this.tileBag;
     }
 
     // EFFECTS: returns number of players
     // in the game.
     public int getNumPlayers() {
-        return -1;
+        return this.players.size();
     }
 
     // MODIFIES: this
     // EFFECTS: adds player to this game
     public void addPlayer(Player player) {
-
+        this.players.add(player);
     }
 
+    // MODIFIES: this
+    // EFFECTS: adds move to game history
+    // DOES NOT add to associated player's
+    // history
     public void addMove(Move move) {
-        
+        this.history.addMove(move);
     }
 
     // EFFECTS: returns the history of all
     // moves played by players during this game
     public History getHistory() {
-        return null;
+        return this.history;
     }
 
     // EFFECTS: returns players associated
     // with this game
     public List<Player> getPlayers() {
-        return null;
+        return this.players;
     }
 
     // EFFECTS: Creates a JSONObject
