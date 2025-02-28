@@ -228,7 +228,7 @@ public class TileBag implements Writable {
     // the characters in input map, at the 
     // corresponding frequency
     public void initializeWithProvidedFrequencies(Map<Character, Integer> frequencies) {
-        
+        for ()
     }
 
     @Override
