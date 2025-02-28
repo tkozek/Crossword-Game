@@ -6,8 +6,6 @@ import org.junit.jupiter.api.Test;
 import model.Direction;
 import model.Player;
 import model.ScrabbleGame;
-import model.board.Board;
-import model.board.BoardTile;
 import model.tile.LetterTile;
 import model.tile.TileBag;
 import model.tile.TileType;
@@ -17,18 +15,13 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.util.List;
 import java.util.Map;
 import java.util.ArrayList;
-import java.util.Set;
-import java.util.HashMap;
 
 public class BoardTest {
     
     private Board board;
     private TileBag testBag;
     private Player testPlayer;
-    private Player testPlayer2;
     private Board testBoard;
-    private HashMap<Character, Integer> preSwapChars;
-    private HashMap<Character, Integer> postSwapChars;
     private List<LetterTile>  letters;
     private LetterTile B; 
     private LetterTile A;
@@ -41,9 +34,6 @@ public class BoardTest {
         board =  new Board();
         game = new ScrabbleGame("alphabet", board, testBag);
         testPlayer = new Player("Trevor", testBoard, testBag, game);
-        testPlayer2 = new Player("Rovert", testBoard, testBag, game);
-        preSwapChars = new HashMap<>();
-        postSwapChars = new HashMap<>();
         testBag.drawTiles(testPlayer);
         letters = testPlayer.getTilesOnRack();
         B = new LetterTile('B',3);

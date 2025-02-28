@@ -1,5 +1,6 @@
 package model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.json.JSONArray;
@@ -25,6 +26,7 @@ public class ScrabbleGame implements Writable {
         this.board = board;
         this.tileBag = tileBag;
         this.history = new History(name);
+        this.players = new ArrayList<>();
     }
 
     // EFFECTS: Names this game

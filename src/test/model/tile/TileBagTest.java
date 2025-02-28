@@ -6,9 +6,6 @@ import org.junit.jupiter.api.Test;
 import model.Player;
 import model.ScrabbleGame;
 import model.board.Board;
-import model.tile.LetterTile;
-import model.tile.TileBag;
-
 import static org.junit.jupiter.api.Assertions.*;
 
 

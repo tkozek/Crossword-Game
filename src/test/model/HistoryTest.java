@@ -13,9 +13,6 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.List;
 import java.util.ArrayList;
-import java.util.Set;
-import java.util.HashSet;
-import java.util.HashMap;
 
 public class HistoryTest {
     
@@ -25,7 +22,6 @@ public class HistoryTest {
     private Player testPlayer2;
     private Board testBoard;
     private List<LetterTile> p1Letters;
-    private List<LetterTile> p2Letters;
     private History history;
     private Move moveToAdd;
     private Move otherMoveToAdd;
@@ -42,7 +38,6 @@ public class HistoryTest {
         testPlayer = new Player("Trevor", testBoard, testBag, game);
         testPlayer2 = new Player("Rovert", testBoard, testBag, game);
         p1Letters = testPlayer.getTilesOnRack();
-        p2Letters = testPlayer2.getTilesOnRack();
         B = new LetterTile('B',3);
         A = new LetterTile('A',1);
         Z = new LetterTile('Z',10);

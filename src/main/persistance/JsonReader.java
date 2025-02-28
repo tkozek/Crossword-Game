@@ -16,7 +16,6 @@ import org.json.JSONObject;
 import model.Player;
 import model.ScrabbleGame;
 import model.board.Board;
-import model.move.Move;
 import model.tile.LetterTile;
 import model.tile.TileBag;
 import model.Direction;
@@ -154,7 +153,7 @@ public class JsonReader {
             moveType = moveObject.getString("MoveType");
             name = moveObject.getString("PlayerName");
             player = game.getPlayerByName(name);
-            switch(moveType) {
+            switch (moveType) {
                 case "PLAY":
                     addWordPlayed(board, moveObject, player);
                     break;        

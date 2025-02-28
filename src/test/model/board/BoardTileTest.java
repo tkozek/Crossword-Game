@@ -3,7 +3,6 @@ package model.board;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import model.board.BoardTile;
 import model.tile.TileType;
 
 import static org.junit.jupiter.api.Assertions.*;
