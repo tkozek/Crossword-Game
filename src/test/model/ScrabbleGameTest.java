@@ -45,6 +45,12 @@ public class ScrabbleGameTest {
     void testSetName() {
         game.setName("Trevor's game");
         assertEquals(game.getName(), "Trevor's game");
+    }
+
+    @Test
+    void testAddMoves() {
+        game.setName("Trevor's game");
+        assertEquals(game.getName(), "Trevor's game");
         tileBag.drawTiles(player);
         List<LetterTile> lettersToPlay = player.getTilesOnRack();
 
