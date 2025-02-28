@@ -26,7 +26,7 @@ public class ScrabbleGameTest {
         board = new Board();
         tileBag = new TileBag();
         game = new ScrabbleGame("test", board, tileBag);
-        player = new Player("player", board, tileBag, game);
+        player = new Player("playerTest", board, tileBag, game);
 
     }
 
@@ -59,5 +59,11 @@ public class ScrabbleGameTest {
         assertEquals(moves.size(), 2);
         assertEquals(moves.get(1), skip);
         assertEquals(moves.get(0), play);
+    }
+
+    @Test
+    void testGetPlayerByName() {
+        game.addPlayer(player);
+        assertEquals(game.getPlayerByName("playerTest"), player);
     }
 }

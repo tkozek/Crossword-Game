@@ -34,6 +34,12 @@ public class ScrabbleGame implements Writable {
         return "";
     }
 
+    // EFFECTS: returns player with given name
+    // in this game
+    public Player getPlayerByName(String name) {
+        
+    }
+
     // EFFECTS: returns board
     public Board getBoard() {
         return null;
