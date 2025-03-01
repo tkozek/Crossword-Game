@@ -7,11 +7,10 @@ import org.json.JSONObject;
 
 import model.move.Move;
 import model.move.MoveType;
-import persistance.Writable;
 
 // Represents a Player's history, which includes
 // a list of their moves across their games
-public class History implements Writable {
+public class History {
 
     private String name;
     private List<Move> moveHistory;
@@ -68,9 +67,9 @@ public class History implements Writable {
         return movesWithLetter;
     }
 
-    @Override
+    /* @Override
     public JSONObject toJson() {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'toJSON'");
-    }
+    } */
 }

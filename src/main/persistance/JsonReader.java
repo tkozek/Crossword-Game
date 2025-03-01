@@ -69,7 +69,7 @@ public class JsonReader {
         JSONArray boardArray = jsonObject.getJSONArray("Board");
         for (int i = 0; i < boardArray.length(); i++) {
             String value = boardArray.getString(i);
-            boolean isOneCharacter = value.length() == 0;
+            boolean isOneCharacter = value.length() == 1;
             char valueChar = value.charAt(0);
             boolean isNotSpace = (valueChar != ' ');
             // (value.length() == 0 && 'A' <= value.charAt(0) <= 'Z');

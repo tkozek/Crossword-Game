@@ -21,7 +21,7 @@ import persistance.JsonWriter;
 // Citation: Saving and loading are based on JSON example from edX
 // Represents a game of Scrabble
 public class ScrabbleApp {
-    private static final String JSON_STORE = "./data/savedGame.json";
+    private static final String JSON_STORE = "./data/gameToPlayTest.json";
     private Player player;
     private Board board;
     private TileBag tileBag;
@@ -42,6 +42,7 @@ public class ScrabbleApp {
         scanner = new Scanner(System.in);
         jsonWriter = new JsonWriter(JSON_STORE);
         jsonReader = new JsonReader(JSON_STORE);
+        tileBag = new TileBag();
         System.out.println("(L)oad your old game or (p)lay a new one?");
         switch (scanner.nextLine()) {
             case "P":
@@ -190,7 +191,7 @@ public class ScrabbleApp {
     // EFFECTS: Let's player decide to view
     // game related info, or save and quit
     public void handleNonPlayOptions(Player p) {
-        System.out.println("\nType whether you'd like to (v)iew something, or s(a)ve and quit, "
+        System.out.println("\nType whether you'd like to (v)iew something, s(a)ve and quit, "
                 + "or (q)uit without saving");
         switch (scanner.nextLine()) {
             case "V":
@@ -201,9 +202,12 @@ public class ScrabbleApp {
             case "a":
                 handleSave();
                 this.gameRunning = false;
+                System.exit(0);
             case "Q":
             case "q":
+            // !!! Consider adding confirmation
                 this.gameRunning = false;
+                System.exit(0);
             default:
                 handleNonPlayOptions(p);
         }
@@ -244,7 +248,7 @@ public class ScrabbleApp {
             jsonWriter.close();
             System.out.println("Saved" + scrabbleGame.getName() + " with " + String.valueOf(numPlayers)
                     + " players to " + JSON_STORE);
-        } catch (FileNotFoundException e) {
+        } catch (IOException e) {
             System.out.println("Unable to write to file " + JSON_STORE);
         }
     }
