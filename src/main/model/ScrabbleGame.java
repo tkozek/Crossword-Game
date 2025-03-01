@@ -96,15 +96,33 @@ public class ScrabbleGame implements Writable {
     // from the ScrabbleGame state
     @Override
     public JSONObject toJson() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'toJSON'");
+        JSONObject json = new JSONObject();
+        json.put("GameName", this.getName());
+        json.put("Board", this.board.toJson());
+        json.put("TileBag", this.tileBag.toJson());
+        json.put("Players", playersToJson());
+        json.put("History", this.historyToJson());
+        return json;
     }
 
     // EFFECTS: returns players in this Scrabble Game 
     // as a JSONArray
     private JSONArray playersToJson() {
-        return null;
+        JSONArray jsonArray = new JSONArray();
+        for (Player player : players) {
+            jsonArray.put(player.toJson());
+        }
+        return jsonArray;
     }
 
+    // EFFECTS: returns players in this Scrabble Game 
+    // as a JSONArray
+    private JSONArray historyToJson() {
+        JSONArray jsonArray = new JSONArray();
+        for (Move move : history.getMoves()) {
+            jsonArray.put(move.toJson());
+        }
+        return jsonArray;
+    }
     
 }
