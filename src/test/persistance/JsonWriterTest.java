@@ -72,6 +72,7 @@ public class JsonWriterTest extends JsonTest{
     @Test
     void testWriterTwoMovesHaveBeenPlayed() {
         try {
+            game.addPlayer(player);
             tileBag.drawTiles(player);
             List<LetterTile> originalLettersDrawn = player.getTilesOnRack();
             List<LetterTile> originalLetterCopies = new ArrayList<>();

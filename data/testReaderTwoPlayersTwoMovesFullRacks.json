@@ -82,11 +82,11 @@
     ],
     "History": [
         {
-            "MoveType": "PLAY",
+            "MoveType": "PLAY_WORD",
             "PlayerName": "Trevor"
         },
         {
-            "MoveType": "SWAP",
+            "MoveType": "SWAO_TILES",
             "PlayerName": "Joe",
             "InitialLetters": "ABCDEFG",
             "AfterSwapLetters": "HIJKLMN"

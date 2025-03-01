@@ -60,14 +60,14 @@
         },
 
         {
-            "MoveType": "SWAP",
+            "MoveType": "SWAP_TILES",
             "PlayerName": "Joe",
             "InitialLetters": "ABCDEFG",
             "AfterSwapLetters": "HIJKLMN"
 
         },
         {
-            "MoveType": "PLAY",
+            "MoveType": "PLAY_WORD",
             "PlayerName": "Mike",
             "LettersPlayed": "XI",
             "Row":1,

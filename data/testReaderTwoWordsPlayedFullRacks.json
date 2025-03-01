@@ -82,7 +82,7 @@
     ],
     "History": [
         {
-            "MoveType": "PLAY",
+            "MoveType": "PLAY_WORD",
             "PlayerName": "Tester",
             "LettersPlayed": "PA",
             "Row":7,
@@ -91,7 +91,7 @@
             "Direction": "R"
         },
         {
-            "MoveType": "PLAY",
+            "MoveType": "PLAY_WORD",
             "PlayerName": "Trevor",
             "LettersPlayed": "TTIES",
             "Row":7,
