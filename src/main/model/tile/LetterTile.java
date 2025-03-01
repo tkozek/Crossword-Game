@@ -40,8 +40,9 @@ public class LetterTile implements Tile, Writable {
 
     @Override
     public JSONObject toJson() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'toJSON'");
+        JSONObject json = new JSONObject();
+        json.put(String.valueOf(getCharacter()), getLetterPoints());
+        return json;
     }
 
 }

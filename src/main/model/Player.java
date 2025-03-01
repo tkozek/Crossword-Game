@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import model.board.Board;
@@ -248,7 +249,21 @@ public class Player implements Writable {
 
     @Override
     public JSONObject toJson() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'toJSON'");
+        JSONObject json = new JSONObject();
+        json.put("name", this.name);
+        json.put("score", this.points);
+        json.put("tileRack", tileRackToJson());
+        return json;
     }
+
+    public JSONArray tileRackToJson() {
+        JSONArray json = new JSONArray();
+        for (LetterTile letter : tileRack) {
+            json.put(letter.toJson());
+        }
+        return json;
+    }
+
+    
+
 }
