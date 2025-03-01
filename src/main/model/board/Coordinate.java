@@ -2,12 +2,8 @@ package model.board;
 
 import java.util.Objects;
 
-import org.json.JSONObject;
-
-import persistance.Writable;
-
 // Represents a (row,column) coordinate on a board
-public class Coordinate implements Writable {
+public class Coordinate {
     private int row;
     private int column;
 
@@ -44,12 +40,6 @@ public class Coordinate implements Writable {
     // the board's special tiles
     public int hashCode() {
         return Objects.hash(row,column);
-    }
-
-    @Override
-    public JSONObject toJson() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'toJSON'");
     }
     
 }
