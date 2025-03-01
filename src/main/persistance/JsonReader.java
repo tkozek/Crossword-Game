@@ -154,10 +154,10 @@ public class JsonReader {
             name = moveObject.getString("PlayerName");
             player = game.getPlayerByName(name);
             switch (moveType) {
-                case "PLAY":
+                case "PLAY_WORD":
                     addWordPlayed(board, moveObject, player);
                     break;        
-                case "SWAP":
+                case "SWAP_TILES":
                     addSwap(board, moveObject, player);
                     break;  
                 case "SKIP":

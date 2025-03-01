@@ -148,9 +148,9 @@ public class Move implements Writable {
                 break;
             case SWAP_TILES:
                 json.put("InitialLetters", getStringFromLetters(lettersInvolved.subList(0,7)));
-                json.put("AfterSwapLetters", getStringFromLetters(lettersInvolved.subList(7,15)));
+                json.put("AfterSwapLetters", getStringFromLetters(lettersInvolved.subList(7,lettersInvolved.size())));
                 break;
-            case SKIP:
+            default:
                 break;
         }
         return json;
