@@ -51,7 +51,7 @@ public class JsonWriterTest extends JsonTest{
     @Test
     void testWriterInitialGame() {
         try {
-            JsonWriter writer = new JsonWriter("./data/testWriterInitialGame");
+            JsonWriter writer = new JsonWriter("./data/testWriterInitialGame.json");
             writer.open();
             writer.write(game);
             writer.close();

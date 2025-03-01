@@ -7,6 +7,7 @@ import org.junit.Test;
 import model.Player;
 import model.ScrabbleGame;
 import model.board.Board;
+import model.move.MoveType;
 import model.tile.TileBag;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -55,14 +56,39 @@ public class JsonReaderTest extends JsonTest{
             Player player = game.getPlayers().get(0);
             assertEquals(player.getPlayerName(), "Trevor");
             assertEquals(player.getPointsThisGame(), 0);
-            
+            assertEquals(player.getHistory().getMoves().get(0).getMoveType(), MoveType.SKIP);
         } catch (IOException e) {
             fail("Couldn't read file");
         }
     }
 
+    @Test
+    public void testReaderTwoPlayersTwoMovesFullTileRacks() {
+        JsonReader reader = new JsonReader("./data/testReaderTwoWordsPlayedFullRacks.json");
+        testBag = new TileBag();
+        try {
+            ScrabbleGame game = reader.read();
+            assertEquals(game.getName(), "Initial Game");
+            assertEquals(game.getNumPlayers(), 2);
+            // Override Board.equals() and update line below this
+            assertFalse(game.getBoard() == null);
+            assertFalse(game.getTileBag().getCurrentLetterFrequencies().equals(testBag.getInitialLetterFrequencies()));
 
+            assertEquals(game.getTileBag().numTilesRemaining(), 100- 7 * 2 - 2 - 5);
 
+            assertEquals(game.getHistory().getMoves().size(), 2);
+            Player player = game.getPlayers().get(0);
+            assertEquals(player.getPlayerName(), "Tester");
+            assertEquals(player.getPointsThisGame(), 10);
+            Player player2 = game.getPlayers().get(1);
+            assertEquals(player2.getPointsThisGame(), 6);
 
+            assertTrue(player.getSelectedTiles().isEmpty());
+            assertEquals(player.getTilesOnRack().get(5).getCharacter(), 'Q');
 
+        } catch (IOException e) {
+            fail("Couldn't read file");
+        }
+    }
+    
 }
