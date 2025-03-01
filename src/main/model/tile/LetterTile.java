@@ -45,4 +45,8 @@ public class LetterTile implements Tile, Writable {
         return json;
     }
 
+    public String getString() {
+        return String.valueOf(character);
+    }
+
 }

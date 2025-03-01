@@ -1,5 +1,7 @@
 package model.board;
 
+import org.json.JSONObject;
+
 import model.tile.Tile;
 import model.tile.TileType;
 
@@ -44,6 +46,21 @@ public class BoardTile implements Tile {
 
     public TileType getTileType() {
         return this.tileType;
+    }
+
+    public String tileTypeAsString() {
+        switch (tileType) {
+            case DOUBLE_LETTER:
+                return "DLS";
+            case DOUBLE_WORD:
+                return "DWS";
+            case TRIPLE_LETTER:
+                return "TLS";
+            case TRIPLE_WORD:
+                return "TWS";
+            default:
+                return " ";
+        }
     }
 
 }

@@ -55,7 +55,6 @@ public class JsonWriterTest extends JsonTest{
             writer.open();
             writer.write(game);
             writer.close();
-            
             JsonReader reader = new JsonReader("./data/testWriterInitialGame");
             game = reader.read();
             assertEquals("Test", game.getName());

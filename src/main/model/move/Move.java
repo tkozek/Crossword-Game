@@ -1,5 +1,6 @@
 package model.move;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.json.JSONObject;
@@ -119,10 +120,40 @@ public class Move implements Writable {
         return false;
     }
 
+    // EFFECTS: returns list of letter tiles
+    // based on input string
+    private String getStringFromLetters(List<LetterTile> letters) {
+        String result = "";
+        for (LetterTile letter : letters) {
+            result += letter.getString();
+        }
+        return result;
+        }
+    
+    
+
     @Override
     public JSONObject toJson() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'toJSON'");
+        JSONObject json = new JSONObject();
+        json.put("MoveType", moveType);
+        json.put("PlayerName", player.getPlayerName());
+        switch (moveType) {
+            case PLAY_WORD:
+                json.put("LettersPlayed", getStringFromLetters(lettersInvolved));
+                json.put("Row", startRow);
+                json.put("Col", startCol);
+                json.put("Points", pointsForMove);
+                String dir = (Direction.DOWN == direction) ? "D" : "R";
+                json.put("Direction", dir);
+                break;
+            case SWAP_TILES:
+                json.put("InitialLetters", getStringFromLetters(lettersInvolved.subList(0,7)));
+                json.put("AfterSwapLetters", getStringFromLetters(lettersInvolved.subList(7,15)));
+                break;
+            case SKIP:
+                break;
+        }
+        return json;
     }
 
 

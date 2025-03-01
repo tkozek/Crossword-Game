@@ -3,6 +3,7 @@ package model.board;
 import java.util.List;
 import java.util.Set;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import model.Direction;
@@ -16,7 +17,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 // Represents a Scrabble Game Board
-public class Board implements Writable {
+public class Board {
     public static final int BOARD_LENGTH = 15;
     private Set<Coordinate> doubleLetterCoordinates = new HashSet<>();
     private Set<Coordinate> doubleWordCoordinates = new HashSet<>();
@@ -357,10 +358,20 @@ public class Board implements Writable {
         return boardTiles[row][column];
     }
 
-    @Override
-    public JSONObject toJson() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'toJSON'");
+    public JSONArray toJson() {
+        JSONArray json = new JSONArray();
+        for (int i = 0; i < BOARD_LENGTH; i++) {
+            for (int j = 0; j < BOARD_LENGTH; j++) {
+                if (boardTiles[i][j] instanceof LetterTile) {
+                    LetterTile letterTile = (LetterTile) boardTiles[i][j];
+                    json.put(String.valueOf(letterTile.getCharacter()));
+                } else {
+                    BoardTile boardTile = (BoardTile) boardTiles[i][j];
+                    json.put(boardTile.tileTypeAsString());
+                }
+            }
+        }
+        return json;
     }
 }
 
