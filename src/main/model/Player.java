@@ -262,8 +262,6 @@ public class Player implements Writable {
             json.put(letter.toJson());
         }
         return json;
-    }
-
-    
+    }    
 
 }

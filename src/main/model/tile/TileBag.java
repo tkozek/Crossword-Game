@@ -226,9 +226,16 @@ public class TileBag implements Writable {
 
 
     @Override
+    // EFFECTS: returns the string corresponding to each remaining
+    // tile in the draw pile and its remaining frequency as a key value
+    // pair in the form "character" : frequency
     public JSONObject toJson() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'toJSON'");
+        JSONObject json = new JSONObject();
+        Map<Character, Integer> currentLetterFrequencies = getCurrentLetterFrequencies();
+        for (Map.Entry<Character, Integer> entry : currentLetterFrequencies.entrySet()) {
+            json.put(String.valueOf(entry.getKey()), entry.getValue());
+        }
+        return json;
     }
 
     public static int getPointsForLetter(char letter) {
