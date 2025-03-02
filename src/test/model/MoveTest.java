@@ -24,8 +24,8 @@ public class MoveTest {
     private Board testBoard;
     private Move playWord;
     private Move swap;
-    private Move endGameWinner;
-    private Move endGameLoser;
+    //private Move endGameWinner;
+    //private Move endGameLoser;
     private String alphabet;
     private ScrabbleGame game;
 

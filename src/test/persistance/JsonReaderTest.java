@@ -6,7 +6,6 @@ import org.junit.Test;
 
 import model.Player;
 import model.ScrabbleGame;
-import model.board.Board;
 import model.move.MoveType;
 import model.tile.TileBag;
 

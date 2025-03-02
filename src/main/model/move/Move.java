@@ -1,6 +1,5 @@
 package model.move;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.json.JSONObject;
@@ -128,7 +127,7 @@ public class Move implements Writable {
             result += letter.getString();
         }
         return result;
-        }
+    }
     
     
 

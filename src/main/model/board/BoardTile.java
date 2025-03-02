@@ -1,7 +1,5 @@
 package model.board;
 
-import org.json.JSONObject;
-
 import model.tile.Tile;
 import model.tile.TileType;
 

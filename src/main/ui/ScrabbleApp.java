@@ -3,7 +3,6 @@ package ui;
 import java.util.Scanner;
 import java.util.List;
 import java.util.Map;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import model.*;
@@ -168,22 +167,18 @@ public class ScrabbleApp {
                 scanner.nextLine();
                 break;
             case "S":
-            case "s":
                 handleSwap(p);
                 scanner.nextLine();
                 break;
-            case "K":
             case "k":
                 handleSkip(p);
                 scanner.nextLine();
                 break;
-            case "O":
             case "o":
                 handleNonPlayOptions(p);
                 break;
             default:
                 handleTurn(p);
-                
         }
     }
 
@@ -393,17 +388,23 @@ public class ScrabbleApp {
                 player.logSwap(board,preSwapLetters,postSwapLetters);
                 System.out.println("\n Your new tiles are: ");
                 getTilePrintOut(player);
-                scanner.nextLine();
-                scanner.nextLine();
+                adjustScanner();
                 break;
             } else {
-                scanner.nextLine();
-                scanner.nextLine();
+                adjustScanner();
                 player.clearSelectedTiles();
                 handleTurn(player);
                 return;
             }
         }
+    }
+
+    // EFFECTS: Helper method to 
+    // reduce method lengths where scanner
+    // must be adjusted numerous times
+    private void adjustScanner() {
+        scanner.nextLine();
+        scanner.nextLine();
     }
 
     // MODIFIES: player

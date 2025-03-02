@@ -3,8 +3,6 @@ package model;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.json.JSONObject;
-
 import model.move.Move;
 import model.move.MoveType;
 
@@ -66,10 +64,4 @@ public class History {
         }
         return movesWithLetter;
     }
-
-    /* @Override
-    public JSONObject toJson() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'toJSON'");
-    } */
 }

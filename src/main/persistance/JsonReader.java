@@ -161,8 +161,7 @@ public class JsonReader {
                     addSwap(board, moveObject, player);
                     break;  
                 case "SKIP":
-                    player.logSkippedTurn(board);
-                    break;  
+                    player.logSkippedTurn(board);  
                 default:
                     break;
             }
