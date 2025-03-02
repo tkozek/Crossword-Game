@@ -99,39 +99,6 @@ public class PlayerTest {
     }
 
 
-    /* @Test
-    void testSwapAllTiles() {
-        assertEquals(testPlayer.getNumTilesOnRack(), 0);
-        testBag.drawTiles(testPlayer);
-        assertEquals(testPlayer.getNumTilesOnRack(), Player.MAX_NUM_TILES);
-
-        List<LetterTile> initialLetters = testPlayer.getTilesOnRack();
-
-        int numTilesToSwap  = 7;
-        assertTrue(testBag.numTilesRemaining() >= numTilesToSwap);
-
-        for (int i = 0; i < 1; i++) {
-            testPlayer.selectTile(i);
-        }
-        assertTrue(testBag.numTilesRemaining() > 7);
-        testPlayer.swapTiles();
-
-        List<LetterTile> postSwapLetters = testPlayer.getTilesOnRack();
-        int numThingsChanged = 0;
-        for (int i = 0; i < numTilesToSwap; i++) {
-            if (!initialLetters.contains(postSwapLetters.get(i))) {
-                numThingsChanged++;
-            }
-    }
-    // Chance of drawing one of the 7 initial tiles first is 7/100,
-    // Chance of drawing one of the 6 remaining initial tiles is 6/99
-    // Chance of drawing one of the 5 remaining initial tiles is 5/98
-    // .....
-    // Chance of drawing all the tiles we had initially is 7!/(100!/93!)
-    // So the chances of this assertion failing are 
-    // 50.4 / 806,781,064,320 about 6.25 in a 100 billion chance
-        assertTrue(numThingsChanged==1);
-    } */
     @Test
     void testSwapZeroTiles() {
         assertEquals(testPlayer.getNumTilesOnRack(), 0);
@@ -304,7 +271,6 @@ public class PlayerTest {
         assertEquals(testPlayer.getHistory().getMoves().get(1).getMoveType(), MoveType.SWAP_TILES);
         assertEquals(testPlayer.getHistory().getMoves().get(1).getPointsForMove(), 0);
     }
-
     
 
 }
