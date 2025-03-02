@@ -87,7 +87,8 @@ public class MoveTest {
         assertEquals(swap.getLettersInvolved(),p1Letters);
         assertEquals(swap.getBoard(),board);
     }
-    @Test
+    
+   /*  @Test
     void testConstructorForEndGameAdjustment() {
         endGameLoser = new Move(testPlayer, board, false, p1Letters, 7);
         assertEquals(endGameLoser.getPlayer(), testPlayer);
@@ -97,7 +98,7 @@ public class MoveTest {
         assertEquals(endGameWinner.getPlayer(), testPlayer2);
         assertEquals(endGameWinner.getMoveType(),MoveType.END_GAME_WINNER);
         assertEquals(endGameWinner.getBoard(),board);
-    }
+    } */
 
     @Test
     void testConstructorSkip() {

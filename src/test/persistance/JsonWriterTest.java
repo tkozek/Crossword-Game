@@ -93,11 +93,11 @@ public class JsonWriterTest extends JsonTest{
             //player.logSkippedTurn(board);
             // should expect there to be one letters played there that match
             // and expect tileBag to be missing the 7 originally drawn tiles      
-            JsonWriter writer = new JsonWriter("./data/testWriterTwoMovesPlayed.json");
+            JsonWriter writer = new JsonWriter("./data/testWriterOneWordPlayed.json");
             writer.open();
             writer.write(game);
             writer.close();
-            JsonReader reader = new JsonReader("./data/testWriterTwoMovesPlayed.json");
+            JsonReader reader = new JsonReader("./data/testWriterOneWordPlayed.json");
             game = reader.read();
             assertEquals(game.getTileBag().numTilesRemaining(), TileBag.TOTAL_LETTERS_INITIALLY - 7);
             Map<Character, Integer> afterReadingTileBagCounts = game.getTileBag().getCurrentLetterFrequencies();
@@ -108,7 +108,7 @@ public class JsonWriterTest extends JsonTest{
 
             int initializedLetter1BagCount = tileBag.getInitialLetterFrequencies().get(letter1Char);
             //Check tilebag counts
-            assertEquals(afterReadingTileBagCounts.get(letter1Char) + originalLetter1CountDrawn, initializedLetter1BagCount);
+            assertEquals(afterReadingTileBagCounts.getOrDefault(letter1Char, 0) + originalLetter1CountDrawn, initializedLetter1BagCount);
             Board newBoard = game.getBoard();
             List<LetterTile> letterToPlay = new ArrayList<>();
             letterToPlay.add(new LetterTile('A', 1));
@@ -126,6 +126,95 @@ public class JsonWriterTest extends JsonTest{
             fail("Exception should not have been thrown");
         }
     }
+
+    @Test
+    void testWriterTwoPlayersEachSwapped() {
+        try {
+        Player player2 = new Player("John", board, tileBag, game);
+        game.addPlayer(player);
+        game.addPlayer(player2);
+
+        tileBag.drawTiles(player);
+        tileBag.drawTiles(player2);
+
+        // Deep copy of initial tiles
+        List<LetterTile> p1InitLetters = player.copySelectedTiles();
+        List<LetterTile> p2InitLetters = player2.copySelectedTiles();
+
+        // Select all tiles
+        for (int i = 0; i < 7; i++) {
+            player.selectTile(i);
+            player2.selectTile(i);
+        }
+        // Both swap all tiles
+        player.swapTiles();
+        player2.swapTiles();
+        
+        // Copy of final letters
+        List<LetterTile> p1FinalLetters = player.copyLetterTiles(player.getTilesOnRack());
+        List<LetterTile> p2FinalLetters = player2.copyLetterTiles(player2.getTilesOnRack());
+
+        player.logSwap(board, p1InitLetters, p1FinalLetters);
+        player2.logSwap(board, p2InitLetters, p2FinalLetters);
+        JsonWriter writer = new JsonWriter("./data/testWriterTwoPlayersEachSwapped.json");
+            writer.open();
+            writer.write(game);
+            writer.close();
+            JsonReader reader = new JsonReader("./data/testWriterTwoPlayersEachSwapped.json");
+            game = reader.read();
+            Player copyP1 = game.getPlayerByName("Tester");
+            Player copyP2 = game.getPlayerByName("John");
+            // All entries should preserve order and have their tile values maintained
+            for (int i = 0; i < 7; i++) {
+                
+                assertEquals(player.getTilesOnRack().get(i).getCharacter(), copyP1.getTilesOnRack().get(i).getCharacter());
+                assertEquals(player.getTilesOnRack().get(i).getLetterPoints(), copyP1.getTilesOnRack().get(i).getLetterPoints());
+                
+                assertEquals(player2.getTilesOnRack().get(i).getCharacter(), copyP2.getTilesOnRack().get(i).getCharacter());
+                assertEquals(player2.getTilesOnRack().get(i).getLetterPoints(), copyP2.getTilesOnRack().get(i).getLetterPoints());
+            }
+
+            assertEquals(copyP1.getHistory().getMoves().size(), player.getHistory().getMoves().size());
+            assertEquals(copyP2.getHistory().getMoves().size(), player2.getHistory().getMoves().size());
+
+            assertEquals(copyP1.getHistory().getMoves().get(0).getDirection(), player.getHistory().getMoves().get(0).getDirection());
+            assertEquals(copyP1.getHistory().getMoves().get(0).getPointsForMove(), player.getHistory().getMoves().get(0).getPointsForMove());
+            //assertEquals(copyP1.getHistory().getMoves().get(0).getLettersInvolved(), player.getHistory().getMoves().get(0).getLettersInvolved());
+    } catch (IOException e) {
+        fail("Exception should not have been thrown");
+    }
+
+
+    }
+
+    /* @Test
+    void testWriteMoveComprehensive() {
+        try {
+            Player player2 = new Player("John", board, tileBag, game);
+            game.addPlayer(player);
+            game.addPlayer(player2);
+    
+            tileBag.drawTiles(player);
+            tileBag.drawTiles(player2);
+    
+            // Deep copy of initial tiles
+            List<LetterTile> p1InitLetters = player.copySelectedTiles();
+            List<LetterTile> p2InitLetters = player2.copySelectedTiles();
+
+            player.swapTiles();
+            player2.swapTiles();
+
+            JsonWriter writer = new JsonWriter("./data/testWriterTwoPlayersEachSwapped.json");
+                writer.open();
+                writer.write(game);
+                writer.close();
+                JsonReader reader = new JsonReader("./data/testWriterTwoPlayersEachSwapped.json");
+                game = reader.read();
+    
+        } catch (IOException e) {
+            fail("Exception should not have been thrown");
+        }
+    } */
  
     
 }

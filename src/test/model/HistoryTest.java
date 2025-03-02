@@ -43,7 +43,7 @@ public class HistoryTest {
         Z = new LetterTile('Z',10);
         history = new History("Trevor");
         moveToAdd = new Move(testPlayer, board, p1Letters, 1,8, 10, Direction.DOWN);
-        otherMoveToAdd = new Move(testPlayer2, board, true, p1Letters, 7);
+        otherMoveToAdd = new Move(testPlayer2, board);
 
     }
 

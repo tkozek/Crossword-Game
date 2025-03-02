@@ -53,7 +53,7 @@ public class Move implements Writable {
         this.pointsForMove = 0;
     }
 
-    // Constructor for end of game where last player gains points from unplayed tiles on opponent racks
+    /* // Constructor for end of game where last player gains points from unplayed tiles on opponent racks
     // REQUIRES: Exchanged points >= 0;
     public Move(Player player, Board board, boolean wasLastToPlay,
             List<LetterTile> unplayedLetters, int exchangedPoints) {
@@ -68,7 +68,7 @@ public class Move implements Writable {
         this.board = board;
         this.lettersInvolved = unplayedLetters;  
 
-    }
+    } */
 
     public Player getPlayer() {
         return this.player;
@@ -150,8 +150,11 @@ public class Move implements Writable {
                 json.put("InitialLetters", getStringFromLetters(lettersInvolved.subList(0,7)));
                 json.put("AfterSwapLetters", getStringFromLetters(lettersInvolved.subList(7,lettersInvolved.size())));
                 break;
-            default:
-                break;
+            case SKIP:
+            //    break;
+            //case END_GAME_LOSER:
+            //    break;
+            //case END_GAME_WINNER:
         }
         return json;
     }
