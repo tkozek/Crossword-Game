@@ -187,7 +187,7 @@ public class JsonWriterTest extends JsonTest{
 
     }
 
-    /* @Test
+    @Test
     void testWriteMoveComprehensive() {
         try {
             Player player2 = new Player("John", board, tileBag, game);
@@ -198,23 +198,55 @@ public class JsonWriterTest extends JsonTest{
             tileBag.drawTiles(player2);
     
             // Deep copy of initial tiles
+            for (int i = 0; i < 7; i++) {
+                player.selectTile(i);
+                player2.selectTile(i);
+            }
             List<LetterTile> p1InitLetters = player.copySelectedTiles();
             List<LetterTile> p2InitLetters = player2.copySelectedTiles();
 
             player.swapTiles();
             player2.swapTiles();
+            for (int i = 0; i < 7; i++) {
+                player.selectTile(i);
+                player2.selectTile(i);
+            }
+            List<LetterTile> p1FinalLetters = player.copySelectedTiles();
+            List<LetterTile> p2FinalLetters = player2.copySelectedTiles();
 
-            JsonWriter writer = new JsonWriter("./data/testWriterTwoPlayersEachSwapped.json");
-                writer.open();
-                writer.write(game);
-                writer.close();
-                JsonReader reader = new JsonReader("./data/testWriterTwoPlayersEachSwapped.json");
-                game = reader.read();
-    
+            player.logSwap(board, p1InitLetters, p1FinalLetters);
+            player2.logSwap(board, p2InitLetters, p2FinalLetters);
+            player.logSkippedTurn(board);
+
+            player2.logWord(board, 7, 7, 70, Direction.DOWN);
+            player.logWord(board, 6, 7, 60, Direction.RIGHT);
+
+
+            JsonWriter writer = new JsonWriter("./data/testWriteMoveComprehensive.json");
+            writer.open();
+            writer.write(game);
+            writer.close();
+            JsonReader reader = new JsonReader("./data/testWriteMoveComprehensive.json");
+            game = reader.read();
+            List<Move> p1Moves = game.getPlayerByName("Tester").getHistory().getMoves();
+            List<Move> p2Moves = game.getPlayerByName("John").getHistory().getMoves();
+
+            assertEquals(p1Moves.size(), 3);
+            assertEquals(p1Moves.get(0).getMoveType(), MoveType.SWAP_TILES);
+            assertEquals(p1Moves.get(1).getMoveType(), MoveType.SKIP);
+            assertEquals(p1Moves.get(2).getMoveType(), MoveType.PLAY_WORD);
+            assertEquals(p1Moves.get(2).getDirection(), Direction.RIGHT);
+
+            assertEquals(p2Moves.size(), 2);
+            assertEquals(p2Moves.get(0).getMoveType(), MoveType.SWAP_TILES);
+            assertEquals(p2Moves.get(1).getMoveType(), MoveType.PLAY_WORD);
+            assertEquals(p2Moves.get(1).getDirection(), Direction.DOWN);
+
+
         } catch (IOException e) {
             fail("Exception should not have been thrown");
         }
-    } */
+    } 
  
     
 }
