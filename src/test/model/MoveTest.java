@@ -56,6 +56,7 @@ public class MoveTest {
         assertEquals(playWord.getBoard(),board);
 
     }
+
     @Test
     void testMoveContainsCharacter() {
         playWord = new Move(testPlayer, board, p1Letters, 1,8, 10, Direction.DOWN);
@@ -77,6 +78,7 @@ public class MoveTest {
         // Move cannot contain all possible letters since tileRack is less than the size of the alphabet
         assertFalse(allTrue);
     }
+    
     @Test
     void testConstructorForSwappedWord() {
         swap = new Move(testPlayer2, board, p1Letters, p2Letters);

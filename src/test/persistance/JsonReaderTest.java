@@ -12,7 +12,7 @@ import model.tile.TileBag;
 import static org.junit.jupiter.api.Assertions.*;
 
 
-public class JsonReaderTest extends JsonTest{
+public class JsonReaderTest extends JsonTest {
 
     private TileBag testBag;
 
@@ -73,7 +73,7 @@ public class JsonReaderTest extends JsonTest{
             assertFalse(game.getBoard() == null);
             assertFalse(game.getTileBag().getCurrentLetterFrequencies().equals(testBag.getInitialLetterFrequencies()));
 
-            assertEquals(game.getTileBag().numTilesRemaining(), 100- 7 * 2 - 2 - 5);
+            assertEquals(game.getTileBag().numTilesRemaining(), 100 - 7 * 2 - 2 - 5);
 
             assertEquals(game.getHistory().getMoves().size(), 2);
             Player player = game.getPlayers().get(0);

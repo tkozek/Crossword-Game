@@ -74,6 +74,7 @@ public class PlayerTest {
         testPlayer.setPlayerName("Michael");
         assertEquals("Michael", testPlayer.getPlayerName());
     }
+
     @Test
     void testDrawTilesEmptyRack() {
         assertEquals(testPlayer.getNumTilesOnRack(), 0);
@@ -86,6 +87,7 @@ public class PlayerTest {
         testPlayer.setPoints(10);
         assertEquals(testPlayer.getPointsThisGame(), 10);
     }
+    
     @Test
     void testMakeMove() {
         testBag.drawTiles(testPlayer);
@@ -135,6 +137,7 @@ public class PlayerTest {
         assertTrue(counts.values().isEmpty());
     
     }
+
     @Test
     void testAddtile() {
         assertEquals(testPlayer.getNumTilesOnRack(), 0);
@@ -158,7 +161,7 @@ public class PlayerTest {
     @Test
     void testSelectTile() {
         testBag.drawTiles(testPlayer);
-        List <LetterTile> drawnTiles = testPlayer.getTilesOnRack();
+        List<LetterTile> drawnTiles = testPlayer.getTilesOnRack();
         //Player.MAX_NUM_TILES == 7
         assertEquals(testPlayer.getNumTilesOnRack(), Player.MAX_NUM_TILES);
         testPlayer.selectTile(0);
@@ -198,6 +201,7 @@ public class PlayerTest {
         assertTrue(rackCharCounts.keySet().isEmpty());
         assertTrue(rackCharCounts.values().isEmpty());
     }
+
     @Test
     void testGetNumEachCharOnMyRackFullRack() {
         testBag.drawTiles(testPlayer);
@@ -245,6 +249,7 @@ public class PlayerTest {
         assertEquals(40, testPlayer.getPointsThisGame());
 
     }
+    
     @Test 
     void testCopySelectedTiles() {
         testBag.drawTiles(testPlayer);

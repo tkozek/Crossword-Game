@@ -23,7 +23,7 @@ public class BoardTest {
     private Player testPlayer;
     private Board testBoard;
     private List<LetterTile>  letters;
-    private LetterTile B; 
+    private LetterTile B;
     private LetterTile A;
     private LetterTile Z;
     private ScrabbleGame game;
@@ -203,6 +203,7 @@ public class BoardTest {
         assertTrue(board.sectionIsAvailable(letters, 7,0, Direction.RIGHT));
         assertTrue(board.sectionIsAvailable(letters, 0,7, Direction.DOWN));
     }
+
     @Test 
     void testCanPlay() {
         assertTrue(board.canPlay(letters, 0, 0, Direction.DOWN));
@@ -225,25 +226,25 @@ public class BoardTest {
         letters.add(Z);
         assertEquals(letters.size(), 3);
         //TW
-        assertEquals((3+1+10) * 3, board.scoreWord(letters, 0,0,Direction.DOWN));
+        assertEquals((3 + 1 + 10) * 3, board.scoreWord(letters, 0,0,Direction.DOWN));
         board = new Board();
-        assertEquals((3+1+10) * 3, board.scoreWord(letters, 0,0,Direction.RIGHT));
+        assertEquals((3 + 1 + 10) * 3, board.scoreWord(letters, 0,0,Direction.RIGHT));
         board = new Board();
         // DW
-        assertEquals((3+1+10) * 2, board.scoreWord(letters, 1,1,Direction.DOWN));
+        assertEquals((3 + 1 + 10) * 2, board.scoreWord(letters, 1,1,Direction.DOWN));
         board = new Board();
-        assertEquals((3+1+10) * 2, board.scoreWord(letters, 1,1,Direction.DOWN));
+        assertEquals((3 + 1 + 10) * 2, board.scoreWord(letters, 1,1,Direction.DOWN));
         board = new Board();
         //Normal
-        assertEquals((3+1+10), board.scoreWord(letters, 1,2,Direction.RIGHT));
+        assertEquals((3 + 1 + 10), board.scoreWord(letters, 1,2,Direction.RIGHT));
         board = new Board();
         //TL
-        assertEquals((3*3+1+10), board.scoreWord(letters, 1,5,Direction.RIGHT));
+        assertEquals((3 * 3 + 1 + 10), board.scoreWord(letters, 1,5,Direction.RIGHT));
         board = new Board();
-        assertEquals((3+1+10*3), board.scoreWord(letters, 3,5,Direction.DOWN));
+        assertEquals((3 + 1 + 10 * 3), board.scoreWord(letters, 3,5,Direction.DOWN));
         board = new Board();
         //DL
-        assertEquals(3 + 1*2+10, board.scoreWord(letters, 10,14,Direction.DOWN));
+        assertEquals(3 + 1 * 2 + 10, board.scoreWord(letters, 10,14,Direction.DOWN));
         board = new Board();
         
     }
@@ -329,6 +330,7 @@ public class BoardTest {
         // didn't add d so it should not be in the map
         assertEquals(counts.get('_'), null);
     }
+    
     @Test
     void testGetTileAtPositionOnBoard() {
         BoardTile boardTile = (BoardTile) board.getTileAtPositionOnBoard(7,7);

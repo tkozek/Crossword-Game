@@ -45,12 +45,12 @@ public class LetterTileTest {
         LetterTile copyLetter = new LetterTile(testTileB);
         assertEquals('B', copyLetter.getCharacter());
         assertEquals(3, copyLetter.getLetterPoints());
-        assertFalse(copyLetter==testTileB);
+        assertFalse(copyLetter == testTileB);
         testTileB = null;
-        assertFalse(copyLetter==null);
+        assertFalse(copyLetter == null);
         assertEquals('B', copyLetter.getCharacter());
         assertEquals(3, copyLetter.getLetterPoints());
-        assertTrue(testTileB==null);
+        assertTrue(testTileB == null);
     }
 
     @Test
@@ -70,12 +70,12 @@ public class LetterTileTest {
         assertFalse(copyLetter == null);
         assertEquals('B', copyLetter.getCharacter());
         assertEquals(3, copyLetter.getLetterPoints());
-        assertTrue(testTileB==null);
+        assertTrue(testTileB == null);
 
         assertFalse(copyQ == null);
         assertEquals('Q', copyQ.getCharacter());
         assertEquals(10, copyQ.getLetterPoints());
-        assertTrue(testTileQ==null);
+        assertTrue(testTileQ == null);
     }
 
    /*  @Test

@@ -21,7 +21,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class JsonWriterTest extends JsonTest{
+public class JsonWriterTest extends JsonTest {
     
     private ScrabbleGame game;
     private Board board;
@@ -111,7 +111,7 @@ public class JsonWriterTest extends JsonTest{
             Board newBoard = game.getBoard();
             List<LetterTile> letterToPlay = new ArrayList<>();
             letterToPlay.add(new LetterTile('A', 1));
-            assertFalse(newBoard.canPlay(letterToPlay, 7   , 7, Direction.DOWN));
+            assertFalse(newBoard.canPlay(letterToPlay, 7, 7, Direction.DOWN));
             LetterTile firstPlacedLetter = (LetterTile) newBoard.getTileAtPositionOnBoard(7,7);
             // Check board updated correctly
             assertEquals(firstPlacedLetter.getCharacter(), letter1Char);
@@ -129,33 +129,33 @@ public class JsonWriterTest extends JsonTest{
     @Test
     void testWriterTwoPlayersEachSwapped() {
         try {
-        Player player2 = new Player("John", board, tileBag, game);
-        game.addPlayer(player);
-        game.addPlayer(player2);
+            Player player2 = new Player("John", board, tileBag, game);
+            game.addPlayer(player);
+            game.addPlayer(player2);
 
-        tileBag.drawTiles(player);
-        tileBag.drawTiles(player2);
+            tileBag.drawTiles(player);
+            tileBag.drawTiles(player2);
 
-        // Deep copy of initial tiles
-        List<LetterTile> p1InitLetters = player.copySelectedTiles();
-        List<LetterTile> p2InitLetters = player2.copySelectedTiles();
+            // Deep copy of initial tiles
+            List<LetterTile> p1InitLetters = player.copySelectedTiles();
+            List<LetterTile> p2InitLetters = player2.copySelectedTiles();
 
-        // Select all tiles
-        for (int i = 0; i < 7; i++) {
-            player.selectTile(i);
-            player2.selectTile(i);
-        }
-        // Both swap all tiles
-        player.swapTiles();
-        player2.swapTiles();
-        
-        // Copy of final letters
-        List<LetterTile> p1FinalLetters = player.copyLetterTiles(player.getTilesOnRack());
-        List<LetterTile> p2FinalLetters = player2.copyLetterTiles(player2.getTilesOnRack());
+            // Select all tiles
+            for (int i = 0; i < 7; i++) {
+                player.selectTile(i);
+                player2.selectTile(i);
+            }
+            // Both swap all tiles
+            player.swapTiles();
+            player2.swapTiles();
+            
+            // Copy of final letters
+            List<LetterTile> p1FinalLetters = player.copyLetterTiles(player.getTilesOnRack());
+            List<LetterTile> p2FinalLetters = player2.copyLetterTiles(player2.getTilesOnRack());
 
-        player.logSwap(board, p1InitLetters, p1FinalLetters);
-        player2.logSwap(board, p2InitLetters, p2FinalLetters);
-        JsonWriter writer = new JsonWriter("./data/testWriterTwoPlayersEachSwapped.json");
+            player.logSwap(board, p1InitLetters, p1FinalLetters);
+            player2.logSwap(board, p2InitLetters, p2FinalLetters);
+            JsonWriter writer = new JsonWriter("./data/testWriterTwoPlayersEachSwapped.json");
             writer.open();
             writer.write(game);
             writer.close();
@@ -179,9 +179,9 @@ public class JsonWriterTest extends JsonTest{
             assertEquals(copyP1.getHistory().getMoves().get(0).getDirection(), player.getHistory().getMoves().get(0).getDirection());
             assertEquals(copyP1.getHistory().getMoves().get(0).getPointsForMove(), player.getHistory().getMoves().get(0).getPointsForMove());
             //assertEquals(copyP1.getHistory().getMoves().get(0).getLettersInvolved(), player.getHistory().getMoves().get(0).getLettersInvolved());
-    } catch (IOException e) {
-        fail("Exception should not have been thrown");
-    }
+        } catch (IOException e) {
+            fail("Exception should not have been thrown");
+        }
 
 
     }

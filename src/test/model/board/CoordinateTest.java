@@ -18,10 +18,10 @@ public class CoordinateTest {
 
     @Test
     public void testGetRow() {
-        c1= new Coordinate(0,1);
+        c1 = new Coordinate(0,1);
         assertEquals(c1.getRow(), 0);
 
-        c1= new Coordinate(10,3);
+        c1 = new Coordinate(10,3);
         assertEquals(c1.getRow(), 10);
 
         c2 = new Coordinate(4,2);
@@ -33,10 +33,10 @@ public class CoordinateTest {
 
     @Test
     public void testGetColumn() {
-        c1= new Coordinate(0,1);
+        c1 = new Coordinate(0,1);
         assertEquals(c1.getColumn(), 1);
 
-        c1= new Coordinate(10,3);
+        c1 = new Coordinate(10,3);
         assertEquals(c1.getColumn(), 3);
 
         c2 = new Coordinate(4,2);

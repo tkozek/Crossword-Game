@@ -100,9 +100,10 @@ public class ScrabbleGame implements Writable {
     public int getFirstPlayerIndex() {
         return firstPlayerIndex;
     }
+    
+    @Override
     // EFFECTS: Creates a JSONObject
     // from the ScrabbleGame state
-    @Override
     public JSONObject toJson() {
         JSONObject json = new JSONObject();
         json.put("GameName", this.getName());

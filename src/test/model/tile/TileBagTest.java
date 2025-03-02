@@ -21,13 +21,13 @@ public class TileBagTest {
 
     @BeforeEach
     void runBefore() {
-         testBag = new TileBag();
-         testBoard = new Board();
-         game = new ScrabbleGame("alphabet", testBoard, testBag);
-         testPlayer = new Player("tester", testBoard, testBag, game);
-         B = new LetterTile('B', 3);
-         B2 = new LetterTile('B', 3);
-         E = new LetterTile('E', 1);
+        testBag = new TileBag();
+        testBoard = new Board();
+        game = new ScrabbleGame("alphabet", testBoard, testBag);
+        testPlayer = new Player("tester", testBoard, testBag, game);
+        B = new LetterTile('B', 3);
+        B2 = new LetterTile('B', 3);
+        E = new LetterTile('E', 1);
     }
 
     @Test
@@ -75,6 +75,7 @@ public class TileBagTest {
         assertEquals(-1, testBag.drawTiles(testPlayer));
 
     }
+    
     @Test
     void testDrawTilesEmptyPile() {
         testBag.emptyDrawPile();

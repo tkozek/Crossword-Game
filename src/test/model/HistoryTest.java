@@ -53,6 +53,7 @@ public class HistoryTest {
         assertTrue(history.getMoves().isEmpty());
         assertTrue(history.getListOfWordsPlayedContainingLetter('A').isEmpty());
     }
+
     @Test
     void testAddMoveOneMove() {
         assertEquals(history.getName(), "Trevor");
@@ -62,6 +63,7 @@ public class HistoryTest {
         assertEquals(history.getMoves().get(0), moveToAdd);
 
     }
+
     @Test
     void testAddTwoMoves() {
         assertEquals(history.getName(), "Trevor");
@@ -85,6 +87,7 @@ public class HistoryTest {
         assertEquals(1, history.getListOfWordsPlayedContainingLetter('A').size());
         assertEquals(1, history.getListOfWordsPlayedContainingLetter('Z').size());
     }
+    
     @Test
     void testGetListOfMoveContainingLetterTwoMoves() {
         List<LetterTile> playedLetters = new ArrayList<>();

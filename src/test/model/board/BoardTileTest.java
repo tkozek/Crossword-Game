@@ -20,8 +20,8 @@ public class BoardTileTest {
     void runBefore() {
         doubleWordTile = new BoardTile(1,1,TileType.DOUBLE_WORD);
         tripleWordTile = new BoardTile(0,0,TileType.TRIPLE_WORD);
-        doubleLetterTile= new BoardTile(0,3,TileType.DOUBLE_LETTER);
-        tripleLetterTile= new BoardTile(5,1,TileType.TRIPLE_LETTER);
+        doubleLetterTile = new BoardTile(0,3,TileType.DOUBLE_LETTER);
+        tripleLetterTile = new BoardTile(5,1,TileType.TRIPLE_LETTER);
         regularTile = new BoardTile(0,1, TileType.NORMAL);
     }
 

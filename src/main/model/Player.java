@@ -241,6 +241,8 @@ public class Player implements Writable {
     }
 
     @Override
+    // EFFECTS: represents this player
+    // as a JSONObject
     public JSONObject toJson() {
         JSONObject json = new JSONObject();
         json.put("name", this.name);
@@ -249,6 +251,8 @@ public class Player implements Writable {
         return json;
     }
 
+    // EFFECTS: returns JSONArray representing
+    // tiles on this player's rack
     public JSONArray tileRackToJson() {
         JSONArray json = new JSONArray();
         for (LetterTile letter : tileRack) {

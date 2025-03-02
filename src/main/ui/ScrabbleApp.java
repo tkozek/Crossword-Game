@@ -85,7 +85,6 @@ public class ScrabbleApp {
         } catch (IOException e) {
             System.out.println("Unable to read game from file: " + JSON_STORE);
         }
-
     }
 
     // MODIFIES: players
@@ -337,7 +336,6 @@ public class ScrabbleApp {
             } else {
                 System.out.println("Invalid entry");
                 handleTurn(player);
-                
             }
         }
     }
@@ -531,7 +529,6 @@ public class ScrabbleApp {
         System.out.println(header);
         printoutSpacer();
     }
-
     
     // Play the game
     public static void main(String[] args) {
