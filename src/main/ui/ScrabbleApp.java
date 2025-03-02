@@ -145,7 +145,7 @@ public class ScrabbleApp {
         int index;
         while (gameRunning) {
             for (int i = 0; i < numPlayers; i++) {
-                index = (i + scrabbleGame.getFirstPlayer()) % numPlayers;
+                index = (i + scrabbleGame.getFirstPlayerIndex()) % numPlayers;
                 getBoardPrintOut(board);
                 Player playerToPlayNext = players.get(index);
                 tileBag.drawTiles(playerToPlayNext);
@@ -350,9 +350,8 @@ public class ScrabbleApp {
     // prints error message if instructions
     // were invalid
     public void handlePositionAndDirectionSelection(Player player) {
-        scanner.nextLine();
+        adjustScanner();
         System.out.println("Enter the row index you'd like to start your word at \n ");
-        scanner.nextLine();
         int row = scanner.nextInt();
         System.out.println("Enter the column index you'd like to start your word at");
         int col = scanner.nextInt();
@@ -363,6 +362,8 @@ public class ScrabbleApp {
             int score = board.playWord(player.getSelectedTiles(), row, col, dir);
             player.logWord(board, row, col, score, dir);
             player.removeSelectedTiles();
+            tileBag.drawTiles(player);
+            System.out.println("\nYour new tiles are:");
             getTilePrintOut(player);
             System.out.println(player.getPlayerName() + " earned " + score + " points!");
             player.addPoints(score);

@@ -129,7 +129,7 @@ public class ScrabbleGame implements Writable {
     // EFFECTS: sets first player index
     // to be the index of given player
     public void setFirstPlayer(Player player) {
-        
+        this.firstPlayerIndex = players.indexOf(player);
     }
 
     // REQUIRES: 0 <= firstPlayerIndex < getNumPlayers()
@@ -137,7 +137,7 @@ public class ScrabbleGame implements Writable {
     // EFFECTS: sets first player index using index
     // of players
     public void setFirstPlayerIndex(int firstPlayerIndex) {
-        
+        this.firstPlayerIndex = firstPlayerIndex;
     }
 
     // EFFECTS: returns players in this Scrabble Game 
