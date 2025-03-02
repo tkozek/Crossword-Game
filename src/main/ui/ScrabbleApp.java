@@ -142,10 +142,12 @@ public class ScrabbleApp {
     // and ensures player's draw new tiles
     // when they are supposed to
     public void handleGameplay() {
+        int index;
         while (gameRunning) {
             for (int i = 0; i < numPlayers; i++) {
+                index = (i + scrabbleGame.getFirstPlayer()) % numPlayers;
                 getBoardPrintOut(board);
-                Player playerToPlayNext = players.get(i);
+                Player playerToPlayNext = players.get(index);
                 tileBag.drawTiles(playerToPlayNext);
                 handleTurn(playerToPlayNext);
             }
@@ -160,13 +162,12 @@ public class ScrabbleApp {
         System.out.println("\n Here are your tiles: " + p.getPlayerName());
         getTilePrintOut(p);
         System.out.println("Type whether you'd like to (P)lay, (S)wap, S(k)ip, or (o)ther.");
-        switch (scanner.nextLine()) {
-            case "P":
+        switch (scanner.nextLine().toLowerCase()) {
             case "p":
                 handlePlay(p);
                 scanner.nextLine();
                 break;
-            case "S":
+            case "s":
                 handleSwap(p);
                 scanner.nextLine();
                 break;
@@ -195,7 +196,7 @@ public class ScrabbleApp {
                 break;
             case "A":
             case "a":
-                handleSave();
+                handleSave(p);
                 this.gameRunning = false;
                 System.exit(0);
             case "Q":
@@ -235,9 +236,11 @@ public class ScrabbleApp {
         handleTurn(p);
     }
 
+    // MODIFIES: scrabbleGame
     // EFFECTS: Saves game to file
-    private void handleSave() {
+    private void handleSave(Player player) {
         try {
+            scrabbleGame.setFirstPlayer(player);
             jsonWriter.open();
             jsonWriter.write(scrabbleGame);
             jsonWriter.close();
@@ -360,6 +363,7 @@ public class ScrabbleApp {
             int score = board.playWord(player.getSelectedTiles(), row, col, dir);
             player.logWord(board, row, col, score, dir);
             player.removeSelectedTiles();
+            getTilePrintOut(player);
             System.out.println(player.getPlayerName() + " earned " + score + " points!");
             player.addPoints(score);
             System.out.println(player.getPlayerName() + " now has " + player.getPointsThisGame() + " points \n");

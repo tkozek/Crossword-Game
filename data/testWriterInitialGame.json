@@ -257,5 +257,6 @@
     },
     "GameName": "Test",
     "History": [],
+    "FirstPlayer": 0,
     "Players": []
 }

@@ -17,6 +17,7 @@ public class ScrabbleGame implements Writable {
     private TileBag tileBag;
     private History history;
     private List<Player> players;
+    private int firstPlayerIndex;
 
     // Represents a Scrabble game and its assets,
     // including the current board, tile bag, 
@@ -27,6 +28,7 @@ public class ScrabbleGame implements Writable {
         this.tileBag = tileBag;
         this.history = new History(name);
         this.players = new ArrayList<>();
+        this.firstPlayerIndex = 0;
     }
 
     // EFFECTS: Names this game
@@ -92,12 +94,19 @@ public class ScrabbleGame implements Writable {
         return this.players;
     }
 
+    // EFFECTS: returns index of 
+    // first player to play once
+    // turn-taking begins
+    public int getFirstPlayerIndex() {
+        return firstPlayerIndex;
+    }
     // EFFECTS: Creates a JSONObject
     // from the ScrabbleGame state
     @Override
     public JSONObject toJson() {
         JSONObject json = new JSONObject();
         json.put("GameName", this.getName());
+        json.put("FirstPlayer", this.firstPlayerIndex);
         json.put("Board", this.board.toJson());
         json.put("TileBag", this.tileBag.toJson());
         json.put("Players", playersToJson());
@@ -113,6 +122,22 @@ public class ScrabbleGame implements Writable {
             jsonArray.put(player.toJson());
         }
         return jsonArray;
+    }
+
+    // REQUIRES: this.getPlayers() contains player
+    // MODIFIES: this
+    // EFFECTS: sets first player index
+    // to be the index of given player
+    public void setFirstPlayer(Player player) {
+        
+    }
+
+    // REQUIRES: 0 <= firstPlayerIndex < getNumPlayers()
+    // MODIFIES: this
+    // EFFECTS: sets first player index using index
+    // of players
+    public void setFirstPlayerIndex(int firstPlayerIndex) {
+        
     }
 
     // EFFECTS: returns players in this Scrabble Game 

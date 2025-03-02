@@ -18,6 +18,7 @@ public class ScrabbleGameTest {
     private Board board;
     private TileBag tileBag;
     private Player player;
+    private Player player2;
 
 
     @BeforeEach
@@ -26,6 +27,7 @@ public class ScrabbleGameTest {
         tileBag = new TileBag();
         game = new ScrabbleGame("test", board, tileBag);
         player = new Player("playerTest", board, tileBag, game);
+        player2 = new Player("P", board, tileBag, game);
     }
 
     @Test
@@ -73,5 +75,16 @@ public class ScrabbleGameTest {
         assertEquals(game.getPlayerByName("playerTest"), player);
         assertEquals(game.getPlayerByName("otherPlayer"), player2);
         assertEquals(game.getPlayerByName("NoPlayerwithThisName"), null);
+    }
+
+    @Test
+    void testFirstPlayer() {
+        assertEquals(0, game.getFirstPlayerIndex());
+        game.addPlayer(player);
+        game.addPlayer(player2);
+        game.setFirstPlayerIndex(1);
+        assertEquals(1, game.getFirstPlayerIndex());
+        game.setFirstPlayer(player);
+        assertEquals(0, game.getFirstPlayerIndex());
     }
 }

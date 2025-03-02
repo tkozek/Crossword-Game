@@ -1,5 +1,6 @@
 {
     "GameName": "Initial Game",
+    "FirstPlayer": 0,
     "Board": [
         "TWS", " ", " ", "DLS", " ", " ", " ", "TWS", " ", " ", " ", "DLS", " ", " ", "TWS",
         " ", "DWS", "X", " ", " ", "TLS", " ", " ", " ", "TLS", " ", " ", " ", "DWS", " ",
