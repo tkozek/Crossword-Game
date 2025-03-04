@@ -171,9 +171,9 @@ public class Board {
         return true;
     }
 
-    // REQUIRES: inBounds(letters,startRow,startCol, direction) is true
-    // EFFECTS: returns true if and only if 
-    // all tiles in the desired section are BoardTiles
+    // EFFECTS: returns true if and only if all letters can be placed without going
+    // out of bounds, skips over spaces where a letter is already played
+    // returns false if startRow,startCol is out of bounds.
     public boolean sectionIsAvailable(List<LetterTile> letters, int startRow, int startCol, Direction dir) {
         int length = letters.size();
         if (dir == Direction.RIGHT) {
