@@ -20,6 +20,8 @@ import model.tile.LetterTile;
 import model.tile.TileBag;
 import model.Direction;
 
+// Represents a reader for JSON files containing
+// data to represent a game of Scrabble
 public class JsonReader {
 
     private String source;
