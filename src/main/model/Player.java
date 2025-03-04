@@ -38,7 +38,7 @@ public class Player implements Writable {
         this.board = board;
         this.tileBag = tileBag;
         this.scrabbleGame = scrabbleGame;
-        this.history = new History(this.name);
+        this.history = new History();
         this.tileRack = new ArrayList<>();
         this.selectedTiles = new ArrayList<>();
         this.points = 0;

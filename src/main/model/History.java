@@ -10,19 +10,14 @@ import model.move.MoveType;
 // a list of their moves across their games
 public class History {
 
-    private String name;
     private List<Move> moveHistory;
 
     // Makes a new history with no moves,
     // and its associated player's name
-    public History(String name) {
-        this.name = name;
+    public History() {
         this.moveHistory = new ArrayList<>();
     }
 
-    public String getName() {
-        return this.name;
-    }
     
     public List<Move> getMoves() {
         return this.moveHistory;

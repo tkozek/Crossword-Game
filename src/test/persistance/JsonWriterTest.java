@@ -120,7 +120,6 @@ public class JsonWriterTest extends JsonTest {
             assertEquals(newGameHistory.getMoves().size(), 1);
             Move firstMove = newGameHistory.getMoves().get(0);
             assertEquals(firstMove.getMoveType(), MoveType.PLAY_WORD);
-            assertEquals(newGameHistory.getName(), "Test");
         } catch (IOException e) {
             fail("Exception should not have been thrown");
         }

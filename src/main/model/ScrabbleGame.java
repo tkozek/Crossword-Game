@@ -26,7 +26,7 @@ public class ScrabbleGame implements Writable {
         this.name = name;
         this.board = board;
         this.tileBag = tileBag;
-        this.history = new History(name);
+        this.history = new History();
         this.players = new ArrayList<>();
         this.firstPlayerIndex = 0;
     }

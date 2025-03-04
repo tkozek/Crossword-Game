@@ -41,7 +41,7 @@ public class HistoryTest {
         B = new LetterTile('B',3);
         A = new LetterTile('A',1);
         Z = new LetterTile('Z',10);
-        history = new History("Trevor");
+        history = new History();
         moveToAdd = new Move(testPlayer, p1Letters, 1,8, 10, Direction.DOWN);
         otherMoveToAdd = new Move(testPlayer2);
 
@@ -49,14 +49,12 @@ public class HistoryTest {
 
     @Test
     void testConstructor() {
-        assertEquals(history.getName(), "Trevor");
         assertTrue(history.getMoves().isEmpty());
         assertTrue(history.getListOfWordsPlayedContainingLetter('A').isEmpty());
     }
 
     @Test
     void testAddMoveOneMove() {
-        assertEquals(history.getName(), "Trevor");
         assertTrue(history.getMoves().isEmpty());
         history.addMove(moveToAdd);
         assertEquals(history.getMoves().size(), 1);
@@ -66,7 +64,6 @@ public class HistoryTest {
 
     @Test
     void testAddTwoMoves() {
-        assertEquals(history.getName(), "Trevor");
         assertTrue(history.getMoves().isEmpty());
         history.addMove(otherMoveToAdd);
         history.addMove(moveToAdd);
