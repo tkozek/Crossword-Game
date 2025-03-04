@@ -180,27 +180,76 @@ public class BoardTest {
         assertEquals(letters.size(),7);
         board.playWord(letters, 0,0,Direction.DOWN);
         assertFalse(board.sectionIsAvailable(letters, 0,0, Direction.DOWN));
+        //(startRow,startCol) taken for both sets of arguments
         assertFalse(board.sectionIsAvailable(letters, 0,0, Direction.RIGHT));
 
     }
 
     @Test
-    void testSectionNotStaggered() {
+    void testSectionAvailableSkipOverOneAndMultipleLetters() {
         assertEquals(letters.size(),7);
         board.playWord(letters, 4,4,Direction.DOWN);
-        assertFalse(board.sectionIsAvailable(letters, 4,0, Direction.RIGHT));
-        assertFalse(board.sectionIsAvailable(letters, 0,4, Direction.DOWN));
+        assertTrue(board.sectionIsAvailable(letters, 4,0, Direction.RIGHT));
+        // Letters already placed from (4,4) to (10,4), should place from (0,4) to (3,4) and (11,4) to (13,4)
+        assertTrue(board.sectionIsAvailable(letters, 0,4, Direction.DOWN));
 
     }
 
     @Test
-    void testSectionAvailableBarelyOverlap() {
+    void testSectionAvailableVariousCases() {
         assertEquals(letters.size(),7);
         board.playWord(letters, 7,7,Direction.DOWN);
-        assertFalse(board.sectionIsAvailable(letters, 7,1, Direction.RIGHT));
-        assertFalse(board.sectionIsAvailable(letters, 1,7, Direction.DOWN));
+        // can place from (7,1) to (7,6), and at (7,8)
+        assertTrue(board.sectionIsAvailable(letters, 7,1, Direction.RIGHT));
+        // can place from (1,7) to (6,7) and at (15,7)
+        assertTrue(board.sectionIsAvailable(letters, 1,7, Direction.DOWN));
+        // can place from (2,7) to (6,7) then there is no more space in the column before going OOB, 2 letters unplaced
+        assertFalse(board.sectionIsAvailable(letters, 2,7, Direction.DOWN));
+        // Doesn't overlap with anything or skip over anything
         assertTrue(board.sectionIsAvailable(letters, 7,0, Direction.RIGHT));
+        // Doesn't overlap with anything or skip over anything
         assertTrue(board.sectionIsAvailable(letters, 0,7, Direction.DOWN));
+    }
+
+    @Test
+    void testSectionAvailableSkipMultipleSectionsTrue() {
+        assertEquals(letters.size(),7);
+        board.playWord(letters, 6,6,Direction.DOWN);
+
+        board.playWord(letters, 6,8,Direction.DOWN);
+
+        board.playWord(letters, 6,11,Direction.DOWN);
+        // Exactly enough space to fit after jumping over the 3 existing letters
+        assertTrue(board.sectionIsAvailable(letters, 6, 5, Direction.RIGHT));
+        // One extra space than needed
+        assertTrue(board.sectionIsAvailable(letters, 6, 4, Direction.RIGHT));
+        // Not enough space
+        assertTrue(board.sectionIsAvailable(letters, 6, 7, Direction.RIGHT));
+        // Letters already placed from (4,4) to (10,4), should place from (0,4) to (3,4) and (11,4) to (13,4)
+        assertTrue(board.sectionIsAvailable(letters, 0,4, Direction.DOWN));
+    }
+
+    @Test
+    void testSectionIsAvailableSkipOneGroupOfTwoTiles() {
+        assertEquals(letters.size(),7);
+        board.playWord(letters, 8,6,Direction.RIGHT);
+
+        board.playWord(letters, 9,6,Direction.RIGHT);
+
+        // One too few spaces
+        assertFalse(board.sectionIsAvailable(letters, 7,7, Direction.DOWN));
+        assertFalse(board.sectionIsAvailable(letters, 7,9, Direction.DOWN));
+
+        //doesnt intersect placed letters
+        assertTrue(board.sectionIsAvailable(letters, 7,5, Direction.DOWN));
+        assertTrue(board.sectionIsAvailable(letters, 8,5, Direction.DOWN));
+
+        // exactly enough spaces
+        assertTrue(board.sectionIsAvailable(letters, 6,6, Direction.DOWN));
+        assertTrue(board.sectionIsAvailable(letters, 6,10, Direction.DOWN));
+        // one extra space
+        assertTrue(board.sectionIsAvailable(letters, 5,6, Direction.DOWN));
+        assertTrue(board.sectionIsAvailable(letters, 5,10, Direction.DOWN));
     }
 
     @Test 
