@@ -118,9 +118,7 @@ public class Move implements Writable {
             result += letter.getString();
         }
         return result;
-    }
-    
-    
+    }   
 
     @Override
     // EFFECTS: returns JSONObject representing

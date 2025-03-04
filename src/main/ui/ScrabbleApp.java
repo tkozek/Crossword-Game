@@ -43,12 +43,10 @@ public class ScrabbleApp {
         jsonReader = new JsonReader(JSON_STORE);
         tileBag = new TileBag();
         System.out.println("(L)oad your old game or (p)lay a new one?");
-        switch (scanner.nextLine()) {
-            case "P":
+        switch (scanner.nextLine().toLowerCase()) {
             case "p":
                 initializeNewGame();
                 break;
-            case "L":
             case "l":
                 loadOldGame();
                 break;
@@ -188,17 +186,14 @@ public class ScrabbleApp {
     public void handleNonPlayOptions(Player p) {
         System.out.println("\nType whether you'd like to (v)iew something, s(a)ve and quit, "
                 + "or (q)uit without saving");
-        switch (scanner.nextLine()) {
-            case "V":
+        switch (scanner.nextLine().toLowerCase()) {
             case "v":
                 handleViewings(p);
                 break;
-            case "A":
             case "a":
                 handleSave(p);
                 this.gameRunning = false;
                 System.exit(0);
-            case "Q":
             case "q":
             // !!! Consider adding confirmation
                 this.gameRunning = false;
@@ -212,22 +207,18 @@ public class ScrabbleApp {
     // would like to view about the game,
     // displays that.
     public void handleViewings(Player p) {
-        System.out.println("\n Type whether you'd like to view current (b)oard, (W)ords played, all (m)oves,"
+        System.out.println("\n Type whether you'd like to view current (b)oard, (w)ords played, all (m)oves,"
                 + " (r)emaining tile counts, or anything else to cancel");
-        switch (scanner.nextLine()) {
-            case "B":
+        switch (scanner.nextLine().toLowerCase()) {
             case "b":
                 getBoardPrintOut(board);
                 break;
-            case "W":
             case "w":
                 printWordsPlayed(p);
                 break;
-            case "M":
             case "m":
                 printAllMovesSummary(p);
                 break;
-            case "R":
             case "r":
                 getRemainingCharacterCounts(p);
                 break;
@@ -355,7 +346,7 @@ public class ScrabbleApp {
         int col = scanner.nextInt();
         scanner.nextLine();
         System.out.println("Now enter direction (R)ight or (D)own (default)");
-        Direction dir = (scanner.nextLine().equals("R")) ? Direction.RIGHT : Direction.DOWN;
+        Direction dir = (scanner.nextLine().toLowerCase().equals("R")) ? Direction.RIGHT : Direction.DOWN;
         if (board.canPlay(player.getSelectedTiles(), row, col, dir)) {
             int score = board.playWord(player.getSelectedTiles(), row, col, dir);
             player.logWord(row, col, score, dir);

@@ -112,13 +112,13 @@
         " ",
         " ",
         " ",
-        "E",
-        "A",
-        "R",
-        "I",
-        "U",
-        "O",
-        "V",
+        "DWS",
+        " ",
+        " ",
+        " ",
+        "DLS",
+        " ",
+        " ",
         "TWS",
         " ",
         " ",
@@ -228,29 +228,29 @@
     ],
     "TileBag": {
         "A": 8,
-        "B": 2,
+        "B": 1,
         "C": 2,
         "D": 4,
         "E": 11,
-        "F": 2,
-        "G": 1,
+        "F": 1,
+        "G": 3,
         "H": 2,
-        "I": 7,
+        "I": 9,
         "K": 1,
         "L": 4,
         "M": 2,
         "N": 6,
-        "O": 7,
+        "O": 8,
         "P": 2,
         "Q": 1,
-        "R": 5,
+        "R": 6,
         "S": 3,
-        "T": 5,
+        "T": 6,
         "U": 3,
-        "V": 1,
+        "V": 2,
         "W": 2,
         "X": 1,
-        "Y": 1,
+        "Y": 2,
         "Z": 1,
         "-": 2
     },
@@ -258,8 +258,8 @@
     "History": [
         {
             "PlayerName": "Trevor",
-            "AfterSwapLetters": "EARIUOV",
-            "InitialLetters": "ISNAGEA",
+            "AfterSwapLetters": "ENYVAYE",
+            "InitialLetters": "NIIHDRI",
             "MoveType": "SWAP_TILES"
         },
         {
@@ -268,29 +268,8 @@
         },
         {
             "PlayerName": "Trevor",
-            "MoveType": "SKIP"
-        },
-        {
-            "Col": 7,
-            "Points": 22,
-            "PlayerName": "Trevor",
-            "MoveType": "PLAY_WORD",
-            "LettersPlayed": "EARIUOV",
-            "Row": 7,
-            "Direction": "R"
-        },
-        {
-            "PlayerName": "Trevor",
-            "MoveType": "SKIP"
-        },
-        {
-            "PlayerName": "Trevor",
-            "MoveType": "SKIP"
-        },
-        {
-            "PlayerName": "Trevor",
-            "AfterSwapLetters": "JTIGYSG",
-            "InitialLetters": "AOUBLYG",
+            "AfterSwapLetters": "AEFUJSB",
+            "InitialLetters": "ENYVAYE",
             "MoveType": "SWAP_TILES"
         },
         {
@@ -300,16 +279,16 @@
     ],
     "FirstPlayer": 0,
     "Players": [{
-        "score": 22,
+        "score": 0,
         "name": "Trevor",
         "tileRack": [
+            {"A": 1},
+            {"E": 1},
+            {"F": 4},
+            {"U": 1},
             {"J": 8},
-            {"T": 1},
-            {"I": 1},
-            {"G": 2},
-            {"Y": 4},
             {"S": 1},
-            {"G": 2}
+            {"B": 3}
         ]
     }]
 }
