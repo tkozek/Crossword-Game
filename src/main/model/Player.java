@@ -90,7 +90,6 @@ public class Player implements Writable {
     // MODIFIES: this
     // EFFECTS: Adds a new word played to player's move history
     public void logWord(int startRow, int startCol, int pointsEarned, Direction dir) {
-        //Player, Board, List<LetterTile> , Start Row, Start Col, Points Earned
         List<LetterTile> letters = this.getSelectedTiles();
         List<LetterTile> copy = copyLetterTiles(letters);
         Move move = new Move(this, copy, startRow, startCol, pointsEarned, dir);

@@ -2,6 +2,7 @@ package model;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -150,5 +151,19 @@ public class ScrabbleGame implements Writable {
         }
         return jsonArray;
     }
-    
+
+    // EFFECTS: Adds up total occurences of every character on board,
+    // and on this player's rack. Combines those and subtracts from
+    // initial counts in draw pile to get remaining number of each
+    // letter between the draw pile and opponents' racks
+    public Map<Character, Integer> getNumEachCharInBagAndOpponents(Player player) {
+        Map<Character, Integer> tileBagCounts = tileBag.getInitialLetterFrequencies();
+        Map<Character, Integer> playerCharCounts = player.getNumEachCharOnMyRack();
+        Map<Character, Integer> boardCounts = board.getNumEachCharOnBoard();
+        for (Character key : tileBagCounts.keySet()) {
+            int valueToSubtract = playerCharCounts.getOrDefault(key,0) + boardCounts.getOrDefault(key,0);
+            tileBagCounts.put(key, tileBagCounts.get(key) - valueToSubtract);
+        }
+        return tileBagCounts;
+    }
 }

@@ -455,7 +455,7 @@ public class ScrabbleApp {
     public void getRemainingCharacterCounts(Player p) {
         printoutSpacer();
         System.out.println("The remaining tile counts in the format 'Letter : Count' are:");
-        Map<Character, Integer> remainingCounts = p.getNumEachCharInBagAndOpponents();
+        Map<Character, Integer> remainingCounts = scrabbleGame.getNumEachCharInBagAndOpponents(p);
         for (Map.Entry<Character, Integer> entry : remainingCounts.entrySet()) {
             System.out.println(entry.getKey() + " : " + entry.getValue());
         }

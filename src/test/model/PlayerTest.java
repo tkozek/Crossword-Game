@@ -179,20 +179,7 @@ public class PlayerTest {
 
     }
 
-    @Test 
-    void testGetNumEachCharInBagAndOpponentsNoLettersOnRackOrBoard() {
-        //List<LetterTile> letters = new ArrayList<>();
-        Map<Character, Integer> counts = testPlayer.getNumEachCharInBagAndOpponents();
-        Map<Character, Integer> drawPileCounts = testBag.getInitialLetterFrequencies();
-        
-        // Both should have all keys
-        assertEquals(counts.keySet().size(), drawPileCounts.keySet().size());
-        
-        //.equals for Map should compare that all keys and values are the same
-        // in each map by default. which is the expected behaviour for this test
-        assertTrue(counts.equals(drawPileCounts));
-        
-    }
+    
 
     @Test
     void testGetNumEachCharOnMyRackEmptyRack() {

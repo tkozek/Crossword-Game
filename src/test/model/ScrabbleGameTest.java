@@ -11,6 +11,7 @@ import model.tile.TileBag;
 
 
 import java.util.List;
+import java.util.Map;
 
 public class ScrabbleGameTest {
 
@@ -86,5 +87,20 @@ public class ScrabbleGameTest {
         assertEquals(1, game.getFirstPlayerIndex());
         game.setFirstPlayer(player);
         assertEquals(0, game.getFirstPlayerIndex());
+    }
+
+    @Test 
+    void testGetNumEachCharInBagAndOpponentsNoLettersOnRackOrBoard() {
+        //List<LetterTile> letters = new ArrayList<>();
+        Map<Character, Integer> counts = game.getNumEachCharInBagAndOpponents(player);
+        Map<Character, Integer> drawPileCounts = tileBag.getInitialLetterFrequencies();
+        
+        // Both should have all keys
+        assertEquals(counts.keySet().size(), drawPileCounts.keySet().size());
+        
+        //.equals for Map should compare that all keys and values are the same
+        // in each map by default. which is the expected behaviour for this test
+        assertTrue(counts.equals(drawPileCounts));
+        
     }
 }

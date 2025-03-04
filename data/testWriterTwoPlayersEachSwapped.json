@@ -227,44 +227,46 @@
         "TWS"
     ],
     "TileBag": {
-        "A": 6,
+        "A": 8,
         "B": 2,
         "C": 2,
-        "D": 4,
-        "E": 11,
+        "D": 2,
+        "E": 8,
         "F": 2,
         "G": 3,
-        "H": 1,
-        "I": 9,
+        "H": 2,
+        "I": 6,
+        "J": 1,
         "K": 1,
-        "L": 3,
+        "L": 4,
         "M": 2,
-        "N": 6,
+        "N": 5,
         "O": 7,
         "P": 2,
         "Q": 1,
         "R": 5,
         "S": 4,
-        "T": 5,
+        "T": 6,
         "U": 4,
         "V": 1,
         "W": 2,
-        "Y": 1,
+        "X": 1,
+        "Y": 2,
         "Z": 1,
-        "-": 1
+        "-": 2
     },
     "GameName": "Test",
     "History": [
         {
             "PlayerName": "Tester",
             "AfterSwapLetters": "",
-            "InitialLetters": "AYOAERA",
+            "InitialLetters": "EVIDEAE",
             "MoveType": "SWAP_TILES"
         },
         {
             "PlayerName": "John",
             "AfterSwapLetters": "",
-            "InitialLetters": "H-TXLVJ",
+            "InitialLetters": "RNEIIDO",
             "MoveType": "SWAP_TILES"
         }
     ],
@@ -274,26 +276,26 @@
             "score": 0,
             "name": "Tester",
             "tileRack": [
-                {"A": 1},
-                {"Y": 4},
-                {"O": 1},
-                {"A": 1},
                 {"E": 1},
-                {"R": 1},
-                {"A": 1}
+                {"V": 4},
+                {"I": 1},
+                {"D": 2},
+                {"E": 1},
+                {"A": 1},
+                {"E": 1}
             ]
         },
         {
             "score": 0,
             "name": "John",
             "tileRack": [
-                {"H": 4},
-                {"-": 0},
-                {"T": 1},
-                {"X": 8},
-                {"L": 1},
-                {"V": 4},
-                {"J": 8}
+                {"R": 1},
+                {"N": 1},
+                {"E": 1},
+                {"I": 1},
+                {"I": 1},
+                {"D": 2},
+                {"O": 1}
             ]
         }
     ]
