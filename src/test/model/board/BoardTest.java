@@ -32,7 +32,7 @@ public class BoardTest {
         testBag = new TileBag();
         board =  new Board();
         game = new ScrabbleGame("alphabet", board, testBag);
-        testPlayer = new Player("Trevor", testBag, game);
+        testPlayer = new Player("Trevor", game);
         testBag.drawTiles(testPlayer);
         letters = testPlayer.getTilesOnRack();
         B = new LetterTile('B',3);

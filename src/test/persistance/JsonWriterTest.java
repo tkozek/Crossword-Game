@@ -33,7 +33,7 @@ public class JsonWriterTest extends JsonTest {
         board = new Board();
         tileBag = new TileBag();
         game = new ScrabbleGame("Test", board, tileBag);
-        player = new Player("Tester", tileBag, game);
+        player = new Player("Tester", game);
     }
 
     @Test
@@ -128,7 +128,7 @@ public class JsonWriterTest extends JsonTest {
     @Test
     void testWriterTwoPlayersEachSwapped() {
         try {
-            Player player2 = new Player("John", tileBag, game);
+            Player player2 = new Player("John", game);
             game.addPlayer(player);
             game.addPlayer(player2);
 
@@ -145,8 +145,8 @@ public class JsonWriterTest extends JsonTest {
                 player2.selectTile(i);
             }
             // Both swap all tiles
-            player.swapTiles();
-            player2.swapTiles();
+            game.swapTiles(player);
+            game.swapTiles(player2);
             
             // Copy of final letters
             List<LetterTile> p1FinalLetters = player.copyLetterTiles(player.getTilesOnRack());
@@ -188,7 +188,7 @@ public class JsonWriterTest extends JsonTest {
     @Test
     void testWriteMoveComprehensive() {
         try {
-            Player player2 = new Player("John", tileBag, game);
+            Player player2 = new Player("John", game);
             game.addPlayer(player);
             game.addPlayer(player2);
     
@@ -203,8 +203,8 @@ public class JsonWriterTest extends JsonTest {
             List<LetterTile> p1InitLetters = player.copySelectedTiles();
             List<LetterTile> p2InitLetters = player2.copySelectedTiles();
 
-            player.swapTiles();
-            player2.swapTiles();
+            game.swapTiles(player);
+            game.swapTiles(player2);
             for (int i = 0; i < 7; i++) {
                 player.selectTile(i);
                 player2.selectTile(i);

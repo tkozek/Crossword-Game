@@ -12,7 +12,6 @@ import org.json.JSONObject;
 
 import model.move.Move;
 import model.tile.LetterTile;
-import model.tile.TileBag;
 import persistance.Writable;
 
 // Represents a player in the Scrabble Game
@@ -25,15 +24,13 @@ public class Player implements Writable {
     private List<LetterTile> tileRack;
     private ScrabbleGame scrabbleGame;
     private List<LetterTile> selectedTiles;
-    private TileBag tileBag;
     private int points;
     
 // Initializes a player with given name, zero points, no history of moves,
 //   an empty tile rack, no selected tiles, zero remaining tiles, the game they will play in.
 //      Their next turn will be their first.
-    public Player(String name, TileBag tileBag, ScrabbleGame scrabbleGame) {
+    public Player(String name, ScrabbleGame scrabbleGame) {
         this.name = name;
-        this.tileBag = tileBag;
         this.scrabbleGame = scrabbleGame;
         this.history = new History();
         this.tileRack = new ArrayList<>();
@@ -66,15 +63,6 @@ public class Player implements Writable {
         return this.points;
     }
 
-////
-    //REQUIRES: 
-    //MODIFIES: this, tileBag
-    //EFFECTS: Draws tiles from player's tile bag 
-    //         until getNumTilesOnRack() == MAX_NUM_TILES
-  //  public void drawTiles() {
-  //      tileBag.drawTiles(this);
- //   }
-////
 
     // REQUIRES: getNumTilesOnRack() < MAX_NUM_TILES
     // MODIFIES: this
@@ -155,30 +143,11 @@ public class Player implements Writable {
         this.selectedTiles.clear();
         return true;
     }
-
     
     //EFFECTS: returns chars corresponding to letters 
     //      on the player's tile rack
     public List<LetterTile> getTilesOnRack() {
         return this.tileRack;
-    }
-
-    //REQUIRES: getSelectedTiles.size() <= tileBag.size()
-    //MODIFIES: this, tileBag
-    //EFFECTS: Adds specified tiles back to common draw bag, then replaces
-    //          same number of tiles with random tiles from draw bag.
-    public void swapTiles() {
-        List<LetterTile> original = this.getSelectedTiles();
-        List<LetterTile> copy = new ArrayList<>();
-        for (LetterTile letter : original) {
-            copy.add(letter);
-        }
-        this.tileBag.addTiles(copy);
-        this.clearSelectedTiles();
-        for (LetterTile letter : copy) {
-            this.tileRack.remove(letter);
-        }
-        this.tileBag.drawTiles(this);
     }
 
     //EFFECTS: returns Chacters 'A' to 'Z' and '_'

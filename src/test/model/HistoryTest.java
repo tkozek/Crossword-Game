@@ -34,8 +34,8 @@ public class HistoryTest {
         testBag = new TileBag();
         board =  new Board();
         game = new ScrabbleGame("alphabet", board, testBag);
-        testPlayer = new Player("Trevor", testBag, game);
-        testPlayer2 = new Player("Rovert", testBag, game);
+        testPlayer = new Player("Trevor", game);
+        testPlayer2 = new Player("Rovert", game);
         p1Letters = testPlayer.getTilesOnRack();
         B = new LetterTile('B',3);
         A = new LetterTile('A',1);

@@ -33,8 +33,8 @@ public class MoveTest {
         testBag = new TileBag();
         board =  new Board();
         game = new ScrabbleGame("alphabet", board, testBag);
-        testPlayer = new Player("Trevor",testBag, game);
-        testPlayer2 = new Player("Rovert",testBag, game);
+        testPlayer = new Player("Trevor", game);
+        testPlayer2 = new Player("Rovert", game);
         testBag.drawTiles(testPlayer);
         testBag.drawTiles(testPlayer2);
         p1Letters = testPlayer.getTilesOnRack();

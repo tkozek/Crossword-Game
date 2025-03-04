@@ -124,7 +124,7 @@ public class ScrabbleApp {
                     + inputPlayerName + ". Press (Y) to confirm or (N) to cancel and re-enter");
             String confirmName = scanner.nextLine();
             if (confirmName.equals("Y")) {
-                player = new Player(inputPlayerName, tileBag, scrabbleGame);
+                player = new Player(inputPlayerName, scrabbleGame);
                 players.add(player);
                 scrabbleGame.addPlayer(player);
             } else if (confirmName.equals("N")) {
@@ -386,7 +386,7 @@ public class ScrabbleApp {
                 printSelectedTiles(player);
             } else if (scanner.hasNext("C")) {
                 List<LetterTile> preSwapLetters = player.copyLetterTiles(player.getTilesOnRack());
-                player.swapTiles();
+                scrabbleGame.swapTiles(player);
                 List<LetterTile> postSwapLetters = player.copyLetterTiles(player.getTilesOnRack());
                 player.logSwap(preSwapLetters, postSwapLetters);
                 System.out.println("\n Your new tiles are: ");

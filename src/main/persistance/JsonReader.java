@@ -111,7 +111,7 @@ public class JsonReader {
     private void addPlayer(ScrabbleGame game, JSONObject nextPlayer) {
         String name = nextPlayer.getString("name");
         int score = nextPlayer.getInt("score");
-        Player player = new Player(name, game.getTileBag(), game);
+        Player player = new Player(name, game);
         player.setPoints(score);
         addTilesFromSavedRack(player, nextPlayer);
         game.addPlayer(player);

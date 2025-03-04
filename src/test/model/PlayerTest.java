@@ -27,7 +27,7 @@ public class PlayerTest {
         testBag = new TileBag();
         testBoard =  new Board();
         game = new ScrabbleGame("n", board, testBag);
-        testPlayer = new Player("Trevor", testBag, game);
+        testPlayer = new Player("Trevor", game);
     }
 
     @Test
@@ -112,7 +112,7 @@ public class PlayerTest {
         List<LetterTile> selectedLetters = testPlayer.getSelectedTiles();
         int numTilesToSwap  = selectedLetters.size();
         assertEquals(numTilesToSwap,0);
-        testPlayer.swapTiles();
+        game.swapTiles(testPlayer);
 
         List<LetterTile> postSwapLetters = testPlayer.getTilesOnRack();
         
@@ -126,13 +126,13 @@ public class PlayerTest {
         testBag.drawTiles(testPlayer);
         testPlayer.selectTile(0);
         testPlayer.selectTile(5);
-        testPlayer.swapTiles();
+        game.swapTiles(testPlayer);
     }
 
 
     @Test
     void testGetNumCharOnRackZeroChars() {
-        Player playerTest = new Player("name", testBag, game);
+        Player playerTest = new Player("name", game);
         Map<Character,Integer> counts = playerTest.getNumEachCharOnMyRack();
         assertTrue(counts.values().isEmpty());
     

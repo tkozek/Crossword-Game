@@ -9,6 +9,7 @@ import org.json.JSONObject;
 
 import model.board.Board;
 import model.move.Move;
+import model.tile.LetterTile;
 import model.tile.TileBag;
 import persistance.Writable;
 
@@ -165,5 +166,23 @@ public class ScrabbleGame implements Writable {
             tileBagCounts.put(key, tileBagCounts.get(key) - valueToSubtract);
         }
         return tileBagCounts;
+    }
+
+    //REQUIRES: getSelectedTiles.size() <= tileBag.size()
+    //MODIFIES: this, tileBag
+    //EFFECTS: Adds specified tiles back to common draw bag, then replaces
+    //          same number of tiles with random tiles from draw bag.
+    public void swapTiles(Player player) {
+        List<LetterTile> original = player.getSelectedTiles();
+        List<LetterTile> copy = new ArrayList<>();
+        for (LetterTile letter : original) {
+            copy.add(letter);
+        }
+        this.tileBag.addTiles(copy);
+        player.clearSelectedTiles();
+        for (LetterTile letter : copy) {
+            player.getTilesOnRack().remove(letter);
+        }
+        this.tileBag.drawTiles(player);
     }
 }
