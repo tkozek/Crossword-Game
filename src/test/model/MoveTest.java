@@ -21,7 +21,6 @@ public class MoveTest {
     private Player testPlayer2;
     private List<LetterTile> p1Letters;
     private List<LetterTile> p2Letters;
-    private Board testBoard;
     private Move playWord;
     private Move swap;
     //private Move endGameWinner;
@@ -34,8 +33,8 @@ public class MoveTest {
         testBag = new TileBag();
         board =  new Board();
         game = new ScrabbleGame("alphabet", board, testBag);
-        testPlayer = new Player("Trevor", testBoard,testBag, game);
-        testPlayer2 = new Player("Rovert", testBoard,testBag, game);
+        testPlayer = new Player("Trevor",testBag, game);
+        testPlayer2 = new Player("Rovert",testBag, game);
         testBag.drawTiles(testPlayer);
         testBag.drawTiles(testPlayer2);
         p1Letters = testPlayer.getTilesOnRack();

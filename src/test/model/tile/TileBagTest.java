@@ -24,7 +24,7 @@ public class TileBagTest {
         testBag = new TileBag();
         testBoard = new Board();
         game = new ScrabbleGame("alphabet", testBoard, testBag);
-        testPlayer = new Player("tester", testBoard, testBag, game);
+        testPlayer = new Player("tester", testBag, game);
         B = new LetterTile('B', 3);
         B2 = new LetterTile('B', 3);
         E = new LetterTile('E', 1);

@@ -21,7 +21,6 @@ public class BoardTest {
     private Board board;
     private TileBag testBag;
     private Player testPlayer;
-    private Board testBoard;
     private List<LetterTile>  letters;
     private LetterTile B;
     private LetterTile A;
@@ -33,7 +32,7 @@ public class BoardTest {
         testBag = new TileBag();
         board =  new Board();
         game = new ScrabbleGame("alphabet", board, testBag);
-        testPlayer = new Player("Trevor", testBoard, testBag, game);
+        testPlayer = new Player("Trevor", testBag, game);
         testBag.drawTiles(testPlayer);
         letters = testPlayer.getTilesOnRack();
         B = new LetterTile('B',3);

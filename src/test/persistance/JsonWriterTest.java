@@ -33,7 +33,7 @@ public class JsonWriterTest extends JsonTest {
         board = new Board();
         tileBag = new TileBag();
         game = new ScrabbleGame("Test", board, tileBag);
-        player = new Player("Tester", board, tileBag, game);
+        player = new Player("Tester", tileBag, game);
     }
 
     @Test
@@ -128,7 +128,7 @@ public class JsonWriterTest extends JsonTest {
     @Test
     void testWriterTwoPlayersEachSwapped() {
         try {
-            Player player2 = new Player("John", board, tileBag, game);
+            Player player2 = new Player("John", tileBag, game);
             game.addPlayer(player);
             game.addPlayer(player2);
 
@@ -188,7 +188,7 @@ public class JsonWriterTest extends JsonTest {
     @Test
     void testWriteMoveComprehensive() {
         try {
-            Player player2 = new Player("John", board, tileBag, game);
+            Player player2 = new Player("John", tileBag, game);
             game.addPlayer(player);
             game.addPlayer(player2);
     

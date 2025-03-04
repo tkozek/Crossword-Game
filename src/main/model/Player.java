@@ -10,7 +10,6 @@ import java.util.Set;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import model.board.Board;
 import model.move.Move;
 import model.tile.LetterTile;
 import model.tile.TileBag;
@@ -27,15 +26,13 @@ public class Player implements Writable {
     private ScrabbleGame scrabbleGame;
     private List<LetterTile> selectedTiles;
     private TileBag tileBag;
-    private Board board;
     private int points;
     
 // Initializes a player with given name, zero points, no history of moves,
-//   an empty tile rack, no selected tiles, zero remaining tiles, the board they will play on.
+//   an empty tile rack, no selected tiles, zero remaining tiles, the game they will play in.
 //      Their next turn will be their first.
-    public Player(String name, Board board, TileBag tileBag, ScrabbleGame scrabbleGame) {
+    public Player(String name, TileBag tileBag, ScrabbleGame scrabbleGame) {
         this.name = name;
-        this.board = board;
         this.tileBag = tileBag;
         this.scrabbleGame = scrabbleGame;
         this.history = new History();
@@ -196,20 +193,6 @@ public class Player implements Writable {
         return playerCharCounts;
     }
 
-    // EFFECTS: Adds up total occurences of every character on board,
-    // and on this player's rack. Combines those and subtracts from
-    //  initial counts in draw pile to get remaining number of each
-    // letter between the draw pile and opponents' racks
-    public Map<Character, Integer> getNumEachCharInBagAndOpponents() {
-        Map<Character, Integer> tileBagCounts = tileBag.getInitialLetterFrequencies();
-        Map<Character, Integer> playerCharCounts = this.getNumEachCharOnMyRack();
-        Map<Character, Integer> boardCounts = board.getNumEachCharOnBoard();
-        for (Character key : tileBagCounts.keySet()) {
-            int valueToSubtract = playerCharCounts.getOrDefault(key,0) + boardCounts.getOrDefault(key,0);
-            tileBagCounts.put(key, tileBagCounts.get(key) - valueToSubtract);
-        }
-        return tileBagCounts;
-    }
 
     public History getHistory() {
         return this.history;

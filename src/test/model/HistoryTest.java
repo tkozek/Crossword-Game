@@ -20,7 +20,6 @@ public class HistoryTest {
     private TileBag testBag;
     private Player testPlayer;
     private Player testPlayer2;
-    private Board testBoard;
     private List<LetterTile> p1Letters;
     private History history;
     private Move moveToAdd;
@@ -35,8 +34,8 @@ public class HistoryTest {
         testBag = new TileBag();
         board =  new Board();
         game = new ScrabbleGame("alphabet", board, testBag);
-        testPlayer = new Player("Trevor", testBoard, testBag, game);
-        testPlayer2 = new Player("Rovert", testBoard, testBag, game);
+        testPlayer = new Player("Trevor", testBag, game);
+        testPlayer2 = new Player("Rovert", testBag, game);
         p1Letters = testPlayer.getTilesOnRack();
         B = new LetterTile('B',3);
         A = new LetterTile('A',1);
