@@ -176,19 +176,21 @@ public class Board {
     // returns false if startRow,startCol is out of bounds.
     public boolean sectionIsAvailable(List<LetterTile> letters, int startRow, int startCol, Direction dir) {
         int length = letters.size();
-        if (dir == Direction.RIGHT) {
-            for (int col = startCol; col < startCol + length; col++) {
-                if (!(boardTiles[startRow][col] instanceof BoardTile)) {
-                    return false;
-                }
+        if (startRow < 0 || startCol < 0 || boardTiles[startRow][startCol] instanceof LetterTile) {
+            return false;
+        }
+        int rowInc = (dir == Direction.DOWN) ? 1 : 0;
+        int colInc = (dir == Direction.RIGHT) ? 1 : 0;
+        int i = 0;
+        while (i < length) {
+            if (startRow + rowInc * i >= BOARD_LENGTH || startCol + colInc * i >= BOARD_LENGTH) {
+                return false;
             }
-        } else {
-            for (int row = startRow; row < startRow + length; row++) {
-                if (!(boardTiles[row][startCol] instanceof BoardTile)) {
-                    return false;
-                }
+            if (!(boardTiles[startRow + rowInc * i][startCol + colInc * i] instanceof BoardTile)) {
+                length++;
             }
-        } 
+            i++;
+        }
         return true;
     }
 
@@ -203,7 +205,7 @@ public class Board {
         return sectionAvailable;
     }
 
-    //REQUIRES: canPlay() is true for given arguments
+    //REQUIRES: sectionIsAvailable() is true for given arguments
     //MODIFIES: this
     //EFFECTS: Places selected letters on board beginning at start position
     //         and going in specified direction. 

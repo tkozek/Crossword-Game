@@ -121,18 +121,18 @@ public class BoardTest {
         assertEquals(7, letters.size());
         //
         Direction dir = Direction.RIGHT;
-        assertTrue(board.inBounds(letters, 7,3, dir));
-        assertTrue(board.inBounds(letters, 7,2, dir));
-        assertTrue(board.inBounds(letters, 7,1, dir));
+        assertTrue(board.sectionIsAvailable(letters, 7,3, dir));
+        assertTrue(board.sectionIsAvailable(letters, 7,2, dir));
+        assertTrue(board.sectionIsAvailable(letters, 7,1, dir));
 
-        assertTrue(board.inBounds(letters, 14,7, dir));
-        assertTrue(board.inBounds(letters, 14,8, dir));
-        assertFalse(board.inBounds(letters, 14,9, dir));
-        assertFalse(board.inBounds(letters, 14,10, dir));
+        assertTrue(board.sectionIsAvailable(letters, 14,7, dir));
+        assertTrue(board.sectionIsAvailable(letters, 14,8, dir));
+        assertFalse(board.sectionIsAvailable(letters, 14,9, dir));
+        assertFalse(board.sectionIsAvailable(letters, 14,10, dir));
 
-        assertTrue(board.inBounds(letters, 0,5, Direction.RIGHT));
-        assertTrue(board.inBounds(letters, 0,6, Direction.RIGHT));
-        assertTrue(board.inBounds(letters, 0,7, Direction.RIGHT));
+        assertTrue(board.sectionIsAvailable(letters, 0,5, Direction.RIGHT));
+        assertTrue(board.sectionIsAvailable(letters, 0,6, Direction.RIGHT));
+        assertTrue(board.sectionIsAvailable(letters, 0,7, Direction.RIGHT));
 
     }
 
@@ -141,17 +141,17 @@ public class BoardTest {
         testBag.drawTiles(testPlayer);
         letters = testPlayer.getTilesOnRack();
         //
-        assertTrue(board.inBounds(letters, 7,7, Direction.DOWN));
-        assertTrue(board.inBounds(letters, 8,7, Direction.DOWN));
-        assertFalse(board.inBounds(letters, 9,7, Direction.DOWN));
+        assertTrue(board.sectionIsAvailable(letters, 7,7, Direction.DOWN));
+        assertTrue(board.sectionIsAvailable(letters, 8,7, Direction.DOWN));
+        assertFalse(board.sectionIsAvailable(letters, 9,7, Direction.DOWN));
 
-        assertTrue(board.inBounds(letters, 7,14, Direction.DOWN));
-        assertTrue(board.inBounds(letters, 8,14, Direction.DOWN));
-        assertFalse(board.inBounds(letters, 9,14, Direction.DOWN));
+        assertTrue(board.sectionIsAvailable(letters, 7,14, Direction.DOWN));
+        assertTrue(board.sectionIsAvailable(letters, 8,14, Direction.DOWN));
+        assertFalse(board.sectionIsAvailable(letters, 9,14, Direction.DOWN));
 
-        assertTrue(board.inBounds(letters, 7,0, Direction.DOWN));
-        assertTrue(board.inBounds(letters, 8,0, Direction.DOWN));
-        assertFalse(board.inBounds(letters, 9,0, Direction.DOWN));
+        assertTrue(board.sectionIsAvailable(letters, 7,0, Direction.DOWN));
+        assertTrue(board.sectionIsAvailable(letters, 8,0, Direction.DOWN));
+        assertFalse(board.sectionIsAvailable(letters, 9,0, Direction.DOWN));
 
     }
 
@@ -160,9 +160,9 @@ public class BoardTest {
         testBag.drawTiles(testPlayer);
         letters = testPlayer.getTilesOnRack();
         //
-        assertFalse(board.inBounds(letters, -1,0, Direction.DOWN));
-        assertFalse(board.inBounds(letters, -1,14, Direction.DOWN));
-        assertFalse(board.inBounds(letters, -2,7, Direction.DOWN));
+        assertFalse(board.sectionIsAvailable(letters, -1,0, Direction.DOWN));
+        assertFalse(board.sectionIsAvailable(letters, -1,14, Direction.DOWN));
+        assertFalse(board.sectionIsAvailable(letters, -2,7, Direction.DOWN));
     }
 
     @Test
@@ -170,9 +170,9 @@ public class BoardTest {
         testBag.drawTiles(testPlayer);
         letters = testPlayer.getTilesOnRack();
         //
-        assertFalse(board.inBounds(letters, 0,-2, Direction.RIGHT));
-        assertFalse(board.inBounds(letters, 7,-1, Direction.RIGHT));
-        assertFalse(board.inBounds(letters, 14,-1, Direction.RIGHT));
+        assertFalse(board.sectionIsAvailable(letters, 0,-2, Direction.RIGHT));
+        assertFalse(board.sectionIsAvailable(letters, 7,-1, Direction.RIGHT));
+        assertFalse(board.sectionIsAvailable(letters, 14,-1, Direction.RIGHT));
     }
 
     @Test
@@ -224,7 +224,7 @@ public class BoardTest {
         // One extra space than needed
         assertTrue(board.sectionIsAvailable(letters, 6, 4, Direction.RIGHT));
         // Not enough space
-        assertTrue(board.sectionIsAvailable(letters, 6, 7, Direction.RIGHT));
+        assertFalse(board.sectionIsAvailable(letters, 6, 7, Direction.RIGHT));
         // Letters already placed from (4,4) to (10,4), should place from (0,4) to (3,4) and (11,4) to (13,4)
         assertTrue(board.sectionIsAvailable(letters, 0,4, Direction.DOWN));
     }
@@ -254,15 +254,16 @@ public class BoardTest {
 
     @Test 
     void testCanPlay() {
-        assertTrue(board.canPlay(letters, 0, 0, Direction.DOWN));
-        assertTrue(board.canPlay(letters, 0, 0, Direction.RIGHT));
+        assertTrue(board.sectionIsAvailable(letters, 0, 0, Direction.DOWN));
+        assertTrue(board.sectionIsAvailable(letters, 0, 0, Direction.RIGHT));
 
-        assertFalse(board.canPlay(letters, 9,9, Direction.DOWN));
-        assertFalse(board.canPlay(letters, 9,9, Direction.RIGHT));
+        assertFalse(board.sectionIsAvailable(letters, 9,9, Direction.DOWN));
+        assertFalse(board.sectionIsAvailable(letters, 9,9, Direction.RIGHT));
 
         board.playWord(letters, 7, 7, Direction.RIGHT);
-        assertTrue(board.canPlay(letters, 1,14, Direction.DOWN));
-        assertFalse(board.canPlay(letters, 1,13, Direction.DOWN));
+        assertTrue(board.sectionIsAvailable(letters, 1,14, Direction.DOWN));
+        // Places 6 tiles starting at (1,13), places 7th tiles at (8,13)
+        assertTrue(board.sectionIsAvailable(letters, 1,13, Direction.DOWN));
     }
 
     @Test
