@@ -111,7 +111,7 @@ public class JsonWriterTest extends JsonTest {
             Board newBoard = game.getBoard();
             List<LetterTile> letterToPlay = new ArrayList<>();
             letterToPlay.add(new LetterTile('A', 1));
-            assertFalse(newBoard.canPlay(letterToPlay, 7, 7, Direction.DOWN));
+            assertFalse(newBoard.sectionIsAvailable(letterToPlay, 7, 7, Direction.DOWN));
             LetterTile firstPlacedLetter = (LetterTile) newBoard.getTileAtPositionOnBoard(7,7);
             // Check board updated correctly
             assertEquals(firstPlacedLetter.getCharacter(), letter1Char);

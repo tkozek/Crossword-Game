@@ -227,45 +227,43 @@
         "TWS"
     ],
     "TileBag": {
-        "A": 7,
+        "A": 8,
         "B": 2,
         "C": 1,
-        "D": 3,
+        "D": 4,
         "E": 11,
-        "F": 1,
-        "G": 3,
-        "H": 2,
+        "F": 2,
+        "G": 2,
         "I": 8,
-        "J": 1,
-        "K": 1,
-        "L": 3,
+        "L": 4,
         "M": 2,
-        "N": 5,
-        "O": 7,
+        "-": 2,
+        "N": 6,
+        "O": 6,
         "P": 2,
         "Q": 1,
-        "R": 6,
+        "R": 5,
         "S": 3,
-        "T": 6,
+        "T": 5,
         "U": 4,
         "V": 2,
-        "W": 1,
+        "W": 2,
+        "X": 1,
         "Y": 2,
-        "Z": 1,
-        "-": 1
+        "Z": 1
     },
     "GameName": "Test",
     "History": [
         {
             "PlayerName": "Tester",
             "AfterSwapLetters": "",
-            "InitialLetters": "SFXOWEC",
+            "InitialLetters": "SHEKAOJ",
             "MoveType": "SWAP_TILES"
         },
         {
             "PlayerName": "John",
             "AfterSwapLetters": "",
-            "InitialLetters": "NA-DLIA",
+            "InitialLetters": "ROCHITG",
             "MoveType": "SWAP_TILES"
         }
     ],
@@ -276,25 +274,25 @@
             "name": "Tester",
             "tileRack": [
                 {"S": 1},
-                {"F": 4},
-                {"X": 8},
-                {"O": 1},
-                {"W": 4},
+                {"H": 4},
                 {"E": 1},
-                {"C": 3}
+                {"K": 5},
+                {"A": 1},
+                {"O": 1},
+                {"J": 8}
             ]
         },
         {
             "score": 0,
             "name": "John",
             "tileRack": [
-                {"N": 1},
-                {"A": 1},
-                {"-": 0},
-                {"D": 2},
-                {"L": 1},
+                {"R": 1},
+                {"O": 1},
+                {"C": 3},
+                {"H": 4},
                 {"I": 1},
-                {"A": 1}
+                {"T": 1},
+                {"G": 2}
             ]
         }
     ]

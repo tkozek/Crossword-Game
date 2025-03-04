@@ -152,7 +152,7 @@ public class Board {
         tripleWordCoordinates.add(new Coordinate(14, 14));
     }
 
-    // EFFECTS: Returns true if all letters will fit within the boundaries
+    /* // EFFECTS: Returns true if all letters will fit within the boundaries
     // of the board, starting at [startRow][startCol] and proceeding in direction
     // until all letters are placed
     public boolean inBounds(List<LetterTile> letters, int startRow, int startCol, Direction dir) {
@@ -169,7 +169,7 @@ public class Board {
             
         }
         return true;
-    }
+    } */
 
     // EFFECTS: returns true if and only if all letters can be placed without going
     // out of bounds, skips over spaces where a letter is already played
@@ -194,7 +194,7 @@ public class Board {
         return true;
     }
 
-    // EFFECTS: returns true if inBounds()
+    /* // EFFECTS: returns true if inBounds()
     // AND section is sectionIsAvailable()
     public boolean canPlay(List<LetterTile> letters, int startRow, int startCol, Direction dir) {
         boolean inBounds =  inBounds(letters, startRow, startCol, dir);
@@ -203,7 +203,7 @@ public class Board {
         }
         boolean sectionAvailable = sectionIsAvailable(letters, startRow, startCol, dir);
         return sectionAvailable;
-    }
+    } */
 
     //REQUIRES: sectionIsAvailable() is true for given arguments
     //MODIFIES: this
