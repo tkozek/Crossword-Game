@@ -152,25 +152,6 @@ public class Board {
         tripleWordCoordinates.add(new Coordinate(14, 14));
     }
 
-    /* // EFFECTS: Returns true if all letters will fit within the boundaries
-    // of the board, starting at [startRow][startCol] and proceeding in direction
-    // until all letters are placed
-    public boolean inBounds(List<LetterTile> letters, int startRow, int startCol, Direction dir) {
-        int length = letters.size();
-        if (startRow < 0 || startCol < 0) {
-            return false;
-        }
-        if (dir == Direction.RIGHT) {
-            if (startCol + length > BOARD_LENGTH) {
-                return false;
-            }
-        } else if (startRow + length > BOARD_LENGTH) {
-            return false;
-            
-        }
-        return true;
-    } */
-
     // EFFECTS: returns true if and only if all letters can be placed without going
     // out of bounds, skips over spaces where a letter is already played
     // returns false if startRow,startCol is out of bounds.
@@ -194,17 +175,6 @@ public class Board {
         return true;
     }
 
-    /* // EFFECTS: returns true if inBounds()
-    // AND section is sectionIsAvailable()
-    public boolean canPlay(List<LetterTile> letters, int startRow, int startCol, Direction dir) {
-        boolean inBounds =  inBounds(letters, startRow, startCol, dir);
-        if (!inBounds) {
-            return false;
-        }
-        boolean sectionAvailable = sectionIsAvailable(letters, startRow, startCol, dir);
-        return sectionAvailable;
-    } */
-
     //REQUIRES: sectionIsAvailable() is true for given arguments
     //MODIFIES: this
     //EFFECTS: Places selected letters on board beginning at start position
@@ -217,7 +187,7 @@ public class Board {
     }
 
 
-    // REQUIRES: canPlay() is true for given arguments
+    // REQUIRES: sectionIsAvailable() is true for given arguments
     // EFFECTS: Returns the score earned for playing letters in the given direction
     // beginning at starting coordinates
     public int scoreWord(List<LetterTile> letters, int startRow, int startCol, Direction dir) {
@@ -269,7 +239,7 @@ public class Board {
         }
     }
 
-    // REQUIRES: canPlay() is true for given arguments
+    // REQUIRES: sectionIsAvailable() is true for given arguments
     // MODIFIES: this
     // EFFECTS: places letters onto board in the given direction
     // beginning at starting coordinates
