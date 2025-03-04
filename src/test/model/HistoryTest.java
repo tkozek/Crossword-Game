@@ -42,8 +42,8 @@ public class HistoryTest {
         A = new LetterTile('A',1);
         Z = new LetterTile('Z',10);
         history = new History("Trevor");
-        moveToAdd = new Move(testPlayer, board, p1Letters, 1,8, 10, Direction.DOWN);
-        otherMoveToAdd = new Move(testPlayer2, board);
+        moveToAdd = new Move(testPlayer, p1Letters, 1,8, 10, Direction.DOWN);
+        otherMoveToAdd = new Move(testPlayer2);
 
     }
 
@@ -80,7 +80,7 @@ public class HistoryTest {
         List<LetterTile> playedLetters = new ArrayList<>();
         playedLetters.add(A);
         playedLetters.add(Z);
-        Move doesntHaveB = new Move(testPlayer, board, playedLetters, 3, 5, 13, Direction.DOWN);
+        Move doesntHaveB = new Move(testPlayer, playedLetters, 3, 5, 13, Direction.DOWN);
         history.addMove(doesntHaveB);
         assertEquals(history.getMoves().size(), 1);
         assertEquals(0, history.getListOfWordsPlayedContainingLetter('B').size());
@@ -93,14 +93,14 @@ public class HistoryTest {
         List<LetterTile> playedLetters = new ArrayList<>();
         playedLetters.add(A);
         playedLetters.add(B); // AB
-        Move doesntHaveZ = new Move(testPlayer, board, playedLetters, 7,9, 8,Direction.RIGHT);
+        Move doesntHaveZ = new Move(testPlayer, playedLetters, 7,9, 8,Direction.RIGHT);
         history.addMove(doesntHaveZ);
 
         List<LetterTile> playedLetters2 = new ArrayList<>();
         playedLetters2.add(A);
         playedLetters2.add(Z); //AZ
 
-        Move doesntHaveB = new Move(testPlayer, board, playedLetters2, 3, 5, 13, Direction.DOWN);
+        Move doesntHaveB = new Move(testPlayer, playedLetters2, 3, 5, 13, Direction.DOWN);
         history.addMove(doesntHaveB);
         assertEquals(history.getMoves().size(), 2);
         //BOTH HAVE A
@@ -148,16 +148,16 @@ public class HistoryTest {
     @Test
     void testGetMovesWithWordsPlayedSomeAreSwapsAndSkips() {
         // Adds move that isn't a word played [1]
-        testPlayer.logSkippedTurn(board);
+        testPlayer.logSkippedTurn();
         assertTrue(testPlayer.getHistory().getMovesWithWordPlayed().isEmpty());
         testBag.drawTiles(testPlayer);
         //logs word played [1]
         testPlayer.logWord(board, 7,7,10,Direction.DOWN);
         assertEquals(testPlayer.getHistory().getMovesWithWordPlayed().size(), 1);
         // Adds move that isn't a word played [2]
-        testPlayer.logSkippedTurn(board);
+        testPlayer.logSkippedTurn();
         // Adds move that isn't a word played [3]
-        testPlayer.logSkippedTurn(board);
+        testPlayer.logSkippedTurn();
         //logs word played [2]
         testPlayer.logWord(board, 9, 9, 14, Direction.RIGHT);
         assertEquals(testPlayer.getHistory().getMovesWithWordPlayed().size(), 2);

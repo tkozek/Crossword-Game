@@ -6,7 +6,6 @@ import org.json.JSONObject;
 
 import model.Direction;
 import model.Player;
-import model.board.Board;
 import model.tile.LetterTile;
 import persistance.Writable;
 
@@ -18,15 +17,13 @@ public class Move implements Writable {
     private Direction direction;
     private int startRow;
     private int startCol;
-    private Board board;
     private Player player;
 
     // Constructor if the player played a word on a board
-    public Move(Player player, Board board, List<LetterTile> letters, 
+    public Move(Player player, List<LetterTile> letters, 
                 int startRow, int startCol, int pointsEarned, Direction direction) {
         this.moveType = MoveType.PLAY_WORD;
         this.player = player;
-        this.board = board;
         this.pointsForMove = pointsEarned;
         this.lettersInvolved = letters;
         this.startRow = startRow;
@@ -35,20 +32,18 @@ public class Move implements Writable {
     }
 
     // Constructor if the player swapped letters
-    public Move(Player player, Board board, List<LetterTile> swappedLetters, List<LetterTile> postSwapLetters) {
+    public Move(Player player, List<LetterTile> swappedLetters, List<LetterTile> postSwapLetters) {
         this.moveType = MoveType.SWAP_TILES;
         this.player = player;
-        this.board = board;
         swappedLetters.addAll(postSwapLetters);
         this.lettersInvolved = swappedLetters;
         this.pointsForMove = 0;
     }
 
     // Constructor if the player skipped turn
-    public Move(Player player, Board board) {
+    public Move(Player player) {
         this.moveType = MoveType.SKIP;
         this.player = player;
-        this.board = board;
         this.pointsForMove = 0;
     }
 
@@ -87,10 +82,6 @@ public class Move implements Writable {
     //  or involved in point adjustments at end game
     public List<LetterTile> getLettersInvolved() {
         return this.lettersInvolved;
-    }
-
-    public Board getBoard() {
-        return this.board;
     }
 
     // REQUIRES: getMoveType() == MoveType.PLAY_WORD

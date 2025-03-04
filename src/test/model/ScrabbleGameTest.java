@@ -54,12 +54,12 @@ public class ScrabbleGameTest {
         tileBag.drawTiles(player);
         List<LetterTile> lettersToPlay = player.getTilesOnRack();
 
-        Move play = new Move(player, board, lettersToPlay, 7, 7, 10, Direction.DOWN);
+        Move play = new Move(player, lettersToPlay, 7, 7, 10, Direction.DOWN);
         game.addMove(play);
         List<Move> moves = game.getHistory().getMoves();
         assertEquals(moves.size(), 1);
         assertEquals(moves.get(0), play);
-        Move skip = new Move(player, board);
+        Move skip = new Move(player);
         game.addMove(skip);
         moves = game.getHistory().getMoves();
         assertEquals(moves.size(), 2);

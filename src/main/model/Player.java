@@ -93,7 +93,7 @@ public class Player implements Writable {
         //Player, Board, List<LetterTile> , Start Row, Start Col, Points Earned
         List<LetterTile> letters = this.getSelectedTiles();
         List<LetterTile> copy = copyLetterTiles(letters);
-        Move move = new Move(this, board, copy, startRow, startCol, pointsEarned, dir);
+        Move move = new Move(this, copy, startRow, startCol, pointsEarned, dir);
         this.history.addMove(move);
         scrabbleGame.addMove(move);
     }
@@ -102,7 +102,7 @@ public class Player implements Writable {
     // EFFECTS: Adds a new word played to player's move history
     public void logWord(Board board, List<LetterTile> letters, int startRow, int startCol, int points, Direction dir) {
         List<LetterTile> copy = copyLetterTiles(letters);
-        Move move = new Move(this, board, copy, startRow, startCol, points, dir);
+        Move move = new Move(this, copy, startRow, startCol, points, dir);
         this.history.addMove(move);
         scrabbleGame.addMove(move);
     }
@@ -118,8 +118,8 @@ public class Player implements Writable {
 
     // MODIFIES: this
     // EFFECTS: Adds a new skipped turn to player's move history
-    public void logSkippedTurn(Board board) {
-        Move move = new Move(this, board);
+    public void logSkippedTurn() {
+        Move move = new Move(this);
         history.addMove(move);
         scrabbleGame.addMove(move);
     }
@@ -127,7 +127,7 @@ public class Player implements Writable {
     // MODIFIES: this
     // EFFECTS: Adds a new swap to player's move history
     public void logSwap(Board board, List<LetterTile> swappedLetters, List<LetterTile> postSwapLetters) {
-        Move move = new Move(this, board, swappedLetters, postSwapLetters);
+        Move move = new Move(this, swappedLetters, postSwapLetters);
         history.addMove(move);
         scrabbleGame.addMove(move);
     }

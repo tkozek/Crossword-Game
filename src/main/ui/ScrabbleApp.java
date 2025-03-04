@@ -415,7 +415,7 @@ public class ScrabbleApp {
     // logs the skipped turn and prints confirmation
     public void handleSkip(Player player) {
         player.clearSelectedTiles();
-        player.logSkippedTurn(board);
+        player.logSkippedTurn();
         //player.swapTiles();
         System.out.println(player.getPlayerName() + " skipped their turn \n");
     }

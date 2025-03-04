@@ -215,7 +215,7 @@ public class JsonWriterTest extends JsonTest {
 
             player.logSwap(board, p1InitLetters, p1FinalLetters);
             player2.logSwap(board, p2InitLetters, p2FinalLetters);
-            player.logSkippedTurn(board);
+            player.logSkippedTurn();
 
             player2.logWord(board, 7, 7, 70, Direction.DOWN);
             player.logWord(board, 6, 7, 60, Direction.RIGHT);

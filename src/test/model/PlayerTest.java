@@ -261,7 +261,7 @@ public class PlayerTest {
 
     @Test
     void testLogSwappedAndLogSkippedTurn() {
-        testPlayer.logSkippedTurn(testBoard);
+        testPlayer.logSkippedTurn();
         assertEquals(testPlayer.getHistory().getMoves().size(), 1);
         assertEquals(testPlayer.getHistory().getMoves().get(0).getMoveType(), MoveType.SKIP);
         testBag.drawTiles(testPlayer);

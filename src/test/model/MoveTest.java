@@ -45,7 +45,7 @@ public class MoveTest {
 
     @Test
     void testConstructorForPlayedWord() {
-        playWord = new Move(testPlayer, board, p1Letters, 7,7, 10, Direction.DOWN);
+        playWord = new Move(testPlayer, p1Letters, 7,7, 10, Direction.DOWN);
         assertEquals(playWord.getMoveType(), MoveType.PLAY_WORD);
         assertEquals(playWord.getPlayer(), testPlayer);
         assertEquals(playWord.getPointsForMove(), 10);
@@ -53,13 +53,12 @@ public class MoveTest {
         assertEquals(playWord.getDirection(),Direction.DOWN); 
         assertEquals(playWord.getStartColumn(), 7);
         assertEquals(playWord.getStartRow(), 7);
-        assertEquals(playWord.getBoard(),board);
 
     }
 
     @Test
     void testMoveContainsCharacter() {
-        playWord = new Move(testPlayer, board, p1Letters, 1,8, 10, Direction.DOWN);
+        playWord = new Move(testPlayer, p1Letters, 1,8, 10, Direction.DOWN);
         LetterTile letter = p1Letters.get(0);
         char firstChar = letter.getCharacter();
         assertEquals(playWord.getMoveType(), MoveType.PLAY_WORD);
@@ -81,13 +80,12 @@ public class MoveTest {
     
     @Test
     void testConstructorForSwappedWord() {
-        swap = new Move(testPlayer2, board, p1Letters, p2Letters);
+        swap = new Move(testPlayer2, p1Letters, p2Letters);
         assertEquals(swap.getPlayer(), testPlayer2);
         assertEquals(swap.getMoveType(), MoveType.SWAP_TILES);
         assertEquals(swap.getPointsForMove(), 0);
         p1Letters.addAll(p2Letters);
         assertEquals(swap.getLettersInvolved(),p1Letters);
-        assertEquals(swap.getBoard(),board);
     }
     
    /*  @Test
@@ -104,10 +102,9 @@ public class MoveTest {
 
     @Test
     void testConstructorSkip() {
-        Move skip = new Move(testPlayer, testBoard);
+        Move skip = new Move(testPlayer);
         assertEquals(skip.getPointsForMove(), 0);
         assertEquals(skip.getMoveType(), MoveType.SKIP);
-        assertEquals(skip.getBoard(), testBoard);
         assertEquals(skip.getPlayer(),testPlayer);
     }
     
