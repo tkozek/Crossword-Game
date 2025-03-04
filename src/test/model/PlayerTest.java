@@ -94,7 +94,7 @@ public class PlayerTest {
         testPlayer.selectTile(0);
         testPlayer.selectTile(6);
         assertEquals(testPlayer.getSelectedTiles().size(), 2);
-        testPlayer.logWord(board, 2, 2, 10, Direction.DOWN);
+        testPlayer.logWord(2, 2, 10, Direction.DOWN);
         assertEquals(testPlayer.getHistory().getMoves().size(), 1);
         assertEquals(testPlayer.getHistory().getMoves().get(0).getPlayer(), testPlayer);
 
@@ -271,7 +271,7 @@ public class PlayerTest {
         assertEquals(testPlayer.getHistory().getMoves().get(0).getPointsForMove(), 0);
         testBoard.playWord(lettersToSwap, 0, 0, Direction.DOWN);
         List<LetterTile> tilesAfterSwap = testPlayer.getTilesOnRack();
-        testPlayer.logSwap(board, lettersToSwap, tilesAfterSwap);
+        testPlayer.logSwap(lettersToSwap, tilesAfterSwap);
         assertEquals(testPlayer.getHistory().getMoves().size(), 2);
         assertEquals(testPlayer.getHistory().getMoves().get(1).getMoveType(), MoveType.SWAP_TILES);
         assertEquals(testPlayer.getHistory().getMoves().get(1).getPointsForMove(), 0);

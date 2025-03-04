@@ -192,7 +192,7 @@ public class JsonReader {
         Direction dir = (moveObject.getString("Direction").equals("D")) ? Direction.DOWN : Direction.RIGHT;
         String lettersString = moveObject.getString("LettersPlayed");
         List<LetterTile> letters = getLettersFromString(lettersString);
-        player.logWord(board, letters, row, col, points, dir);
+        player.logWord(letters, row, col, points, dir);
     }
 
     // MODIFIES: player, game
@@ -203,6 +203,6 @@ public class JsonReader {
         List<LetterTile> initialLetters = getLettersFromString(lettersString);
         lettersString = moveObject.getString("AfterSwapLetters");
         List<LetterTile> postSwapLetters = getLettersFromString(lettersString);
-        player.logSwap(board, initialLetters, postSwapLetters);
+        player.logSwap(initialLetters, postSwapLetters);
     }
 }

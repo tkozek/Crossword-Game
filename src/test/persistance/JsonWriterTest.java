@@ -87,7 +87,7 @@ public class JsonWriterTest extends JsonTest {
             // 
             int score = board.playWord(selectedTiles, 7, 7, Direction.DOWN);
             // log word logs it to player's game too
-            player.logWord(board, 7, 7, score, Direction.DOWN);
+            player.logWord(7, 7, score, Direction.DOWN);
             player.removeSelectedTiles();
             //player.logSkippedTurn(board);
             // should expect there to be one letters played there that match
@@ -153,8 +153,8 @@ public class JsonWriterTest extends JsonTest {
             List<LetterTile> p1FinalLetters = player.copyLetterTiles(player.getTilesOnRack());
             List<LetterTile> p2FinalLetters = player2.copyLetterTiles(player2.getTilesOnRack());
 
-            player.logSwap(board, p1InitLetters, p1FinalLetters);
-            player2.logSwap(board, p2InitLetters, p2FinalLetters);
+            player.logSwap(p1InitLetters, p1FinalLetters);
+            player2.logSwap(p2InitLetters, p2FinalLetters);
             JsonWriter writer = new JsonWriter("./data/testWriterTwoPlayersEachSwapped.json");
             writer.open();
             writer.write(game);
@@ -213,12 +213,12 @@ public class JsonWriterTest extends JsonTest {
             List<LetterTile> p1FinalLetters = player.copySelectedTiles();
             List<LetterTile> p2FinalLetters = player2.copySelectedTiles();
 
-            player.logSwap(board, p1InitLetters, p1FinalLetters);
-            player2.logSwap(board, p2InitLetters, p2FinalLetters);
+            player.logSwap(p1InitLetters, p1FinalLetters);
+            player2.logSwap(p2InitLetters, p2FinalLetters);
             player.logSkippedTurn();
 
-            player2.logWord(board, 7, 7, 70, Direction.DOWN);
-            player.logWord(board, 6, 7, 60, Direction.RIGHT);
+            player2.logWord(7, 7, 70, Direction.DOWN);
+            player.logWord(6, 7, 60, Direction.RIGHT);
 
 
             JsonWriter writer = new JsonWriter("./data/testWriteMoveComprehensive.json");

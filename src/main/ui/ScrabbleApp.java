@@ -358,7 +358,7 @@ public class ScrabbleApp {
         Direction dir = (scanner.nextLine().equals("R")) ? Direction.RIGHT : Direction.DOWN;
         if (board.canPlay(player.getSelectedTiles(), row, col, dir)) {
             int score = board.playWord(player.getSelectedTiles(), row, col, dir);
-            player.logWord(board, row, col, score, dir);
+            player.logWord(row, col, score, dir);
             player.removeSelectedTiles();
             tileBag.drawTiles(player);
             System.out.println("\nYour new tiles are:");
@@ -388,7 +388,7 @@ public class ScrabbleApp {
                 List<LetterTile> preSwapLetters = player.copyLetterTiles(player.getTilesOnRack());
                 player.swapTiles();
                 List<LetterTile> postSwapLetters = player.copyLetterTiles(player.getTilesOnRack());
-                player.logSwap(board,preSwapLetters,postSwapLetters);
+                player.logSwap(preSwapLetters, postSwapLetters);
                 System.out.println("\n Your new tiles are: ");
                 getTilePrintOut(player);
                 adjustScanner();
