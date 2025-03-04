@@ -1,5 +1,6 @@
 package model;
 
+import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -8,7 +9,6 @@ import model.move.Move;
 import model.tile.LetterTile;
 import model.tile.TileBag;
 
-import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.List;
 

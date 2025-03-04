@@ -1,11 +1,11 @@
 package model.board;
 
+import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import model.tile.TileType;
 
-import static org.junit.jupiter.api.Assertions.*;
 
 
 public class BoardTileTest {

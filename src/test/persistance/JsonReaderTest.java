@@ -2,14 +2,15 @@ package persistance;
 
 import java.io.IOException;
 
-import org.junit.Test;
+import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import model.Player;
 import model.ScrabbleGame;
 import model.move.MoveType;
 import model.tile.TileBag;
 
-import static org.junit.jupiter.api.Assertions.*;
 
 
 public class JsonReaderTest extends JsonTest {
