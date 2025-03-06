@@ -112,7 +112,7 @@
         " ",
         " ",
         " ",
-        "S",
+        "D",
         " ",
         " ",
         " ",
@@ -239,14 +239,13 @@
         "J": 1,
         "K": 1,
         "L": 4,
-        "M": 2,
-        "N": 4,
-        "O": 8,
+        "M": 1,
+        "N": 6,
+        "O": 7,
         "P": 2,
-        "Q": 1,
         "R": 6,
         "S": 3,
-        "T": 5,
+        "T": 6,
         "U": 4,
         "V": 2,
         "W": 2,
@@ -258,10 +257,10 @@
     "GameName": "Test",
     "History": [{
         "Col": 7,
-        "Points": 2,
+        "Points": 4,
         "PlayerName": "Tester",
         "MoveType": "PLAY_WORD",
-        "LettersPlayed": "S",
+        "LettersPlayed": "D",
         "Row": 7,
         "Direction": "D"
     }],
@@ -270,12 +269,12 @@
         "score": 0,
         "name": "Tester",
         "tileRack": [
+            {"O": 1},
+            {"Q": 10},
             {"A": 1},
-            {"D": 2},
-            {"T": 1},
-            {"N": 1},
+            {"M": 3},
             {"I": 1},
-            {"N": 1}
+            {"S": 1}
         ]
     }]
 }

@@ -187,7 +187,7 @@ public class Board {
     }
 
 
-    // REQUIRES: sectionIsAvailable() is true for given arguments
+  /*   // REQUIRES: sectionIsAvailable() is true for given arguments
     // EFFECTS: Returns the score earned for playing letters in the given direction
     // beginning at starting coordinates
     public int scoreWord(List<LetterTile> letters, int startRow, int startCol, Direction dir) {
@@ -205,6 +205,45 @@ public class Board {
             total += letterPoints;
         }
         return total * wordMultiplier;
+    } */
+
+      // REQUIRES: sectionIsAvailable() is true for given arguments
+    // EFFECTS: Returns the score earned for playing letters in the given direction
+    // beginning at starting coordinates
+    public int scoreWord(List<LetterTile> letters, int startRow, int startCol, Direction dir) {
+        int length = letters.size();
+        int wordMultiplier = 1;
+        int total = 0;
+        int adjacentTotal = 0;
+        int lettersPlaced = 0;
+        int i = 0;
+        int rowInc = (dir == Direction.DOWN) ? 1 : 0;
+        int colInc = (dir == Direction.RIGHT) ? 1 : 0;
+        while (lettersPlaced < length) {
+            if (boardTiles[startRow + i * rowInc][ startCol + i * colInc] instanceof LetterTile) {
+                LetterTile alreadyPlacedLetter = (LetterTile) boardTiles[startRow + i * rowInc][startCol + i * colInc];
+                total += alreadyPlacedLetter.getLetterPoints();
+                // add that score but no recursive calls and no new letters placed
+                continue;
+            }
+            //otherwise we can place a letter here, and need recursive calls
+            int letterPoints = letters.get(lettersPlaced).getLetterPoints();
+            Coordinate coord = new Coordinate(startRow + i * rowInc, startCol + i * colInc);
+            adjacentTotal += scorePerpendicularAdjacentWords(letterPoints, coord, colInc, rowInc);
+            wordMultiplier *= findWordMultiplier(coord);
+            letterPoints *=  findLetterMultiplier(coord);
+            lettersPlaced++;
+            total += letterPoints;
+        }
+        return total * wordMultiplier + adjacentTotal;
+    }
+
+    // EFFECTS: Checks for multipliers at the starting coordinate, then
+    // iteratively adds points from already placed in-line letter tiles
+    // which connect to the starting coordinate. returns score
+    // after applying relevant multiplier.
+    private int scorePerpendicularAdjacentWords(int letterPoints, Coordinate coord, int rowInc, int colInc) {
+        return -1;
     }
 
     // MODIFIES: this
@@ -247,10 +286,16 @@ public class Board {
         int length = letters.size();
         int rowIncrement = (dir == Direction.DOWN) ? 1 : 0;
         int colIncrement = (dir == Direction.RIGHT) ? 1 : 0;
-        for (int i = 0; i < length; i++) {
+        int i = 0;
+        int lettersPlaced = 0;
+        while (lettersPlaced < length) {
             int row = startRow + i * rowIncrement;
             int col = startCol + i * colIncrement;
-            boardTiles[row][col] = letters.get(i);
+            if (!(boardTiles[row][col] instanceof LetterTile)) {
+                boardTiles[row][col] = letters.get(lettersPlaced);
+                lettersPlaced++;
+            }
+            i++;
         }
     }
 
