@@ -9,7 +9,6 @@ import model.move.Move;
 import model.tile.LetterTile;
 import model.tile.TileBag;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -116,7 +115,6 @@ public class ScrabbleGameTest {
 
     @Test
     void testScorePerpendicularConnectedByBlank() {
-        List<LetterTile> blankOnly = new ArrayList<>();
         player.addTile(new LetterTile('B', 3));
         player.addTile(new LetterTile('R', 1));
         player.addTile(new LetterTile('I', 1));

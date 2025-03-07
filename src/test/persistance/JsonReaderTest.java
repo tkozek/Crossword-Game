@@ -17,6 +17,11 @@ public class JsonReaderTest extends JsonTest {
 
     private TileBag testBag;
 
+    @BeforeEach
+    private void setup() {
+        
+    }
+
     @Test
     public void testReaderNonExistentFile() {
         JsonReader reader = new JsonReader("./data/iwillnevernameafilethis.json");

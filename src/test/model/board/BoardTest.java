@@ -25,30 +25,18 @@ public class BoardTest {
     private LetterTile A;
     private LetterTile B;
     private LetterTile C;
-    private LetterTile D;
     private LetterTile E;
-    private LetterTile F;
     private LetterTile G;
     private LetterTile H;
-    private LetterTile I;
-    private LetterTile J;
     private LetterTile K;
     private LetterTile L;
-    private LetterTile M;
     private LetterTile N;
     private LetterTile O;
-    private LetterTile P;
-    private LetterTile Q;
     private LetterTile R;
     private LetterTile S;
     private LetterTile T;
-    private LetterTile U;
-    private LetterTile V;
-    private LetterTile W;
-    private LetterTile X;
     private LetterTile Y;
     private LetterTile Z;
-    private LetterTile Blank;
     private ScrabbleGame game;
 
     @BeforeEach
@@ -75,8 +63,6 @@ public class BoardTest {
         O = new LetterTile('O', 1);
         Y = new LetterTile('Y', 4);
         S = new LetterTile('S', 1);
-        X = new LetterTile('X', 8);
-        Blank = new LetterTile('-', 0);
     }
     
     /* @Test

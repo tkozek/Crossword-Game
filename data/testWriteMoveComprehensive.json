@@ -227,29 +227,29 @@
         "TWS"
     ],
     "TileBag": {
-        "A": 8,
+        "A": 9,
         "B": 2,
         "C": 2,
         "D": 4,
-        "E": 11,
+        "E": 8,
         "F": 2,
-        "G": 1,
+        "G": 3,
         "H": 2,
-        "I": 8,
+        "I": 6,
         "J": 1,
         "K": 1,
-        "L": 4,
-        "M": 1,
-        "N": 5,
-        "O": 6,
-        "P": 1,
+        "L": 3,
+        "M": 2,
+        "N": 4,
+        "O": 5,
+        "P": 2,
         "Q": 1,
-        "R": 5,
-        "S": 3,
-        "T": 6,
-        "U": 3,
+        "R": 6,
+        "S": 4,
+        "T": 5,
+        "U": 4,
         "V": 2,
-        "W": 1,
+        "W": 2,
         "X": 1,
         "Y": 2,
         "Z": 1,
@@ -259,26 +259,26 @@
     "History": [
         {
             "PlayerName": "Tester",
-            "AfterSwapLetters": "WSAOEGG",
-            "InitialLetters": "OWQSEGC",
+            "AfterSwapLetters": "ENIINTL",
+            "InitialLetters": "DTLNQLE",
             "MoveType": "SWAP_TILES"
         },
         {
             "PlayerName": "John",
-            "AfterSwapLetters": "PNURMIO",
-            "InitialLetters": "YAOTIUT",
+            "AfterSwapLetters": "OOIOEEE",
+            "InitialLetters": "RSHERIY",
             "MoveType": "SWAP_TILES"
         },
         {
             "PlayerName": "Tester",
-            "AfterSwapLetters": "WSAOEGG",
-            "InitialLetters": "OWQSEGC",
+            "AfterSwapLetters": "ENIINTL",
+            "InitialLetters": "DTLNQLE",
             "MoveType": "SWAP_TILES"
         },
         {
             "PlayerName": "John",
-            "AfterSwapLetters": "PNURMIO",
-            "InitialLetters": "YAOTIUT",
+            "AfterSwapLetters": "OOIOEEE",
+            "InitialLetters": "RSHERIY",
             "MoveType": "SWAP_TILES"
         },
         {
@@ -290,7 +290,7 @@
             "Points": 70,
             "PlayerName": "John",
             "MoveType": "PLAY_WORD",
-            "LettersPlayed": "PNURMIO",
+            "LettersPlayed": "OOIOEEE",
             "Row": 7,
             "Direction": "D"
         },
@@ -310,26 +310,26 @@
             "score": 0,
             "name": "Tester",
             "tileRack": [
-                {"W": 4},
-                {"S": 1},
-                {"A": 1},
-                {"O": 1},
                 {"E": 1},
-                {"G": 2},
-                {"G": 2}
+                {"N": 1},
+                {"I": 1},
+                {"I": 1},
+                {"N": 1},
+                {"T": 1},
+                {"L": 1}
             ]
         },
         {
             "score": 0,
             "name": "John",
             "tileRack": [
-                {"P": 3},
-                {"N": 1},
-                {"U": 1},
-                {"R": 1},
-                {"M": 3},
+                {"O": 1},
+                {"O": 1},
                 {"I": 1},
-                {"O": 1}
+                {"O": 1},
+                {"E": 1},
+                {"E": 1},
+                {"E": 1}
             ]
         }
     ]

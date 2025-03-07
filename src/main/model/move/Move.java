@@ -1,12 +1,9 @@
 package model.move;
 
-import java.util.List;
-
 import org.json.JSONObject;
 
 import model.Direction;
 import model.Player;
-import model.tile.LetterTile;
 import persistance.Writable;
 
 // A move made by a player, either a word played or a swap
@@ -109,7 +106,7 @@ public class Move implements Writable {
         return false;
     }
 
-    // EFFECTS: returns list of letter tiles
+   /*  // EFFECTS: returns list of letter tiles
     // based on input string
     private String getStringFromLetters(List<LetterTile> letters) {
         String result = "";
@@ -117,7 +114,7 @@ public class Move implements Writable {
             result += letter.getString();
         }
         return result;
-    }   
+    }    */
 
     @Override
     // EFFECTS: returns JSONObject representing
