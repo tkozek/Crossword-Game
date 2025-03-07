@@ -18,7 +18,7 @@ public class Coordinate {
         return this.row;
     }
 
-    public int getColumn() {
+    public int getCol() {
         return this.column;
     }
 

@@ -33,16 +33,16 @@ public class CoordinateTest {
     @Test
     public void testGetColumn() {
         c1 = new Coordinate(0,1);
-        assertEquals(c1.getColumn(), 1);
+        assertEquals(c1.getCol(), 1);
 
         c1 = new Coordinate(10,3);
-        assertEquals(c1.getColumn(), 3);
+        assertEquals(c1.getCol(), 3);
 
         c2 = new Coordinate(4,2);
-        assertEquals(2, c2.getColumn());
+        assertEquals(2, c2.getCol());
 
         c2 = new Coordinate(8,5);
-        assertEquals(5, c2.getColumn());
+        assertEquals(5, c2.getCol());
     }
 
     @Test 

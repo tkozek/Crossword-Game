@@ -215,19 +215,18 @@ public class Board {
     public int scoreWord(List<LetterTile> letters, int startRow, int startCol, int rowInc, int colInc) {
         int wordMultiplier = 1;
         int total = 0;
-        int adjacentTotal = 0;
-        int lettersPlaced = 0;
+        int adjTotal = 0;
+        int numPlaced = 0;
         int i = 0;
-        while (lettersPlaced < letters.size()) {
+        while (numPlaced < letters.size()) {
             if (boardTiles[startRow + i * rowInc][ startCol + i * colInc] instanceof BoardTile) {
                 // we can place a letter here, and need recursive calls
-                int letterPoints = letters.get(lettersPlaced).getLetterPoints();
+                LetterTile letter = letters.get(numPlaced);
                 Coordinate coord = new Coordinate(startRow + i * rowInc, startCol + i * colInc);
-                adjacentTotal += scorePerpendicularAdjacentWords(letterPoints, coord, colInc, rowInc);
+                adjTotal += scorePerpendicularWord(letter, coord.getRow(), coord.getCol(), colInc, rowInc);
                 wordMultiplier *= findWordMultiplier(coord, false);
-                letterPoints *=  findLetterMultiplier(coord, false);
-                lettersPlaced++;
-                total += letterPoints;
+                numPlaced++;
+                total += letter.getLetterPoints() * findLetterMultiplier(coord, false);
             } else {
                 LetterTile alreadyPlacedLetter = (LetterTile) boardTiles[startRow + i * rowInc][startCol + i * colInc];
                 total += alreadyPlacedLetter.getLetterPoints();
@@ -236,7 +235,7 @@ public class Board {
             i++;
         }
         total += getInlineAdjacentPoints(startRow, startCol, rowInc, colInc, i);
-        return total * wordMultiplier + adjacentTotal;
+        return total * wordMultiplier + adjTotal;
     }
 
     // REQUIRES: startRow and startCol are both in bounds, shift >= 0, exactly one of rowInc and colInc are 
@@ -267,30 +266,52 @@ public class Board {
     // iteratively adds points from already placed in-line letter tiles
     // which connect to the starting coordinate. returns score
     // after applying relevant multiplier.
-    private int scorePerpendicularAdjacentWords(int letterPoints, Coordinate coord, int rowInc, int colInc) {
+    private int scorePerpendicularWord(LetterTile letter, int startRow, int startCol, int rowInc, int colInc) {
+        Coordinate coord = new Coordinate(startRow, startCol);
         int total = 0;
-        int startRow = coord.getRow();
-        int startCol = coord.getColumn();
-        int i = 1;
-        while ((startRow + rowInc * i) < BOARD_LENGTH && (startCol + colInc * i) < BOARD_LENGTH && 
-                boardTiles[startRow + rowInc * i][startCol + colInc * i] instanceof LetterTile) {
-                    LetterTile letter = (LetterTile) boardTiles[startRow + rowInc * i][startCol + colInc * i];
-                    total += letter.getLetterPoints();
-                    i++;
-                }
-        i = -1;
-        // then go back starting from one space before first tile
-        while ((startRow + rowInc * i) >= 0 && (startCol + colInc * i) >= 0 && 
-                boardTiles[startRow + rowInc * i][startCol + colInc * i] instanceof LetterTile) {
-                    LetterTile letter = (LetterTile) boardTiles[startRow + rowInc * i][startCol + colInc * i];
-                    total += letter.getLetterPoints();
-                    i--;
-                }
-        if (total == 0) {
+        int letterPoints = letter.getLetterPoints();
+        boolean blankStarter = letterPoints == 0; // display may change, but value of blank is always zero
+        total += scorePosAdjacent(startRow, startCol, rowInc, colInc);
+        total += scoreNegAdjacent(startRow, startCol, rowInc, colInc);
+        if (total == 0 && !blankStarter) {
             return 0;
         } else {
             return (total + letterPoints * findLetterMultiplier(coord, true)) * findWordMultiplier(coord, true);
         }
+    }
+
+    private int scorePosAdjacent(int startRow, int startCol, int rowInc, int colInc) {
+        int i = 1;
+        int total = 0;
+        while (inBounds(startRow + rowInc * i, startCol + colInc * i)) {
+            if (boardTiles[startRow + rowInc * i][startCol + colInc * i] instanceof LetterTile) {
+                LetterTile letter = (LetterTile) boardTiles[startRow + rowInc * i][startCol + colInc * i];
+                total += letter.getLetterPoints();
+            } else {
+                break;
+            }
+            i++;
+        }
+        return total;
+    }
+
+    private int scoreNegAdjacent(int startRow, int startCol, int rowInc, int colInc) {
+        int i = -1;
+        int total = 0;
+        while (inBounds(startRow + rowInc * i, startCol + colInc * i)) {
+            if (boardTiles[startRow + rowInc * i][startCol + colInc * i] instanceof LetterTile) {
+                LetterTile letter = (LetterTile) boardTiles[startRow + rowInc * i][startCol + colInc * i];
+                total += letter.getLetterPoints();
+            } else {
+                break;
+            }
+            i--;
+        }
+        return total;
+    }
+
+    private boolean inBounds(int row, int col) {
+        return (row >= 0 && row < BOARD_LENGTH && col >= 0 && col < BOARD_LENGTH);
     }
 
     // MODIFIES: this

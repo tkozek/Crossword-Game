@@ -208,7 +208,7 @@ public class ScrabbleApp {
     // displays that.
     public void handleViewings(Player p) {
         System.out.println("\n Type whether you'd like to view current (b)oard, (w)ords played, all (m)oves,"
-                + " (r)emaining tile counts, or anything else to cancel");
+                + " (f)iltered moves, (r)emaining tile counts, or anything else to cancel");
         switch (scanner.nextLine().toLowerCase()) {
             case "b":
                 getBoardPrintOut(board);
@@ -219,11 +219,32 @@ public class ScrabbleApp {
             case "m":
                 printAllMovesSummary(p);
                 break;
+            case "f":
+                handleShowFilteredMoves(p);
+                break;
             case "r":
                 getRemainingCharacterCounts(p);
                 break;
         }
         handleTurn(p);
+    }
+
+    // EFFECTS: Returns summary of all words player has played
+    // which contains their input letter, or indicates of 
+    // no such words exist.
+    private void handleShowFilteredMoves(Player p) {
+        System.out.println("Enter a character to view all your words played which contained that character");
+        String entry = scanner.nextLine().toUpperCase();
+        Character character = entry.charAt(0);
+        List<Move> moves = player.getHistory().getListOfWordsPlayedContainingLetter(character);
+        if (moves.isEmpty()) {
+            System.out.println("You haven't played any words containing " + character.toString());
+        } else {
+            for (Move move : moves) {
+                getWordPrintout(move, p);
+            }
+        }
+        scanner.nextLine();
     }
 
     // MODIFIES: scrabbleGame
@@ -257,6 +278,7 @@ public class ScrabbleApp {
                 printSkipSummary(move, p);
             }
         }
+        scanner.nextLine();
     }
 
     //EFFECTS: Prints summary of a player swap
