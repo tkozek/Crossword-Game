@@ -9,7 +9,7 @@ import model.move.Move;
 import model.tile.LetterTile;
 import model.tile.TileBag;
 
-
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -112,5 +112,53 @@ public class ScrabbleGameTest {
         // in each map by default. which is the expected behaviour for this test
         assertTrue(counts.equals(drawPileCounts));
         
+    }
+
+    @Test
+    void testScorePerpendicularConnectedByBlank() {
+        List<LetterTile> blankOnly = new ArrayList<>();
+        player.addTile(new LetterTile('B', 3));
+        player.addTile(new LetterTile('R', 1));
+        player.addTile(new LetterTile('I', 1));
+        player.addTile(new LetterTile('N', 1));
+        player.addTile(new LetterTile('K', 5));
+        
+        for (int i = 0; i < 5; i++) {
+            player.selectTile(i);
+        }
+        assertEquals(32, game.playWord(player, 7, 7, Direction.DOWN));
+        assertEquals(1, game.getHistory().getMoves().size());
+        assertEquals(1, player.getHistory().getMoves().size());
+        assertEquals(player.getNumTilesOnRack(), 7);
+        assertEquals(game.getTileBag().numTilesRemaining(), 100 - 7);
+        assertEquals(32, player.getPointsThisGame());
+
+        for (int i = 0; i < 7; i++) {
+            player.selectTile(i);
+        }
+        player.removeSelectedTiles();
+        assertEquals(player.getNumTilesOnRack(), 0);
+        player.addTile(new LetterTile('I', 1));
+        player.addTile(new LetterTile('T', 1));
+        player.addTile(new LetterTile('E', 1));
+        player.addTile(new LetterTile('S', 1));
+
+        assertEquals(player.getNumTilesOnRack(), 4);
+        for (int i = 0; i < 4; i++) {
+            player.selectTile(i);
+        }
+        assertEquals(18, game.playWord(player, 11, 8, Direction.RIGHT));
+        assertEquals(player.getNumTilesOnRack(), 7);
+        for (int i = 0; i < 7; i++) {
+            player.selectTile(i);
+        }
+        player.removeSelectedTiles();
+        player.addTile(new LetterTile('-'));
+        player.addTile(new LetterTile('I'));
+        player.addTile(new LetterTile('T'));
+        for (int i = 0; i < 3; i++) {
+            player.selectTile(i);
+        }
+        assertEquals(8, game.playWord(player, 10, 10, Direction.RIGHT));
     }
 }

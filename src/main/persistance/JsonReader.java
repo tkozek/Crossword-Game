@@ -169,18 +169,6 @@ public class JsonReader {
             }
         }
     }
-
-    // EFFECTS: returns list of letter tiles
-    // based on input string
-    private List<LetterTile> getLettersFromString(String string) {
-        List<LetterTile> letters = new ArrayList<>();
-        LetterTile letter;
-        for (int i = 0; i < string.length(); i++) {
-            letter = new LetterTile(string.charAt(i));
-            letters.add(letter);
-        }
-        return letters;
-    }
     
 
     // MODIFIES: player, game

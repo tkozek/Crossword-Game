@@ -215,6 +215,7 @@ public class ScrabbleGame implements Writable {
         player.addMove(wordPlayed);
         history.addMove(wordPlayed);
         player.removeSelectedTiles();
+        player.addPoints(score);
         tileBag.drawTiles(player);
         return score;
     }

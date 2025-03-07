@@ -374,7 +374,6 @@ public class ScrabbleApp {
             System.out.println("\nYour new tiles are:");
             getTilePrintOut(player);
             System.out.println(player.getPlayerName() + " earned " + score + " points!");
-            player.addPoints(score);
             System.out.println(player.getPlayerName() + " now has " + player.getPointsThisGame() + " points \n");
         } else {
             System.out.println("Can't play that word there");

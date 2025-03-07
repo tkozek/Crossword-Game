@@ -310,7 +310,7 @@ public class Board {
         return total;
     }
 
-    private boolean inBounds(int row, int col) {
+    public boolean inBounds(int row, int col) {
         return (row >= 0 && row < BOARD_LENGTH && col >= 0 && col < BOARD_LENGTH);
     }
 

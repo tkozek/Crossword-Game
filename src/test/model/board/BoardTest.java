@@ -48,6 +48,7 @@ public class BoardTest {
     private LetterTile X;
     private LetterTile Y;
     private LetterTile Z;
+    private LetterTile Blank;
     private ScrabbleGame game;
 
     @BeforeEach
@@ -75,7 +76,7 @@ public class BoardTest {
         Y = new LetterTile('Y', 4);
         S = new LetterTile('S', 1);
         X = new LetterTile('X', 8);
-        
+        Blank = new LetterTile('-', 0);
     }
     
     /* @Test
@@ -564,5 +565,28 @@ public class BoardTest {
         justA.add(new LetterTile('A'));
         assertEquals(8, board.playWord(justA, 4, 4, Direction.RIGHT));
     }
+
+    @Test
+    void testfindTripleWordMultiplierIsAdjacency() {
+        assertEquals(board.findWordMultiplier(new Coordinate(0,0), true), 3);
+        assertEquals(board.findWordMultiplier(new Coordinate(0,0), true), 3);
+        assertEquals(board.findWordMultiplier(new Coordinate(0,0), false), 3);
+        assertEquals(board.findWordMultiplier(new Coordinate(0,0), true), 1);
+        assertEquals(board.findWordMultiplier(new Coordinate(0,0), false), 1);  
+    }
+
+    @Test
+    void testInBounds() {
+        assertTrue(board.inBounds(0,0));
+        assertFalse(board.inBounds(-1,0));
+        assertFalse(board.inBounds(-1,-1));
+        assertFalse(board.inBounds(0,-1));
+        assertFalse(board.inBounds(15,0));
+        assertFalse(board.inBounds(15,15));
+        assertFalse(board.inBounds(0,16));
+        assertFalse(board.inBounds(16,-1));
+        assertFalse(board.inBounds(-1,16));
+    }
+
 
 }
