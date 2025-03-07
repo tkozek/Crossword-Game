@@ -61,12 +61,15 @@ public class BoardTest {
         A = new LetterTile('A',1);
         B = new LetterTile('B',3);
         C = new LetterTile('C', 3);
+        
+        E = new LetterTile('E', 1);
         G = new LetterTile('G', 2);
         H = new LetterTile('H', 4);
-        E = new LetterTile('E', 1);
         N = new LetterTile('N', 1);
         R = new LetterTile('R', 1);
-
+        L = new LetterTile('L', 1);
+        K = new LetterTile('K', 5);
+        T = new LetterTile('T', 1);
         Z = new LetterTile('Z',10);
         O = new LetterTile('O', 1);
         Y = new LetterTile('Y', 4);
@@ -116,6 +119,7 @@ public class BoardTest {
 
     } */
 
+   
     @Test 
     public void testSectionIsAvailableNothingAddedGoingRight() {
         testBag.drawTiles(testPlayer);
@@ -305,25 +309,25 @@ public class BoardTest {
         letters.add(Z);
         assertEquals(letters.size(), 3);
         //TW
-        assertEquals((3 + 1 + 10) * 3, board.scoreWord(letters, 0,0,Direction.DOWN));
+        assertEquals((3 + 1 + 10) * 3, board.scoreWord(letters, 0,0, 0, 1));
         board = new Board();
-        assertEquals((3 + 1 + 10) * 3, board.scoreWord(letters, 0,0,Direction.RIGHT));
+        assertEquals((3 + 1 + 10) * 3, board.scoreWord(letters, 0,0, 1, 0));
         board = new Board();
         // DW
-        assertEquals((3 + 1 + 10) * 2, board.scoreWord(letters, 1,1,Direction.DOWN));
+        assertEquals((3 + 1 + 10) * 2, board.scoreWord(letters, 1,1,0, 1));
         board = new Board();
-        assertEquals((3 + 1 + 10) * 2, board.scoreWord(letters, 1,1,Direction.DOWN));
+        assertEquals((3 + 1 + 10) * 2, board.scoreWord(letters, 1,1,0, 1));
         board = new Board();
         //Normal
-        assertEquals((3 + 1 + 10), board.scoreWord(letters, 1,2,Direction.RIGHT));
+        assertEquals((3 + 1 + 10), board.scoreWord(letters, 1,2, 0, 1));
         board = new Board();
         //TL
-        assertEquals((3 * 3 + 1 + 10), board.scoreWord(letters, 1,5,Direction.RIGHT));
+        assertEquals((3 * 3 + 1 + 10), board.scoreWord(letters, 1,5,1, 0));
         board = new Board();
-        assertEquals((3 + 1 + 10 * 3), board.scoreWord(letters, 3,5,Direction.DOWN));
+        assertEquals((3 + 1 + 10 * 3), board.scoreWord(letters, 3,5, 1, 0));
         board = new Board();
         //DL
-        assertEquals(3 + 1 * 2 + 10, board.scoreWord(letters, 10,14,Direction.DOWN));
+        assertEquals(3 + 1 * 2 + 10, board.scoreWord(letters, 10,14, 1, 0));
         board = new Board();
         
     }
@@ -506,7 +510,7 @@ public class BoardTest {
         assertEquals(22, board.playWord(CHORE, 7,7, Direction.DOWN));
         assertEquals(6, board.playWord(TOOL, 9, 6, Direction.RIGHT));
         // FORMS AH and AT
-        assertEquals(9, board.playWord(justA, 8, 0, Direction.RIGHT));
+        assertEquals(9, board.playWord(justA, 8, 6, Direction.RIGHT));
     }
 
     @Test
@@ -516,7 +520,7 @@ public class BoardTest {
         HANG.add(A);
         HANG.add(N);
         HANG.add(G);
-        assertEquals(16, board.scoreWord(HANG, 7, 4, Direction.RIGHT));
+        assertEquals(16, board.playWord(HANG, 7, 4, Direction.RIGHT));
         List<LetterTile> CHANGE = new ArrayList<>();
         CHANGE.add(C);
         CHANGE.add(E);
@@ -554,7 +558,7 @@ public class BoardTest {
         List<LetterTile> ATE = new ArrayList<>();
         ATE.add(new LetterTile('A'));
         ATE.add(new LetterTile('E'));
-        assertEquals(2, board.playWord(ATE, 5, 4, Direction.RIGHT));
+        assertEquals(3, board.playWord(ATE, 5, 4, Direction.RIGHT));
         
         List<LetterTile> justA = new ArrayList<>();
         justA.add(new LetterTile('A'));

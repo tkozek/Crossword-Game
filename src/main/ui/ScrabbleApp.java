@@ -346,7 +346,7 @@ public class ScrabbleApp {
         int col = scanner.nextInt();
         scanner.nextLine();
         System.out.println("Now enter direction (R)ight or (D)own (default)");
-        Direction dir = (scanner.nextLine().toLowerCase().equals("R")) ? Direction.RIGHT : Direction.DOWN;
+        Direction dir = (scanner.nextLine().toLowerCase().equals("r")) ? Direction.RIGHT : Direction.DOWN;
         if (board.sectionIsAvailable(player.getSelectedTiles(), row, col, dir)) {
             int score = board.playWord(player.getSelectedTiles(), row, col, dir);
             player.logWord(row, col, score, dir);

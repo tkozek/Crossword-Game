@@ -181,7 +181,9 @@ public class Board {
     //         and going in specified direction. 
     //         returns points earned from the word
     public int playWord(List<LetterTile> letters, int startRow, int startCol, Direction dir) {
-        int score = scoreWord(letters, startRow, startCol, dir);
+        int rowInc = (dir == Direction.DOWN) ? 1 : 0;
+        int colInc = (dir == Direction.RIGHT) ? 1 : 0;
+        int score = scoreWord(letters, startRow, startCol, rowInc, colInc);
         placeWord(letters, startRow, startCol, dir);
         return score;
     }
@@ -210,32 +212,55 @@ public class Board {
       // REQUIRES: sectionIsAvailable() is true for given arguments
     // EFFECTS: Returns the score earned for playing letters in the given direction
     // beginning at starting coordinates
-    public int scoreWord(List<LetterTile> letters, int startRow, int startCol, Direction dir) {
-        int length = letters.size();
+    public int scoreWord(List<LetterTile> letters, int startRow, int startCol, int rowInc, int colInc) {
         int wordMultiplier = 1;
         int total = 0;
         int adjacentTotal = 0;
         int lettersPlaced = 0;
         int i = 0;
-        int rowInc = (dir == Direction.DOWN) ? 1 : 0;
-        int colInc = (dir == Direction.RIGHT) ? 1 : 0;
-        while (lettersPlaced < length) {
-            if (boardTiles[startRow + i * rowInc][ startCol + i * colInc] instanceof LetterTile) {
+        while (lettersPlaced < letters.size()) {
+            if (boardTiles[startRow + i * rowInc][ startCol + i * colInc] instanceof BoardTile) {
+                // we can place a letter here, and need recursive calls
+                int letterPoints = letters.get(lettersPlaced).getLetterPoints();
+                Coordinate coord = new Coordinate(startRow + i * rowInc, startCol + i * colInc);
+                adjacentTotal += scorePerpendicularAdjacentWords(letterPoints, coord, colInc, rowInc);
+                wordMultiplier *= findWordMultiplier(coord, false);
+                letterPoints *=  findLetterMultiplier(coord, false);
+                lettersPlaced++;
+                total += letterPoints;
+            } else {
                 LetterTile alreadyPlacedLetter = (LetterTile) boardTiles[startRow + i * rowInc][startCol + i * colInc];
                 total += alreadyPlacedLetter.getLetterPoints();
                 // add that score but no recursive calls and no new letters placed
-                continue;
             }
-            //otherwise we can place a letter here, and need recursive calls
-            int letterPoints = letters.get(lettersPlaced).getLetterPoints();
-            Coordinate coord = new Coordinate(startRow + i * rowInc, startCol + i * colInc);
-            adjacentTotal += scorePerpendicularAdjacentWords(letterPoints, coord, colInc, rowInc);
-            wordMultiplier *= findWordMultiplier(coord);
-            letterPoints *=  findLetterMultiplier(coord);
-            lettersPlaced++;
-            total += letterPoints;
+            i++;
         }
+        total += getInlineAdjacentPoints(startRow, startCol, rowInc, colInc, i);
         return total * wordMultiplier + adjacentTotal;
+    }
+
+    // REQUIRES: startRow and startCol are both in bounds, shift >= 0, exactly one of rowInc and colInc are 
+    // 1 and 0 respectively.
+    // EFFECTS: returns any points earned from existing tiles prior to first letter placed and after last letter
+    // placed in this turn. 
+    private int getInlineAdjacentPoints(int startRow, int startCol, int rowInc, int colInc, int shift) {
+        int total = 0;
+        // start at point after final placed tile
+        while ((startRow + rowInc * shift) < BOARD_LENGTH && (startCol + colInc * shift) < BOARD_LENGTH && 
+                boardTiles[startRow + rowInc * shift][startCol + colInc * shift] instanceof LetterTile) {
+                    LetterTile letter = (LetterTile) boardTiles[startRow + rowInc * shift][startCol + colInc * shift];
+                    total += letter.getLetterPoints();
+                    shift++;
+                }
+        shift = -1;
+        // then go back starting from one space before first tile
+        while ((startRow + rowInc * shift) >= 0 && (startCol + colInc * shift) >= 0 && 
+                boardTiles[startRow + rowInc * shift][startCol + colInc * shift] instanceof LetterTile) {
+                    LetterTile letter = (LetterTile) boardTiles[startRow + rowInc * shift][startCol + colInc * shift];
+                    total += letter.getLetterPoints();
+                    shift--;
+                }
+        return total;
     }
 
     // EFFECTS: Checks for multipliers at the starting coordinate, then
@@ -243,19 +268,45 @@ public class Board {
     // which connect to the starting coordinate. returns score
     // after applying relevant multiplier.
     private int scorePerpendicularAdjacentWords(int letterPoints, Coordinate coord, int rowInc, int colInc) {
-        return -1;
+        int total = 0;
+        int startRow = coord.getRow();
+        int startCol = coord.getColumn();
+        int i = 1;
+        while ((startRow + rowInc * i) < BOARD_LENGTH && (startCol + colInc * i) < BOARD_LENGTH && 
+                boardTiles[startRow + rowInc * i][startCol + colInc * i] instanceof LetterTile) {
+                    LetterTile letter = (LetterTile) boardTiles[startRow + rowInc * i][startCol + colInc * i];
+                    total += letter.getLetterPoints();
+                    i++;
+                }
+        i = -1;
+        // then go back starting from one space before first tile
+        while ((startRow + rowInc * i) >= 0 && (startCol + colInc * i) >= 0 && 
+                boardTiles[startRow + rowInc * i][startCol + colInc * i] instanceof LetterTile) {
+                    LetterTile letter = (LetterTile) boardTiles[startRow + rowInc * i][startCol + colInc * i];
+                    total += letter.getLetterPoints();
+                    i--;
+                }
+        if (total == 0) {
+            return 0;
+        } else {
+            return (total + letterPoints * findLetterMultiplier(coord, true)) * findWordMultiplier(coord, true);
+        }
     }
 
     // MODIFIES: this
     // EFFECTS: returns the word multiplier for the
     // board space at coord, removes multiplier from 
     // that coordinate so that it isn't used a second time
-    public int findWordMultiplier(Coordinate coord) {
+    public int findWordMultiplier(Coordinate coord, boolean isAdjacency) {
         if (doubleWordCoordinates.contains(coord)) {
-            doubleWordCoordinates.remove(coord);
+            if (!isAdjacency) {
+                doubleWordCoordinates.remove(coord);
+            }
             return 2;
         } else if (tripleWordCoordinates.contains(coord)) {
-            tripleWordCoordinates.remove(coord);
+            if (!isAdjacency) {
+                tripleWordCoordinates.remove(coord);
+            }
             return 3;
         } else {
             return 1;
@@ -266,12 +317,16 @@ public class Board {
     // EFFECTS: returns the letter multiplier for the
     // board space at coord, removes multiplier from 
     // that coordinate so that it isn't used a second time
-    public int findLetterMultiplier(Coordinate coord) {
+    public int findLetterMultiplier(Coordinate coord, boolean isAdjacency) {
         if (doubleLetterCoordinates.contains(coord)) {
+            if (!isAdjacency) {
             doubleLetterCoordinates.remove(coord);
+            }
             return 2;
         } else if (tripleLetterCoordinates.contains(coord)) {
+            if (!isAdjacency) {
             tripleLetterCoordinates.remove(coord);
+            }
             return 3;
         } else {
             return 1;
