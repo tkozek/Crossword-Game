@@ -398,10 +398,7 @@ public class ScrabbleApp {
                 System.out.println("So far you've selected: ");
                 printSelectedTiles(player);
             } else if (scanner.hasNext("C")) {
-                List<LetterTile> preSwapLetters = player.copyLetterTiles(player.getTilesOnRack());
                 scrabbleGame.swapTiles(player);
-                List<LetterTile> postSwapLetters = player.copyLetterTiles(player.getTilesOnRack());
-                player.logSwap(preSwapLetters, postSwapLetters);
                 System.out.println("\n Your new tiles are: ");
                 getTilePrintOut(player);
                 adjustScanner();

@@ -172,17 +172,18 @@ public class ScrabbleGame implements Writable {
     //MODIFIES: this, tileBag
     //EFFECTS: Adds specified tiles back to common draw bag, then replaces
     //          same number of tiles with random tiles from draw bag.
+    //          logs this move for both the player's history and its own
     public void swapTiles(Player player) {
-        List<LetterTile> original = player.getSelectedTiles();
-        List<LetterTile> copy = new ArrayList<>();
-        for (LetterTile letter : original) {
-            copy.add(letter);
-        }
-        this.tileBag.addTiles(copy);
-        player.clearSelectedTiles();
-        for (LetterTile letter : copy) {
-            player.getTilesOnRack().remove(letter);
-        }
+        List<LetterTile> preSwapLetters = player.copyLetterTiles(player.getTilesOnRack());
+        List<LetterTile> toSwap = player.copyLetterTiles(player.getSelectedTiles());
+        this.tileBag.addTiles(toSwap);
+        player.removeSelectedTiles();
         this.tileBag.drawTiles(player);
+        List<LetterTile> postSwapLetters = player.copyLetterTiles(player.getTilesOnRack());
+        Move swap = new Move(player, preSwapLetters, postSwapLetters);
+        history.addMove(swap);
+        player.addMove(swap);
     }
+
+
 }

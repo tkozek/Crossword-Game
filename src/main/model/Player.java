@@ -185,6 +185,12 @@ public class Player implements Writable {
         this.points += points;
     }
 
+    // MODIFIES: this
+    // EFFECTS: adds move to this player's history
+    public void addMove(Move move) {
+        history.addMove(move);
+    }
+
     //EFFECTS: returns deep copy of player's
     // selected tiles
     public List<LetterTile> copySelectedTiles() {
