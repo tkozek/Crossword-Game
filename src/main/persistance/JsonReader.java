@@ -150,7 +150,6 @@ public class JsonReader {
         String moveType;
         String name;
         Player player;
-        Board board = game.getBoard();
         for (int i = 0; i < historyArray.length(); i++) {
             JSONObject moveObject = historyArray.getJSONObject(i);
             moveType = moveObject.getString("MoveType");
@@ -158,13 +157,13 @@ public class JsonReader {
             player = game.getPlayerByName(name);
             switch (moveType) {
                 case "PLAY_WORD":
-                    addWordPlayed(board, moveObject, player);
+                    addWordPlayed(game, moveObject, player);
                     break;        
                 case "SWAP_TILES":
-                    addSwap(board, moveObject, player);
+                    addSwap(game, moveObject, player);
                     break;  
                 case "SKIP":
-                    player.logSkippedTurn();  
+                    game.logSkippedTurn(player);  
                 default:
                     break;
             }
@@ -187,24 +186,21 @@ public class JsonReader {
     // MODIFIES: player, game
     // EFFECTS: adds move of type PLAY to 
     // both player and game history
-    private void addWordPlayed(Board board, JSONObject moveObject, Player player) {
+    private void addWordPlayed(ScrabbleGame game, JSONObject moveObject, Player player) {
         int points = moveObject.getInt("Points");
         int row = moveObject.getInt("Row");
         int col = moveObject.getInt("Col");
         Direction dir = (moveObject.getString("Direction").equals("D")) ? Direction.DOWN : Direction.RIGHT;
-        String lettersString = moveObject.getString("LettersPlayed");
-        List<LetterTile> letters = getLettersFromString(lettersString);
-        player.logWord(letters, row, col, points, dir);
+        String letters = moveObject.getString("LettersPlayed");
+        game.logWord(player, letters, row, col, points, dir);
     }
 
     // MODIFIES: player, game
     // EFFECTS: adds move of type SWAP to 
     // both player and game history
-    private void addSwap(Board board, JSONObject moveObject, Player player) {
-        String lettersString = moveObject.getString("InitialLetters");
-        List<LetterTile> initialLetters = getLettersFromString(lettersString);
-        lettersString = moveObject.getString("AfterSwapLetters");
-        List<LetterTile> postSwapLetters = getLettersFromString(lettersString);
-        player.logSwap(initialLetters, postSwapLetters);
+    private void addSwap(ScrabbleGame game, JSONObject moveObject, Player player) {
+        String initialLetters = moveObject.getString("InitialLetters");
+        String postSwapLetters = moveObject.getString("AfterSwapLetters");
+        game.logSwap(player, initialLetters, postSwapLetters);
     }
 }

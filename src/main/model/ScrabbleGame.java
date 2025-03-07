@@ -174,16 +174,70 @@ public class ScrabbleGame implements Writable {
     //          same number of tiles with random tiles from draw bag.
     //          logs this move for both the player's history and its own
     public void swapTiles(Player player) {
-        List<LetterTile> preSwapLetters = player.copyLetterTiles(player.getTilesOnRack());
+        String preSwapLetters = "";
+        for (LetterTile letter : player.getTilesOnRack()) {
+            preSwapLetters += letter.getString();
+        }
         List<LetterTile> toSwap = player.copyLetterTiles(player.getSelectedTiles());
         this.tileBag.addTiles(toSwap);
         player.removeSelectedTiles();
         this.tileBag.drawTiles(player);
-        List<LetterTile> postSwapLetters = player.copyLetterTiles(player.getTilesOnRack());
+        String postSwapLetters = "";
+        for (LetterTile letter : player.getTilesOnRack()) {
+            postSwapLetters += letter.getString();
+        }
         Move swap = new Move(player, preSwapLetters, postSwapLetters);
         history.addMove(swap);
         player.addMove(swap);
     }
 
+    // MODIFIES: this, player
+    // EFFECTS: Logs a swap into player and game's history
+    public void logSwap(Player player, String initialLetters, String postSwapLetters) {
+        Move swap = new Move(player, initialLetters, postSwapLetters);
+        history.addMove(swap);
+        player.addMove(swap);
+    }
+
+    // REQUIRES: Players selected tiles can be played on this board
+    // starting at (row, col) and proceeding in given direction
+    // MODIFIES: this, player, board, tileBag
+    // EFFECTS: plays players selected tiles in desired manner on board,
+    // logs the move to player and game history, replenishes player's tile
+    // rack, returns score.
+    public int playWord(Player player, int row, int col, Direction dir) {
+        String lettersPlayed = "";
+        for (LetterTile letter : player.getSelectedTiles()) {
+            lettersPlayed += letter.getString();
+        }
+        int score = board.playWord(player.getSelectedTiles(), row, col, dir);
+        Move wordPlayed = new Move(player, lettersPlayed, row, col, score, dir);
+        player.addMove(wordPlayed);
+        history.addMove(wordPlayed);
+        player.removeSelectedTiles();
+        tileBag.drawTiles(player);
+        return score;
+    }
+
+    // MODIFIES: this, player
+    // EFFECTS: logs a previously played word to 
+    // both game history and player history. 
+    // DOES NOT impact score.
+    public void logWord(Player player, String letters, int row, int col, int points, Direction dir) {
+        Move word = new Move(player, letters, row, col, points, dir);
+        player.addMove(word);
+        history.addMove(word);
+    }
+
+    // REQUIRES: getPlayers() contains player
+    // MODIFIES: this, player
+    // EFFECTS; logs a skipped turn in this history
+    // and this player's history
+    public void logSkippedTurn(Player player) {
+        player.clearSelectedTiles();
+        Move skip = new Move(player);
+        player.addMove(skip);
+        history.addMove(skip);
+    }
 
 }

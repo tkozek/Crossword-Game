@@ -227,30 +227,31 @@
         "TWS"
     ],
     "TileBag": {
-        "A": 7,
+        "A": 8,
         "B": 2,
-        "C": 2,
+        "C": 1,
         "D": 3,
-        "E": 12,
+        "E": 11,
         "F": 2,
         "G": 2,
         "H": 1,
         "I": 8,
         "J": 1,
         "K": 1,
-        "L": 4,
+        "L": 3,
         "M": 2,
         "N": 4,
-        "O": 6,
-        "P": 1,
+        "O": 8,
+        "P": 2,
         "Q": 1,
-        "R": 6,
-        "S": 4,
+        "R": 5,
+        "S": 3,
         "T": 5,
-        "U": 3,
+        "U": 4,
         "V": 2,
         "W": 2,
-        "Y": 2,
+        "X": 1,
+        "Y": 1,
         "Z": 1,
         "-": 2
     },
@@ -258,14 +259,26 @@
     "History": [
         {
             "PlayerName": "Tester",
-            "AfterSwapLetters": "NIXOGAO",
-            "InitialLetters": "MSOTEIA",
+            "AfterSwapLetters": "IANELYS",
+            "InitialLetters": "KYTERIN",
             "MoveType": "SWAP_TILES"
         },
         {
             "PlayerName": "John",
-            "AfterSwapLetters": "DAPTNHU",
-            "InitialLetters": "KMQPREW",
+            "AfterSwapLetters": "HNTCGRD",
+            "InitialLetters": "EOTFEL-",
+            "MoveType": "SWAP_TILES"
+        },
+        {
+            "PlayerName": "Tester",
+            "AfterSwapLetters": "IANELYS",
+            "InitialLetters": "KYTERIN",
+            "MoveType": "SWAP_TILES"
+        },
+        {
+            "PlayerName": "John",
+            "AfterSwapLetters": "HNTCGRD",
+            "InitialLetters": "EOTFEL-",
             "MoveType": "SWAP_TILES"
         },
         {
@@ -277,7 +290,7 @@
             "Points": 70,
             "PlayerName": "John",
             "MoveType": "PLAY_WORD",
-            "LettersPlayed": "DAPTNHU",
+            "LettersPlayed": "HNTCGRD",
             "Row": 7,
             "Direction": "D"
         },
@@ -286,7 +299,7 @@
             "Points": 60,
             "PlayerName": "Tester",
             "MoveType": "PLAY_WORD",
-            "LettersPlayed": "NIXOGAO",
+            "LettersPlayed": "",
             "Row": 6,
             "Direction": "R"
         }
@@ -297,26 +310,26 @@
             "score": 0,
             "name": "Tester",
             "tileRack": [
-                {"N": 1},
                 {"I": 1},
-                {"X": 8},
-                {"O": 1},
-                {"G": 2},
                 {"A": 1},
-                {"O": 1}
+                {"N": 1},
+                {"E": 1},
+                {"L": 1},
+                {"Y": 4},
+                {"S": 1}
             ]
         },
         {
             "score": 0,
             "name": "John",
             "tileRack": [
-                {"D": 2},
-                {"A": 1},
-                {"P": 3},
-                {"T": 1},
-                {"N": 1},
                 {"H": 4},
-                {"U": 1}
+                {"N": 1},
+                {"T": 1},
+                {"C": 3},
+                {"G": 2},
+                {"R": 1},
+                {"D": 2}
             ]
         }
     ]

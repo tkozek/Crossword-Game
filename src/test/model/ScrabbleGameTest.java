@@ -48,6 +48,16 @@ public class ScrabbleGameTest {
         assertEquals(game.getName(), "Trevor's game");
     }
 
+// EFFECTS: returns list of letter tiles
+    // based on input string
+    private String getStringFromLetters(List<LetterTile> letters) {
+        String result = "";
+        for (LetterTile letter : letters) {
+            result += letter.getString();
+        }
+        return result;
+    }  
+    
     @Test
     void testAddMoves() {
         game.setName("Trevor's game");
@@ -55,7 +65,7 @@ public class ScrabbleGameTest {
         tileBag.drawTiles(player);
         List<LetterTile> lettersToPlay = player.getTilesOnRack();
 
-        Move play = new Move(player, lettersToPlay, 7, 7, 10, Direction.DOWN);
+        Move play = new Move(player, getStringFromLetters(lettersToPlay), 7, 7, 10, Direction.DOWN);
         game.addMove(play);
         List<Move> moves = game.getHistory().getMoves();
         assertEquals(moves.size(), 1);

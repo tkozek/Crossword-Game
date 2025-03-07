@@ -227,23 +227,24 @@
         "TWS"
     ],
     "TileBag": {
-        "A": 9,
+        "A": 8,
         "B": 2,
-        "C": 1,
+        "C": 2,
         "D": 3,
-        "E": 8,
+        "E": 10,
         "F": 2,
         "G": 3,
         "H": 2,
-        "I": 9,
+        "I": 6,
         "J": 1,
         "K": 1,
-        "L": 3,
+        "L": 4,
         "M": 1,
-        "N": 6,
-        "O": 6,
+        "N": 5,
+        "O": 7,
         "P": 2,
-        "R": 5,
+        "Q": 1,
+        "R": 4,
         "S": 4,
         "T": 5,
         "U": 4,
@@ -258,14 +259,26 @@
     "History": [
         {
             "PlayerName": "Tester",
+            "AfterSwapLetters": "IEEAIDI",
+            "InitialLetters": "EJUAIDW",
+            "MoveType": "SWAP_TILES"
+        },
+        {
+            "PlayerName": "John",
+            "AfterSwapLetters": "OMYRNRT",
+            "InitialLetters": "OFHIDFO",
+            "MoveType": "SWAP_TILES"
+        },
+        {
+            "PlayerName": "Tester",
             "AfterSwapLetters": "",
-            "InitialLetters": "ODMCOET",
+            "InitialLetters": "IEEAIDI",
             "MoveType": "SWAP_TILES"
         },
         {
             "PlayerName": "John",
             "AfterSwapLetters": "",
-            "InitialLetters": "EYRLEEQ",
+            "InitialLetters": "OMYRNRT",
             "MoveType": "SWAP_TILES"
         }
     ],
@@ -275,26 +288,26 @@
             "score": 0,
             "name": "Tester",
             "tileRack": [
-                {"O": 1},
-                {"D": 2},
-                {"M": 3},
-                {"C": 3},
-                {"O": 1},
+                {"I": 1},
                 {"E": 1},
-                {"T": 1}
+                {"E": 1},
+                {"A": 1},
+                {"I": 1},
+                {"D": 2},
+                {"I": 1}
             ]
         },
         {
             "score": 0,
             "name": "John",
             "tileRack": [
-                {"E": 1},
+                {"O": 1},
+                {"M": 3},
                 {"Y": 4},
                 {"R": 1},
-                {"L": 1},
-                {"E": 1},
-                {"E": 1},
-                {"Q": 10}
+                {"N": 1},
+                {"R": 1},
+                {"T": 1}
             ]
         }
     ]

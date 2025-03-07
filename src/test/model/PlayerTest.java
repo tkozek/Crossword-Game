@@ -87,14 +87,25 @@ public class PlayerTest {
         testPlayer.setPoints(10);
         assertEquals(testPlayer.getPointsThisGame(), 10);
     }
-    
+
+    // EFFECTS: returns list of letter tiles
+    // based on input string
+    private String getStringFromLetters(List<LetterTile> letters) {
+        String result = "";
+        for (LetterTile letter : letters) {
+            result += letter.getString();
+        }
+        return result;
+    }  
+
     @Test
     void testMakeMove() {
         testBag.drawTiles(testPlayer);
         testPlayer.selectTile(0);
         testPlayer.selectTile(6);
-        assertEquals(testPlayer.getSelectedTiles().size(), 2);
-        testPlayer.logWord(2, 2, 10, Direction.DOWN);
+        List<LetterTile> letters = testPlayer.getSelectedTiles();
+        assertEquals(letters.size(), 2);
+        game.logWord(testPlayer, getStringFromLetters(letters),2, 2, 10, Direction.DOWN);
         assertEquals(testPlayer.getHistory().getMoves().size(), 1);
         assertEquals(testPlayer.getHistory().getMoves().get(0).getPlayer(), testPlayer);
 
@@ -248,7 +259,7 @@ public class PlayerTest {
 
     @Test
     void testLogSwappedAndLogSkippedTurn() {
-        testPlayer.logSkippedTurn();
+        game.logSkippedTurn(testPlayer);
         assertEquals(testPlayer.getHistory().getMoves().size(), 1);
         assertEquals(testPlayer.getHistory().getMoves().get(0).getMoveType(), MoveType.SKIP);
         testBag.drawTiles(testPlayer);
@@ -258,7 +269,7 @@ public class PlayerTest {
         assertEquals(testPlayer.getHistory().getMoves().get(0).getPointsForMove(), 0);
         testBoard.playWord(lettersToSwap, 0, 0, Direction.DOWN);
         List<LetterTile> tilesAfterSwap = testPlayer.getTilesOnRack();
-        testPlayer.logSwap(lettersToSwap, tilesAfterSwap);
+        game.logSwap(testPlayer, getStringFromLetters(lettersToSwap), getStringFromLetters(tilesAfterSwap));
         assertEquals(testPlayer.getHistory().getMoves().size(), 2);
         assertEquals(testPlayer.getHistory().getMoves().get(1).getMoveType(), MoveType.SWAP_TILES);
         assertEquals(testPlayer.getHistory().getMoves().get(1).getPointsForMove(), 0);

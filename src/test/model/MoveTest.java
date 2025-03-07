@@ -44,11 +44,11 @@ public class MoveTest {
 
     @Test
     void testConstructorForPlayedWord() {
-        playWord = new Move(testPlayer, p1Letters, 7,7, 10, Direction.DOWN);
+        playWord = new Move(testPlayer, getStringFromLetters(p1Letters), 7,7, 10, Direction.DOWN);
         assertEquals(playWord.getMoveType(), MoveType.PLAY_WORD);
         assertEquals(playWord.getPlayer(), testPlayer);
         assertEquals(playWord.getPointsForMove(), 10);
-        assertEquals(playWord.getLettersInvolved(), p1Letters);
+        assertEquals(playWord.getLettersInvolved(), getStringFromLetters(p1Letters));
         assertEquals(playWord.getDirection(),Direction.DOWN); 
         assertEquals(playWord.getStartColumn(), 7);
         assertEquals(playWord.getStartRow(), 7);
@@ -57,12 +57,12 @@ public class MoveTest {
 
     @Test
     void testMoveContainsCharacter() {
-        playWord = new Move(testPlayer, p1Letters, 1,8, 10, Direction.DOWN);
+        playWord = new Move(testPlayer, getStringFromLetters(p1Letters), 1,8, 10, Direction.DOWN);
         LetterTile letter = p1Letters.get(0);
         char firstChar = letter.getCharacter();
         assertEquals(playWord.getMoveType(), MoveType.PLAY_WORD);
         assertEquals(playWord.getPointsForMove(), 10);
-        assertEquals(playWord.getLettersInvolved(), p1Letters);
+        assertEquals(playWord.getLettersInvolved(), getStringFromLetters(p1Letters));
         assertEquals(playWord.getDirection(),Direction.DOWN);
         assertTrue(playWord.moveContainsLetter(firstChar)); 
         boolean allTrue = true;
@@ -76,15 +76,25 @@ public class MoveTest {
         // Move cannot contain all possible letters since tileRack is less than the size of the alphabet
         assertFalse(allTrue);
     }
+
+    // EFFECTS: returns list of letter tiles
+    // based on input string
+    private String getStringFromLetters(List<LetterTile> letters) {
+        String result = "";
+        for (LetterTile letter : letters) {
+            result += letter.getString();
+        }
+        return result;
+    }  
     
     @Test
     void testConstructorForSwappedWord() {
-        swap = new Move(testPlayer2, p1Letters, p2Letters);
+        swap = new Move(testPlayer2, getStringFromLetters(p1Letters), getStringFromLetters(p2Letters));
         assertEquals(swap.getPlayer(), testPlayer2);
         assertEquals(swap.getMoveType(), MoveType.SWAP_TILES);
         assertEquals(swap.getPointsForMove(), 0);
         p1Letters.addAll(p2Letters);
-        assertEquals(swap.getLettersInvolved(),p1Letters);
+        assertEquals(swap.getLettersInvolved(), getStringFromLetters(p1Letters));
     }
     
    /*  @Test

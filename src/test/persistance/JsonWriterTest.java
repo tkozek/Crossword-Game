@@ -87,7 +87,7 @@ public class JsonWriterTest extends JsonTest {
             // 
             int score = board.playWord(selectedTiles, 7, 7, Direction.DOWN);
             // log word logs it to player's game too
-            player.logWord(7, 7, score, Direction.DOWN);
+            game.logWord(player, getStringFromLetters(selectedTiles), 7, 7, score, Direction.DOWN);
             player.removeSelectedTiles();
             //player.logSkippedTurn(board);
             // should expect there to be one letters played there that match
@@ -152,8 +152,8 @@ public class JsonWriterTest extends JsonTest {
             List<LetterTile> p1FinalLetters = player.copyLetterTiles(player.getTilesOnRack());
             List<LetterTile> p2FinalLetters = player2.copyLetterTiles(player2.getTilesOnRack());
 
-            player.logSwap(p1InitLetters, p1FinalLetters);
-            player2.logSwap(p2InitLetters, p2FinalLetters);
+            game.logSwap(player, getStringFromLetters(p1InitLetters), getStringFromLetters(p1FinalLetters));
+            game.logSwap(player2, getStringFromLetters(p2InitLetters), getStringFromLetters(p2FinalLetters));
             JsonWriter writer = new JsonWriter("./data/testWriterTwoPlayersEachSwapped.json");
             writer.open();
             writer.write(game);
@@ -203,8 +203,8 @@ public class JsonWriterTest extends JsonTest {
             List<LetterTile> p1InitLetters = player.copySelectedTiles();
             List<LetterTile> p2InitLetters = player2.copySelectedTiles();
 
-            game.swapTiles(player);
-            game.swapTiles(player2);
+            game.swapTiles(player);  // first logged move
+            game.swapTiles(player2); // first logged move
             for (int i = 0; i < 7; i++) {
                 player.selectTile(i);
                 player2.selectTile(i);
@@ -212,12 +212,12 @@ public class JsonWriterTest extends JsonTest {
             List<LetterTile> p1FinalLetters = player.copySelectedTiles();
             List<LetterTile> p2FinalLetters = player2.copySelectedTiles();
 
-            player.logSwap(p1InitLetters, p1FinalLetters);
-            player2.logSwap(p2InitLetters, p2FinalLetters);
-            player.logSkippedTurn();
+            game.logSwap(player, getStringFromLetters(p1InitLetters), getStringFromLetters(p1FinalLetters)); // second logged move
+            game.logSwap(player2, getStringFromLetters(p2InitLetters), getStringFromLetters(p2FinalLetters)); // second logged move
+            game.logSkippedTurn(player); // 3rd
 
-            player2.logWord(7, 7, 70, Direction.DOWN);
-            player.logWord(6, 7, 60, Direction.RIGHT);
+            game.logWord(player2, getStringFromLetters(player2.getSelectedTiles()), 7, 7, 70, Direction.DOWN); //3rd
+            game.logWord(player, getStringFromLetters(player.getSelectedTiles()), 6, 7, 60, Direction.RIGHT); //4th
 
 
             JsonWriter writer = new JsonWriter("./data/testWriteMoveComprehensive.json");
@@ -229,22 +229,34 @@ public class JsonWriterTest extends JsonTest {
             List<Move> p1Moves = game.getPlayerByName("Tester").getHistory().getMoves();
             List<Move> p2Moves = game.getPlayerByName("John").getHistory().getMoves();
 
-            assertEquals(p1Moves.size(), 3);
+            assertEquals(p1Moves.size(), 4);
             assertEquals(p1Moves.get(0).getMoveType(), MoveType.SWAP_TILES);
-            assertEquals(p1Moves.get(1).getMoveType(), MoveType.SKIP);
-            assertEquals(p1Moves.get(2).getMoveType(), MoveType.PLAY_WORD);
-            assertEquals(p1Moves.get(2).getDirection(), Direction.RIGHT);
+            assertEquals(p1Moves.get(1).getMoveType(), MoveType.SWAP_TILES);
+            assertEquals(p1Moves.get(2).getMoveType(), MoveType.SKIP);
+            assertEquals(p1Moves.get(3).getMoveType(), MoveType.PLAY_WORD);
+            assertEquals(p1Moves.get(3).getDirection(), Direction.RIGHT);
 
-            assertEquals(p2Moves.size(), 2);
+            assertEquals(p2Moves.size(), 3);
             assertEquals(p2Moves.get(0).getMoveType(), MoveType.SWAP_TILES);
-            assertEquals(p2Moves.get(1).getMoveType(), MoveType.PLAY_WORD);
-            assertEquals(p2Moves.get(1).getDirection(), Direction.DOWN);
+            assertEquals(p2Moves.get(1).getMoveType(), MoveType.SWAP_TILES);
+            assertEquals(p2Moves.get(2).getMoveType(), MoveType.PLAY_WORD);
+            assertEquals(p2Moves.get(2).getDirection(), Direction.DOWN);
 
 
         } catch (IOException e) {
             fail("Exception should not have been thrown");
         }
     } 
+
+    // EFFECTS: returns list of letter tiles
+    // based on input string
+    private String getStringFromLetters(List<LetterTile> letters) {
+        String result = "";
+        for (LetterTile letter : letters) {
+            result += letter.getString();
+        }
+        return result;
+    }  
  
     
 }

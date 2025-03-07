@@ -284,7 +284,7 @@ public class ScrabbleApp {
     //EFFECTS: Prints summary of a player swap
     public void printSwapSummary(Move swap, Player p) {
         String printout = "\n" + p.getPlayerName() + " swapped tiles. ";
-        String preAndPostLetters = getWordString(swap.getLettersInvolved());
+        String preAndPostLetters = swap.getLettersInvolved();
         int halfLength = preAndPostLetters.length() / 2;
         String preSwapLetters = preAndPostLetters.substring(0, halfLength);
         String postSwapLetters = preAndPostLetters.substring(halfLength);
@@ -321,7 +321,7 @@ public class ScrabbleApp {
     // EFFECTS: prints summary of a word played
     public void getWordPrintout(Move word, Player p) {
         String printout = "\n" + p.getPlayerName() + " played ";
-        String wordString = getWordString(word.getLettersInvolved());
+        String wordString = word.getLettersInvolved();
         String startRow = String.valueOf(word.getStartRow());
         String startCol = String.valueOf(word.getStartColumn());
         String coordinates = "(" + startRow + "," + startCol + ")";
@@ -370,10 +370,7 @@ public class ScrabbleApp {
         System.out.println("Now enter direction (R)ight or (D)own (default)");
         Direction dir = (scanner.nextLine().toLowerCase().equals("r")) ? Direction.RIGHT : Direction.DOWN;
         if (board.sectionIsAvailable(player.getSelectedTiles(), row, col, dir)) {
-            int score = board.playWord(player.getSelectedTiles(), row, col, dir);
-            player.logWord(row, col, score, dir);
-            player.removeSelectedTiles();
-            tileBag.drawTiles(player);
+            int score = scrabbleGame.playWord(player, row, col, dir);
             System.out.println("\nYour new tiles are:");
             getTilePrintOut(player);
             System.out.println(player.getPlayerName() + " earned " + score + " points!");
@@ -424,9 +421,7 @@ public class ScrabbleApp {
     // EFFECTS: deselects players tiles
     // logs the skipped turn and prints confirmation
     public void handleSkip(Player player) {
-        player.clearSelectedTiles();
-        player.logSkippedTurn();
-        //player.swapTiles();
+        scrabbleGame.logSkippedTurn(player);
         System.out.println(player.getPlayerName() + " skipped their turn \n");
     }
 

@@ -13,15 +13,14 @@ import persistance.Writable;
 public class Move implements Writable {
     private MoveType moveType;
     private int pointsForMove;
-    private List<LetterTile> lettersInvolved;
+    private String lettersInvolved;
     private Direction direction;
     private int startRow;
     private int startCol;
     private Player player;
 
     // Constructor if the player played a word on a board
-    public Move(Player player, List<LetterTile> letters, 
-                int startRow, int startCol, int pointsEarned, Direction direction) {
+    public Move(Player player, String letters, int startRow, int startCol, int pointsEarned, Direction direction) {
         this.moveType = MoveType.PLAY_WORD;
         this.player = player;
         this.pointsForMove = pointsEarned;
@@ -32,10 +31,10 @@ public class Move implements Writable {
     }
 
     // Constructor if the player swapped letters
-    public Move(Player player, List<LetterTile> swappedLetters, List<LetterTile> postSwapLetters) {
+    public Move(Player player, String swappedLetters, String postSwapLetters) {
         this.moveType = MoveType.SWAP_TILES;
         this.player = player;
-        swappedLetters.addAll(postSwapLetters);
+        swappedLetters += postSwapLetters;
         this.lettersInvolved = swappedLetters;
         this.pointsForMove = 0;
     }
@@ -80,7 +79,7 @@ public class Move implements Writable {
 
     // EFFECTS: returns list of letters played, swapped,
     //  or involved in point adjustments at end game
-    public List<LetterTile> getLettersInvolved() {
+    public String getLettersInvolved() {
         return this.lettersInvolved;
     }
 
@@ -102,8 +101,8 @@ public class Move implements Writable {
     // EFFECTS: returns true if at least one 
     // letter in the move matches the given letter.
     public boolean moveContainsLetter(char letter) {
-        for (LetterTile letterTile : this.getLettersInvolved()) {
-            if (letterTile.getCharacter() == letter) {
+        for (int i = 0; i < lettersInvolved.length(); i++) {
+            if (lettersInvolved.charAt(i) == letter) {
                 return true;
             }
         }
@@ -129,7 +128,7 @@ public class Move implements Writable {
         json.put("PlayerName", player.getPlayerName());
         switch (moveType) {
             case PLAY_WORD:
-                json.put("LettersPlayed", getStringFromLetters(lettersInvolved));
+                json.put("LettersPlayed", lettersInvolved);
                 json.put("Row", startRow);
                 json.put("Col", startCol);
                 json.put("Points", pointsForMove);
@@ -137,8 +136,8 @@ public class Move implements Writable {
                 json.put("Direction", dir);
                 break;
             case SWAP_TILES:
-                json.put("InitialLetters", getStringFromLetters(lettersInvolved.subList(0,7)));
-                json.put("AfterSwapLetters", getStringFromLetters(lettersInvolved.subList(7,lettersInvolved.size())));
+                json.put("InitialLetters", lettersInvolved.substring(0,7));
+                json.put("AfterSwapLetters", lettersInvolved.substring(7,lettersInvolved.length()));
                 break;
             case SKIP:
             //    break;

@@ -71,7 +71,7 @@ public class Player implements Writable {
         this.tileRack.add(drawnLetter);
     }
 
-
+/* 
     // MODIFIES: this
     // EFFECTS: Adds a new word played to player's move history
     public void logWord(int startRow, int startCol, int pointsEarned, Direction dir) {
@@ -80,16 +80,16 @@ public class Player implements Writable {
         Move move = new Move(this, copy, startRow, startCol, pointsEarned, dir);
         this.history.addMove(move);
         scrabbleGame.addMove(move);
-    }
+    } */
 
-    // MODIFIES: this
+/*     // MODIFIES: this
     // EFFECTS: Adds a new word played to player's move history
     public void logWord(List<LetterTile> letters, int startRow, int startCol, int points, Direction dir) {
         List<LetterTile> copy = copyLetterTiles(letters);
         Move move = new Move(this, copy, startRow, startCol, points, dir);
         this.history.addMove(move);
         scrabbleGame.addMove(move);
-    }
+    } */
 
     // EFFECTS: returns deep copy of given list of letters.
     public List<LetterTile> copyLetterTiles(List<LetterTile> lettersToCopy) {
@@ -100,21 +100,21 @@ public class Player implements Writable {
         return copiedLetters;
     }
 
-    // MODIFIES: this
+ /*    // MODIFIES: this
     // EFFECTS: Adds a new skipped turn to player's move history
     public void logSkippedTurn() {
         Move move = new Move(this);
         history.addMove(move);
         scrabbleGame.addMove(move);
-    }
+    } */
 
-    // MODIFIES: this
+  /*   // MODIFIES: this
     // EFFECTS: Adds a new swap to player's move history
     public void logSwap(List<LetterTile> swappedLetters, List<LetterTile> postSwapLetters) {
         Move move = new Move(this, swappedLetters, postSwapLetters);
         history.addMove(move);
         scrabbleGame.addMove(move);
-    }
+    } */
 
     // REQUIRES: 0 <= index <     public int getNumTilesOnRack() {
     // MODIFIES: this
