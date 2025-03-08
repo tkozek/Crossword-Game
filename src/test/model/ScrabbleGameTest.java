@@ -182,7 +182,7 @@ public class ScrabbleGameTest {
         assertEquals(player2.getPointsThisGame(), 0);
         assertEquals(1, player.getHistory().getMoves().size());
         assertEquals(1, player2.getHistory().getMoves().size());
-        assertEquals(MoveType.END_GAME_ADJUSTMENT, player2.getHistory().getMoves().get(0));
-        assertEquals(MoveType.END_GAME_ADJUSTMENT, player.getHistory().getMoves().get(0));
+        assertEquals(MoveType.END_GAME_ADJUSTMENT, player2.getHistory().getMoves().get(0).getMoveType());
+        assertEquals(MoveType.END_GAME_ADJUSTMENT, player.getHistory().getMoves().get(0).getMoveType());
     }
 }

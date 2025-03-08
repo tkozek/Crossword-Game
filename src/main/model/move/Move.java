@@ -47,6 +47,7 @@ public class Move implements Writable {
      // Constructor for end of game where last player gains points from unplayed tiles on opponent racks
     // REQUIRES: Exchanged points >= 0;
     public Move(Player player, Player lastPlayer, String lettersAccountedFor, int exchangedPoints) {
+        this.moveType = MoveType.END_GAME_ADJUSTMENT;
         this.player = player;
         this.lastPlayer = lastPlayer;
         this.lettersInvolved = lettersAccountedFor;  

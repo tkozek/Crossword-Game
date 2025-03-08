@@ -132,14 +132,6 @@ public class Player implements Writable {
         return this.selectedTiles;
     }
 
-    public int pointsValueOnRack() {
-        int total = 0;
-        for (LetterTile letter : tileRack) {
-            total += letter.getLetterPoints();
-        }
-        return total;
-    }
-
     // MODIFIES: this
     // EFFECTS: clears selected tiles if any were selected
     // returns true if there were tiles to clear 

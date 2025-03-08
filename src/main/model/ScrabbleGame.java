@@ -249,6 +249,9 @@ public class ScrabbleGame implements Writable {
         String totalLetters = "";
         String letters = "";
         for (Player p : players) {
+            if (p.equals(firstToUseAllTiles)) {
+                continue;
+            }
             playerLoss = 0;
             letters = "";
             for (LetterTile letter : p.getTilesOnRack()) {
