@@ -143,6 +143,12 @@ public class Player implements Writable {
         this.selectedTiles.clear();
         return true;
     }
+
+    // EFFECTS: returns true iff
+    // there are no tiles on this player's rack
+    public boolean playedAllTiles() {
+        return false;
+    }
     
     //EFFECTS: returns chars corresponding to letters 
     //      on the player's tile rack

@@ -241,4 +241,13 @@ public class ScrabbleGame implements Writable {
         history.addMove(skip);
     }
 
+    // MODIFIES: this
+    // EFFECTS: subtracts score of unplayed tiles on the rack
+    // of all players except firstToUseAllTiles, adds this pooled
+    // score to firstToUseAllTiles' score. Logs these adjustments
+    // in game and players' histories.
+    public void performEndGameAdjustments(Player firstToUseAllTiles) {
+
+    }
+
 }
