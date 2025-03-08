@@ -161,14 +161,16 @@ public class JsonReader {
                     addSwap(game, moveObject, player);
                     break;  
                 case "SKIP":
-                    game.logSkippedTurn(player);  
+                    game.logSkippedTurn(player); 
+                    break;
+                case "END_GAME":
+                    addEndGame(game, moveObject, player);
                 default:
                     break;
             }
         }
     }
     
-
     // MODIFIES: player, game
     // EFFECTS: adds move of type PLAY to 
     // both player and game history
@@ -188,5 +190,12 @@ public class JsonReader {
         String initialLetters = moveObject.getString("InitialLetters");
         String postSwapLetters = moveObject.getString("AfterSwapLetters");
         game.logSwap(player, initialLetters, postSwapLetters);
+    }
+
+    // MODIFIES: player, game
+    // EFFECTS: adds move of type SWAP to 
+    // both player and game history
+    private void addEndGame(ScrabbleGame game, JSONObject moveObject, Player player) {
+
     }
 }
