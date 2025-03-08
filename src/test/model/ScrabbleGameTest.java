@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 
 import model.board.Board;
 import model.move.Move;
+import model.move.MoveType;
 import model.tile.LetterTile;
 import model.tile.TileBag;
 
@@ -158,5 +159,30 @@ public class ScrabbleGameTest {
             player.selectTile(i);
         }
         assertEquals(8, game.playWord(player, 10, 10, Direction.RIGHT));
+    }
+
+    @Test
+    void testEndGameAdjustments() {
+        game.addPlayer(player);
+        game.addPlayer(player2);
+        tileBag.drawTiles(player2);
+        assertEquals(player2.getNumTilesOnRack(), 7);
+        int scoreToLoseP2 = 0;
+        for (LetterTile unplayedLetter : player2.getTilesOnRack()) {
+            scoreToLoseP2 += unplayedLetter.getLetterPoints();
+        }
+        player2.setPoints(scoreToLoseP2);
+        //player goes out, gains all those unplayed points
+        // player 2 loses them all so p2 has zero points left
+
+        //add 1 point so we are convinced that they didn't just swap entire scores
+        player.setPoints(1);
+        game.performEndGameAdjustments(player);
+        assertEquals(player.getPointsThisGame(), 1 + scoreToLoseP2);
+        assertEquals(player2.getPointsThisGame(), 0);
+        assertEquals(1, player.getHistory().getMoves().size());
+        assertEquals(1, player2.getHistory().getMoves().size());
+        assertEquals(MoveType.END_GAME_ADJUSTMENT, player2.getHistory().getMoves().get(0));
+        assertEquals(MoveType.END_GAME_ADJUSTMENT, player.getHistory().getMoves().get(0));
     }
 }

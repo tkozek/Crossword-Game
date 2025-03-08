@@ -15,6 +15,7 @@ public class Move implements Writable {
     private int startRow;
     private int startCol;
     private Player player;
+    private Player lastPlayer;
 
     // Constructor if the player played a word on a board
     public Move(Player player, String letters, int startRow, int startCol, int pointsEarned, Direction direction) {
@@ -43,22 +44,14 @@ public class Move implements Writable {
         this.pointsForMove = 0;
     }
 
-    /* // Constructor for end of game where last player gains points from unplayed tiles on opponent racks
+     // Constructor for end of game where last player gains points from unplayed tiles on opponent racks
     // REQUIRES: Exchanged points >= 0;
-    public Move(Player player, Board board, boolean wasLastToPlay,
-            List<LetterTile> unplayedLetters, int exchangedPoints) {
-        if (wasLastToPlay) {
-            this.moveType = MoveType.END_GAME_WINNER;
-            this.pointsForMove = exchangedPoints;
-        } else {
-            this.moveType = MoveType.END_GAME_LOSER;
-            this.pointsForMove = -1 * exchangedPoints;
-        }
+    public Move(Player player, Player lastPlayer, String lettersAccountedFor, int exchangedPoints) {
         this.player = player;
-        this.board = board;
-        this.lettersInvolved = unplayedLetters;  
-
-    } */
+        this.lastPlayer = lastPlayer;
+        this.lettersInvolved = lettersAccountedFor;  
+        this.pointsForMove = exchangedPoints;
+    }
 
     public Player getPlayer() {
         return this.player;

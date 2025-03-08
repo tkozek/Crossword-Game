@@ -145,7 +145,6 @@ public class ScrabbleApp {
                 index = (i + scrabbleGame.getFirstPlayerIndex()) % numPlayers;
                 getBoardPrintOut(board);
                 Player playerToPlayNext = players.get(index);
-                tileBag.drawTiles(playerToPlayNext);
                 handleTurn(playerToPlayNext);
             }
         }
