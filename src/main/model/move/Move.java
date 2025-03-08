@@ -125,24 +125,47 @@ public class Move implements Writable {
         json.put("PlayerName", player.getPlayerName());
         switch (moveType) {
             case PLAY_WORD:
-                json.put("LettersPlayed", lettersInvolved);
-                json.put("Row", startRow);
-                json.put("Col", startCol);
-                json.put("Points", pointsForMove);
-                String dir = (Direction.DOWN == direction) ? "D" : "R";
-                json.put("Direction", dir);
+                playWordToJson(json);
                 break;
             case SWAP_TILES:
-                json.put("InitialLetters", lettersInvolved.substring(0,7));
-                json.put("AfterSwapLetters", lettersInvolved.substring(7,lettersInvolved.length()));
+                swapTilesToJson(json);
                 break;
             case SKIP:
-            //    break;
-            //case END_GAME_LOSER:
-            //    break;
-            //case END_GAME_WINNER:
+                break;
+            case END_GAME_ADJUSTMENT:
+                endGameAdjustmentToJson(json);
         }
         return json;
+    }
+
+    // REQUIRES: this is a move of type PLAY_WORD
+    // MODIFIES: json
+    // EFFECTS: adds information about this move
+    // to json
+    private void playWordToJson(JSONObject json) {
+        json.put("LettersPlayed", lettersInvolved);
+        json.put("Row", startRow);
+        json.put("Col", startCol);
+        json.put("Points", pointsForMove);
+        String dir = (Direction.DOWN == direction) ? "D" : "R";
+        json.put("Direction", dir);
+    }
+
+    // REQUIRES: this is a move of type SWAP_TILES
+    // MODIFIES: json
+    // EFFECTS: adds information about this move
+    // to json
+    private void swapTilesToJson(JSONObject json) {
+        json.put("InitialLetters", lettersInvolved.substring(0,7));
+        json.put("AfterSwapLetters", lettersInvolved.substring(7,lettersInvolved.length()));
+    }
+
+    // REQUIRES: this is a move of type END_GAME_ADJUSTMENT
+    // MODIFIES: json
+    // EFFECTS: adds information about this move
+    // to json
+    private void endGameAdjustmentToJson(JSONObject json) {
+
     }
 
 
