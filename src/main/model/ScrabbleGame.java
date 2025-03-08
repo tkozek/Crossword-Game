@@ -187,16 +187,14 @@ public class ScrabbleGame implements Writable {
             postSwapLetters += letter.getString();
         }
         Move swap = new Move(player, preSwapLetters, postSwapLetters);
-        history.addMove(swap);
-        player.addMove(swap);
+        addMoveToGameAndPlayerHistory(swap, player);
     }
 
     // MODIFIES: this, player
     // EFFECTS: Logs a swap into player and game's history
     public void logSwap(Player player, String initialLetters, String postSwapLetters) {
         Move swap = new Move(player, initialLetters, postSwapLetters);
-        history.addMove(swap);
-        player.addMove(swap);
+        addMoveToGameAndPlayerHistory(swap, player);
     }
 
     // REQUIRES: Players selected tiles can be played on this board
@@ -226,8 +224,7 @@ public class ScrabbleGame implements Writable {
     // DOES NOT impact score.
     public void logWord(Player player, String letters, int row, int col, int points, Direction dir) {
         Move word = new Move(player, letters, row, col, points, dir);
-        player.addMove(word);
-        history.addMove(word);
+        addMoveToGameAndPlayerHistory(word, player);
     }
 
     // REQUIRES: getPlayers() contains player
@@ -237,8 +234,7 @@ public class ScrabbleGame implements Writable {
     public void logSkippedTurn(Player player) {
         player.clearSelectedTiles();
         Move skip = new Move(player);
-        player.addMove(skip);
-        history.addMove(skip);
+        addMoveToGameAndPlayerHistory(skip, player);
     }
 
     // MODIFIES: this
@@ -247,7 +243,35 @@ public class ScrabbleGame implements Writable {
     // score to firstToUseAllTiles' score. Logs these adjustments
     // in game and players' histories.
     public void performEndGameAdjustments(Player firstToUseAllTiles) {
+        int total = 0;
+        int playerLoss = 0;
+        Move adjustment;
+        String totalLetters = "";
+        String letters = "";
+        for (Player p : players) {
+            playerLoss = 0;
+            letters = "";
+            for (LetterTile letter : p.getTilesOnRack()) {
+                playerLoss += letter.getLetterPoints();
+                letters += letter.getString();
+            }
+            p.addPoints(-1 * playerLoss);
+            total += playerLoss;
+            totalLetters += letters;
+            adjustment = new Move(p, firstToUseAllTiles, letters, playerLoss);
+            addMoveToGameAndPlayerHistory(adjustment, p);
+        }
+        firstToUseAllTiles.addPoints(total);
+        adjustment = new Move(firstToUseAllTiles, firstToUseAllTiles, totalLetters, total);
+        addMoveToGameAndPlayerHistory(adjustment, firstToUseAllTiles);
+    }
 
+
+    // MODIFIES: this, player
+    // EFFECTS: adds this move to both the game's and the player's history
+    private void addMoveToGameAndPlayerHistory(Move move, Player player) {
+        history.addMove(move);
+        player.addMove(move);
     }
 
 }
