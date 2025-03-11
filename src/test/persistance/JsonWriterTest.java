@@ -316,6 +316,7 @@ public class JsonWriterTest extends JsonTest {
             assertEquals(p3Letters, p3Moves.get(0).getLettersInvolved());
 
             assertEquals(p2Letters + p3Letters, p1Moves.get(1).getLettersInvolved());
+            assertEquals(p1, game.highestScoringPlayer());
         } catch (IOException e) {
             fail("Exception should not have been thrown");
         }

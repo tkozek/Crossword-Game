@@ -291,4 +291,20 @@ public class ScrabbleGame implements Writable {
         tileBag.drawTiles(p);
     }
 
+    // EFFECTS: returns the player with the highest score
+    // in this game
+    public Player highestScoringPlayer() {
+        if (players.isEmpty()) {
+            return null;
+        }
+        Player highestScoringPlayer = players.get(0);
+        int highest = highestScoringPlayer.getPointsThisGame();
+        for (Player p : players) {
+            if (p.getPointsThisGame() > highest) {
+                highestScoringPlayer = p;
+            }
+        }
+        return highestScoringPlayer;
+    }
+
 }
