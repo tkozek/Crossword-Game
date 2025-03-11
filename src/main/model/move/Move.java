@@ -87,6 +87,11 @@ public class Move implements Writable {
         return this.startCol;
     }
 
+    // REQUIRES: this is an END_GAME_ADJUSTMENT
+    public Player getLastPlayer() {
+        return lastPlayer;
+    }
+
     // REQUIRES: getMoveType() == MoveType.PLAY_WORD, letter is 
     // uppercase between 'A' to 'Z' or '-'
     // EFFECTS: returns true if at least one 

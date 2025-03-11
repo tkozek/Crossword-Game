@@ -270,18 +270,34 @@ public class ScrabbleApp {
     // swaps, skips
     public void printAllMovesSummary(Player p) {
         List<Move> allMoves = p.getHistory().getMoves();
-        MoveType moveType;
         for (Move move : allMoves) {
-            moveType = move.getMoveType();
-            if (moveType == MoveType.PLAY_WORD) {
-                getWordPrintout(move, p);
-            } else if (moveType == MoveType.SWAP_TILES) {
-                printSwapSummary(move, p);
-            } else if (moveType == MoveType.SKIP) {
-                printSkipSummary(move, p);
+            switch (move.getMoveType()) {
+                case PLAY_WORD:
+                    getWordPrintout(move, p);
+                    break;
+                case SWAP_TILES:
+                    printSwapSummary(move, p);
+                    break;
+                case SKIP:
+                    printSkipSummary(move, p);
+                    break;
+                case END_GAME_ADJUSTMENT:
+                    printSingleEndGameAdjustmentSummary(move, p);
+                    break;
             }
         }
         scanner.nextLine();
+    }
+
+    // EFFECTS: Summarizes an end game adjustment
+    public void printSingleEndGameAdjustmentSummary(Move move, Player player) {
+        String playerName = player.getPlayerName();
+        String lastPlayer = move.getLastPlayer().getPlayerName();
+        int pointChange = move.getPointsForMove();
+        int absolutePointChange = Math.abs(pointChange);
+        String gainOrLoss = (pointChange >= 0) ? " gained " : " lost ";
+        String pluralOrNot = (absolutePointChange != 1) ? "s" : "";
+        System.out.println(lastPlayer + " used all their tiles first. \n" + playerName + gainOrLoss + absolutePointChange + pluralOrNot);
     }
 
     //EFFECTS: Prints summary of a player swap
