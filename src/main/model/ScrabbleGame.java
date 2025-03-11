@@ -268,6 +268,13 @@ public class ScrabbleGame implements Writable {
         addMoveToGameAndPlayerHistory(adjustment, firstToUseAllTiles);
     }
 
+    // MODIFIES: this, player
+    // EFFECTS: Logs an end game adjustment into player and game's history
+    public void logEndGameAdjustment(Player player, Player lastPlayer, String lettersInvolved, int pointChange) {
+        Move endGameAdjustment = new Move(player, lastPlayer, lettersInvolved, pointChange);
+        addMoveToGameAndPlayerHistory(endGameAdjustment, player);
+    }
+
 
     // MODIFIES: this, player
     // EFFECTS: adds this move to both the game's and the player's history
