@@ -488,8 +488,15 @@ public class ScrabbleApp {
     public void handleEndGame(Player lastPlayer) {
         this.gameRunning = false;
         scrabbleGame.performEndGameAdjustments(lastPlayer);
-        System.out.println(lastPlayer.getPlayerName() + "was the last to play");
-        
+        System.out.println(lastPlayer.getPlayerName() + " was the last to play");
+        System.out.println("The winner is " + scrabbleGame.highestScoringPlayer().getPlayerName());
+        printScoreSummaries();
+    }
+
+    private void printScoreSummaries() {
+        for (Player p : players) {
+            System.out.println(p.getPlayerName() + " scored " + p.getPointsThisGame() + " points this game.\n");
+        }
     }
 
 

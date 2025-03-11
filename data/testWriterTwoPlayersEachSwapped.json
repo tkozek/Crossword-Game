@@ -227,56 +227,56 @@
         "TWS"
     ],
     "TileBag": {
-        "A": 8,
+        "A": 5,
         "B": 2,
         "C": 2,
         "D": 3,
         "E": 10,
-        "F": 1,
+        "F": 2,
         "G": 3,
-        "H": 1,
-        "I": 8,
+        "H": 2,
+        "I": 9,
         "J": 1,
         "K": 1,
-        "L": 4,
+        "L": 2,
         "M": 2,
-        "N": 5,
+        "N": 6,
         "O": 7,
         "P": 2,
-        "Q": 1,
         "R": 5,
         "S": 4,
-        "T": 5,
-        "U": 4,
+        "T": 6,
+        "U": 3,
         "V": 2,
         "W": 2,
+        "X": 1,
         "Y": 2,
-        "-": 1
+        "-": 2
     },
     "GameName": "Test",
     "History": [
         {
             "PlayerName": "Tester",
-            "AfterSwapLetters": "RDH-ETO",
-            "InitialLetters": "ARJLRRD",
+            "AfterSwapLetters": "ZAUAEQR",
+            "InitialLetters": "EOKEEAV",
             "MoveType": "SWAP_TILES"
         },
         {
             "PlayerName": "John",
-            "AfterSwapLetters": "AZXFNEI",
-            "InitialLetters": "ASLCYOU",
+            "AfterSwapLetters": "LADLOAE",
+            "InitialLetters": "SRPIY-J",
             "MoveType": "SWAP_TILES"
         },
         {
             "PlayerName": "Tester",
             "AfterSwapLetters": "",
-            "InitialLetters": "RDH-ETO",
+            "InitialLetters": "ZAUAEQR",
             "MoveType": "SWAP_TILES"
         },
         {
             "PlayerName": "John",
             "AfterSwapLetters": "",
-            "InitialLetters": "AZXFNEI",
+            "InitialLetters": "LADLOAE",
             "MoveType": "SWAP_TILES"
         }
     ],
@@ -286,26 +286,26 @@
             "score": 0,
             "name": "Tester",
             "tileRack": [
-                {"R": 1},
-                {"D": 2},
-                {"H": 4},
-                {"-": 0},
+                {"Z": 10},
+                {"A": 1},
+                {"U": 1},
+                {"A": 1},
                 {"E": 1},
-                {"T": 1},
-                {"O": 1}
+                {"Q": 10},
+                {"R": 1}
             ]
         },
         {
             "score": 0,
             "name": "John",
             "tileRack": [
+                {"L": 1},
                 {"A": 1},
-                {"Z": 10},
-                {"X": 8},
-                {"F": 4},
-                {"N": 1},
-                {"E": 1},
-                {"I": 1}
+                {"D": 2},
+                {"L": 1},
+                {"O": 1},
+                {"A": 1},
+                {"E": 1}
             ]
         }
     ]
