@@ -196,6 +196,9 @@ public class JsonReader {
     // EFFECTS: adds move of type SWAP to 
     // both player and game history
     private void addEndGame(ScrabbleGame game, JSONObject moveObject, Player player) {
-
+        String letters = moveObject.getString("LettersAccountedFor");
+        Player lastPlayer = game.getPlayerByName(moveObject.getString("FinalPlayer"));
+        int pointsChange = moveObject.getInt("ChangeInPoints");
+        game.logEndGameAdjustment(player, lastPlayer, letters, pointsChange);
     }
 }
