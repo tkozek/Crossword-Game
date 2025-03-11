@@ -112,7 +112,7 @@
         " ",
         " ",
         " ",
-        "DWS",
+        "-",
         " ",
         " ",
         " ",
@@ -127,7 +127,7 @@
         " ",
         " ",
         "DLS",
-        " ",
+        "I",
         "DLS",
         " ",
         " ",
@@ -142,22 +142,22 @@
         " ",
         "TLS",
         " ",
+        "F",
+        " ",
+        "TLS",
+        " ",
         " ",
         " ",
         "TLS",
         " ",
         " ",
         " ",
-        "TLS",
-        " ",
-        " ",
-        " ",
         " ",
         " ",
         "DWS",
         " ",
         " ",
-        " ",
+        "R",
         " ",
         " ",
         "DWS",
@@ -172,7 +172,7 @@
         " ",
         " ",
         " ",
-        "DLS",
+        "Y",
         " ",
         " ",
         " ",
@@ -187,7 +187,7 @@
         " ",
         " ",
         "DLS",
-        " ",
+        "I",
         "DLS",
         " ",
         " ",
@@ -202,7 +202,7 @@
         " ",
         "TLS",
         " ",
-        " ",
+        "-",
         " ",
         "TLS",
         " ",
@@ -226,110 +226,62 @@
         " ",
         "TWS"
     ],
-    "TileBag": {
-        "A": 9,
-        "B": 2,
-        "C": 1,
-        "D": 4,
-        "E": 9,
-        "F": 2,
-        "G": 2,
-        "H": 2,
-        "I": 7,
-        "J": 1,
-        "K": 1,
-        "L": 3,
-        "M": 2,
-        "N": 5,
-        "O": 8,
-        "P": 2,
-        "Q": 1,
-        "R": 6,
-        "S": 3,
-        "T": 6,
-        "U": 3,
-        "V": 1,
-        "W": 1,
-        "X": 1,
-        "Y": 1,
-        "Z": 1,
-        "-": 2
-    },
+    "TileBag": {},
     "GameName": "Test",
     "History": [
         {
-            "PlayerName": "Tester",
-            "AfterSwapLetters": "GISWNEI",
-            "InitialLetters": "LNRNGEE",
-            "MoveType": "SWAP_TILES"
-        },
-        {
-            "PlayerName": "John",
-            "AfterSwapLetters": "VEULYCE",
-            "InitialLetters": "UXIDAHA",
-            "MoveType": "SWAP_TILES"
-        },
-        {
-            "PlayerName": "Tester",
-            "AfterSwapLetters": "GISWNEI",
-            "InitialLetters": "LNRNGEE",
-            "MoveType": "SWAP_TILES"
-        },
-        {
-            "PlayerName": "John",
-            "AfterSwapLetters": "VEULYCE",
-            "InitialLetters": "UXIDAHA",
-            "MoveType": "SWAP_TILES"
-        },
-        {
-            "PlayerName": "Tester",
-            "MoveType": "SKIP"
-        },
-        {
             "Col": 7,
-            "Points": 70,
-            "PlayerName": "John",
+            "Points": 30,
+            "PlayerName": "Player1",
             "MoveType": "PLAY_WORD",
-            "LettersPlayed": "VEULYCE",
+            "LettersPlayed": "-IFRYI-",
             "Row": 7,
             "Direction": "D"
         },
         {
-            "Col": 7,
-            "Points": 60,
-            "PlayerName": "Tester",
-            "MoveType": "PLAY_WORD",
-            "LettersPlayed": "",
-            "Row": 6,
-            "Direction": "R"
+            "PlayerName": "Player2",
+            "MoveType": "END_GAME_ADJUSTMENT"
+        },
+        {
+            "PlayerName": "Player3",
+            "MoveType": "END_GAME_ADJUSTMENT"
+        },
+        {
+            "PlayerName": "Player1",
+            "MoveType": "END_GAME_ADJUSTMENT"
         }
     ],
     "FirstPlayer": 0,
     "Players": [
         {
-            "score": 0,
-            "name": "Tester",
+            "score": 64,
+            "name": "Player1",
+            "tileRack": []
+        },
+        {
+            "score": -8,
+            "name": "Player2",
             "tileRack": [
-                {"G": 2},
-                {"I": 1},
-                {"S": 1},
-                {"W": 4},
-                {"N": 1},
+                {"T": 1},
                 {"E": 1},
-                {"I": 1}
+                {"L": 1},
+                {"U": 1},
+                {"G": 2},
+                {"N": 1},
+                {"L": 1}
             ]
         },
         {
-            "score": 0,
-            "name": "John",
+            "score": -26,
+            "name": "Player3",
             "tileRack": [
-                {"V": 4},
-                {"E": 1},
-                {"U": 1},
-                {"L": 1},
+                {"W": 4},
+                {"D": 2},
+                {"R": 1},
                 {"Y": 4},
-                {"C": 3},
-                {"E": 1}
+                {"H": 4},
+                {"Q": 10},
+                {"U": 1}
             ]
         }
     ]

@@ -159,7 +159,7 @@ public class Move implements Writable {
     // EFFECTS: adds information about this move
     // to json
     private void endGameAdjustmentToJson(JSONObject json) {
-
+        
     }
 
 

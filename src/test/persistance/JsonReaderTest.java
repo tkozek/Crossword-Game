@@ -1,6 +1,8 @@
 package persistance;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.BeforeEach;
@@ -8,6 +10,7 @@ import org.junit.jupiter.api.Test;
 
 import model.Player;
 import model.ScrabbleGame;
+import model.move.Move;
 import model.move.MoveType;
 import model.tile.TileBag;
 
@@ -96,4 +99,78 @@ public class JsonReaderTest extends JsonTest {
         }
     }
     
+
+    @Test
+    public void testReaderEndGame() {
+        JsonReader reader = new JsonReader("./data/testReadEndGame.json");
+        try {
+            ScrabbleGame game = reader.read();
+            assertEquals(game.getName(), "End Game");
+            assertEquals(game.getNumPlayers(), 14);
+            // Override Board.equals() and update line below this
+            assertFalse(game.getBoard() == null);
+            assertTrue(game.getTileBag().getCurrentLetterFrequencies().isEmpty());
+
+            assertEquals(game.getTileBag().numTilesRemaining(), 0);
+
+            assertEquals(game.getHistory().getMoves().size(), 16);
+            Player player;
+            List<Integer> endScores = new ArrayList<>();
+            endScores.add(-16);
+            endScores.add(200);
+            endScores.add(-31);
+            endScores.add(-15);
+            endScores.add(-10);
+            endScores.add(-12);
+            endScores.add(-15);
+            endScores.add(-10);
+            endScores.add(-7);
+            endScores.add(-10);
+            endScores.add(-8);
+            endScores.add(-7);
+            endScores.add(-7);
+            endScores.add(-7);
+            int index;
+            for (int i = 1; i <= 14; i++) {
+                index = i - 1;
+                player = game.getPlayers().get(index);
+                assertEquals(player.getPlayerName(), "Player" + index);
+                assertEquals(player.getPointsThisGame(), endScores.get(index));
+                assertTrue(player.getTilesOnRack().isEmpty());
+            }
+
+            Player p1 = game.getPlayerByName("Player1");
+            List<Move> p1Moves = p1.getHistory().getMoves();
+            assertEquals(p1Moves.size(), 2);
+            assertEquals(p1Moves.get(0).getMoveType(), MoveType.PLAY_WORD);
+            assertEquals(p1Moves.get(0).getLettersInvolved(), "IT");
+            assertEquals(p1Moves.get(0).getPointsForMove(), 4);
+
+            assertEquals(p1Moves.get(1).getMoveType(), MoveType.END_GAME_ADJUSTMENT);
+            assertEquals(p1Moves.get(1).getLettersInvolved(), "EEADLZH");
+            assertEquals(p1Moves.get(1).getPointsForMove(), -20);
+
+            Player p2 = game.getPlayerByName("Player2");
+            List<Move> p2Moves = p2.getHistory().getMoves();
+            assertEquals(p2Moves.size(), 2);
+            assertEquals(p2Moves.get(0).getMoveType(), MoveType.PLAY_WORD);
+            assertEquals(p2Moves.get(0).getLettersInvolved(), "WIBJYMF");
+            assertEquals(p2Moves.get(0).getPointsForMove(), 41);
+
+            assertEquals(p2Moves.get(1).getMoveType(), MoveType.END_GAME_ADJUSTMENT);
+            assertEquals(p2Moves.get(1).getLettersInvolved(), "VBOQFXOPEKEAACMILIBLYATCHUERVPENWORDUGGLRAASONTOISSAURGDILUEDSNOTAEAENTOEIIEENNROIEREEADLZH");
+            assertEquals(p2Moves.get(1).getPointsForMove(), 159);
+            assertEquals(p2.getPointsThisGame(), 200);
+
+            for (int i = 3; i <= 14; i++) {
+                index = i - 1;
+                player = game.getPlayers().get(index);
+                assertEquals(player.getHistory().getMoves().size(), 1);
+                assertEquals(player.getHistory().getMoves().get(0).getMoveType(), MoveType.END_GAME_ADJUSTMENT);
+                assertEquals(player.getHistory().getMoves().get(0).getPointsForMove(), endScores.get(index));
+            }
+        } catch (IOException e) {
+            fail("Couldn't read file");
+        }
+    }
 }

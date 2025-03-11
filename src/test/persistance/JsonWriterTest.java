@@ -248,6 +248,79 @@ public class JsonWriterTest extends JsonTest {
         }
     } 
 
+    @Test
+    void testWriteEndGame() {
+        try {
+            Player player1 = new Player("Player1", game);
+            Player player2 = new Player("Player2", game);
+            Player player3 = new Player("Player3", game);
+            game.addPlayer(player1);
+            game.addPlayer(player2);
+            game.addPlayer(player3);
+            game.drawTiles(player1);
+            game.drawTiles(player2);
+            game.drawTiles(player3);
+
+            String p1Letters = getStringFromLetters(player1.getTilesOnRack());
+            String p2Letters = getStringFromLetters(player2.getTilesOnRack());
+            String p3Letters = getStringFromLetters(player3.getTilesOnRack());
+
+            tileBag.emptyDrawPile();
+            for (int i = 0; i < Player.MAX_NUM_TILES; i++) {
+                player1.selectTile(i);
+            } 
+            
+            int scoreForP1Word = game.playWord(player1, 7, 7, Direction.DOWN);
+            int pointValOnP2Rack = getTotalValueFromLetters(player2.getTilesOnRack());
+            int pointValOnP3Rack = getTotalValueFromLetters(player3.getTilesOnRack());
+            
+            game.performEndGameAdjustments(player1);
+
+            JsonWriter writer = new JsonWriter("./data/testWriterEndGame.json");
+            writer.open();
+            writer.write(game);
+            writer.close();
+            JsonReader reader = new JsonReader("./data/testWriterEndGame.json");
+            game = reader.read();
+            Player p1 = game.getPlayerByName("Player1");
+            Player p2 = game.getPlayerByName("Player2");
+            Player p3 = game.getPlayerByName("Player3");
+
+            List<Move> p1Moves = p1.getHistory().getMoves();
+            List<Move> p2Moves = p2.getHistory().getMoves();
+            List<Move> p3Moves = p3.getHistory().getMoves();
+
+            // p1 played once, then each player had one end game adjustment
+            assertEquals(p1Moves.size(), 2);
+            assertEquals(p2Moves.size(), 1);
+            assertEquals(p3Moves.size(), 1);
+
+
+            assertEquals(p1Moves.get(0).getMoveType(), MoveType.PLAY_WORD);
+            assertEquals(p1Moves.get(0).getPointsForMove(), scoreForP1Word);
+            assertEquals(p1Moves.get(1).getMoveType(), MoveType.END_GAME_ADJUSTMENT);
+
+            assertEquals(p2Moves.get(0).getMoveType(), MoveType.END_GAME_ADJUSTMENT);
+            assertEquals(p2Moves.get(0).getPointsForMove(), -1 * pointValOnP2Rack);
+
+            assertEquals(p3Moves.get(0).getMoveType(), MoveType.END_GAME_ADJUSTMENT);
+            assertEquals(p3Moves.get(0).getPointsForMove(), -1 * pointValOnP3Rack);
+
+            assertEquals(p1Moves.get(1).getPointsForMove(),  pointValOnP2Rack + pointValOnP3Rack);
+
+            assertEquals(p1.getPointsThisGame(), scoreForP1Word + pointValOnP2Rack + pointValOnP3Rack);
+            assertEquals(p2.getPointsThisGame(), -1 *  pointValOnP2Rack);
+            assertEquals(p3.getPointsThisGame(), -1 * pointValOnP3Rack);
+
+            assertEquals(p2Letters, p2Moves.get(0).getLettersInvolved());
+            assertEquals(p3Letters, p3Moves.get(0).getLettersInvolved());
+
+            assertEquals(p2Letters + p3Letters, p1Moves.get(1).getLettersInvolved());
+        } catch (IOException e) {
+            fail("Exception should not have been thrown");
+        }
+    } 
+
     // EFFECTS: returns list of letter tiles
     // based on input string
     private String getStringFromLetters(List<LetterTile> letters) {
@@ -257,6 +330,14 @@ public class JsonWriterTest extends JsonTest {
         }
         return result;
     }  
+
+    private int getTotalValueFromLetters(List<LetterTile> letters) {
+        int total = 0;
+        for (LetterTile letter : letters) {
+            total += letter.getLetterPoints();
+        }
+        return total;
+    }
  
     
 }

@@ -1,0 +1,217 @@
+{
+    "GameName": "End Game",
+    "FirstPlayer": 1,
+    "Board": [
+        "TWS", " ", " ", "DLS", " ", " ", " ", "TWS", " ", " ", " ", "DLS", " ", " ", "TWS",
+        " ", "DWS", " ", " ", " ", "TLS", " ", " ", " ", "TLS", " ", " ", " ", "DWS", " ",
+        " ", " ", "DWS", " ", " ", " ", "DLS", " ", "DLS", " ", " ", " ", "DWS", " ", " ",
+        "DLS", " ", " ", "DWS", " ", " ", " ", "DLS", " ", " ", " ", "DWS", " ", " ", "DLS",
+        " ", " ", " ", " ", "DWS", " ", " ", " ", " ", " ", "DWS", " ", " ", " ", " ",
+        " ", "TLS", " ", " ", " ", "TLS", " ", " ", " ", "TLS", " ", " ", " ", "TLS", " ",
+        " ", " ", "DLS", " ", " ", " ", "DLS", " ", "DLS", " ", " ", " ", "DLS", " ", " ", 
+
+        "TWS", " ", " ", "DLS", " ", " ", " ", "I", "T", " ", " ", "DLS", " ", " ", "TWS",
+
+        " ", "W", "I", "B", "J", "Y", "M", "F", "DLS", " ", " ", " ", "DLS", " ", " ", 
+        " ", "TLS", " ", " ", " ", "TLS", " ", " ", " ", "TLS", " ", " ", " ", "TLS", " ",
+        " ", " ", " ", " ", "DWS", " ", " ", " ", " ", " ", "DWS", " ", " ", " ", " ",
+        "DLS", " ", " ", "DWS", " ", " ", " ", "DLS", " ", " ", " ", "DWS", " ", " ", "DLS",
+        " ", " ", "DWS", " ", " ", " ", "DLS", " ", "DLS", " ", " ", " ", "DWS", " ", " ",
+        " ", "DWS", " ", " ", " ", "TLS", " ", " ", " ", "TLS", " ", " ", " ", "DWS", " ",
+        "TWS", " ", " ", "DLS", " ", " ", " ", "TWS", " ", " ", " ", "DLS", " ", " ", "TWS"
+    ],
+    "TileBag": {
+    
+    },
+    "Players": [
+    {
+        "name": "Player1",
+        "score": -16,
+        "tileRack": []
+    },
+    {
+        "name": "Player2",
+        "score": 200,
+        "tileRack": []
+    },
+    {
+        "name": "Player3",
+        "score": -31,
+        "tileRack": []
+    },
+    {
+        "name": "Player4",
+        "score": -15,
+        "tileRack": []
+    },
+    {
+        "name": "Player5",
+        "score": -10,
+        "tileRack": []
+    },
+    {
+        "name": "Player6",
+        "score": -12,
+        "tileRack": []
+    },
+    {
+        "name": "Player7",
+        "score": -15,
+        "tileRack": []
+    },
+    {
+        "name": "Player8",
+        "score": -10,
+        "tileRack": []
+    },
+    {
+        "name": "Player9",
+        "score": -7,
+        "tileRack": []
+    },
+    {
+        "name": "Player10",
+        "score": -10,
+        "tileRack": []
+    },
+    {
+        "name": "Player11",
+        "score": -8,
+        "tileRack": []
+    },
+    {
+        "name": "Player12",
+        "score": -7,
+        "tileRack": []
+    },
+    {
+        "name": "Player13",
+        "score": -7,
+        "tileRack":[]
+    },
+    {
+        "name": "Player14",
+        "score": -7,
+        "tileRack": []
+    }
+],
+    "History": [
+        {
+            "MoveType": "PLAY_WORD",
+            "PlayerName": "Player1",
+            "LettersPlayed": "IT",
+            "Row":7,
+            "Col":7,
+            "Points": 4,
+            "Direction": "R"
+
+        },
+        {
+            "MoveType": "PLAY_WORD",
+            "PlayerName": "Player2",
+            "LettersPlayed": "WIBJYMF",
+            "Row":8,
+            "Col":1,
+            "Points": 41,
+            "Direction": "R"
+        },
+        {
+            "MoveType": "END_GAME_ADJUSTMENT",
+            "PlayerName": "Player3",
+            "FinalPlayer": "Player2",
+            "LettersAccountedFor": "VBOQFXO",
+            "ChangeInPoints": -31            
+        },
+        {
+            "MoveType": "END_GAME_ADJUSTMENT",
+            "PlayerName": "Player4",
+            "FinalPlayer": "Player2",
+            "LettersAccountedFor": "PEKEAAC",
+            "ChangeInPoints": -15            
+        },
+        {
+            "MoveType": "END_GAME_ADJUSTMENT",
+            "PlayerName": "Player5",
+            "FinalPlayer": "Player2",
+            "LettersAccountedFor": "MILIBLY",
+            "ChangeInPoints": -10            
+        },
+        {
+            "MoveType": "END_GAME_ADJUSTMENT",
+            "PlayerName": "Player6",
+            "FinalPlayer": "Player2",
+            "LettersAccountedFor": "ATCHUER",
+            "ChangeInPoints": -12            
+        },
+        {
+            "MoveType": "END_GAME_ADJUSTMENT",
+            "PlayerName": "Player7",
+            "FinalPlayer": "Player2",
+            "LettersAccountedFor": "VPENWOR",
+            "ChangeInPoints": -15            
+        },
+        {
+            "MoveType": "END_GAME_ADJUSTMENT",
+            "PlayerName": "Player8",
+            "FinalPlayer": "Player2",
+            "LettersAccountedFor": "DUGGLRA",
+            "ChangeInPoints": -10            
+        },
+        {
+            "MoveType": "END_GAME_ADJUSTMENT",
+            "PlayerName": "Player9",
+            "FinalPlayer": "Player2",
+            "LettersAccountedFor": "ASONTOI",
+            "ChangeInPoints": -7           
+        },
+        {
+            "MoveType": "END_GAME_ADJUSTMENT",
+            "PlayerName": "Player10",
+            "FinalPlayer": "Player2",
+            "LettersAccountedFor": "SSAURGD",
+            "ChangeInPoints": -10            
+        },
+        {
+            "MoveType": "END_GAME_ADJUSTMENT",
+            "PlayerName": "Player11",
+            "FinalPlayer": "Player2",
+            "LettersAccountedFor": "ILUEDSN",
+            "ChangeInPoints": -8            
+        },
+        {
+            "MoveType": "END_GAME_ADJUSTMENT",
+            "PlayerName": "Player12",
+            "FinalPlayer": "Player2",
+            "LettersAccountedFor": "OTAEAEN",
+            "ChangeInPoints": -7             
+        },
+        {
+            "MoveType": "END_GAME_ADJUSTMENT",
+            "PlayerName": "Player13",
+            "FinalPlayer": "Player2",
+            "LettersAccountedFor": "TOEIIEE",
+            "ChangeInPoints": -7            
+        },
+        {
+            "MoveType": "END_GAME_ADJUSTMENT",
+            "PlayerName": "Player14",
+            "FinalPlayer": "Player2",
+            "LettersAccountedFor": "NNROIER",
+            "ChangeInPoints": -7            
+        },
+        {
+            "MoveType": "END_GAME_ADJUSTMENT",
+            "PlayerName": "Player1",
+            "FinalPlayer": "Player2",
+            "LettersAccountedFor": "EEADLZH",
+            "ChangeInPoints": -20            
+        },
+        {
+            "MoveType": "END_GAME_ADJUSTMENT",
+            "PlayerName": "Player2",
+            "FinalPlayer": "Player2",
+            "LettersAccountedFor": "VBOQFXOPEKEAACMILIBLYATCHUERVPENWORDUGGLRAASONTOISSAURGDILUEDSNOTAEAENTOEIIEENNROIEREEADLZH",
+            "ChangeInPoints": 159            
+        }
+    ]
+}

@@ -210,8 +210,7 @@ public class ScrabbleGame implements Writable {
         }
         int score = board.playWord(player.getSelectedTiles(), row, col, dir);
         Move wordPlayed = new Move(player, lettersPlayed, row, col, score, dir);
-        player.addMove(wordPlayed);
-        history.addMove(wordPlayed);
+        addMoveToGameAndPlayerHistory(wordPlayed, player);
         player.removeSelectedTiles();
         player.addPoints(score);
         tileBag.drawTiles(player);
@@ -261,7 +260,7 @@ public class ScrabbleGame implements Writable {
             p.addPoints(-1 * playerLoss);
             total += playerLoss;
             totalLetters += letters;
-            adjustment = new Move(p, firstToUseAllTiles, letters, playerLoss);
+            adjustment = new Move(p, firstToUseAllTiles, letters, -1 * playerLoss);
             addMoveToGameAndPlayerHistory(adjustment, p);
         }
         firstToUseAllTiles.addPoints(total);
