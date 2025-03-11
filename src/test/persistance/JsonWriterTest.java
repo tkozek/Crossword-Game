@@ -275,7 +275,7 @@ public class JsonWriterTest extends JsonTest {
             int pointValOnP3Rack = getTotalValueFromLetters(player3.getTilesOnRack());
             
             game.performEndGameAdjustments(player1);
-
+            assertEquals(player1.getHistory().getMoves().get(1).getMoveType(), MoveType.END_GAME_ADJUSTMENT);
             JsonWriter writer = new JsonWriter("./data/testWriterEndGame.json");
             writer.open();
             writer.write(game);

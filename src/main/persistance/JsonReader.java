@@ -163,7 +163,7 @@ public class JsonReader {
                 case "SKIP":
                     game.logSkippedTurn(player); 
                     break;
-                case "END_GAME":
+                case "END_GAME_ADJUSTMENT":
                     addEndGame(game, moveObject, player);
                 default:
                     break;

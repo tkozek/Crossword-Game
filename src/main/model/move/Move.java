@@ -128,6 +128,9 @@ public class Move implements Writable {
                 break;
             case END_GAME_ADJUSTMENT:
                 endGameAdjustmentToJson(json);
+                break;
+            default:
+                break;
         }
         return json;
     }

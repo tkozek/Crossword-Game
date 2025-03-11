@@ -69,6 +69,13 @@ public class PlayerTest {
     }
 
     @Test
+    void testPlayedAllTiles() {
+        assertTrue(testPlayer.playedAllTiles());
+        game.drawTiles(testPlayer);
+        assertFalse(testPlayer.playedAllTiles());
+    }
+
+    @Test
     void testSetPlayerName() {
         assertEquals("Trevor", testPlayer.getPlayerName());
         testPlayer.setPlayerName("Michael");

@@ -103,6 +103,7 @@ public class JsonReaderTest extends JsonTest {
     @Test
     public void testReaderEndGame() {
         JsonReader reader = new JsonReader("./data/testReadEndGame.json");
+        testBag = new TileBag();
         try {
             ScrabbleGame game = reader.read();
             assertEquals(game.getName(), "End Game");
@@ -134,7 +135,7 @@ public class JsonReaderTest extends JsonTest {
             for (int i = 1; i <= 14; i++) {
                 index = i - 1;
                 player = game.getPlayers().get(index);
-                assertEquals(player.getPlayerName(), "Player" + index);
+                assertEquals(player.getPlayerName(), "Player" + i);
                 assertEquals(player.getPointsThisGame(), endScores.get(index));
                 assertTrue(player.getTilesOnRack().isEmpty());
             }
