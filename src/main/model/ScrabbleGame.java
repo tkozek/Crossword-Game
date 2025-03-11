@@ -277,4 +277,12 @@ public class ScrabbleGame implements Writable {
         player.addMove(move);
     }
 
+
+    // MODIFIES: this
+    // EFFECTS: fills players tile rack with as
+    // many tiles as allowed from the game's tilebag
+    public void drawTiles(Player p) {
+        tileBag.drawTiles(p);
+    }
+
 }
