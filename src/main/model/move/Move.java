@@ -159,7 +159,9 @@ public class Move implements Writable {
     // EFFECTS: adds information about this move
     // to json
     private void endGameAdjustmentToJson(JSONObject json) {
-        
+        json.put("FinalPlayer", lastPlayer.getPlayerName());
+        json.put("LettersAccountedFor", lettersInvolved);
+        json.put("ChangeInPoints", pointsForMove);
     }
 
 
