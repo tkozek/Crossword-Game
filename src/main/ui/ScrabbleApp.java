@@ -147,6 +147,9 @@ public class ScrabbleApp {
                 Player playerToPlayNext = players.get(index);
                 scrabbleGame.drawTiles(playerToPlayNext);
                 handleTurn(playerToPlayNext);
+                if (playerToPlayNext.outOfTiles()) {
+                    handleEndGame(playerToPlayNext);
+                }
             }
         }
     }
@@ -480,6 +483,15 @@ public class ScrabbleApp {
     public void endGame() {
         this.gameRunning = false;
     }
+
+
+    public void handleEndGame(Player lastPlayer) {
+        this.gameRunning = false;
+        scrabbleGame.performEndGameAdjustments(lastPlayer);
+        System.out.println(lastPlayer.getPlayerName() + "was the last to play");
+        
+    }
+
 
     // EFFECTS: prints out the current board
     public void getBoardPrintOut(Board board) {

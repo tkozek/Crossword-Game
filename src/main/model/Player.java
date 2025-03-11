@@ -146,7 +146,7 @@ public class Player implements Writable {
 
     // EFFECTS: returns true iff
     // there are no tiles on this player's rack
-    public boolean playedAllTiles() {
+    public boolean outOfTiles() {
         return tileRack.isEmpty();
     }
     

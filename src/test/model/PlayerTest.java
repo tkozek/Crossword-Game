@@ -70,9 +70,9 @@ public class PlayerTest {
 
     @Test
     void testPlayedAllTiles() {
-        assertTrue(testPlayer.playedAllTiles());
+        assertTrue(testPlayer.outOfTiles());
         game.drawTiles(testPlayer);
-        assertFalse(testPlayer.playedAllTiles());
+        assertFalse(testPlayer.outOfTiles());
     }
 
     @Test
