@@ -18,7 +18,7 @@ import persistance.JsonWriter;
 
 // Citation: Saving and loading are based on JSON example from edX
 // Represents a game of Scrabble
-public class ScrabbleApp {
+public class ScrabbleConsoleApp {
     private static final String JSON_STORE = "./data/gameToPlayTest.json";
     private Player player;
     private Board board;
@@ -33,7 +33,7 @@ public class ScrabbleApp {
     
     //EFFECTS: Creates new ScrabbleApp with
     //        a board and tile bag
-    public ScrabbleApp() {        
+    public ScrabbleConsoleApp() {        
         printoutSpacer();
         System.out.println("Welcome to Scrabble in Java");
         printoutSpacer();
@@ -571,6 +571,6 @@ public class ScrabbleApp {
     
     // Play the game
     public static void main(String[] args) {
-        new ScrabbleApp();
+        new ScrabbleConsoleApp();
     }
 }
