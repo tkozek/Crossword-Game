@@ -159,7 +159,8 @@ public class JsonReaderTest extends JsonTest {
             assertEquals(p2Moves.get(0).getPointsForMove(), 41);
 
             assertEquals(p2Moves.get(1).getMoveType(), MoveType.END_GAME_ADJUSTMENT);
-            assertEquals(p2Moves.get(1).getLettersInvolved(), "VBOQFXOPEKEAACMILIBLYATCHUERVPENWORDUGGLRAASONTOISSAURGDILUEDSNOTAEAENTOEIIEENNROIEREEADLZH");
+            assertEquals(p2Moves.get(1).getLettersInvolved(), 
+                    "VBOQFXOPEKEAACMILIBLYATCHUERVPENWORDUGGLRAASONTOISSAURGDILUEDSNOTAEAENTOEIIEENNROIEREEADLZH");
             assertEquals(p2Moves.get(1).getPointsForMove(), 159);
             assertEquals(p2.getPointsThisGame(), 200);
 

@@ -9,7 +9,6 @@ import model.*;
 import model.board.Board;
 import model.board.BoardTile;
 import model.move.Move;
-import model.move.MoveType;
 import model.tile.LetterTile;
 import model.tile.Tile;
 import model.tile.TileBag;
@@ -297,7 +296,8 @@ public class ScrabbleApp {
         int absolutePointChange = Math.abs(pointChange);
         String gainOrLoss = (pointChange >= 0) ? " gained " : " lost ";
         String pluralOrNot = (absolutePointChange != 1) ? "s" : "";
-        System.out.println(lastPlayer + " used all their tiles first. \n" + playerName + gainOrLoss + absolutePointChange + pluralOrNot);
+        System.out.println(lastPlayer + " used all their tiles first. \n" 
+                + playerName + gainOrLoss + absolutePointChange + pluralOrNot);
     }
 
     //EFFECTS: Prints summary of a player swap

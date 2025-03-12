@@ -245,20 +245,20 @@ public class Board {
     private int getInlineAdjacentPoints(int startRow, int startCol, int rowInc, int colInc, int shift) {
         int total = 0;
         // start at point after final placed tile
-        while ((startRow + rowInc * shift) < BOARD_LENGTH && (startCol + colInc * shift) < BOARD_LENGTH && 
-                boardTiles[startRow + rowInc * shift][startCol + colInc * shift] instanceof LetterTile) {
-                    LetterTile letter = (LetterTile) boardTiles[startRow + rowInc * shift][startCol + colInc * shift];
-                    total += letter.getLetterPoints();
-                    shift++;
-                }
+        while ((startRow + rowInc * shift) < BOARD_LENGTH && (startCol + colInc * shift) < BOARD_LENGTH 
+                && boardTiles[startRow + rowInc * shift][startCol + colInc * shift] instanceof LetterTile) {
+            LetterTile letter = (LetterTile) boardTiles[startRow + rowInc * shift][startCol + colInc * shift];
+            total += letter.getLetterPoints();
+            shift++;
+        }
         shift = -1;
         // then go back starting from one space before first tile
-        while ((startRow + rowInc * shift) >= 0 && (startCol + colInc * shift) >= 0 && 
-                boardTiles[startRow + rowInc * shift][startCol + colInc * shift] instanceof LetterTile) {
-                    LetterTile letter = (LetterTile) boardTiles[startRow + rowInc * shift][startCol + colInc * shift];
-                    total += letter.getLetterPoints();
-                    shift--;
-                }
+        while ((startRow + rowInc * shift) >= 0 && (startCol + colInc * shift) >= 0 
+            && boardTiles[startRow + rowInc * shift][startCol + colInc * shift] instanceof LetterTile) {
+            LetterTile letter = (LetterTile) boardTiles[startRow + rowInc * shift][startCol + colInc * shift];
+            total += letter.getLetterPoints();
+            shift--;
+        }
         return total;
     }
 
@@ -341,12 +341,12 @@ public class Board {
     public int findLetterMultiplier(Coordinate coord, boolean isAdjacency) {
         if (doubleLetterCoordinates.contains(coord)) {
             if (!isAdjacency) {
-            doubleLetterCoordinates.remove(coord);
+                doubleLetterCoordinates.remove(coord);
             }
             return 2;
         } else if (tripleLetterCoordinates.contains(coord)) {
             if (!isAdjacency) {
-            tripleLetterCoordinates.remove(coord);
+                tripleLetterCoordinates.remove(coord);
             }
             return 3;
         } else {

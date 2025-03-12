@@ -449,7 +449,7 @@ public class BoardTest {
         assertEquals(6, board.playWord(YET, 5, 10, Direction.DOWN));
 
         assertEquals(10, board.playWord(justH, 6, 9, Direction.DOWN));
-        }
+    }
 
     @Test
     void testScoreWordOneJump() {

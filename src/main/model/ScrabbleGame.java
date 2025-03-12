@@ -241,14 +241,14 @@ public class ScrabbleGame implements Writable {
     // of all players except firstToUseAllTiles, adds this pooled
     // score to firstToUseAllTiles' score. Logs these adjustments
     // in game and players' histories.
-    public void performEndGameAdjustments(Player firstToUseAllTiles) {
+    public void performEndGameAdjustments(Player lastPlayer) {
         int total = 0;
         int playerLoss = 0;
         Move adjustment;
         String totalLetters = "";
         String letters = "";
         for (Player p : players) {
-            if (p.equals(firstToUseAllTiles)) {
+            if (p.equals(lastPlayer)) {
                 continue;
             }
             playerLoss = 0;
@@ -260,12 +260,11 @@ public class ScrabbleGame implements Writable {
             p.addPoints(-1 * playerLoss);
             total += playerLoss;
             totalLetters += letters;
-            adjustment = new Move(p, firstToUseAllTiles, letters, -1 * playerLoss);
+            adjustment = new Move(p, lastPlayer, letters, -1 * playerLoss);
             addMoveToGameAndPlayerHistory(adjustment, p);
         }
-        firstToUseAllTiles.addPoints(total);
-        adjustment = new Move(firstToUseAllTiles, firstToUseAllTiles, totalLetters, total);
-        addMoveToGameAndPlayerHistory(adjustment, firstToUseAllTiles);
+        lastPlayer.addPoints(total);
+        addMoveToGameAndPlayerHistory(new Move(lastPlayer, lastPlayer, totalLetters, total), lastPlayer);
     }
 
     // MODIFIES: this, player

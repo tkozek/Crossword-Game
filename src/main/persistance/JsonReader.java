@@ -165,8 +165,6 @@ public class JsonReader {
                     break;
                 case "END_GAME_ADJUSTMENT":
                     addEndGame(game, moveObject, player);
-                default:
-                    break;
             }
         }
     }
