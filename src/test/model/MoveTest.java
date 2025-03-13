@@ -82,7 +82,7 @@ public class MoveTest {
     private String getStringFromLetters(List<LetterTile> letters) {
         String result = "";
         for (LetterTile letter : letters) {
-            result += letter.getString();
+            result += letter.toDisplay();
         }
         return result;
     }  

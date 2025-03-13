@@ -176,7 +176,7 @@ public class ScrabbleGame implements Writable {
     public void swapTiles(Player player) {
         String preSwapLetters = "";
         for (LetterTile letter : player.getTilesOnRack()) {
-            preSwapLetters += letter.getString();
+            preSwapLetters += letter.toDisplay();
         }
         List<LetterTile> toSwap = player.copyLetterTiles(player.getSelectedTiles());
         this.tileBag.addTiles(toSwap);
@@ -184,7 +184,7 @@ public class ScrabbleGame implements Writable {
         this.tileBag.drawTiles(player);
         String postSwapLetters = "";
         for (LetterTile letter : player.getTilesOnRack()) {
-            postSwapLetters += letter.getString();
+            postSwapLetters += letter.toDisplay();
         }
         Move swap = new Move(player, preSwapLetters, postSwapLetters);
         addMoveToGameAndPlayerHistory(swap, player);
@@ -206,7 +206,7 @@ public class ScrabbleGame implements Writable {
     public int playWord(Player player, int row, int col, Direction dir) {
         String lettersPlayed = "";
         for (LetterTile letter : player.getSelectedTiles()) {
-            lettersPlayed += letter.getString();
+            lettersPlayed += letter.toDisplay();
         }
         int score = board.playWord(player.getSelectedTiles(), row, col, dir);
         Move wordPlayed = new Move(player, lettersPlayed, row, col, score, dir);
@@ -255,7 +255,7 @@ public class ScrabbleGame implements Writable {
             letters = "";
             for (LetterTile letter : p.getTilesOnRack()) {
                 playerLoss += letter.getLetterPoints();
-                letters += letter.getString();
+                letters += letter.toDisplay();
             }
             p.addPoints(-1 * playerLoss);
             total += playerLoss;

@@ -49,7 +49,7 @@ public class BoardTile implements Tile {
     // EFFECTS: returns string which 
     // represents the tile based on 
     // its point modifier
-    public String tileTypeAsString() {
+    public String toDisplay() {
         switch (tileType) {
             case DOUBLE_LETTER:
                 return "DLS";

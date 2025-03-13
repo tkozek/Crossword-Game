@@ -458,7 +458,7 @@ public class Board {
                     json.put(String.valueOf(letterTile.getCharacter()));
                 } else {
                     BoardTile boardTile = (BoardTile) boardTiles[i][j];
-                    json.put(boardTile.tileTypeAsString());
+                    json.put(boardTile.toDisplay());
                 }
             }
         }

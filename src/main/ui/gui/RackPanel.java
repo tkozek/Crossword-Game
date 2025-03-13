@@ -14,7 +14,6 @@ public class RackPanel extends JPanel {
 
     public RackPanel(Player p) {
         setLayout(new FlowLayout(FlowLayout.CENTER));
-
         for (LetterTile letter : p.getTilesOnRack()) {
             JPanel tilePanel = createTilePanel(letter);
             add(tilePanel);
@@ -25,11 +24,10 @@ public class RackPanel extends JPanel {
         JPanel tilePanel = new JPanel();
         tilePanel.setPreferredSize(new Dimension(40, 40));
         tilePanel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
-
-        JLabel label = new JLabel(letter.getString());
+        tilePanel.setBackground(new Color(244, 217, 138));
+        JLabel label = new JLabel(letter.toDisplay());
         label.setFont(new Font("Arial", Font.BOLD, 16));
         tilePanel.add(label);
-
         return tilePanel;
     }
 

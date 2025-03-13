@@ -42,27 +42,26 @@ public class ScrabbleVisualApp extends JFrame {
         super("Scrabble Game");
         jsonWriter = new JsonWriter(JSON_STORE);
         jsonReader = new JsonReader(JSON_STORE);
-        
-        initializeMainMenu();
-        this.board = new Board();
-        this.tileBag = new TileBag();
-        this.scrabbleGame = new ScrabbleGame("Scrabble", board, tileBag);
+        tileBag = new TileBag();
+        loadOldGame();
 
 
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(1000,1000);
         setLayout(new BorderLayout());
 
-        // boardPanel = new BoardPanel(board);
-        // rackPanel = new RackPanel(null);
+        boardPanel = new BoardPanel(board);
+        rackPanel = new RackPanel(players.get(0));
         scorePanel = new ScorePanel(scrabbleGame);
-        // historyPanel = new HistoryPanel(null);
+        historyPanel = new HistoryPanel(players.get(0));
 
         add(boardPanel, BorderLayout.CENTER);
         add(rackPanel, BorderLayout.SOUTH);
-        add(scorePanel, BorderLayout.NORTH);
+        add(scorePanel, BorderLayout.WEST);
         add(historyPanel, BorderLayout.EAST);
-
+        repaint();
+        setVisible(true);
+        repaint();
         setLocationRelativeTo(null);
     }
 

@@ -15,7 +15,7 @@ public class ScorePanel extends JPanel {
     
     public ScorePanel(ScrabbleGame scrabbleGame) {
         List<Player> players = scrabbleGame.getPlayers();
-        setLayout(new GridLayout(players.size(), 1));
+        setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
         for (Player player : players) {
             JLabel playerLabel = new JLabel(player.getPlayerName() + ": " + player.getPointsThisGame());
