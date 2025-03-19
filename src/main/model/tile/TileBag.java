@@ -16,6 +16,7 @@ import java.util.HashMap;
 // a Scrabble Game
 public class TileBag implements Writable {
     public static final int TOTAL_LETTERS_INITIALLY = 100;
+    public static final int MAX_NUM_PLAYER_TILES = 7;
     private Map<Character, Integer> letterFrequencyMap = new HashMap<>();
     private static Map<Character, Integer> letterPointsMap = new HashMap<>();
     private List<LetterTile> drawPile;
@@ -169,7 +170,7 @@ public class TileBag implements Writable {
         int numTilesAdded = 0;
         int nextTileIndex;
         LetterTile nextTile;
-        while (player.getNumTilesOnRack() < Player.MAX_NUM_TILES && !drawPile.isEmpty()) {
+        while (player.getNumTilesOnRack() < MAX_NUM_PLAYER_TILES && !drawPile.isEmpty()) {
             nextTileIndex = randomIndexGenerator.nextInt(this.numTilesRemaining());
             nextTile = drawPile.get(nextTileIndex);
             player.addTile(nextTile);

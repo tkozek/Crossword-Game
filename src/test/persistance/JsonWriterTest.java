@@ -266,7 +266,7 @@ public class JsonWriterTest extends JsonTest {
             String p3Letters = getStringFromLetters(player3.getTilesOnRack());
 
             tileBag.emptyDrawPile();
-            for (int i = 0; i < Player.MAX_NUM_TILES; i++) {
+            for (int i = 0; i < TileBag.MAX_NUM_PLAYER_TILES; i++) {
                 player1.selectTile(i);
             } 
             

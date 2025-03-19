@@ -18,7 +18,7 @@ import persistance.Writable;
 
 public class Player implements Writable {
  
-    public static final int MAX_NUM_TILES = 7;
+    
     private String name;
     private History history;
     private List<LetterTile> tileRack;

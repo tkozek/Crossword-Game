@@ -86,7 +86,7 @@ public class PlayerTest {
     void testDrawTilesEmptyRack() {
         assertEquals(testPlayer.getNumTilesOnRack(), 0);
         testBag.drawTiles(testPlayer);
-        assertEquals(testPlayer.getNumTilesOnRack(), Player.MAX_NUM_TILES);
+        assertEquals(testPlayer.getNumTilesOnRack(), TileBag.MAX_NUM_PLAYER_TILES);
     }
 
     @Test
@@ -123,7 +123,7 @@ public class PlayerTest {
     void testSwapZeroTiles() {
         assertEquals(testPlayer.getNumTilesOnRack(), 0);
         testBag.drawTiles(testPlayer);
-        assertEquals(testPlayer.getNumTilesOnRack(), Player.MAX_NUM_TILES);
+        assertEquals(testPlayer.getNumTilesOnRack(), TileBag.MAX_NUM_PLAYER_TILES);
         
         List<LetterTile> initialLetters = testPlayer.getTilesOnRack();
         //Select tiles to swap
@@ -181,7 +181,7 @@ public class PlayerTest {
         testBag.drawTiles(testPlayer);
         List<LetterTile> drawnTiles = testPlayer.getTilesOnRack();
         //Player.MAX_NUM_TILES == 7
-        assertEquals(testPlayer.getNumTilesOnRack(), Player.MAX_NUM_TILES);
+        assertEquals(testPlayer.getNumTilesOnRack(), TileBag.MAX_NUM_PLAYER_TILES);
         testPlayer.selectTile(0);
         assertTrue(testPlayer.getSelectedTiles().contains(drawnTiles.get(0)));
         assertFalse(testPlayer.getSelectedTiles().contains(drawnTiles.get(1)));
@@ -210,7 +210,7 @@ public class PlayerTest {
     @Test
     void testGetNumEachCharOnMyRackFullRack() {
         testBag.drawTiles(testPlayer);
-        assertEquals(Player.MAX_NUM_TILES, testPlayer.getTilesOnRack().size());
+        assertEquals(TileBag.MAX_NUM_PLAYER_TILES, testPlayer.getTilesOnRack().size());
         Map<Character, Integer> rackCharCounts = testPlayer.getNumEachCharOnMyRack();
         assertFalse(rackCharCounts.keySet().isEmpty());
         assertFalse(rackCharCounts.values().isEmpty());
@@ -218,7 +218,7 @@ public class PlayerTest {
         for (int charCount : rackCharCounts.values()) {
             totalCounts += charCount;
         }
-        assertEquals(Player.MAX_NUM_TILES, totalCounts);
+        assertEquals(TileBag.MAX_NUM_PLAYER_TILES, totalCounts);
     }
 
     @Test

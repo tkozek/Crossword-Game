@@ -43,11 +43,11 @@ public class TileBagTest {
         //No tiles removed yet
         assertEquals(testBag.numTilesRemaining(), TileBag.TOTAL_LETTERS_INITIALLY);
         // Enough tiles removed from bag to fill player's rack
-        assertEquals(testBag.drawTiles(testPlayer), Player.MAX_NUM_TILES);
+        assertEquals(testBag.drawTiles(testPlayer), TileBag.MAX_NUM_PLAYER_TILES);
         //Enough tiles removed from bag to fill player's rack
-        assertEquals(testBag.numTilesRemaining(), TileBag.TOTAL_LETTERS_INITIALLY -  Player.MAX_NUM_TILES);
+        assertEquals(testBag.numTilesRemaining(), TileBag.TOTAL_LETTERS_INITIALLY -  TileBag.MAX_NUM_PLAYER_TILES);
         // MAX_NUM_TILES get added to rack
-        assertEquals(testPlayer.getNumTilesOnRack(), Player.MAX_NUM_TILES);
+        assertEquals(testPlayer.getNumTilesOnRack(), TileBag.MAX_NUM_PLAYER_TILES);
         //Cannot draw more tiles 
         assertEquals(0, testBag.drawTiles(testPlayer));
     }
@@ -81,7 +81,7 @@ public class TileBagTest {
         testBag.emptyDrawPile();
         LetterTile letter = new LetterTile('A', 1);
         testBag.addTile(letter);
-        assertTrue(testPlayer.getNumTilesOnRack() + 1 < Player.MAX_NUM_TILES);
+        assertTrue(testPlayer.getNumTilesOnRack() + 1 < TileBag.MAX_NUM_PLAYER_TILES);
         // the single A we added will be drawn, then 
         // loop stops executing since the pile is empty, even though Player still 
         // doesnt have a full rack
