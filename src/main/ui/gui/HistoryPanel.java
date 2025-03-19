@@ -47,8 +47,8 @@ public class HistoryPanel extends JPanel {
             movePanel.setMaximumSize(new Dimension(200,300));
             add(movePanel);
             movePanel.setBorder(BorderFactory.createLineBorder(Color.black));
-            }
         }
+    }
 
     // EFFECTS: Returns string summary of a word played
     public String getWordString(Move word, Player p) {

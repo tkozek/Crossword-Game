@@ -18,12 +18,12 @@ public class BoardPanel extends JPanel {
 
         for (int i = 0; i < Board.BOARD_LENGTH; i++) {
             for (int j = 0; j < Board.BOARD_LENGTH; j++) {
-            JPanel tile = new JPanel();
-            tile.setBackground(new Color(244, 217, 138));
-            JLabel letter = new JLabel(board.getTileAtPositionOnBoard(i, j).toDisplay());
-            tile.add(letter);
-            tile.setBorder(BorderFactory.createLineBorder(Color.black));
-            add(tile);
+                JPanel tile = new JPanel();
+                tile.setBackground(new Color(244, 217, 138));
+                JLabel letter = new JLabel(board.getTileAtPositionOnBoard(i, j).toDisplay());
+                tile.add(letter);
+                tile.setBorder(BorderFactory.createLineBorder(Color.black));
+                add(tile);
             }
         }
     }
