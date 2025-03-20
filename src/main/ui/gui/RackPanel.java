@@ -3,21 +3,48 @@ package ui.gui;
 import javax.swing.*;
 
 import model.Player;
+import model.ScrabbleGame;
 import model.tile.LetterTile;
 
 import java.awt.*;
+import java.awt.event.ActionListener;
 
 // The panel in the Graphical user interface which 
 // displays the current state of the current player's 
 // tile rack
 public class RackPanel extends JPanel {
 
-    public RackPanel(Player p) {
+    private JButton playWordButton;
+    private JButton swapTilesButton;
+    private JButton skipTurnButton;
+    private JButton turnSelectionConfirmationButton;
+    private JPanel actionPanel;
+    private int startRow;
+    private int startCol;
+    private Player player;
+
+    public RackPanel(ScrabbleGame game, Player player) {
+        this.player = player;
         setLayout(new FlowLayout(FlowLayout.CENTER));
-        for (LetterTile letter : p.getTilesOnRack()) {
+        actionPanel = new JPanel();
+        actionPanel.setLayout(new BoxLayout(actionPanel, BoxLayout.Y_AXIS));
+        addActionButtons();
+        for (LetterTile letter : player.getTilesOnRack()) {
             JPanel tilePanel = createTilePanel(letter);
             add(tilePanel);
         }
+    }
+
+    private void addActionButtons() {
+        playWordButton = new JButton("Play");
+        swapTilesButton = new JButton("Swap");
+        skipTurnButton = new JButton("Skip");
+        turnSelectionConfirmationButton = new JButton("Confirm");
+
+        actionPanel.add(playWordButton);
+        actionPanel.add(swapTilesButton);
+        actionPanel.add(skipTurnButton);
+        actionPanel.add(turnSelectionConfirmationButton);
     }
 
     private JPanel createTilePanel(LetterTile letter) {

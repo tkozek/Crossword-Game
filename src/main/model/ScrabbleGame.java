@@ -102,6 +102,10 @@ public class ScrabbleGame implements Writable {
     public int getFirstPlayerIndex() {
         return firstPlayerIndex;
     }
+
+    public int getPlayerIndex(Player player) {
+        return players.indexOf(player);
+    }
     
     @Override
     // EFFECTS: Creates a JSONObject
