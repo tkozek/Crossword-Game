@@ -27,9 +27,11 @@ public class ScrabbleVisualApp {
     private static final int TILE_SIZE = 30;
 
     private static final Color DOUBLE_LETTER_COLOR = new Color(173, 216, 230);
-    private static final Color TRIPLE_LETTER_COLOR = new Color(0, 0, 139);
+    private static final Color TRIPLE_LETTER_COLOR = new Color(5, 127, 187);
     private static final Color DOUBLE_WORD_COLOR =  Color.PINK;
     private static final Color TRIPLE_WORD_COLOR = new Color(255, 0, 0);
+    private static final Color DEFAULT_BOARD_SPACE_COLOR = new Color(190, 171, 141);
+    private static final Color DEFAULT_LETTER_TILE_COLOR = new Color(244, 217, 138);
 
     private Board board;
     private TileBag tileBag;
@@ -47,7 +49,8 @@ public class ScrabbleVisualApp {
 
     private JPanel panel;
     
-    private JButton saveButton;
+    private JButton saveAndQuitButton;
+    private JButton quitWithoutSavingButton;
     private JLabel coverPhoto;
     private JFrame loadOrPlayFrame;
     private JButton newGameButton;
@@ -87,42 +90,30 @@ public class ScrabbleVisualApp {
     // a saved game.
     private void initializeStartMenu() {
         loadOrPlayFrame = new JFrame("Start Menu");
-        //Point mouseLocation = MouseInfo.getPointerInfo().getLocation();
-        //loadOrPlayFrame.setLocation(mouseLocation.x, mouseLocation.y);
         loadOrPlayFrame.setSize(FRAME_SIDE_LENGTH, FRAME_SIDE_LENGTH);
-
         coverPhoto = new JLabel(new ImageIcon("./data/startMenuBackgroundPhoto.jpg"));
         coverPhoto.setLayout(new GridBagLayout());
-
-       // panel = new JPanel();
-
         newGameButton = new JButton("New Game");
         loadGameButton = new JButton("Load Game");
         
-
         newGameButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 loadOrPlayFrame.setVisible(false);
                 initializeNewGame();
             }
         });
-
         loadGameButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 loadOrPlayFrame.setVisible(false);
-                loadOldGame();
-                
+                loadOldGame(); 
             }
         });
         coverPhoto.add(newGameButton, new GridBagConstraints());
         coverPhoto.add(loadGameButton, new GridBagConstraints());
-
-       // loadOrPlayFrame.add(panel);
+        
         loadOrPlayFrame.add(coverPhoto);
         loadOrPlayFrame.repaint();
         loadOrPlayFrame.setVisible(true);
-        loadOrPlayFrame.repaint();
-
     }
 
     // MODIFIES: scrabbleGame, players, tileBag, board, numPlayers
@@ -255,15 +246,24 @@ public class ScrabbleVisualApp {
         String directionString = (dir == Direction.DOWN) ? "Down" : "Right";
         toggleDirectionButton = new JButton(directionString);
         clearSelectionsButton = new JButton("Clear selection");
-        
+        saveAndQuitButton = new JButton("Save and Quit");
+        quitWithoutSavingButton = new JButton("Quit without Saving");
         addActionButtonActionListeners(player);
+        addActionButtonsToActionButtonPanels();
 
+    }
+
+    // MODIFIES: this
+    // EFFECTS: puts available action buttons into appropriate panels
+    private void addActionButtonsToActionButtonPanels() {
         moveButtons.add(playWordButton);
         moveButtons.add(swapTilesButton);
         moveButtons.add(skipTurnButton);
 
         otherOptionButtons.add(toggleDirectionButton);
         otherOptionButtons.add(clearSelectionsButton);
+        otherOptionButtons.add(saveAndQuitButton);
+        otherOptionButtons.add(quitWithoutSavingButton);
 
         actionPanel.add(moveButtons);
         actionPanel.add(otherOptionButtons);
@@ -325,7 +325,6 @@ public class ScrabbleVisualApp {
                 toggleDirectionButton.setText(newText);
             }
         });
-
         clearSelectionsButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 player.clearSelectedTiles();
@@ -336,6 +335,31 @@ public class ScrabbleVisualApp {
                 // frame.repaint();
             }
         });
+        saveAndQuitButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                handleSave(player);
+                System.exit(0);
+            }
+        });
+        quitWithoutSavingButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                System.exit(0);
+            }
+        });
+    }
+
+    // MODIFIES: scrabbleGame
+    // EFFECTS: Saves game to file
+    private void handleSave(Player player) {
+        try {
+            scrabbleGame.setFirstPlayer(player);
+            jsonWriter.open();
+            jsonWriter.write(scrabbleGame);
+            jsonWriter.close();
+            // !!! ToDo Add "Okay" button to click before closing
+        } catch (IOException e) {
+            System.out.println("Unable to write to file " + JSON_STORE);
+        }
     }
 
     
@@ -346,7 +370,7 @@ public class ScrabbleVisualApp {
         JButton tileButton = new JButton(letter.toDisplay());
         tileButton.setPreferredSize(new Dimension(40, 40));
         tileButton.setBorder(BorderFactory.createLineBorder(Color.BLACK));
-        tileButton.setBackground(new Color(244, 217, 138));
+        tileButton.setBackground(DEFAULT_LETTER_TILE_COLOR);
         tileButton.setFont(new Font("Arial", Font.BOLD, 16));
         tileButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
@@ -367,9 +391,10 @@ public class ScrabbleVisualApp {
         for (int i = 0; i < Board.BOARD_LENGTH; i++) {
             for (int j = 0; j < Board.BOARD_LENGTH; j++) {
                 String toDisplay = board.getTileAtPositionOnBoard(i, j).toDisplay();
-                JButton tile = new JButton(board.getTileAtPositionOnBoard(i, j).toDisplay());
+                JButton tile = new JButton(toDisplay);
                 tile.setBackground(selectBoardTileColor(toDisplay));
-                tile.setBorder(BorderFactory.createLineBorder(Color.black));
+                tile.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+                tile.setFont(new Font("Arial", Font.BOLD, 14));
                 final int row = i;
                 final int col = j;
                 tile.addActionListener(new ActionListener() {
@@ -400,8 +425,11 @@ public class ScrabbleVisualApp {
             case "TWS":
                 color = TRIPLE_WORD_COLOR;
                 break;
+            case " ":
+                color = DEFAULT_BOARD_SPACE_COLOR;
+                break;
             default:
-                color = new Color(244, 217, 138);
+                color = DEFAULT_LETTER_TILE_COLOR;
                 break;
         }
         return color;
