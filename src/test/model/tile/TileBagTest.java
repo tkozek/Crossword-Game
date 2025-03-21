@@ -15,9 +15,9 @@ public class TileBagTest {
     private Player testPlayer;
     private Board testBoard;
     private ScrabbleGame game;
-    private LetterTile B;
-    private LetterTile E;
-    private LetterTile B2;
+    private LetterTile b1;
+    private LetterTile e1;
+    private LetterTile b2;
 
     @BeforeEach
     void runBefore() {
@@ -25,9 +25,9 @@ public class TileBagTest {
         testBoard = new Board();
         game = new ScrabbleGame("alphabet", testBoard, testBag);
         testPlayer = new Player("tester", game);
-        B = new LetterTile('B', 3);
-        B2 = new LetterTile('B', 3);
-        E = new LetterTile('E', 1);
+        b1 = new LetterTile('B', 3);
+        b2 = new LetterTile('B', 3);
+        e1 = new LetterTile('E', 1);
     }
 
     @Test
@@ -93,13 +93,13 @@ public class TileBagTest {
         testBag.emptyDrawPile();
         assertTrue(testBag.getCurrentLetterFrequencies().keySet().isEmpty());
         assertTrue(testBag.getCurrentLetterFrequencies().values().isEmpty());
-        testBag.addTile(B);
+        testBag.addTile(b1);
         assertFalse(testBag.getCurrentLetterFrequencies().keySet().isEmpty());
         assertEquals(1, testBag.getCurrentLetterFrequencies().get('B'));
-        testBag.addTile(E);
+        testBag.addTile(e1);
         assertEquals(2, testBag.getCurrentLetterFrequencies().size());
         assertEquals(1, testBag.getCurrentLetterFrequencies().get('E'));
-        testBag.addTile(B2);
+        testBag.addTile(b2);
         assertEquals(2, testBag.getCurrentLetterFrequencies().get('B'));
     }
 }

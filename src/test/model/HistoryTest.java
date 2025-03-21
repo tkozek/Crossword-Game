@@ -24,9 +24,9 @@ public class HistoryTest {
     private History history;
     private Move moveToAdd;
     private Move otherMoveToAdd;
-    private LetterTile B; 
-    private LetterTile A;
-    private LetterTile Z;
+    private LetterTile b1; 
+    private LetterTile a1;
+    private LetterTile z1;
     private ScrabbleGame game;
 
     @BeforeEach
@@ -37,9 +37,9 @@ public class HistoryTest {
         testPlayer = new Player("Trevor", game);
         testPlayer2 = new Player("Rovert", game);
         p1Letters = testPlayer.getTilesOnRack();
-        B = new LetterTile('B',3);
-        A = new LetterTile('A',1);
-        Z = new LetterTile('Z',10);
+        b1 = new LetterTile('B',3);
+        a1 = new LetterTile('A',1);
+        z1 = new LetterTile('Z',10);
         history = new History();
         moveToAdd = new Move(testPlayer, getStringFromLetters(p1Letters), 1,8, 10, Direction.DOWN);
         otherMoveToAdd = new Move(testPlayer2);
@@ -84,8 +84,8 @@ public class HistoryTest {
     @Test
     void testGetListOfMoveContainingLetterOneMove() {
         List<LetterTile> playedLetters = new ArrayList<>();
-        playedLetters.add(A);
-        playedLetters.add(Z);
+        playedLetters.add(a1);
+        playedLetters.add(z1);
         Move doesntHaveB = new Move(testPlayer, getStringFromLetters(playedLetters), 3, 5, 13, Direction.DOWN);
         history.addMove(doesntHaveB);
         assertEquals(history.getMoves().size(), 1);
@@ -97,14 +97,14 @@ public class HistoryTest {
     @Test
     void testGetListOfMoveContainingLetterTwoMoves() {
         List<LetterTile> playedLetters = new ArrayList<>();
-        playedLetters.add(A);
-        playedLetters.add(B); // AB
+        playedLetters.add(a1);
+        playedLetters.add(b1); // AB
         Move doesntHaveZ = new Move(testPlayer, getStringFromLetters(playedLetters), 7,9, 8,Direction.RIGHT);
         history.addMove(doesntHaveZ);
 
         List<LetterTile> playedLetters2 = new ArrayList<>();
-        playedLetters2.add(A);
-        playedLetters2.add(Z); //AZ
+        playedLetters2.add(a1);
+        playedLetters2.add(z1); //AZ
 
         Move doesntHaveB = new Move(testPlayer, getStringFromLetters(playedLetters2), 3, 5, 13, Direction.DOWN);
         history.addMove(doesntHaveB);

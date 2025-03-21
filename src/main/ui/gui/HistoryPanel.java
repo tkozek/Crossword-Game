@@ -4,9 +4,7 @@ import javax.swing.*;
 
 import model.Direction;
 import model.Player;
-import model.board.Board;
 import model.move.Move;
-import model.move.MoveType;
 
 import java.awt.*;
 

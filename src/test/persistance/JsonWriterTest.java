@@ -171,13 +171,16 @@ public class JsonWriterTest extends JsonTest {
                 assertEquals(letterP2.getCharacter(), copyP2.getTilesOnRack().get(i).getCharacter());
                 assertEquals(letterP2.getLetterPoints(), copyP2.getTilesOnRack().get(i).getLetterPoints());
             }
+            List<Move> p1Moves = player.getHistory().getMoves();
+            List<Move> p2Moves = player2.getHistory().getMoves();
 
-            assertEquals(copyP1.getHistory().getMoves().size(), player.getHistory().getMoves().size());
-            assertEquals(copyP2.getHistory().getMoves().size(), player2.getHistory().getMoves().size());
+            List<Move> copyP1Moves = copyP1.getHistory().getMoves();
+            List<Move> copyP2Moves = copyP2.getHistory().getMoves();
+            assertEquals(copyP1Moves.size(), player.getHistory().getMoves().size());
+            assertEquals(copyP2Moves.size(), player2.getHistory().getMoves().size());
 
-            assertEquals(copyP1.getHistory().getMoves().get(0).getDirection(), player.getHistory().getMoves().get(0).getDirection());
-            assertEquals(copyP1.getHistory().getMoves().get(0).getPointsForMove(), player.getHistory().getMoves().get(0).getPointsForMove());
-            //assertEquals(copyP1.getHistory().getMoves().get(0).getLettersInvolved(), player.getHistory().getMoves().get(0).getLettersInvolved());
+            assertEquals(copyP1Moves.get(0).getDirection(), p1Moves.get(0).getDirection());
+            assertEquals(copyP2Moves.get(0).getPointsForMove(), p2Moves.get(0).getPointsForMove());
         } catch (IOException e) {
             fail("Exception should not have been thrown");
         }
@@ -212,13 +215,12 @@ public class JsonWriterTest extends JsonTest {
             List<LetterTile> p1FinalLetters = player.copySelectedTiles();
             List<LetterTile> p2FinalLetters = player2.copySelectedTiles();
 
-            game.logSwap(player, getStringFromLetters(p1InitLetters), getStringFromLetters(p1FinalLetters)); // second logged move
-            game.logSwap(player2, getStringFromLetters(p2InitLetters), getStringFromLetters(p2FinalLetters)); // second logged move
+            game.logSwap(player, getStringFromLetters(p1InitLetters), getStringFromLetters(p1FinalLetters)); 
+            game.logSwap(player2, getStringFromLetters(p2InitLetters), getStringFromLetters(p2FinalLetters));
             game.logSkippedTurn(player); // 3rd
 
             game.logWord(player2, getStringFromLetters(player2.getSelectedTiles()), 7, 7, 70, Direction.DOWN); //3rd
             game.logWord(player, getStringFromLetters(player.getSelectedTiles()), 6, 7, 60, Direction.RIGHT); //4th
-
 
             JsonWriter writer = new JsonWriter("./data/testWriteMoveComprehensive.json");
             writer.open();
@@ -241,8 +243,6 @@ public class JsonWriterTest extends JsonTest {
             assertEquals(p2Moves.get(1).getMoveType(), MoveType.SWAP_TILES);
             assertEquals(p2Moves.get(2).getMoveType(), MoveType.PLAY_WORD);
             assertEquals(p2Moves.get(2).getDirection(), Direction.DOWN);
-
-
         } catch (IOException e) {
             fail("Exception should not have been thrown");
         }
@@ -261,7 +261,6 @@ public class JsonWriterTest extends JsonTest {
             game.drawTiles(player2);
             game.drawTiles(player3);
 
-            String p1Letters = getStringFromLetters(player1.getTilesOnRack());
             String p2Letters = getStringFromLetters(player2.getTilesOnRack());
             String p3Letters = getStringFromLetters(player3.getTilesOnRack());
 

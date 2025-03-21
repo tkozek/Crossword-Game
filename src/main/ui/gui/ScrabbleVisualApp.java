@@ -16,7 +16,6 @@ import persistance.JsonReader;
 import persistance.JsonWriter;
 
 import java.util.List;
-import java.util.ArrayList;
 
 // A Graphical user interface for Scrabble
 public class ScrabbleVisualApp {

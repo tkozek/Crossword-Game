@@ -22,21 +22,21 @@ public class BoardTest {
     private TileBag testBag;
     private Player testPlayer;
     private List<LetterTile>  letters;
-    private LetterTile A;
-    private LetterTile B;
-    private LetterTile C;
-    private LetterTile E;
-    private LetterTile G;
-    private LetterTile H;
-    private LetterTile K;
-    private LetterTile L;
-    private LetterTile N;
-    private LetterTile O;
-    private LetterTile R;
-    private LetterTile S;
-    private LetterTile T;
-    private LetterTile Y;
-    private LetterTile Z;
+    private LetterTile a1;
+    private LetterTile b1;
+    private LetterTile c1;
+    private LetterTile e1;
+    private LetterTile g1;
+    private LetterTile h1;
+    private LetterTile k1;
+    private LetterTile l1;
+    private LetterTile n1;
+    private LetterTile o1;
+    private LetterTile r1;
+    private LetterTile s1;
+    private LetterTile t1;
+    private LetterTile y1;
+    private LetterTile z1;
     private ScrabbleGame game;
 
     @BeforeEach
@@ -47,22 +47,22 @@ public class BoardTest {
         testPlayer = new Player("Trevor", game);
         testBag.drawTiles(testPlayer);
         letters = testPlayer.getTilesOnRack();
-        A = new LetterTile('A',1);
-        B = new LetterTile('B',3);
-        C = new LetterTile('C', 3);
+        a1 = new LetterTile('A',1);
+        b1 = new LetterTile('B',3);
+        c1 = new LetterTile('C', 3);
         
-        E = new LetterTile('E', 1);
-        G = new LetterTile('G', 2);
-        H = new LetterTile('H', 4);
-        N = new LetterTile('N', 1);
-        R = new LetterTile('R', 1);
-        L = new LetterTile('L', 1);
-        K = new LetterTile('K', 5);
-        T = new LetterTile('T', 1);
-        Z = new LetterTile('Z',10);
-        O = new LetterTile('O', 1);
-        Y = new LetterTile('Y', 4);
-        S = new LetterTile('S', 1);
+        e1 = new LetterTile('E', 1);
+        g1 = new LetterTile('G', 2);
+        h1 = new LetterTile('H', 4);
+        n1 = new LetterTile('N', 1);
+        r1 = new LetterTile('R', 1);
+        l1 = new LetterTile('L', 1);
+        k1 = new LetterTile('K', 5);
+        t1 = new LetterTile('T', 1);
+        z1 = new LetterTile('Z',10);
+        o1 = new LetterTile('O', 1);
+        y1 = new LetterTile('Y', 4);
+        s1 = new LetterTile('S', 1);
     }
     
     /* @Test
@@ -177,7 +177,7 @@ public class BoardTest {
     }
 
     @Test
-    void testInBoundsStartOOBMoveDownIntoBounds() {
+    void testInBoundsStartOutOfBoundsMoveDownIntoBounds() {
         testBag.drawTiles(testPlayer);
         letters = testPlayer.getTilesOnRack();
         //
@@ -187,7 +187,7 @@ public class BoardTest {
     }
 
     @Test
-    void testInBoundsStartOOBMoveRightUntilInBounds() {
+    void testInBoundsStartOutOfBoundsMoveRightUntilInBounds() {
         testBag.drawTiles(testPlayer);
         letters = testPlayer.getTilesOnRack();
         //
@@ -291,9 +291,9 @@ public class BoardTest {
     void testScoreWord() {
         letters.clear();
         assertTrue(letters.isEmpty());
-        letters.add(B);
-        letters.add(A);
-        letters.add(Z);
+        letters.add(b1);
+        letters.add(a1);
+        letters.add(z1);
         assertEquals(letters.size(), 3);
         //TW
         assertEquals((3 + 1 + 10) * 3, board.scoreWord(letters, 0,0, 0, 1));
@@ -333,7 +333,7 @@ public class BoardTest {
     void testGetNumCharOnBoardOneTilePlaced() {
         List<LetterTile> toAdd = new ArrayList<>();
         // Add lettertile B to toAdd
-        toAdd.add(B);
+        toAdd.add(b1);
         // Play word "B" at 7,7 (direction is arbitrary)
         board.playWord(toAdd,7,7, Direction.DOWN);
         // Now our Map shouldnt be empty
@@ -352,11 +352,11 @@ public class BoardTest {
         List<LetterTile> toAdd = new ArrayList<>();
         List<LetterTile> toAdd2 = new ArrayList<>();
         // Add lettertile B to toAdd
-        toAdd.add(A);
-        toAdd.add(Z);
+        toAdd.add(a1);
+        toAdd.add(z1);
         // Play word "AZ" at 7,7 ; 7,8
         board.playWord(toAdd,7,7, Direction.RIGHT);
-        toAdd2.add(B);
+        toAdd2.add(b1);
         board.playWord(toAdd2, 0,0, Direction.DOWN);
         // Now our Map should have A, B, Z keys
         Map<Character,Integer> counts = board.getNumEachCharOnBoard();
@@ -375,16 +375,16 @@ public class BoardTest {
 
     @Test
     void testGetNumCharOnBoardSameLetterAddedMoreThanOnce() {
-        LetterTile A2 = new LetterTile('A', 1);
+        LetterTile a2 = new LetterTile('A', 1);
         List<LetterTile> toAdd = new ArrayList<>();
         List<LetterTile> toAdd2 = new ArrayList<>();
         // Add lettertile B to toAdd
-        toAdd.add(A);
-        toAdd.add(A2);
-        toAdd.add(Z);
+        toAdd.add(a1);
+        toAdd.add(a2);
+        toAdd.add(z1);
         // Play word "AZ" at 7,7 ; 7,8
         board.playWord(toAdd,6,8, Direction.RIGHT);
-        toAdd2.add(B);
+        toAdd2.add(b1);
         board.playWord(toAdd2, 0,0, Direction.DOWN);
         // Now our Map should have A, B, Z keys
         Map<Character,Integer> counts = board.getNumEachCharOnBoard();
@@ -410,65 +410,65 @@ public class BoardTest {
         BoardTile twTile = (BoardTile) board.getTileAtPositionOnBoard(7,0);
         assertEquals(twTile.getTileType(), TileType.TRIPLE_WORD);
 
-        BoardTile tLTile = (BoardTile) board.getTileAtPositionOnBoard(1,5);
-        assertEquals(tLTile.getTileType(), TileType.TRIPLE_LETTER);
+        BoardTile tlTile = (BoardTile) board.getTileAtPositionOnBoard(1,5);
+        assertEquals(tlTile.getTileType(), TileType.TRIPLE_LETTER);
 
-        BoardTile dLTile = (BoardTile) board.getTileAtPositionOnBoard(0,3);
-        assertEquals(dLTile.getTileType(), TileType.DOUBLE_LETTER);
+        BoardTile dlTile = (BoardTile) board.getTileAtPositionOnBoard(0,3);
+        assertEquals(dlTile.getTileType(), TileType.DOUBLE_LETTER);
     }
 
     @Test
     void testScoreWordConnectsToExistingWordNoMultipliers() {
-        List<LetterTile> BAT = new ArrayList<>();
-        BAT.add(B);
-        BAT.add(A);
-        BAT.add(T);
-        assertEquals(10, board.playWord(BAT, 7, 7, Direction.RIGHT));
-        List<LetterTile> SOY = new ArrayList<>();
-        SOY.add(S);
-        SOY.add(O);
-        SOY.add(Y);
+        List<LetterTile> bat = new ArrayList<>();
+        bat.add(b1);
+        bat.add(a1);
+        bat.add(t1);
+        assertEquals(10, board.playWord(bat, 7, 7, Direction.RIGHT));
+        List<LetterTile> soy = new ArrayList<>();
+        soy.add(s1);
+        soy.add(o1);
+        soy.add(y1);
         // BATS for 6 plus SOY for 6
-        assertEquals(12, board.playWord(SOY, 7, 10, Direction.DOWN));
+        assertEquals(12, board.playWord(soy, 7, 10, Direction.DOWN));
     }
 
     @Test
     void testScoreWordConnectTwiceAtOneSquareNoMultiplier() {
-        List<LetterTile> BOAT = new ArrayList<>();
-        BOAT.add(B);
-        BOAT.add(O);
-        BOAT.add(A);
-        BOAT.add(T);
+        List<LetterTile> boat = new ArrayList<>();
+        boat.add(b1);
+        boat.add(o1);
+        boat.add(a1);
+        boat.add(t1);
         // Will connect to BOAT's 'T'
-        List<LetterTile> YET = new ArrayList<>();
-        YET.add(Y);
-        YET.add(E);
+        List<LetterTile> yet = new ArrayList<>();
+        yet.add(y1);
+        yet.add(e1);
         List<LetterTile> justH = new ArrayList<>();
-        justH.add(H);
-        assertEquals(12, board.playWord(BOAT, 7,7, Direction.RIGHT));
-        assertEquals(6, board.playWord(YET, 5, 10, Direction.DOWN));
+        justH.add(h1);
+        assertEquals(12, board.playWord(boat, 7,7, Direction.RIGHT));
+        assertEquals(6, board.playWord(yet, 5, 10, Direction.DOWN));
 
         assertEquals(10, board.playWord(justH, 6, 9, Direction.DOWN));
     }
 
     @Test
     void testScoreWordOneJump() {
-        List<LetterTile> CHORE = new ArrayList<>();
-        CHORE.add(C);
-        CHORE.add(H);
-        CHORE.add(O);
-        CHORE.add(R);
-        CHORE.add(E);
+        List<LetterTile> chore = new ArrayList<>();
+        chore.add(c1);
+        chore.add(h1);
+        chore.add(o1);
+        chore.add(r1);
+        chore.add(e1);
 
-        List<LetterTile> TOOL = new ArrayList<>();
+        List<LetterTile> tool = new ArrayList<>();
 
-        TOOL.add(T);
-        TOOL.add(O);
-        TOOL.add(L);
+        tool.add(t1);
+        tool.add(o1);
+        tool.add(l1);
 
-        assertEquals(22, board.playWord(CHORE, 7,7, Direction.DOWN));
+        assertEquals(22, board.playWord(chore, 7,7, Direction.DOWN));
         // Must jump over CHORE's 'O'
-        assertEquals(6, board.playWord(TOOL, 9, 6, Direction.RIGHT));
+        assertEquals(6, board.playWord(tool, 9, 6, Direction.RIGHT));
 
         LetterTile boardTile97 = (LetterTile) board.getTileAtPositionOnBoard(9, 7);
         LetterTile boardTile98 = (LetterTile) board.getTileAtPositionOnBoard(9, 8);
@@ -481,39 +481,39 @@ public class BoardTest {
 
     @Test
     void testScoreWordConnectTwiceAtOneSquareWithLetterMultiplier() {
-        List<LetterTile> CHORE = new ArrayList<>();
-        CHORE.add(C);
-        CHORE.add(H);
-        CHORE.add(O);
-        CHORE.add(R);
-        CHORE.add(E);
-        List<LetterTile> TOOL = new ArrayList<>();
-        TOOL.add(T);
-        TOOL.add(O);
-        TOOL.add(L);
+        List<LetterTile> chore = new ArrayList<>();
+        chore.add(c1);
+        chore.add(h1);
+        chore.add(o1);
+        chore.add(r1);
+        chore.add(e1);
+        List<LetterTile> tool = new ArrayList<>();
+        tool.add(t1);
+        tool.add(o1);
+        tool.add(l1);
         List<LetterTile> justA = new ArrayList<>();
-        justA.add(A);
+        justA.add(a1);
 
-        assertEquals(22, board.playWord(CHORE, 7,7, Direction.DOWN));
-        assertEquals(6, board.playWord(TOOL, 9, 6, Direction.RIGHT));
+        assertEquals(22, board.playWord(chore, 7,7, Direction.DOWN));
+        assertEquals(6, board.playWord(tool, 9, 6, Direction.RIGHT));
         // FORMS AH and AT
         assertEquals(9, board.playWord(justA, 8, 6, Direction.RIGHT));
     }
 
     @Test
     void testScoreWordPlayAtBothEndsBySkippingFourLetters() {
-        List<LetterTile> HANG = new ArrayList<>();
-        HANG.add(H);
-        HANG.add(A);
-        HANG.add(N);
-        HANG.add(G);
-        assertEquals(16, board.playWord(HANG, 7, 4, Direction.RIGHT));
-        List<LetterTile> CHANGE = new ArrayList<>();
-        CHANGE.add(C);
-        CHANGE.add(E);
+        List<LetterTile> hang = new ArrayList<>();
+        hang.add(h1);
+        hang.add(a1);
+        hang.add(n1);
+        hang.add(g1);
+        assertEquals(16, board.playWord(hang, 7, 4, Direction.RIGHT));
+        List<LetterTile> change = new ArrayList<>();
+        change.add(c1);
+        change.add(e1);
         // Adds C to start and E to the end of HANG to make CHANGE. Double letter applied
         // to C, double word not applied since it was already applied to HANG
-        assertEquals(15, board.playWord(CHANGE, 7, 3, Direction.RIGHT));
+        assertEquals(15, board.playWord(change, 7, 3, Direction.RIGHT));
         LetterTile boardTile73 = (LetterTile) board.getTileAtPositionOnBoard(7, 3);
         LetterTile boardTile74 = (LetterTile) board.getTileAtPositionOnBoard(7, 4);
         LetterTile boardTile78 = (LetterTile) board.getTileAtPositionOnBoard(7, 8);
@@ -527,25 +527,25 @@ public class BoardTest {
 
     @Test
     void testScoreWordConnectTwiceAtOneSquareWithWordMultiplier() {
-        List<LetterTile> HANG = new ArrayList<>();
-        HANG.add(H);
-        HANG.add(A);
-        HANG.add(N);
-        HANG.add(G);
-        board.playWord(HANG, 7, 4, Direction.RIGHT);
-        List<LetterTile> STEAK = new ArrayList<>();
-        STEAK.add(S);
-        STEAK.add(T);
-        STEAK.add(E);
-        STEAK.add(K);
+        List<LetterTile> hang = new ArrayList<>();
+        hang.add(h1);
+        hang.add(a1);
+        hang.add(n1);
+        hang.add(g1);
+        board.playWord(hang, 7, 4, Direction.RIGHT);
+        List<LetterTile> steak = new ArrayList<>();
+        steak.add(s1);
+        steak.add(t1);
+        steak.add(e1);
+        steak.add(k1);
 
-        assertEquals(11, board.playWord(STEAK, 4, 5, Direction.DOWN));
+        assertEquals(11, board.playWord(steak, 4, 5, Direction.DOWN));
         LetterTile boardTile75 = (LetterTile) board.getTileAtPositionOnBoard(7, 5);
         assertEquals(boardTile75.getCharacter(), 'A');
-        List<LetterTile> ATE = new ArrayList<>();
-        ATE.add(new LetterTile('A'));
-        ATE.add(new LetterTile('E'));
-        assertEquals(3, board.playWord(ATE, 5, 4, Direction.RIGHT));
+        List<LetterTile> ate = new ArrayList<>();
+        ate.add(new LetterTile('A'));
+        ate.add(new LetterTile('E'));
+        assertEquals(3, board.playWord(ate, 5, 4, Direction.RIGHT));
         
         List<LetterTile> justA = new ArrayList<>();
         justA.add(new LetterTile('A'));
