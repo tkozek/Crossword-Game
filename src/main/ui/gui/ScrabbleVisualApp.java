@@ -48,7 +48,7 @@ public class ScrabbleVisualApp {
     private JPanel rackPanel;
     private ScorePanel scorePanel;
 
-    private JPanel historyPanel;
+    private JPanel informationPanel;
     private JPanel allMovesPanel;
     private JPanel filteredWordsPanel;
     private JButton searchWordsButton;
@@ -56,15 +56,13 @@ public class ScrabbleVisualApp {
     private JPanel remainingTileCountsPanel;
     private JButton searchRemainingCountsButton;
     private JTextField searchRemainingCountsTextField;
-    private JComboBox infoPanelComboBox; 
+    private JTabbedPane infoTabs;
 
     private JsonWriter jsonWriter;
     private JsonReader jsonReader;
     private List<Player> players;
     private int numPlayers;
     private JFrame frame;
-
-    private JPanel panel;
     
     private JButton saveAndQuitButton;
     private JButton quitWithoutSavingButton;
@@ -84,7 +82,7 @@ public class ScrabbleVisualApp {
     private JButton playWordButton;
     private JButton swapTilesButton;
     private JButton skipTurnButton;
-    private JButton turnSelectionConfirmationButton;
+    
     private JButton toggleDirectionButton;
     private JButton clearSelectionsButton;
     private JPanel actionPanel;
@@ -144,8 +142,6 @@ public class ScrabbleVisualApp {
             this.tileBag = scrabbleGame.getTileBag();
             this.numPlayers = players.size();
             handleGame(0);
-            // System.out.println("Loaded " + scrabbleGame.getName() + " with " + String.valueOf(numPlayers) 
-            //         + " players from " + JSON_STORE);
         } catch (IOException e) {
             System.out.println("Unable to read game from file: " + JSON_STORE);
         }
@@ -161,7 +157,6 @@ public class ScrabbleVisualApp {
         this.numPlayers = 0;
         requestPlayerNames();
         //scrabbleGame.setFirstPlayer(players.get(0)); // !!! Todo add exception handling
-        
     }
 
     // MODIFIES: this
@@ -209,18 +204,16 @@ public class ScrabbleVisualApp {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(FRAME_SIDE_LENGTH, FRAME_SIDE_LENGTH);
         frame.setLayout(new BorderLayout());
-        //Point mouseLocation = MouseInfo.getPointerInfo().getLocation();
-        //frame.setLocation(mouseLocation.x - FRAME_SIDE_LENGTH / 4, mouseLocation.y - FRAME_SIDE_LENGTH / 4);
         getBoardPanel(board);
         Player playerToPlayNext = players.get(index);
         scrabbleGame.drawTiles(playerToPlayNext);
         getRackPanel(playerToPlayNext);
         scorePanel = new ScorePanel(scrabbleGame);
-        getHistoryPanel(playerToPlayNext);
+        getInformationPanel(playerToPlayNext);
         frame.add(boardPanel, BorderLayout.CENTER);
         frame.add(rackPanel, BorderLayout.SOUTH);
         frame.add(scorePanel, BorderLayout.WEST);
-        frame.add(historyPanel, BorderLayout.EAST);
+        frame.add(informationPanel, BorderLayout.EAST);
         
         frame.repaint();
         frame.setVisible(true);
@@ -240,13 +233,8 @@ public class ScrabbleVisualApp {
         for (int i = 0; i < letters.size(); i++) {
             rackPanel.add(createTilePanel(player, letters.get(i), i));
         }
-/* 
-        for (LetterTile letter : player.getTilesOnRack()) {
-            JPanel tilePanel = createTilePanel(letter);
-            rackPanel.add(tilePanel);
-        } */
     }
-//
+
 
     // MODIFIES: this
     // EFFECTS: loads panel with available action buttons
@@ -352,6 +340,12 @@ public class ScrabbleVisualApp {
                 // frame.repaint();
             }
         });
+        addSaveAndQuitActionListeners(player);
+    }
+
+    // MODIFIES: this
+    // EFFECTS: adds save and quit, and quit without saving action listeners.
+    private void addSaveAndQuitActionListeners(Player player) {
         saveAndQuitButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 handleSave(player);
@@ -452,28 +446,25 @@ public class ScrabbleVisualApp {
         return color;
     }
 
-    // MODIFIES: 
-    // EFFECTS: 
-    public void getHistoryPanel(Player player) {
-        historyPanel = new JPanel();
-        historyPanel.setLayout(new CardLayout());
-        historyPanel.setPreferredSize(new Dimension(175, FRAME_SIDE_LENGTH));
-        
+    // MODIFIES: this
+    // EFFECTS: adds tabbed information panel to frame
+    public void getInformationPanel(Player player) {
+        informationPanel = new JPanel();
+        informationPanel.setLayout(new CardLayout());
+        informationPanel.setPreferredSize(new Dimension(175, FRAME_SIDE_LENGTH));
+        infoTabs = new JTabbedPane();
         addAllMovesPanel(player);
         addFilteredWordsPanel(player);
         addRemainingTileCountsPanel(player);
 
         String[] panelNames = {"All Moves", "Filtered Words", "Remaining Tile Counts"};
-        infoPanelComboBox = new JComboBox<>(panelNames);
-        infoPanelComboBox.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                CardLayout card = (CardLayout) historyPanel.getLayout();
-                card.show(historyPanel, (String) infoPanelComboBox.getSelectedItem());
-            }
-        }); 
-        historyPanel.add(infoPanelComboBox);
+        informationPanel.add(infoTabs);
     }
 
+
+    // MODIFIES: infoTabs       
+    // EFFECTs: adds a panel to show summary of all moves
+    // to the information tabbed pane
     private void addAllMovesPanel(Player player) {
         allMovesPanel = new JPanel();
         String summary = "";
@@ -498,9 +489,11 @@ public class ScrabbleVisualApp {
             allMovesPanel.setMaximumSize(new Dimension(200,500));
             allMovesPanel.setBorder(BorderFactory.createLineBorder(Color.black));
         }
-        historyPanel.add(allMovesPanel, "All Moves");
+        infoTabs.add(allMovesPanel, "All Moves");
     }
 
+    // EFFECTS: returns JTextArea with given text and 
+    // standardized formatting
     private JTextArea getFormattedTextArea(String text) {
         JTextArea textArea = new JTextArea(text);
         textArea.setFont(new Font("Arial", Font.ITALIC, 12));
@@ -512,6 +505,9 @@ public class ScrabbleVisualApp {
         return textArea;
     }
 
+    // MODIFIES: infoTabs       
+    // EFFECTs: adds a panel to show filtered word summary
+    // to the information tabbed pane
     private void addFilteredWordsPanel(Player player) {
         filteredWordsPanel = new JPanel();
         searchWordsButton = new JButton("Search");
@@ -530,9 +526,12 @@ public class ScrabbleVisualApp {
         });
         filteredWordsPanel.add(searchWordsTextField);
         filteredWordsPanel.add(searchWordsButton);
-        historyPanel.add(filteredWordsPanel, "Filtered Words");
+        infoTabs.add(filteredWordsPanel, "Filtered Words");
     }
 
+    // MODIFIES: infoTabs
+    // EFFECTs: adds a panel to show remaining tile counts
+    // to the information tabbed pane
     private void addRemainingTileCountsPanel(Player player) {
         remainingTileCountsPanel = new JPanel();
         Map<Character, Integer> remainingCounts = scrabbleGame.getNumEachCharInBagAndOpponents(player);
@@ -552,7 +551,7 @@ public class ScrabbleVisualApp {
                 }
             }
         });
-        historyPanel.add(remainingTileCountsPanel, "Remaining Tile Counts");
+        infoTabs.add(remainingTileCountsPanel, "Remaining Tile Counts");
     }
 
     // EFFECTS: Returns string summary of a word played
@@ -614,6 +613,5 @@ public class ScrabbleVisualApp {
     // EFFECTS: Start the Graphical User Interface
     public static void main(String[] args) {
         new ScrabbleVisualApp();
-        
     }
 }

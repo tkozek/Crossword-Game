@@ -13,6 +13,8 @@ import java.awt.*;
 // in this game, under their names
 public class ScorePanel extends JPanel {
     
+    // EFFECTS: adds player's name to a panel along with their score
+    // in the format name: score
     public ScorePanel(ScrabbleGame scrabbleGame) {
         List<Player> players = scrabbleGame.getPlayers();
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
