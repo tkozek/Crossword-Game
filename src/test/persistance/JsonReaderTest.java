@@ -64,7 +64,7 @@ public class JsonReaderTest extends JsonTest {
             Player player = game.getPlayers().get(0);
             assertEquals(player.getPlayerName(), "Trevor");
             assertEquals(player.getPointsThisGame(), 0);
-            assertEquals(player.getHistory().getMoves().get(0).getMoveType(), MoveType.SKIP);
+            assertEquals(player.getMoves().get(0).getMoveType(), MoveType.SKIP);
         } catch (IOException e) {
             fail("Couldn't read file");
         }
@@ -141,7 +141,7 @@ public class JsonReaderTest extends JsonTest {
             }
 
             Player p1 = game.getPlayerByName("Player1");
-            List<Move> p1Moves = p1.getHistory().getMoves();
+            List<Move> p1Moves = p1.getMoves();
             assertEquals(p1Moves.size(), 2);
             assertEquals(p1Moves.get(0).getMoveType(), MoveType.PLAY_WORD);
             assertEquals(p1Moves.get(0).getLettersInvolved(), "IT");
@@ -152,7 +152,7 @@ public class JsonReaderTest extends JsonTest {
             assertEquals(p1Moves.get(1).getPointsForMove(), -20);
 
             Player p2 = game.getPlayerByName("Player2");
-            List<Move> p2Moves = p2.getHistory().getMoves();
+            List<Move> p2Moves = p2.getMoves();
             assertEquals(p2Moves.size(), 2);
             assertEquals(p2Moves.get(0).getMoveType(), MoveType.PLAY_WORD);
             assertEquals(p2Moves.get(0).getLettersInvolved(), "WIBJYMF");
@@ -167,9 +167,9 @@ public class JsonReaderTest extends JsonTest {
             for (int i = 3; i <= 14; i++) {
                 index = i - 1;
                 player = game.getPlayers().get(index);
-                assertEquals(player.getHistory().getMoves().size(), 1);
-                assertEquals(player.getHistory().getMoves().get(0).getMoveType(), MoveType.END_GAME_ADJUSTMENT);
-                assertEquals(player.getHistory().getMoves().get(0).getPointsForMove(), endScores.get(index));
+                assertEquals(player.getMoves().size(), 1);
+                assertEquals(player.getMoves().get(0).getMoveType(), MoveType.END_GAME_ADJUSTMENT);
+                assertEquals(player.getMoves().get(0).getPointsForMove(), endScores.get(index));
             }
         } catch (IOException e) {
             fail("Couldn't read file");

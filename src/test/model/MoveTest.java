@@ -116,5 +116,12 @@ public class MoveTest {
         assertEquals(skip.getMoveType(), MoveType.SKIP);
         assertEquals(skip.getPlayer(),testPlayer);
     }
+
+    @Test
+    void testGetLastPlayer() {
+        Move endGame = new Move(testPlayer, testPlayer2, "ADC", 6);
+        assertEquals(testPlayer2, endGame.getLastPlayer());
+        assertFalse(testPlayer.equals(endGame.getLastPlayer()));
+    }
     
 }

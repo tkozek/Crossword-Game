@@ -268,7 +268,7 @@ public class ScrabbleConsoleApp {
     // in order, including playing words,
     // swaps, skips
     public void printAllMovesSummary(Player p) {
-        List<Move> allMoves = p.getHistory().getMoves();
+        List<Move> allMoves = p.getMoves();
         for (Move move : allMoves) {
             switch (move.getMoveType()) {
                 case PLAY_WORD:

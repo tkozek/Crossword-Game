@@ -171,13 +171,13 @@ public class JsonWriterTest extends JsonTest {
                 assertEquals(letterP2.getCharacter(), copyP2.getTilesOnRack().get(i).getCharacter());
                 assertEquals(letterP2.getLetterPoints(), copyP2.getTilesOnRack().get(i).getLetterPoints());
             }
-            List<Move> p1Moves = player.getHistory().getMoves();
-            List<Move> p2Moves = player2.getHistory().getMoves();
+            List<Move> p1Moves = player.getMoves();
+            List<Move> p2Moves = player2.getMoves();
 
-            List<Move> copyP1Moves = copyP1.getHistory().getMoves();
-            List<Move> copyP2Moves = copyP2.getHistory().getMoves();
-            assertEquals(copyP1Moves.size(), player.getHistory().getMoves().size());
-            assertEquals(copyP2Moves.size(), player2.getHistory().getMoves().size());
+            List<Move> copyP1Moves = copyP1.getMoves();
+            List<Move> copyP2Moves = copyP2.getMoves();
+            assertEquals(copyP1Moves.size(), player.getMoves().size());
+            assertEquals(copyP2Moves.size(), player2.getMoves().size());
 
             assertEquals(copyP1Moves.get(0).getDirection(), p1Moves.get(0).getDirection());
             assertEquals(copyP2Moves.get(0).getPointsForMove(), p2Moves.get(0).getPointsForMove());
@@ -274,7 +274,7 @@ public class JsonWriterTest extends JsonTest {
             int pointValOnP3Rack = getTotalValueFromLetters(player3.getTilesOnRack());
             
             game.performEndGameAdjustments(player1);
-            assertEquals(player1.getHistory().getMoves().get(1).getMoveType(), MoveType.END_GAME_ADJUSTMENT);
+            assertEquals(player1.getMoves().get(1).getMoveType(), MoveType.END_GAME_ADJUSTMENT);
             JsonWriter writer = new JsonWriter("./data/testWriterEndGame.json");
             writer.open();
             writer.write(game);
@@ -285,9 +285,9 @@ public class JsonWriterTest extends JsonTest {
             Player p2 = game.getPlayerByName("Player2");
             Player p3 = game.getPlayerByName("Player3");
 
-            List<Move> p1Moves = p1.getHistory().getMoves();
-            List<Move> p2Moves = p2.getHistory().getMoves();
-            List<Move> p3Moves = p3.getHistory().getMoves();
+            List<Move> p1Moves = p1.getMoves();
+            List<Move> p2Moves = p2.getMoves();
+            List<Move> p3Moves = p3.getMoves();
 
             // p1 played once, then each player had one end game adjustment
             assertEquals(p1Moves.size(), 2);

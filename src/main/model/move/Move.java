@@ -129,12 +129,10 @@ public class Move implements Writable {
             case SWAP_TILES:
                 swapTilesToJson(json);
                 break;
-            case SKIP:
-                break;
             case END_GAME_ADJUSTMENT:
                 endGameAdjustmentToJson(json);
                 break;
-            default:
+            default: // No additional information is added for SKIP
                 break;
         }
         return json;

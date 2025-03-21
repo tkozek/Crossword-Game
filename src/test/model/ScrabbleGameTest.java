@@ -89,7 +89,7 @@ public class ScrabbleGameTest {
     }
 
     @Test
-    void testFirstPlayer() {
+    void testFirstPlayerAndIndexOf() {
         assertEquals(0, game.getFirstPlayerIndex());
         game.addPlayer(player);
         game.addPlayer(player2);
@@ -97,6 +97,8 @@ public class ScrabbleGameTest {
         assertEquals(1, game.getFirstPlayerIndex());
         game.setFirstPlayer(player);
         assertEquals(0, game.getFirstPlayerIndex());
+        assertEquals(0, game.getPlayerIndex(player));
+        assertEquals(1, game.getPlayerIndex(player2));
     }
 
     @Test 
@@ -127,7 +129,7 @@ public class ScrabbleGameTest {
         }
         assertEquals(32, game.playWord(player, 7, 7, Direction.DOWN));
         assertEquals(1, game.getHistory().getMoves().size());
-        assertEquals(1, player.getHistory().getMoves().size());
+        assertEquals(1, player.getMoves().size());
         assertEquals(player.getNumTilesOnRack(), 7);
         assertEquals(game.getTileBag().numTilesRemaining(), 100 - 7);
         assertEquals(32, player.getPointsThisGame());
@@ -180,9 +182,24 @@ public class ScrabbleGameTest {
         game.performEndGameAdjustments(player);
         assertEquals(player.getPointsThisGame(), 1 + scoreToLoseP2);
         assertEquals(player2.getPointsThisGame(), 0);
-        assertEquals(1, player.getHistory().getMoves().size());
-        assertEquals(1, player2.getHistory().getMoves().size());
-        assertEquals(MoveType.END_GAME_ADJUSTMENT, player2.getHistory().getMoves().get(0).getMoveType());
-        assertEquals(MoveType.END_GAME_ADJUSTMENT, player.getHistory().getMoves().get(0).getMoveType());
+        assertEquals(1, player.getMoves().size());
+        assertEquals(1, player2.getMoves().size());
+        assertEquals(MoveType.END_GAME_ADJUSTMENT, player2.getMoves().get(0).getMoveType());
+        assertEquals(MoveType.END_GAME_ADJUSTMENT, player.getMoves().get(0).getMoveType());
+
+        assertEquals(game.highestScoringPlayer(), player);
+    }
+
+    @Test
+    void testHighestScoringPlayer() {
+        assertEquals(null, game.highestScoringPlayer());
+        Player p3 = new Player("trevor", game);
+        game.addPlayer(player);
+        game.addPlayer(player2);
+        game.addPlayer(p3); 
+        player.setPoints(2);
+        player2.setPoints(3);
+        p3.setPoints(1);
+        assertEquals(player2, game.highestScoringPlayer());
     }
 }

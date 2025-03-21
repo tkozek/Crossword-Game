@@ -64,6 +64,7 @@ public class BoardTest {
         y1 = new LetterTile('Y', 4);
         s1 = new LetterTile('S', 1);
     }
+
     
     /* @Test
     void testSectionContainsWithAllTypes() {
@@ -574,5 +575,20 @@ public class BoardTest {
         assertFalse(board.inBounds(-1,16));
     }
 
+    @Test
+    void testInlineAdjacentToUpperBoundColumn() {
+        List<LetterTile> hang = new ArrayList<>();
+        hang.add(h1);
+        hang.add(a1);
+        hang.add(n1);
+        hang.add(g1);
+        board.playWord(hang, 11, 14, Direction.DOWN);
+        List<LetterTile> stek = new ArrayList<>();
+        stek.add(s1);
+        stek.add(t1);
+        stek.add(e1);
+        stek.add(k1);
 
+        assertEquals(11, board.playWord(stek, 14, 10, Direction.RIGHT));
+    }
 }
