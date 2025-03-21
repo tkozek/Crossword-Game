@@ -10,6 +10,7 @@ import model.Direction;
 import model.Player;
 import model.ScrabbleGame;
 import model.board.Board;
+import model.move.Move;
 import model.tile.LetterTile;
 import model.tile.TileBag;
 import persistance.JsonReader;
@@ -37,7 +38,7 @@ public class ScrabbleVisualApp {
     private JPanel boardPanel;
     private JPanel rackPanel;
     private ScorePanel scorePanel;
-    private HistoryPanel historyPanel;
+    private JPanel historyPanel;
     private JsonWriter jsonWriter;
     private JsonReader jsonReader;
     private List<Player> players;
@@ -47,7 +48,7 @@ public class ScrabbleVisualApp {
     private JPanel panel;
     
     private JButton saveButton;
-
+    private JLabel coverPhoto;
     private JFrame loadOrPlayFrame;
     private JButton newGameButton;
     private JButton loadGameButton;
@@ -89,7 +90,11 @@ public class ScrabbleVisualApp {
         //Point mouseLocation = MouseInfo.getPointerInfo().getLocation();
         //loadOrPlayFrame.setLocation(mouseLocation.x, mouseLocation.y);
         loadOrPlayFrame.setSize(FRAME_SIDE_LENGTH, FRAME_SIDE_LENGTH);
-        panel = new JPanel();
+
+        coverPhoto = new JLabel(new ImageIcon("./data/startMenuBackgroundPhoto.jpg"));
+        coverPhoto.setLayout(new GridBagLayout());
+
+       // panel = new JPanel();
 
         newGameButton = new JButton("New Game");
         loadGameButton = new JButton("Load Game");
@@ -109,9 +114,11 @@ public class ScrabbleVisualApp {
                 
             }
         });
-        panel.add(newGameButton);
-        panel.add(loadGameButton);
-        loadOrPlayFrame.add(panel);
+        coverPhoto.add(newGameButton, new GridBagConstraints());
+        coverPhoto.add(loadGameButton, new GridBagConstraints());
+
+       // loadOrPlayFrame.add(panel);
+        loadOrPlayFrame.add(coverPhoto);
         loadOrPlayFrame.repaint();
         loadOrPlayFrame.setVisible(true);
         loadOrPlayFrame.repaint();
@@ -167,10 +174,7 @@ public class ScrabbleVisualApp {
         });
         confirmAllPlayersButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                getPlayerNamesFrame.setVisible(false);
-                players = scrabbleGame.getPlayers();
-                gameRunning = true;
-                handleGame(0);  
+                confirmPlayersButtonActionListener();
             }
         });
         requestPlayerNamePanel.add(requestPlayerNameText);
@@ -178,6 +182,13 @@ public class ScrabbleVisualApp {
         requestPlayerNamePanel.add(confirmAllPlayersButton);
         getPlayerNamesFrame.add(requestPlayerNamePanel);
         getPlayerNamesFrame.setVisible(true);
+    }
+
+    public void confirmPlayersButtonActionListener() {
+        getPlayerNamesFrame.setVisible(false);
+        players = scrabbleGame.getPlayers();
+        gameRunning = true;
+        handleGame(0);  
     }
 
     // MODIFIES: player, board, tileBag
@@ -197,17 +208,15 @@ public class ScrabbleVisualApp {
         scrabbleGame.drawTiles(playerToPlayNext);
         getRackPanel(playerToPlayNext);
         scorePanel = new ScorePanel(scrabbleGame);
-        historyPanel = new HistoryPanel(playerToPlayNext);
+        getHistoryPanel(playerToPlayNext);
         frame.add(boardPanel, BorderLayout.CENTER);
         frame.add(rackPanel, BorderLayout.SOUTH);
         frame.add(scorePanel, BorderLayout.WEST);
         frame.add(historyPanel, BorderLayout.EAST);
         
-        
         frame.repaint();
         frame.setVisible(true);
         frame.repaint();
-            
     }
 
     // MODIFIES: this
@@ -247,6 +256,38 @@ public class ScrabbleVisualApp {
         toggleDirectionButton = new JButton(directionString);
         clearSelectionsButton = new JButton("Clear selection");
         
+        addActionButtonActionListeners(player);
+
+        moveButtons.add(playWordButton);
+        moveButtons.add(swapTilesButton);
+        moveButtons.add(skipTurnButton);
+
+        otherOptionButtons.add(toggleDirectionButton);
+        otherOptionButtons.add(clearSelectionsButton);
+
+        actionPanel.add(moveButtons);
+        actionPanel.add(otherOptionButtons);
+        
+        rackPanel.add(actionPanel);
+    }
+    
+    // REQUIRES: playWordButton, swapTilesButton, skipTurnButton,
+    // toggleDirectionButton, and clearSelectionsButton have been
+    // initialized
+    // MODIFIES: this
+    // EFFECTS: adds play, swap, and skip action listeners,
+    // as well as clear selected tiles, direction, save and quit,
+    // and quit without saving action listeners.
+    public void addActionButtonActionListeners(Player player) {
+        addMoveButtonActionListeners(player);
+        addOtherButtonOptionsActionListeners(player);
+    }
+
+    // REQUIRES: playWordButton, swapTilesButton, skipTurnButton
+    // have been initialized
+    // MODIFIES: this
+    // EFFECTS: adds play, swap, and skip action listeners
+    public void addMoveButtonActionListeners(Player player) {
         playWordButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 scrabbleGame.playWord(player, startRow, startCol, dir);
@@ -254,7 +295,6 @@ public class ScrabbleVisualApp {
                 handleGame(scrabbleGame.getPlayerIndex(player) + 1);
             }
         });
-
         swapTilesButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 scrabbleGame.swapTiles(player);
@@ -262,7 +302,6 @@ public class ScrabbleVisualApp {
                 handleGame(scrabbleGame.getPlayerIndex(player) + 1);
             }
         });
-
         skipTurnButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 scrabbleGame.logSkippedTurn(player);
@@ -270,7 +309,14 @@ public class ScrabbleVisualApp {
                 handleGame(scrabbleGame.getPlayerIndex(player) + 1);
             }
         });
+    }
 
+    // REQUIRES: toggleDirectionButton, and clearSelectionsButton 
+    // have been initialized
+    // MODIFIES: this
+    // EFFECTS: adds clear selected tiles, direction, save and quit,
+    // and quit without saving action listeners.
+    public void addOtherButtonOptionsActionListeners(Player player) {
         toggleDirectionButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 Direction newDirection = (dir == Direction.DOWN) ? Direction.RIGHT : Direction.DOWN;
@@ -290,17 +336,6 @@ public class ScrabbleVisualApp {
                 // frame.repaint();
             }
         });
-        moveButtons.add(playWordButton);
-        moveButtons.add(swapTilesButton);
-        moveButtons.add(skipTurnButton);
-
-        otherOptionButtons.add(toggleDirectionButton);
-        otherOptionButtons.add(clearSelectionsButton);
-
-        actionPanel.add(moveButtons);
-        actionPanel.add(otherOptionButtons);
-        
-        rackPanel.add(actionPanel);
     }
 
     
@@ -332,7 +367,6 @@ public class ScrabbleVisualApp {
         for (int i = 0; i < Board.BOARD_LENGTH; i++) {
             for (int j = 0; j < Board.BOARD_LENGTH; j++) {
                 String toDisplay = board.getTileAtPositionOnBoard(i, j).toDisplay();
-                
                 JButton tile = new JButton(board.getTileAtPositionOnBoard(i, j).toDisplay());
                 tile.setBackground(selectBoardTileColor(toDisplay));
                 tile.setBorder(BorderFactory.createLineBorder(Color.black));
@@ -371,8 +405,90 @@ public class ScrabbleVisualApp {
                 break;
         }
         return color;
-
     }
+
+    // MODIFIES: 
+    // EFFECTS: 
+    public void getHistoryPanel(Player player) {
+        historyPanel = new JPanel();
+        historyPanel.setLayout(new FlowLayout());
+        historyPanel.setPreferredSize(new Dimension(175, FRAME_SIDE_LENGTH));
+        String summary = "";
+        for (Move move : player.getHistory().getMoves()) {
+            switch (move.getMoveType()) {
+                case PLAY_WORD:
+                    summary = getWordString(move, player);
+                    break;
+                case SWAP_TILES:
+                    summary = getSwapSummary(move, player);
+                    break;
+                case SKIP:
+                    summary = getSkipSummary(move, player);
+                    break;
+                case END_GAME_ADJUSTMENT:
+                    summary = getSingleEndGameAdjustmentSummary(move, player);
+                    break;
+            }
+            JTextArea moveSummary = new JTextArea(summary);
+            moveSummary.setFont(new Font("Arial", Font.ITALIC, 12));
+            moveSummary.setLineWrap(true);
+            moveSummary.setWrapStyleWord(true);
+            moveSummary.setCaretPosition(0);
+            moveSummary.setEditable(false);
+            moveSummary.setPreferredSize(new Dimension(150, 75));
+
+            JPanel movePanel = new JPanel();
+            movePanel.add(moveSummary);
+            movePanel.setMaximumSize(new Dimension(200,300));
+            historyPanel.add(movePanel);
+            movePanel.setBorder(BorderFactory.createLineBorder(Color.black));
+        }
+    }
+
+    // EFFECTS: Returns string summary of a word played
+    public String getWordString(Move word, Player p) {
+        String printout = "\n" + p.getPlayerName() + " played ";
+        String wordString = word.getLettersInvolved();
+        String startRow = String.valueOf(word.getStartRow());
+        String startCol = String.valueOf(word.getStartColumn());
+        String coordinates = "(" + startRow + "," + startCol + ")";
+        String direction = (word.getDirection() == Direction.RIGHT) ? "to the right" : "down";
+        String points = String.valueOf(word.getPointsForMove());
+        printout += wordString + " starting at " + coordinates + " and moving " 
+                + direction + " earning " + points + " points.";
+        return printout;
+    } 
+
+    //EFFECTS: Returns string summary of a player swap
+    public String getSwapSummary(Move swap, Player p) {
+        String printout = "\n" + p.getPlayerName() + " swapped tiles. ";
+        String preAndPostLetters = swap.getLettersInvolved();
+        int halfLength = preAndPostLetters.length() / 2;
+        String preSwapLetters = preAndPostLetters.substring(0, halfLength);
+        String postSwapLetters = preAndPostLetters.substring(halfLength);
+        String points = String.valueOf(swap.getPointsForMove());
+        printout += "Their tiles before swapping were: " + preSwapLetters + " and their tiles after swapping were " 
+                 + postSwapLetters + ", earning " + points + " points.";
+        return printout;
+    }
+
+    // EFFECTS: Returns string summary of a skipped turn
+    public String getSkipSummary(Move skip, Player p) {
+        return p.getPlayerName() + " skipped their turn";
+    }
+
+    // EFFECTS: Returns string summary of an end game adjustment
+    public String getSingleEndGameAdjustmentSummary(Move move, Player player) {
+        String playerName = player.getPlayerName();
+        String lastPlayer = move.getLastPlayer().getPlayerName();
+        int pointChange = move.getPointsForMove();
+        int absolutePointChange = Math.abs(pointChange);
+        String gainOrLoss = (pointChange >= 0) ? " gained " : " lost ";
+        String pluralOrNot = (absolutePointChange != 1) ? "s." : ".";
+        return lastPlayer + " used all their tiles first. " + playerName + gainOrLoss 
+                + absolutePointChange + " point" + pluralOrNot;
+    }
+
     
     // MODIFIES: this
     // EFFECTS: adds a new player to the game
