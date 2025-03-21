@@ -11,12 +11,14 @@ import model.Player;
 import model.ScrabbleGame;
 import model.board.Board;
 import model.move.Move;
+import model.move.MoveType;
 import model.tile.LetterTile;
 import model.tile.TileBag;
 import persistance.JsonReader;
 import persistance.JsonWriter;
 
 import java.util.List;
+import java.util.Map;
 
 // A Graphical user interface for Scrabble
 public class ScrabbleVisualApp {
@@ -32,6 +34,11 @@ public class ScrabbleVisualApp {
     private static final Color TRIPLE_WORD_COLOR = new Color(255, 0, 0);
     private static final Color DEFAULT_BOARD_SPACE_COLOR = new Color(190, 171, 141);
     private static final Color DEFAULT_LETTER_TILE_COLOR = new Color(244, 217, 138);
+    private static final Color SELECTED_TILE_BORDER_COLOR = new Color(128, 0, 128);
+    private static final String SEARCH_WORDS_DEFAULT_DISPLAY_TEXT = "Enter a letter, then press 'search' " 
+                + " to \ndisplay all words with that letter";
+    private static final String SEARCH_REMAINING_COUNTS_DEFAULT_DISPLAY_TEXT = "Enter a letter to get its remaining "
+                + "count in draw pile and opponent racks\n or blank to see all";
 
     private Board board;
     private TileBag tileBag;
@@ -40,7 +47,17 @@ public class ScrabbleVisualApp {
     private JPanel boardPanel;
     private JPanel rackPanel;
     private ScorePanel scorePanel;
+
     private JPanel historyPanel;
+    private JPanel allMovesPanel;
+    private JPanel filteredWordsPanel;
+    private JButton searchWordsButton;
+    private JTextField searchWordsTextField;
+    private JPanel remainingTileCountsPanel;
+    private JButton searchRemainingCountsButton;
+    private JTextField searchRemainingCountsTextField;
+    private JComboBox infoPanelComboBox; 
+
     private JsonWriter jsonWriter;
     private JsonReader jsonReader;
     private List<Player> players;
@@ -375,7 +392,7 @@ public class ScrabbleVisualApp {
         tileButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 player.selectTile(letterIndex);
-                tileButton.setBorder(BorderFactory.createLineBorder(Color.GREEN));
+                tileButton.setBorder(BorderFactory.createLineBorder(SELECTED_TILE_BORDER_COLOR));
             }
         });
         return tileButton;
@@ -439,8 +456,26 @@ public class ScrabbleVisualApp {
     // EFFECTS: 
     public void getHistoryPanel(Player player) {
         historyPanel = new JPanel();
-        historyPanel.setLayout(new FlowLayout());
+        historyPanel.setLayout(new CardLayout());
         historyPanel.setPreferredSize(new Dimension(175, FRAME_SIDE_LENGTH));
+        
+        addAllMovesPanel(player);
+        addFilteredWordsPanel(player);
+        addRemainingTileCountsPanel(player);
+
+        String[] panelNames = {"All Moves", "Filtered Words", "Remaining Tile Counts"};
+        infoPanelComboBox = new JComboBox<>(panelNames);
+        infoPanelComboBox.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                CardLayout card = (CardLayout) historyPanel.getLayout();
+                card.show(historyPanel, (String) infoPanelComboBox.getSelectedItem());
+            }
+        }); 
+        historyPanel.add(infoPanelComboBox);
+    }
+
+    private void addAllMovesPanel(Player player) {
+        allMovesPanel = new JPanel();
         String summary = "";
         for (Move move : player.getHistory().getMoves()) {
             switch (move.getMoveType()) {
@@ -457,20 +492,67 @@ public class ScrabbleVisualApp {
                     summary = getSingleEndGameAdjustmentSummary(move, player);
                     break;
             }
-            JTextArea moveSummary = new JTextArea(summary);
-            moveSummary.setFont(new Font("Arial", Font.ITALIC, 12));
-            moveSummary.setLineWrap(true);
-            moveSummary.setWrapStyleWord(true);
-            moveSummary.setCaretPosition(0);
-            moveSummary.setEditable(false);
-            moveSummary.setPreferredSize(new Dimension(150, 75));
-
-            JPanel movePanel = new JPanel();
-            movePanel.add(moveSummary);
-            movePanel.setMaximumSize(new Dimension(200,300));
-            historyPanel.add(movePanel);
-            movePanel.setBorder(BorderFactory.createLineBorder(Color.black));
+            JTextArea moveSummary = getFormattedTextArea(summary);
+            
+            allMovesPanel.add(moveSummary);
+            allMovesPanel.setMaximumSize(new Dimension(200,500));
+            allMovesPanel.setBorder(BorderFactory.createLineBorder(Color.black));
         }
+        historyPanel.add(allMovesPanel, "All Moves");
+    }
+
+    private JTextArea getFormattedTextArea(String text) {
+        JTextArea textArea = new JTextArea(text);
+        textArea.setFont(new Font("Arial", Font.ITALIC, 12));
+        textArea.setLineWrap(true);
+        textArea.setWrapStyleWord(true);
+        textArea.setCaretPosition(0);
+        textArea.setEditable(false);
+        textArea.setPreferredSize(new Dimension(150, 100));
+        return textArea;
+    }
+
+    private void addFilteredWordsPanel(Player player) {
+        filteredWordsPanel = new JPanel();
+        searchWordsButton = new JButton("Search");
+        searchWordsTextField = new JTextField(SEARCH_WORDS_DEFAULT_DISPLAY_TEXT);
+
+        searchWordsButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                char letter = searchWordsTextField.getText().toUpperCase().charAt(0);
+                List<Move> moves = player.getMoves();
+                for (Move move : moves) {
+                    if (move.getMoveType() == MoveType.PLAY_WORD && move.moveContainsLetter(letter)) {
+                        filteredWordsPanel.add(getFormattedTextArea(getWordString(move, player)));
+                    }
+                }
+            }
+        });
+        filteredWordsPanel.add(searchWordsTextField);
+        filteredWordsPanel.add(searchWordsButton);
+        historyPanel.add(filteredWordsPanel, "Filtered Words");
+    }
+
+    private void addRemainingTileCountsPanel(Player player) {
+        remainingTileCountsPanel = new JPanel();
+        Map<Character, Integer> remainingCounts = scrabbleGame.getNumEachCharInBagAndOpponents(player);
+        searchRemainingCountsButton = new JButton("Search");
+        searchRemainingCountsTextField = new JTextField(SEARCH_REMAINING_COUNTS_DEFAULT_DISPLAY_TEXT);
+        searchRemainingCountsButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                String text = searchRemainingCountsTextField.getText();
+                if (text == "") {
+                    for (Map.Entry<Character, Integer> entry : remainingCounts.entrySet()) {
+                        remainingTileCountsPanel.add(getFormattedTextArea(entry.getKey() + " : " + entry.getValue()));
+                    }
+                } else {
+                    char key = text.toUpperCase().charAt(0);
+                    int count = remainingCounts.get(key);
+                    remainingTileCountsPanel.add(getFormattedTextArea(key + " : " + count));
+                }
+            }
+        });
+        historyPanel.add(remainingTileCountsPanel, "Remaining Tile Counts");
     }
 
     // EFFECTS: Returns string summary of a word played

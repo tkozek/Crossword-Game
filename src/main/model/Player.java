@@ -173,6 +173,10 @@ public class Player implements Writable {
         return this.history;
     }
 
+    public List<Move> getMoves() {
+        return this.history.getMoves();
+    }
+
     // MODIFIES: this
     // EFFECTS: removes all selected tiles
     // from tile rack, and clears selected tiles
