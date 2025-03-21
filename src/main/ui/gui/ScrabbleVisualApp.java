@@ -24,11 +24,18 @@ public class ScrabbleVisualApp {
     private static final String JSON_STORE = "./data/gameToPlayTest.json";
     private static final String REQUEST_PLAYER_NAME_TEXT = "Type player name then click add";
     private static final int FRAME_SIDE_LENGTH = 1000;
+    private static final int TILE_SIZE = 30;
+
+    private static final Color DOUBLE_LETTER_COLOR = new Color(173, 216, 230);
+    private static final Color TRIPLE_LETTER_COLOR = new Color(0, 0, 139);
+    private static final Color DOUBLE_WORD_COLOR =  Color.PINK;
+    private static final Color TRIPLE_WORD_COLOR = new Color(255, 0, 0);
+
     private Board board;
     private TileBag tileBag;
     private ScrabbleGame scrabbleGame;
     private boolean gameRunning;
-    private BoardPanel boardPanel;
+    private JPanel boardPanel;
     private JPanel rackPanel;
     private ScorePanel scorePanel;
     private HistoryPanel historyPanel;
@@ -52,6 +59,8 @@ public class ScrabbleVisualApp {
     private JButton addPlayerButton;
     private JButton confirmAllPlayersButton;
 
+    private JPanel moveButtons;
+    private JPanel otherOptionButtons;
     private JButton playWordButton;
     private JButton swapTilesButton;
     private JButton skipTurnButton;
@@ -63,21 +72,25 @@ public class ScrabbleVisualApp {
     private int startCol;
     private Direction dir;
 
+    // EFFECTS: Loads start menu frame to user screen.
     public ScrabbleVisualApp() {
         jsonWriter = new JsonWriter(JSON_STORE);
         jsonReader = new JsonReader(JSON_STORE);
         dir = Direction.DOWN;
         tileBag = new TileBag(); // this needs to be here due to static tilebag and nature of json reader
-        initializeMainMenu();
+        initializeStartMenu();
     }
 
-    private void initializeMainMenu() {
+    // MODIFIES: this
+    // EFFECTS: Creates start menu frame for player to select
+    // whether they would like to play a new game or load 
+    // a saved game.
+    private void initializeStartMenu() {
         loadOrPlayFrame = new JFrame("Start Menu");
-        Point mouseLocation = MouseInfo.getPointerInfo().getLocation();
-        loadOrPlayFrame.setLocation(mouseLocation.x, mouseLocation.y);
+        //Point mouseLocation = MouseInfo.getPointerInfo().getLocation();
+        //loadOrPlayFrame.setLocation(mouseLocation.x, mouseLocation.y);
         loadOrPlayFrame.setSize(FRAME_SIDE_LENGTH, FRAME_SIDE_LENGTH);
         panel = new JPanel();
-       // panel.setLayout(new BoxLayout(panel, BoxLayout.X_AXIS));
 
         newGameButton = new JButton("New Game");
         loadGameButton = new JButton("Load Game");
@@ -97,7 +110,6 @@ public class ScrabbleVisualApp {
                 
             }
         });
-
         panel.add(newGameButton);
         panel.add(loadGameButton);
         loadOrPlayFrame.add(panel);
@@ -138,25 +150,22 @@ public class ScrabbleVisualApp {
         
     }
 
+    // MODIFIES: this
+    // EFFECTS: Prompts player to enter players' names
+    //         in the desired order of play.
     private void requestPlayerNames() {
         getPlayerNamesFrame = new JFrame("Request Player Names");
         getPlayerNamesFrame.setSize(FRAME_SIDE_LENGTH, FRAME_SIDE_LENGTH);
-        Point mouseLocation = MouseInfo.getPointerInfo().getLocation();
-        getPlayerNamesFrame.setLocation(mouseLocation.x, mouseLocation.y);
-        // !!! ToDO Add some text box with instructions to hover above these buttons
         requestPlayerNamePanel = new JPanel();
-
         requestPlayerNameText = new JTextField(REQUEST_PLAYER_NAME_TEXT);
         addPlayerButton = new JButton("Add player with name in text field");
         confirmAllPlayersButton = new JButton("Start game with players entered so far");
-
         addPlayerButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 addPlayer();
                 requestPlayerNameText.setText(REQUEST_PLAYER_NAME_TEXT);
             }
         });
-
         confirmAllPlayersButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 getPlayerNamesFrame.setVisible(false);
@@ -169,9 +178,7 @@ public class ScrabbleVisualApp {
         requestPlayerNamePanel.add(addPlayerButton);
         requestPlayerNamePanel.add(confirmAllPlayersButton);
         getPlayerNamesFrame.add(requestPlayerNamePanel);
-
         getPlayerNamesFrame.setVisible(true);
-
     }
 
     // MODIFIES: player, board, tileBag
@@ -184,9 +191,9 @@ public class ScrabbleVisualApp {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(FRAME_SIDE_LENGTH, FRAME_SIDE_LENGTH);
         frame.setLayout(new BorderLayout());
-        Point mouseLocation = MouseInfo.getPointerInfo().getLocation();
-        frame.setLocation(mouseLocation.x, mouseLocation.y);
-        boardPanel = new BoardPanel(board);
+        //Point mouseLocation = MouseInfo.getPointerInfo().getLocation();
+        //frame.setLocation(mouseLocation.x - FRAME_SIDE_LENGTH / 4, mouseLocation.y - FRAME_SIDE_LENGTH / 4);
+        getBoardPanel(board);
         Player playerToPlayNext = players.get(index);
         scrabbleGame.drawTiles(playerToPlayNext);
         getRackPanel(playerToPlayNext);
@@ -204,6 +211,9 @@ public class ScrabbleVisualApp {
             
     }
 
+    // MODIFIES: this
+    // EFFECTS: loads panel with player's tiles,
+    // along with their available action buttons
     private void getRackPanel(Player player) {
         rackPanel = new JPanel();
         rackPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
@@ -221,11 +231,21 @@ public class ScrabbleVisualApp {
         } */
     }
 //
+
+    // MODIFIES: this
+    // EFFECTS: loads panel with available action buttons
     private void addActionButtons(Player player) {
+        moveButtons = new JPanel();
+        otherOptionButtons = new JPanel();
+        moveButtons.setLayout(new BoxLayout(moveButtons, BoxLayout.X_AXIS));
+        otherOptionButtons.setLayout(new BoxLayout(otherOptionButtons, BoxLayout.X_AXIS));
+        moveButtons.setAlignmentX(Component.CENTER_ALIGNMENT);
+        otherOptionButtons.setAlignmentX(Component.CENTER_ALIGNMENT);
         playWordButton = new JButton("Play");
         swapTilesButton = new JButton("Swap");
         skipTurnButton = new JButton("Skip");
-        toggleDirectionButton = new JButton("Down");
+        String directionString = (dir == Direction.DOWN) ? "Down" : "Right";
+        toggleDirectionButton = new JButton(directionString);
         clearSelectionsButton = new JButton("Clear selection");
         
         playWordButton.addActionListener(new ActionListener() {
@@ -271,17 +291,23 @@ public class ScrabbleVisualApp {
                 // frame.repaint();
             }
         });
+        moveButtons.add(playWordButton);
+        moveButtons.add(swapTilesButton);
+        moveButtons.add(skipTurnButton);
 
-        actionPanel.add(playWordButton);
-        actionPanel.add(swapTilesButton);
-        actionPanel.add(skipTurnButton);
-        actionPanel.add(toggleDirectionButton);
-        actionPanel.add(clearSelectionsButton);
+        otherOptionButtons.add(toggleDirectionButton);
+        otherOptionButtons.add(clearSelectionsButton);
+
+        actionPanel.add(moveButtons);
+        actionPanel.add(otherOptionButtons);
+        
         rackPanel.add(actionPanel);
     }
 
     
-
+    // MODIFIES: this
+    // EFFECTS: Adds panel representing player's tiles
+    // to the frame
     private JButton createTilePanel(Player player, LetterTile letter, int letterIndex) {
         JButton tileButton = new JButton(letter.toDisplay());
         tileButton.setPreferredSize(new Dimension(40, 40));
@@ -296,9 +322,59 @@ public class ScrabbleVisualApp {
         });
         return tileButton;
     }
-    //
     
+    // MODIFIES: this
+    // EFFECTS: Adds panel representing the current board
+    // to the frame
+    public void getBoardPanel(Board board) {
+        boardPanel = new JPanel();
+        boardPanel.setLayout(new GridLayout(Board.BOARD_LENGTH, Board.BOARD_LENGTH));
+        boardPanel.setPreferredSize(new Dimension(Board.BOARD_LENGTH * TILE_SIZE, Board.BOARD_LENGTH * TILE_SIZE));
+        for (int i = 0; i < Board.BOARD_LENGTH; i++) {
+            for (int j = 0; j < Board.BOARD_LENGTH; j++) {
+                String toDisplay = board.getTileAtPositionOnBoard(i, j).toDisplay();
+                
+                JButton tile = new JButton(board.getTileAtPositionOnBoard(i, j).toDisplay());
+                tile.setBackground(selectBoardTileColor(toDisplay));
+                tile.setBorder(BorderFactory.createLineBorder(Color.black));
+                final int row = i;
+                final int col = j;
+                tile.addActionListener(new ActionListener() {
+                    public void actionPerformed(ActionEvent e) {
+                        startRow = row;
+                        startCol = col;
+                    }
+                });
+                boardPanel.add(tile);
+            }
+        }
+    }
 
+    // EFFECTS: returns appropriate display color given
+    // displayString which corresponds to a tile on the board
+    private Color selectBoardTileColor(String displayString) {
+        Color color;
+        switch (displayString) {
+            case "DLS":
+                color = DOUBLE_LETTER_COLOR;
+                break;
+            case "DWS":
+                color = DOUBLE_WORD_COLOR;
+                break;
+            case "TLS":
+                color = TRIPLE_LETTER_COLOR;
+                break;
+            case "TWS":
+                color = TRIPLE_WORD_COLOR;
+                break;
+            default:
+                color = new Color(244, 217, 138);
+                break;
+        }
+        return color;
+
+    }
+    
     // MODIFIES: this
     // EFFECTS: adds a new player to the game
     // who's name is the text currently in 
@@ -310,6 +386,7 @@ public class ScrabbleVisualApp {
         numPlayers++;
     }
 
+    // EFFECTS: Start the Graphical User Interface
     public static void main(String[] args) {
         new ScrabbleVisualApp();
         

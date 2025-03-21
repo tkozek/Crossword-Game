@@ -99,15 +99,15 @@ public class JsonWriterTest extends JsonTest {
             JsonReader reader = new JsonReader("./data/testWriterOneWordPlayed.json");
             game = reader.read();
             assertEquals(game.getTileBag().numTilesRemaining(), TileBag.TOTAL_LETTERS_INITIALLY - 7);
-            Map<Character, Integer> afterReadingTileBagCounts = game.getTileBag().getCurrentLetterFrequencies();
+            Map<Character, Integer> readTileBagCounts = game.getTileBag().getCurrentLetterFrequencies();
 
             char letter1Char = letter1.getCharacter();
 
-            int originalLetter1CountDrawn = originalLetterCounts.get(letter1.getCharacter());
+            int initialLetter1Count = originalLetterCounts.get(letter1.getCharacter());
 
-            int initializedLetter1BagCount = tileBag.getInitialLetterFrequencies().get(letter1Char);
+            int letter1CountFreshBag = tileBag.getInitialLetterFrequencies().get(letter1Char);
             //Check tilebag counts
-            assertEquals(afterReadingTileBagCounts.getOrDefault(letter1Char, 0) + originalLetter1CountDrawn, initializedLetter1BagCount);
+            assertEquals(readTileBagCounts.getOrDefault(letter1Char, 0) + initialLetter1Count, letter1CountFreshBag);
             Board newBoard = game.getBoard();
             List<LetterTile> letterToPlay = new ArrayList<>();
             letterToPlay.add(new LetterTile('A', 1));
@@ -164,12 +164,12 @@ public class JsonWriterTest extends JsonTest {
             Player copyP2 = game.getPlayerByName("John");
             // All entries should preserve order and have their tile values maintained
             for (int i = 0; i < 7; i++) {
-                
-                assertEquals(player.getTilesOnRack().get(i).getCharacter(), copyP1.getTilesOnRack().get(i).getCharacter());
-                assertEquals(player.getTilesOnRack().get(i).getLetterPoints(), copyP1.getTilesOnRack().get(i).getLetterPoints());
-                
-                assertEquals(player2.getTilesOnRack().get(i).getCharacter(), copyP2.getTilesOnRack().get(i).getCharacter());
-                assertEquals(player2.getTilesOnRack().get(i).getLetterPoints(), copyP2.getTilesOnRack().get(i).getLetterPoints());
+                LetterTile letterP1 = player.getTilesOnRack().get(i);
+                assertEquals(letterP1.getCharacter(), copyP1.getTilesOnRack().get(i).getCharacter());
+                assertEquals(letterP1.getLetterPoints(), copyP1.getTilesOnRack().get(i).getLetterPoints());
+                LetterTile letterP2 = player2.getTilesOnRack().get(i);
+                assertEquals(letterP2.getCharacter(), copyP2.getTilesOnRack().get(i).getCharacter());
+                assertEquals(letterP2.getLetterPoints(), copyP2.getTilesOnRack().get(i).getLetterPoints());
             }
 
             assertEquals(copyP1.getHistory().getMoves().size(), player.getHistory().getMoves().size());
