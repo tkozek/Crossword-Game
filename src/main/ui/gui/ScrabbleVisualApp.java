@@ -190,7 +190,10 @@ public class ScrabbleVisualApp {
         getPlayerNamesFrame.setVisible(true);
     }
 
-    public void confirmPlayersButtonActionListener() {
+    
+    // MODIFIES: this
+    // EFFECTS: opens the game frame for the first player
+    private void confirmPlayersButtonActionListener() {
         getPlayerNamesFrame.setVisible(false);
         players = scrabbleGame.getPlayers();
         gameRunning = true;
@@ -285,7 +288,7 @@ public class ScrabbleVisualApp {
     // EFFECTS: adds play, swap, and skip action listeners,
     // as well as clear selected tiles, direction, save and quit,
     // and quit without saving action listeners.
-    public void addActionButtonActionListeners(Player player) {
+    private void addActionButtonActionListeners(Player player) {
         addMoveButtonActionListeners(player);
         addOtherButtonOptionsActionListeners(player);
     }
@@ -294,7 +297,7 @@ public class ScrabbleVisualApp {
     // have been initialized
     // MODIFIES: this
     // EFFECTS: adds play, swap, and skip action listeners
-    public void addMoveButtonActionListeners(Player player) {
+    private void addMoveButtonActionListeners(Player player) {
         playWordButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 scrabbleGame.playWord(player, startRow, startCol, dir);
@@ -323,7 +326,7 @@ public class ScrabbleVisualApp {
     // MODIFIES: this
     // EFFECTS: adds clear selected tiles, direction, save and quit,
     // and quit without saving action listeners.
-    public void addOtherButtonOptionsActionListeners(Player player) {
+    private void addOtherButtonOptionsActionListeners(Player player) {
         toggleDirectionButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 Direction newDirection = (dir == Direction.DOWN) ? Direction.RIGHT : Direction.DOWN;
@@ -396,7 +399,7 @@ public class ScrabbleVisualApp {
     // MODIFIES: this
     // EFFECTS: Adds panel representing the current board
     // to the frame
-    public void getBoardPanel(Board board) {
+    private void getBoardPanel(Board board) {
         boardPanel = new JPanel();
         boardPanel.setLayout(new GridLayout(Board.BOARD_LENGTH, Board.BOARD_LENGTH));
         boardPanel.setPreferredSize(new Dimension(Board.BOARD_LENGTH * TILE_SIZE, Board.BOARD_LENGTH * TILE_SIZE));
@@ -449,7 +452,7 @@ public class ScrabbleVisualApp {
 
     // MODIFIES: this
     // EFFECTS: adds tabbed information panel to frame
-    public void getInformationPanel(Player player) {
+    private void getInformationPanel(Player player) {
         informationPanel = new JPanel();
         informationPanel.setLayout(new CardLayout());
         informationPanel.setPreferredSize(new Dimension(175, FRAME_SIDE_LENGTH));
@@ -523,16 +526,30 @@ public class ScrabbleVisualApp {
         filteredWordsPanel = new JPanel();
         searchWordsButton = new JButton("Search");
         searchWordsTextField = new JTextField(SEARCH_WORDS_DEFAULT_DISPLAY_TEXT);
+        addSearchWordsButtonActionListener(player);
+        filteredWordsPanel.add(searchWordsTextField);
+        filteredWordsPanel.add(searchWordsButton);
+        infoTabs.add(filteredWordsPanel, "Filtered Words");
+    }
 
+    // MODIFIES: searchWordsButton
+    // EFFECTS: adds action listener to the button in Filtered Words tab
+    private void addSearchWordsButtonActionListener(Player player) {
         searchWordsButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 resetTabbedPanePanel(filteredWordsPanel);
+                if (searchWordsTextField.getText().isEmpty()) {
+                    for (Move move : player.getMoves()) {
+                        if (move.getMoveType() == MoveType.PLAY_WORD) {
+                            filteredWordsPanel.add(getFormattedTextArea(getWordString(move, player), 100));
+                        }
+                    }
+                }
                 char letter = searchWordsTextField.getText().toUpperCase().charAt(0);
-                List<Move> moves = player.getMoves();
-                if (moves.isEmpty()) {
+                if (player.getMoves().isEmpty()) {
                     filteredWordsPanel.add(getFormattedTextArea("You haven't played a word with that letter", 100));
                 } else {
-                    for (Move move : moves) {
+                    for (Move move : player.getMoves()) {
                         if (move.getMoveType() == MoveType.PLAY_WORD && move.moveContainsLetter(letter)) {
                             filteredWordsPanel.add(getFormattedTextArea(getWordString(move, player), 100));
                         }
@@ -541,9 +558,6 @@ public class ScrabbleVisualApp {
                 repaintAndRevalidate(filteredWordsPanel);
             }
         });
-        filteredWordsPanel.add(searchWordsTextField);
-        filteredWordsPanel.add(searchWordsButton);
-        infoTabs.add(filteredWordsPanel, "Filtered Words");
     }
 
     // MODIFIES: panel
