@@ -25,3 +25,29 @@ This project is of interest to me since *Scrabble* was one of my favorite board 
 6. As a user I'd like to have the option to quit my game, and be prompted to see if I want to save it.
 
 7. As a user when I run the application I'd like to have the choice between continuing a previous, unfinished game, or starting a new game.
+
+## Instructions for End User
+
+1. Run the program from ScrabbleVisualApp.java to open the Graphical User Interface.
+Here you will see the visual component of the application, which is a background image on the "Start Menu" frame.
+2. Select whether you would like to load your saved game or play a new game.
+3. If you selected play a new game then a new frame will pop up for you to input player names in the desired order of play.
+4. Clear the textbox, type the first player's name, then click "Add player with name in textbox".
+5. Repeat step 4 until all desired players have been added. Then click "Start Game" to begin playing. 
+6. Now a new frame will appear titled "Scrabble Game".
+7. To add a move to a your player's history, you may either play a word, swap tiles, or skip your turn. 
+8. To play a word, click on the tiles in your rack in the order you'd like to place them. At some point before clicking "Play",
+ you must click the space on the board where you would like to start your turn from. There is a button which will either display as "Down" or "Right".
+ Click this button to toggle the direction your tiles will be placed in. Whichever is currently displayed is the currently selected direction.
+ 9. The board will update to reflect the tiles you've now placed,
+ and replacement tiles will be drawn onto your rack provided that tiles remain in the draw pile. Your score will update in the top left of the frame. 
+10. To swap you select the tiles you'd like to get rid of, then click "Swap".
+11. To skip, simply press "Skip".
+12. For any move you make, its summary will be visible to the right, under "All Moves", which is displayed by default. If you would 
+like to view only words, then you can press the "Filtered Words" tab, then if you clear the textbox and press "Search", all your 
+words will display. If you want to only view words with a certain letter, then you can enter that letter in the textbox then click "Search".
+13. If you would like to know how many of a given tile remains unplayed, between your opponents' tile racks and the draw pile, then you can
+click on the "Remaining Tile Counts" tab towards right of the frame. This functions similarly to viewing filtered words. To view all tile counts
+clear the textbox before pressing "Search", or enter a specific character into the textbox to view only that character's count. 
+14. If you are tired of playing, then can look towards the bottom of the "Scrabble Game" frame to find the appropriate buttons. 
+Namely, if you'd like to save the game then press "Save and Quit", if you don't want to save then press "Quit without Saving".

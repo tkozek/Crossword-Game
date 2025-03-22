@@ -170,8 +170,8 @@ public class ScrabbleVisualApp {
         getPlayerNamesFrame.setSize(FRAME_SIDE_LENGTH, FRAME_SIDE_LENGTH);
         requestPlayerNamePanel = new JPanel();
         requestPlayerNameText = new JTextField(REQUEST_PLAYER_NAME_TEXT);
-        addPlayerButton = new JButton("Add player with name in text field");
-        confirmAllPlayersButton = new JButton("Start game with players entered so far");
+        addPlayerButton = new JButton("Add player with name in textbox");
+        confirmAllPlayersButton = new JButton("Start Game");
         addPlayerButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 addPlayer();
