@@ -198,14 +198,14 @@ public class ScrabbleGame implements Writable {
     // EFFECTS: Logs a swap into player and game's history
     public void logSwap(Player player, String initialLetters, String postSwapLetters) {
         Move swap = new Move(player, initialLetters, postSwapLetters);
-        updateHistoriesAndEventLog(swap, player);
+        updateHistories(swap, player);
     }
 
     // REQUIRES: Players selected tiles can be played on this board
     // starting at (row, col) and proceeding in given direction
-    // MODIFIES: this, player, board, tileBag
+    // MODIFIES: this, player, board, tileBag, EventLog
     // EFFECTS: plays players selected tiles in desired manner on board,
-    // logs the move to player and game history, replenishes player's tile
+    // logs the move to EventLog, player history and game history. Replenishes player's tile
     // rack, returns score.
     public int playWord(Player player, int row, int col, Direction dir) {
         String lettersPlayed = "";
@@ -227,18 +227,30 @@ public class ScrabbleGame implements Writable {
     // DOES NOT impact score.
     public void logWord(Player player, String letters, int row, int col, int points, Direction dir) {
         Move word = new Move(player, letters, row, col, points, dir);
-        updateHistoriesAndEventLog(word, player);
+        updateHistories(word, player);
+    }
+
+    // REQUIRES: getPlayers() contains player
+    // MODIFIES: this, player, EventLog
+    // EFFECTS; logs a skipped turn in this history
+    // and this player's history, and the EventLog
+    public void logSkippedTurn(Player player) {
+        player.clearSelectedTiles();
+        Move skip = new Move(player);
+        updateHistoriesAndEventLog(skip, player);
     }
 
     // REQUIRES: getPlayers() contains player
     // MODIFIES: this, player
     // EFFECTS; logs a skipped turn in this history
     // and this player's history
-    public void logSkippedTurn(Player player) {
+    public void logSkipFromHistory(Player player) {
         player.clearSelectedTiles();
         Move skip = new Move(player);
-        updateHistoriesAndEventLog(skip, player);
+        updateHistories(skip, player);
     }
+
+
 
     // MODIFIES: this
     // EFFECTS: subtracts score of unplayed tiles on the rack
@@ -303,6 +315,14 @@ public class ScrabbleGame implements Writable {
         log.logEvent(new Event(description));
     }
 
+    // MODIFIES: this, player
+    // EFFECTS: adds this move to both the game's and the player's history
+    private void updateHistories(Move move, Player player) {
+        history.addMove(move);
+        player.addMove(move);
+    }
+
+
 
     // MODIFIES: this
     // EFFECTS: fills players tile rack with as
@@ -360,7 +380,7 @@ public class ScrabbleGame implements Writable {
     // REQUIRES: skip.getMoveType() == MoveType.SKIP
     // EFFECTS: returns summary of a skipped turn
     public String getSkipDescription(Move skip, Player p) {
-        return p.getPlayerName() + " skipped their turn";
+        return p.getPlayerName() + " skipped their turn.";
     }
 
     // REQUIRES: skip.getMoveType() == MoveType.END_GAME_ADJUSTMENT

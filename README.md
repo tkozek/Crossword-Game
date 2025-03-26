@@ -53,24 +53,24 @@ press "Search" while the textbox is empty, or enter a specific character into th
 Namely, if you'd like to save the game then press "Save and Quit", if you don't want to save then press "Quit without Saving".
 
 ## Phase 4: Task 2
-Wed Mar 26 13:32:22 PDT 2025
-Player1 played CODE starting at (7,7) and moving to the right earning 14 points.
-Wed Mar 26 13:32:31 PDT 2025
-Player2 played MALT starting at (6,10) and moving to the right earning 11 points.
-Wed Mar 26 13:32:50 PDT 2025
-Player1 played SLOP starting at (6,14) and moving down earning 25 points.
-Wed Mar 26 13:33:05 PDT 2025
-Player2 played BLT starting at (6,8) and moving down earning 10 points.
-Wed Mar 26 13:33:19 PDT 2025
-Player1 played WIL starting at (3,13) and moving down earning 9 points.
-Wed Mar 26 13:33:22 PDT 2025
-Player2 skipped their turn
-Wed Mar 26 13:33:26 PDT 2025
-Player1 swapped tiles. Their tiles before swapping were: FRNEETN and their tiles after swapping were ONQINIO, earning 0 points.
-Wed Mar 26 13:33:38 PDT 2025
-Player2 played AH starting at (3,12) and moving down earning 15 points.
-Wed Mar 26 13:33:47 PDT 2025
-Player1 swapped tiles. Their tiles before swapping were: ONQINIO and their tiles after swapping were ONUNNSV, earning 0 points.
-Wed Mar 26 13:34:06 PDT 2025
-Player2 played MI starting at (9,6) and moving to the right earning 5 points.
+Wed Mar 26 13:32:22 PDT 2025  
+Player1 played CODE starting at (7,7) and moving to the right earning 14 points.    
+Wed Mar 26 13:32:31 PDT 2025  
+Player2 played MALT starting at (6,10) and moving to the right earning 11 points.   
+Wed Mar 26 13:32:50 PDT 2025  
+Player1 played SLOP starting at (6,14) and moving down earning 25 points.   
+Wed Mar 26 13:33:05 PDT 2025  
+Player2 played BLT starting at (6,8) and moving down earning 10 points.  
+Wed Mar 26 13:33:19 PDT 2025  
+Player1 played WIL starting at (3,13) and moving down earning 9 points.    
+Wed Mar 26 13:33:22 PDT 2025  
+Player2 skipped their turn.    
+Wed Mar 26 13:33:26 PDT 2025  
+Player1 swapped tiles. Their tiles before swapping were: FRNEETN and their tiles after swapping were ONQINIO, earning 0 points.  
+Wed Mar 26 13:33:38 PDT 2025  
+Player2 played AH starting at (3,12) and moving down earning 15 points.  
+Wed Mar 26 13:33:47 PDT 2025  
+Player1 swapped tiles. Their tiles before swapping were: ONQINIO and their tiles after swapping were ONUNNSV, earning 0 points.  
+Wed Mar 26 13:34:06 PDT 2025  
+Player2 played MI starting at (9,6) and moving to the right earning 5 points.  
 ![Board Example](data/eventLogExampleBoard.png)

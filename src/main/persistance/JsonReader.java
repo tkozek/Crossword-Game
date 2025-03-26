@@ -161,7 +161,7 @@ public class JsonReader {
                     addSwap(game, moveObject, player);
                     break;  
                 case "SKIP":
-                    game.logSkippedTurn(player); 
+                    game.logSkipFromHistory(player); 
                     break;
                 case "END_GAME_ADJUSTMENT":
                     addEndGame(game, moveObject, player);
