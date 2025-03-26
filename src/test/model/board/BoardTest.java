@@ -44,7 +44,7 @@ public class BoardTest {
         testBag = new TileBag();
         board =  new Board();
         game = new ScrabbleGame("alphabet", board, testBag);
-        testPlayer = new Player("Trevor", game);
+        testPlayer = new Player("Trevor");
         testBag.drawTiles(testPlayer);
         letters = testPlayer.getTilesOnRack();
         a1 = new LetterTile('A',1);

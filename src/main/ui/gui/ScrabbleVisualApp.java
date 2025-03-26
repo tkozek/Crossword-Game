@@ -763,7 +763,7 @@ public class ScrabbleVisualApp {
     // requestPlayerNameText
     private void addPlayer() {
         String name = requestPlayerNameText.getText();
-        Player player = new Player(name, scrabbleGame);
+        Player player = new Player(name);
         scrabbleGame.addPlayer(player);
         numPlayers++;
     }

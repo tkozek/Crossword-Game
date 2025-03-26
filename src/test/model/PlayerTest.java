@@ -27,7 +27,7 @@ public class PlayerTest {
         testBag = new TileBag();
         testBoard =  new Board();
         game = new ScrabbleGame("n", board, testBag);
-        testPlayer = new Player("Trevor", game);
+        testPlayer = new Player("Trevor");
     }
 
     @Test
@@ -150,7 +150,7 @@ public class PlayerTest {
 
     @Test
     void testGetNumCharOnRackZeroChars() {
-        Player playerTest = new Player("name", game);
+        Player playerTest = new Player("name");
         Map<Character,Integer> counts = playerTest.getNumEachCharOnMyRack();
         assertTrue(counts.values().isEmpty());
     

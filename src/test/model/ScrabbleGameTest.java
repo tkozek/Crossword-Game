@@ -27,8 +27,8 @@ public class ScrabbleGameTest {
         board = new Board();
         tileBag = new TileBag();
         game = new ScrabbleGame("test", board, tileBag);
-        player = new Player("playerTest", game);
-        player2 = new Player("P", game);
+        player = new Player("playerTest");
+        player2 = new Player("P");
     }
 
     @Test
@@ -81,7 +81,7 @@ public class ScrabbleGameTest {
     @Test
     void testGetPlayerByName() {
         game.addPlayer(player);
-        Player player2 = new Player("otherPlayer", game);
+        Player player2 = new Player("otherPlayer");
         game.addPlayer(player2);
         assertEquals(game.getPlayerByName("playerTest"), player);
         assertEquals(game.getPlayerByName("otherPlayer"), player2);
@@ -193,7 +193,7 @@ public class ScrabbleGameTest {
     @Test
     void testHighestScoringPlayer() {
         assertEquals(null, game.highestScoringPlayer());
-        Player p3 = new Player("trevor", game);
+        Player p3 = new Player("trevor");
         game.addPlayer(player);
         game.addPlayer(player2);
         game.addPlayer(p3); 

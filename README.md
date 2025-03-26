@@ -74,3 +74,11 @@ Player1 swapped tiles. Their tiles before swapping were: ONQINIO and their tiles
 Wed Mar 26 13:34:06 PDT 2025  
 Player2 played MI starting at (9,6) and moving to the right earning 5 points.  
 ![Board Example](data/eventLogExampleBoard.png)
+
+## Phase 4: Task 3
+If I had more time to work on the project I would refactor the UI package to have an abstract class, called ScrabbleUserInterface. Then both ScrabbleVisualApp and ScrabbleConsoleApp would  
+extend this abstract class. This would allow me to reduce repetition of fields, and repetitive game logic code. Additionally, this centralizes those repetitive components, so that  
+design choices which make sense to share between the two interfaces remain in sync. 
+
+I might also refactor to make History specific to ScrabbleGame, rather than to both Player and ScrabbleGame. Then History could simply filter itself to present moves from a given Player,
+providing the same functionality that currently exists. This removes unnecessary coupling between Player and History. 

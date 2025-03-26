@@ -121,7 +121,7 @@ public class ScrabbleConsoleApp {
                     + inputPlayerName + ". Press (Y) to confirm or (N) to cancel and re-enter");
             String confirmName = scanner.nextLine();
             if (confirmName.equals("Y")) {
-                player = new Player(inputPlayerName, scrabbleGame);
+                player = new Player(inputPlayerName);
                 players.add(player);
                 scrabbleGame.addPlayer(player);
             } else if (confirmName.equals("N")) {

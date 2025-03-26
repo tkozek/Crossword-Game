@@ -22,16 +22,14 @@ public class Player implements Writable {
     private String name;
     private History history;
     private List<LetterTile> tileRack;
-    private ScrabbleGame scrabbleGame;
     private List<LetterTile> selectedTiles;
     private int points;
     
 // Initializes a player with given name, zero points, no history of moves,
 //   an empty tile rack, no selected tiles, zero remaining tiles, the game they will play in.
 //      Their next turn will be their first.
-    public Player(String name, ScrabbleGame scrabbleGame) {
+    public Player(String name) {
         this.name = name;
-        this.scrabbleGame = scrabbleGame;
         this.history = new History();
         this.tileRack = new ArrayList<>();
         this.selectedTiles = new ArrayList<>();
@@ -71,25 +69,6 @@ public class Player implements Writable {
         this.tileRack.add(drawnLetter);
     }
 
-/* 
-    // MODIFIES: this
-    // EFFECTS: Adds a new word played to player's move history
-    public void logWord(int startRow, int startCol, int pointsEarned, Direction dir) {
-        List<LetterTile> letters = this.getSelectedTiles();
-        List<LetterTile> copy = copyLetterTiles(letters);
-        Move move = new Move(this, copy, startRow, startCol, pointsEarned, dir);
-        this.history.addMove(move);
-        scrabbleGame.addMove(move);
-    } */
-
-/*     // MODIFIES: this
-    // EFFECTS: Adds a new word played to player's move history
-    public void logWord(List<LetterTile> letters, int startRow, int startCol, int points, Direction dir) {
-        List<LetterTile> copy = copyLetterTiles(letters);
-        Move move = new Move(this, copy, startRow, startCol, points, dir);
-        this.history.addMove(move);
-        scrabbleGame.addMove(move);
-    } */
 
     // EFFECTS: returns deep copy of given list of letters.
     public List<LetterTile> copyLetterTiles(List<LetterTile> lettersToCopy) {
@@ -99,22 +78,6 @@ public class Player implements Writable {
         }
         return copiedLetters;
     }
-
- /*    // MODIFIES: this
-    // EFFECTS: Adds a new skipped turn to player's move history
-    public void logSkippedTurn() {
-        Move move = new Move(this);
-        history.addMove(move);
-        scrabbleGame.addMove(move);
-    } */
-
-  /*   // MODIFIES: this
-    // EFFECTS: Adds a new swap to player's move history
-    public void logSwap(List<LetterTile> swappedLetters, List<LetterTile> postSwapLetters) {
-        Move move = new Move(this, swappedLetters, postSwapLetters);
-        history.addMove(move);
-        scrabbleGame.addMove(move);
-    } */
 
     // REQUIRES: 0 <= index <     public int getNumTilesOnRack() {
     // MODIFIES: this
