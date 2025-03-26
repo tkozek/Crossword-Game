@@ -56,7 +56,7 @@ public class ScrabbleVisualApp {
     private boolean gameRunning;
     private JPanel boardPanel;
     private JPanel rackPanel;
-    private ScorePanel scorePanel;
+    private JPanel scorePanel;
 
     private JPanel informationPanel;
     private JPanel allMovesPanel;
@@ -278,7 +278,7 @@ public class ScrabbleVisualApp {
         Player playerToPlayNext = players.get(index);
         scrabbleGame.drawTiles(playerToPlayNext);
         getRackPanel(playerToPlayNext);
-        scorePanel = new ScorePanel(scrabbleGame);
+        getScorePanel(scrabbleGame);
         getInformationPanel(playerToPlayNext);
         frame.add(boardPanel, BorderLayout.CENTER);
         frame.add(rackPanel, BorderLayout.SOUTH);
@@ -286,6 +286,18 @@ public class ScrabbleVisualApp {
         frame.add(informationPanel, BorderLayout.EAST);
         frame.repaint();
         frame.setVisible(true);
+    }
+
+    // EFFECTS: adds players' names to along with their score
+    // to scorePanel in the format name: score
+    private void getScorePanel(ScrabbleGame scrabbleGame) {
+        scorePanel = new JPanel();
+        List<Player> players = scrabbleGame.getPlayers();
+        scorePanel.setLayout(new BoxLayout(scorePanel, BoxLayout.Y_AXIS));
+        for (Player player : players) {
+            JLabel playerLabel = new JLabel(player.getPlayerName() + ": " + player.getPointsThisGame());
+            scorePanel.add(playerLabel);
+        }
     }
 
     // MODIFIES: this

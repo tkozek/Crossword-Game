@@ -112,7 +112,7 @@
         " ",
         " ",
         " ",
-        "N",
+        "S",
         " ",
         " ",
         " ",
@@ -127,7 +127,7 @@
         " ",
         " ",
         "DLS",
-        "E",
+        "B",
         "DLS",
         " ",
         " ",
@@ -142,7 +142,7 @@
         " ",
         "TLS",
         " ",
-        "D",
+        "C",
         " ",
         "TLS",
         " ",
@@ -157,7 +157,7 @@
         "DWS",
         " ",
         " ",
-        "Y",
+        "I",
         " ",
         " ",
         "DWS",
@@ -172,7 +172,7 @@
         " ",
         " ",
         " ",
-        "X",
+        "S",
         " ",
         " ",
         " ",
@@ -187,7 +187,7 @@
         " ",
         " ",
         "DLS",
-        "N",
+        "C",
         "DLS",
         " ",
         " ",
@@ -202,7 +202,7 @@
         " ",
         "TLS",
         " ",
-        "O",
+        "G",
         " ",
         "TLS",
         " ",
@@ -231,31 +231,31 @@
     "History": [
         {
             "Col": 7,
-            "Points": 52,
+            "Points": 30,
             "PlayerName": "Player1",
             "MoveType": "PLAY_WORD",
-            "LettersPlayed": "NEDYXNO",
+            "LettersPlayed": "SBCISCG",
             "Row": 7,
             "Direction": "D"
         },
         {
-            "LettersAccountedFor": "EAAKADM",
+            "LettersAccountedFor": "YOAESIF",
             "FinalPlayer": "Player1",
-            "ChangeInPoints": -14,
+            "ChangeInPoints": -13,
             "PlayerName": "Player2",
             "MoveType": "END_GAME_ADJUSTMENT"
         },
         {
-            "LettersAccountedFor": "FNAAILA",
+            "LettersAccountedFor": "ETVJIKU",
             "FinalPlayer": "Player1",
-            "ChangeInPoints": -10,
+            "ChangeInPoints": -21,
             "PlayerName": "Player3",
             "MoveType": "END_GAME_ADJUSTMENT"
         },
         {
-            "LettersAccountedFor": "EAAKADMFNAAILA",
+            "LettersAccountedFor": "YOAESIFETVJIKU",
             "FinalPlayer": "Player1",
-            "ChangeInPoints": 24,
+            "ChangeInPoints": 34,
             "PlayerName": "Player1",
             "MoveType": "END_GAME_ADJUSTMENT"
         }
@@ -263,34 +263,34 @@
     "FirstPlayer": 0,
     "Players": [
         {
-            "score": 76,
+            "score": 64,
             "name": "Player1",
             "tileRack": []
         },
         {
-            "score": -14,
+            "score": -13,
             "name": "Player2",
             "tileRack": [
+                {"Y": 4},
+                {"O": 1},
+                {"A": 1},
                 {"E": 1},
-                {"A": 1},
-                {"A": 1},
-                {"K": 5},
-                {"A": 1},
-                {"D": 2},
-                {"M": 3}
+                {"S": 1},
+                {"I": 1},
+                {"F": 4}
             ]
         },
         {
-            "score": -10,
+            "score": -21,
             "name": "Player3",
             "tileRack": [
-                {"F": 4},
-                {"N": 1},
-                {"A": 1},
-                {"A": 1},
+                {"E": 1},
+                {"T": 1},
+                {"V": 4},
+                {"J": 8},
                 {"I": 1},
-                {"L": 1},
-                {"A": 1}
+                {"K": 5},
+                {"U": 1}
             ]
         }
     ]
