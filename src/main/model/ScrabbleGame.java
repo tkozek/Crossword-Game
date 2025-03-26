@@ -191,14 +191,14 @@ public class ScrabbleGame implements Writable {
             postSwapLetters += letter.toDisplay();
         }
         Move swap = new Move(player, preSwapLetters, postSwapLetters);
-        addMoveToGameAndPlayerHistory(swap, player);
+        updateHistoriesAndEventLog(swap, player);
     }
 
     // MODIFIES: this, player
     // EFFECTS: Logs a swap into player and game's history
     public void logSwap(Player player, String initialLetters, String postSwapLetters) {
         Move swap = new Move(player, initialLetters, postSwapLetters);
-        addMoveToGameAndPlayerHistory(swap, player);
+        updateHistoriesAndEventLog(swap, player);
     }
 
     // REQUIRES: Players selected tiles can be played on this board
@@ -214,7 +214,7 @@ public class ScrabbleGame implements Writable {
         }
         int score = board.playWord(player.getSelectedTiles(), row, col, dir);
         Move wordPlayed = new Move(player, lettersPlayed, row, col, score, dir);
-        addMoveToGameAndPlayerHistory(wordPlayed, player);
+        updateHistoriesAndEventLog(wordPlayed, player);
         player.removeSelectedTiles();
         player.addPoints(score);
         tileBag.drawTiles(player);
@@ -227,7 +227,7 @@ public class ScrabbleGame implements Writable {
     // DOES NOT impact score.
     public void logWord(Player player, String letters, int row, int col, int points, Direction dir) {
         Move word = new Move(player, letters, row, col, points, dir);
-        addMoveToGameAndPlayerHistory(word, player);
+        updateHistoriesAndEventLog(word, player);
     }
 
     // REQUIRES: getPlayers() contains player
@@ -237,7 +237,7 @@ public class ScrabbleGame implements Writable {
     public void logSkippedTurn(Player player) {
         player.clearSelectedTiles();
         Move skip = new Move(player);
-        addMoveToGameAndPlayerHistory(skip, player);
+        updateHistoriesAndEventLog(skip, player);
     }
 
     // MODIFIES: this
@@ -265,25 +265,42 @@ public class ScrabbleGame implements Writable {
             total += playerLoss;
             totalLetters += letters;
             adjustment = new Move(p, lastPlayer, letters, -1 * playerLoss);
-            addMoveToGameAndPlayerHistory(adjustment, p);
+            updateHistoriesAndEventLog(adjustment, p);
         }
         lastPlayer.addPoints(total);
-        addMoveToGameAndPlayerHistory(new Move(lastPlayer, lastPlayer, totalLetters, total), lastPlayer);
+        updateHistoriesAndEventLog(new Move(lastPlayer, lastPlayer, totalLetters, total), lastPlayer);
     }
 
     // MODIFIES: this, player
     // EFFECTS: Logs an end game adjustment into player and game's history
     public void logEndGameAdjustment(Player player, Player lastPlayer, String lettersInvolved, int pointChange) {
         Move endGameAdjustment = new Move(player, lastPlayer, lettersInvolved, pointChange);
-        addMoveToGameAndPlayerHistory(endGameAdjustment, player);
+        updateHistoriesAndEventLog(endGameAdjustment, player);
     }
 
 
-    // MODIFIES: this, player
-    // EFFECTS: adds this move to both the game's and the player's history
-    private void addMoveToGameAndPlayerHistory(Move move, Player player) {
+    // MODIFIES: this, player, EventLog
+    // EFFECTS: adds this move to both the game's and the player's history,
+    // and adds relevant Event to EventLog.
+    private void updateHistoriesAndEventLog(Move move, Player player) {
         history.addMove(move);
         player.addMove(move);
+        String description = "";
+        switch (move.getMoveType()) {
+            case PLAY_WORD:
+                description = getWordDescription(move, player);
+                break;
+            case SWAP_TILES:
+                description = getSwapDescription(move, player);
+                break;   
+            case SKIP:
+                description = getSkipDescription(move, player);
+                break;
+            default:
+                description = getEndGameDescription(move, player);
+        }
+        EventLog log = EventLog.getInstance();
+        log.logEvent(new Event(description));
     }
 
 
@@ -308,6 +325,55 @@ public class ScrabbleGame implements Writable {
             }
         }
         return highestScoringPlayer;
+    }
+    
+    // REQUIRES: skip.getMoveType() == MoveType.PLAY_WORD
+    // EFFECTS: returns summary of a word played
+    public String getWordDescription(Move word, Player p) {
+        String printout = p.getPlayerName() + " played ";
+        String wordString = word.getLettersInvolved();
+        String startRow = String.valueOf(word.getStartRow());
+        String startCol = String.valueOf(word.getStartColumn());
+        String coordinates = "(" + startRow + "," + startCol + ")";
+        String direction = (word.getDirection() == Direction.RIGHT) ? "to the right" : "down";
+        String points = String.valueOf(word.getPointsForMove());
+        printout += wordString + " starting at " + coordinates + " and moving " 
+                + direction + " earning " + points + " points.";
+        return printout;
+    }
+
+
+    // REQUIRES: skip.getMoveType() == MoveType.SWAP_TILES
+    //EFFECTS: returns summary of a player swap
+    public String getSwapDescription(Move swap, Player p) {
+        String printout = p.getPlayerName() + " swapped tiles. ";
+        String preAndPostLetters = swap.getLettersInvolved();
+        int halfLength = preAndPostLetters.length() / 2;
+        String preSwapLetters = preAndPostLetters.substring(0, halfLength);
+        String postSwapLetters = preAndPostLetters.substring(halfLength);
+        String points = String.valueOf(swap.getPointsForMove());
+        printout += "Their tiles before swapping were: " + preSwapLetters + " and their tiles after swapping were " 
+                 + postSwapLetters + ", earning " + points + " points.";
+        return printout;
+    }
+
+    // REQUIRES: skip.getMoveType() == MoveType.SKIP
+    // EFFECTS: returns summary of a skipped turn
+    public String getSkipDescription(Move skip, Player p) {
+        return p.getPlayerName() + " skipped their turn";
+    }
+
+    // REQUIRES: skip.getMoveType() == MoveType.END_GAME_ADJUSTMENT
+    // EFFECTS: returns summary of a end game adjustment
+    public String getEndGameDescription(Move move, Player player) {
+        String playerName = player.getPlayerName();
+        String lastPlayer = move.getLastPlayer().getPlayerName();
+        int pointChange = move.getPointsForMove();
+        int absolutePointChange = Math.abs(pointChange);
+        String gainOrLoss = (pointChange >= 0) ? " gained " : " lost ";
+        String pluralOrNot = (absolutePointChange != 1) ? "s" : "";
+        return lastPlayer + " used all their tiles first. \n" 
+                + playerName + gainOrLoss + absolutePointChange + pluralOrNot;
     }
 
 }

@@ -78,7 +78,7 @@ public class ScrabbleConsoleApp {
             this.tileBag = scrabbleGame.getTileBag();
             this.numPlayers = players.size();
             System.out.println("Loaded " + scrabbleGame.getName() + " with " + String.valueOf(numPlayers) 
-                    + " players from " + JSON_STORE);
+                    + " players from " + JSON_STORE + "\n");
         } catch (IOException e) {
             System.out.println("Unable to read game from file: " + JSON_STORE);
         }
@@ -195,10 +195,12 @@ public class ScrabbleConsoleApp {
             case "a":
                 handleSave(p);
                 this.gameRunning = false;
+                printEventLog();
                 System.exit(0);
             case "q":
             // !!! Consider adding confirmation
                 this.gameRunning = false;
+                printEventLog();
                 System.exit(0);
             default:
                 handleNonPlayOptions(p);
@@ -507,6 +509,7 @@ public class ScrabbleConsoleApp {
         System.out.println(lastPlayer.getPlayerName() + " was the last to play");
         System.out.println("The winner is " + scrabbleGame.highestScoringPlayer().getPlayerName());
         printScoreSummaries();
+        printEventLog();
     }
 
     private void printScoreSummaries() {
@@ -567,6 +570,17 @@ public class ScrabbleConsoleApp {
         }
         System.out.println(header);
         printoutSpacer();
+    }
+
+    // REQUIRES: user has quit application or the game has ended.
+    // EFFECTS: prints event log to console
+    private void printEventLog() {
+        EventLog log = EventLog.getInstance();
+        System.out.println();
+        System.out.println();
+        for (Event e : log) {
+            System.out.println(e.toString());
+        }
     }
     
     // Play the game

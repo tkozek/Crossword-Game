@@ -13,6 +13,8 @@ import java.awt.event.FocusListener;
 import java.io.IOException;
 
 import model.Direction;
+import model.Event;
+import model.EventLog;
 import model.Player;
 import model.ScrabbleGame;
 import model.board.Board;
@@ -413,11 +415,13 @@ public class ScrabbleVisualApp {
         saveAndQuitButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 handleSave(player);
+                printEventLog();
                 System.exit(0);
             }
         });
         quitWithoutSavingButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
+                printEventLog();
                 System.exit(0);
             }
         });
@@ -750,6 +754,17 @@ public class ScrabbleVisualApp {
         Player player = new Player(name, scrabbleGame);
         scrabbleGame.addPlayer(player);
         numPlayers++;
+    }
+
+    // REQUIRES: user has quit application or the game has ended.
+    // EFFECTS: prints event log to console
+    private void printEventLog() {
+        EventLog log = EventLog.getInstance();
+        System.out.println();
+        System.out.println();
+        for (Event e : log) {
+            System.out.println(e.toString());
+        }
     }
 
     // EFFECTS: Start the Graphical User Interface
