@@ -16,7 +16,6 @@ import java.awt.event.FocusListener;
 import java.io.IOException;
 
 import model.*;
-import model.Event;
 import model.board.*;
 import model.tile.*;
 import model.move.*;
@@ -47,8 +46,6 @@ public class ScrabbleVisualApp extends ScrabbleUserInterface {
     private static final String SEARCH_REMAINING_COUNTS_DEFAULT_DISPLAY_TEXT = "";
     //"Enter a letter to get its remaining "+ "count in draw pile and opponent racks\n or blank to see all";
 
-    private Board board;
-    private TileBag tileBag;
     private ScrabbleGame game;
     private boolean gameRunning;
     private JPanel boardPanel;
@@ -98,7 +95,6 @@ public class ScrabbleVisualApp extends ScrabbleUserInterface {
     // EFFECTS: Loads start menu frame to user screen.
     public ScrabbleVisualApp() {
         dir = Direction.DOWN;
-        tileBag = new TileBag(); // this needs to be here due to static tilebag and nature of json reader
         initializeStartMenu();
     }
 
@@ -150,7 +146,7 @@ public class ScrabbleVisualApp extends ScrabbleUserInterface {
         });
     }
 
-    // MODIFIES: scrabbleGame, players, tileBag, board, numPlayers
+    // MODIFIES: scrabbleGame, players, numPlayers
     // EFFECTS: loads assets from previously saved game
     private void loadOldGame() {
         this.gameRunning = true;
@@ -158,8 +154,6 @@ public class ScrabbleVisualApp extends ScrabbleUserInterface {
             JsonReader jsonReader = new JsonReader(JSON_STORE);
             game = jsonReader.read();
             this.players = game.getPlayers();
-            this.board = game.getBoard();
-            this.tileBag = game.getTileBag();
             this.numPlayers = players.size();
             handleGame(game.getFirstPlayerIndex());
         } catch (IOException e) {
@@ -167,13 +161,11 @@ public class ScrabbleVisualApp extends ScrabbleUserInterface {
         }
     }
 
-    // MODIFIES: scrabbleGame, board, tileBag
+    // MODIFIES: scrabbleGame
     // EFFECTS: creates assets for a new game and prompts user input
     // for setup parameters
     private void initializeNewGame() {
-        this.board = new Board();
-        this.tileBag = new TileBag();
-        this.game = new ScrabbleGame("game", board, tileBag);
+        this.game = new ScrabbleGame("game");
         this.numPlayers = 0;
         requestPlayerNames();
         //scrabbleGame.setFirstPlayer(players.get(0)); // !!! Todo add exception handling
@@ -258,7 +250,7 @@ public class ScrabbleVisualApp extends ScrabbleUserInterface {
         });
     }
 
-    // MODIFIES: player, board, tileBag
+    // MODIFIES: player
     // EFFECTS: Manages order of turn taking, 
     // and ensures player's draw new tiles
     // when they are supposed to
@@ -268,7 +260,7 @@ public class ScrabbleVisualApp extends ScrabbleUserInterface {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(FRAME_SIDE_LENGTH, FRAME_SIDE_LENGTH);
         frame.setLayout(new BorderLayout());
-        getBoardPanel(board);
+        getBoardPanel(game.getBoard());
         Player playerToPlayNext = players.get(index);
         game.drawTiles(playerToPlayNext);
         getRackPanel(playerToPlayNext);

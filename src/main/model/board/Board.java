@@ -28,7 +28,7 @@ public class Board {
     // Double Letter, Triple Letter Tiles
 
     public Board() {
-        doubleLetterCoordinates.add(new Coordinate(0,3));
+        
         boardTiles = new Tile[BOARD_LENGTH][BOARD_LENGTH];
         initializeBoard();
 
@@ -72,6 +72,7 @@ public class Board {
     // EFFECTS: Indicates coordinates where a Double Letter Square
     //          should exist at the start of the game
     private void initializeDoubleLetterSquares() {
+        doubleLetterCoordinates.add(new Coordinate(0,3));
         doubleLetterCoordinates.add(new Coordinate(0, 11));
         doubleLetterCoordinates.add(new Coordinate(2, 6));
         doubleLetterCoordinates.add(new Coordinate(2, 8));

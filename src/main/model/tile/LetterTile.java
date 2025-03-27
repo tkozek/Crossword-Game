@@ -2,6 +2,7 @@ package model.tile;
 
 import org.json.JSONObject;
 
+import model.Utility;
 import persistance.Writable;
 
 //Represents the playable tiles in a Scrabble Game
@@ -26,7 +27,7 @@ public class LetterTile implements Tile, Writable {
 
     public LetterTile(char character) {
         this.character = character;
-        this.points = TileBag.getPointsForLetter(character);
+        this.points = Utility.getLetterPoints(character);
     }
     
 

@@ -33,6 +33,7 @@ public class JsonReaderTest extends JsonTest {
             fail("IOException expected");
         } catch (IOException e) {
             // passes test if it catches an exemption thrown
+            
         }
     }
 

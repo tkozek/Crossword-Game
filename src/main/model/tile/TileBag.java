@@ -18,7 +18,7 @@ public class TileBag implements Writable {
     public static final int TOTAL_LETTERS_INITIALLY = 100;
     public static final int MAX_NUM_PLAYER_TILES = 7;
     private Map<Character, Integer> letterFrequencyMap = new HashMap<>();
-    private static Map<Character, Integer> letterPointsMap = new HashMap<>();
+    /* private Map<Character, Integer> letterPointsMap = new HashMap<>(); */
     private List<LetterTile> drawPile;
     private Random randomIndexGenerator;
     
@@ -39,8 +39,8 @@ public class TileBag implements Writable {
     private void initializeMaps() {
         initializeFrequenciesAThroughM(letterFrequencyMap);
         initializeFrequenciesNThroughBlank(letterFrequencyMap);
-        initializeLetterPointsAThroughM(letterFrequencyMap);
-        initializeLetterPointsNThroughBlank(letterFrequencyMap);
+       /*  initializeLetterPointsAThroughM(letterFrequencyMap);
+        initializeLetterPointsNThroughBlank(letterFrequencyMap); */
     }
 
     // MODIFIES: this
@@ -88,7 +88,7 @@ public class TileBag implements Writable {
     // EFFECTS: Adds Tile Point Values to 
     //   Point map for Letters A, B, C,....,M
     //     inclusive
-    private void initializeLetterPointsAThroughM(Map<Character, Integer> letterFrequencyMap) {
+   /*  private void initializeLetterPointsAThroughM(Map<Character, Integer> letterFrequencyMap) {
         letterPointsMap.put('A', 1); 
         letterPointsMap.put('B', 3); 
         letterPointsMap.put('C', 3);
@@ -102,9 +102,9 @@ public class TileBag implements Writable {
         letterPointsMap.put('K', 5); 
         letterPointsMap.put('L', 1);
         letterPointsMap.put('M', 3);
-    }
+    } */
 
-    // MODIFIES: this
+    /* // MODIFIES: this
     // EFFECTS: Adds Tile Point Values to 
     //   Point map for Letters N, O,....,Z,_,
     //     inclusive
@@ -123,7 +123,7 @@ public class TileBag implements Writable {
         letterPointsMap.put('Y', 4); 
         letterPointsMap.put('Z', 10); 
         letterPointsMap.put('-', 0);
-    }
+    } */
 
     //REQUIRES: Tile Bag is empty
     //MODIFIES: this
@@ -134,17 +134,16 @@ public class TileBag implements Writable {
             char letter = entry.getKey();
             int frequency = entry.getValue();
             // get points from Point map
-            int points = letterPointsMap.get(letter); 
-            addTiles(letter,points,frequency);
+            addTiles(letter, frequency);
         }
     }
 
     //MODIFIES: this
     //EFFECTS: Adds a new Letter Tile to the tile bag
     //  the specified number of times.
-    private void addTiles(char letter, int points, int numberToAdd) {
+    private void addTiles(char letter, int numberToAdd) {
         for (int i = 0; i < numberToAdd; i++) {
-            drawPile.add(new LetterTile(letter,points));
+            drawPile.add(new LetterTile(letter));
         }
     }
 
@@ -239,8 +238,8 @@ public class TileBag implements Writable {
         return json;
     }
 
-    public static int getPointsForLetter(char letter) {
+    /* private int getPointsForLetter(char letter) {
         return letterPointsMap.get(letter);
     }
-    
+     */
 }  

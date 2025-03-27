@@ -4,7 +4,6 @@ import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import model.board.Board;
 import model.move.MoveType;
 import model.tile.LetterTile;
 import model.tile.TileBag;
@@ -16,17 +15,12 @@ import java.util.ArrayList;
 
 public class PlayerTest {
     
-    private Board board;
-    private TileBag testBag;
     private Player testPlayer;
-    private Board testBoard;
     private ScrabbleGame game;
     
     @BeforeEach
     void runBefore() {
-        testBag = new TileBag();
-        testBoard =  new Board();
-        game = new ScrabbleGame("n", board, testBag);
+        game = new ScrabbleGame("n");
         testPlayer = new Player("Trevor");
     }
 
@@ -41,7 +35,7 @@ public class PlayerTest {
 
     @Test
     void testSelectTileAlreadySelected() {
-        testBag.drawTiles(testPlayer);
+        game.drawTiles(testPlayer);
         assertEquals(testPlayer.getNumTilesOnRack(), 7);
         assertTrue(testPlayer.selectTile(0));
         assertFalse(testPlayer.selectTile(0));
@@ -54,13 +48,13 @@ public class PlayerTest {
 
     @Test
     void testClearSelectedTilesNoneSelected() {
-        testBag.drawTiles(testPlayer);
+        game.drawTiles(testPlayer);
         assertFalse(testPlayer.clearSelectedTiles());
     }
 
     @Test
     void testClearSelectedTiles() {
-        testBag.drawTiles(testPlayer);
+        game.drawTiles(testPlayer);
         assertEquals(testPlayer.getNumTilesOnRack(), 7);
         assertTrue(testPlayer.selectTile(0));
         assertEquals(testPlayer.getSelectedTiles().size(), 1);
@@ -85,7 +79,7 @@ public class PlayerTest {
     @Test
     void testDrawTilesEmptyRack() {
         assertEquals(testPlayer.getNumTilesOnRack(), 0);
-        testBag.drawTiles(testPlayer);
+        game.drawTiles(testPlayer);
         assertEquals(testPlayer.getNumTilesOnRack(), TileBag.MAX_NUM_PLAYER_TILES);
     }
 
@@ -107,7 +101,7 @@ public class PlayerTest {
 
     @Test
     void testMakeMove() {
-        testBag.drawTiles(testPlayer);
+        game.drawTiles(testPlayer);
         testPlayer.selectTile(0);
         testPlayer.selectTile(6);
         List<LetterTile> letters = testPlayer.getSelectedTiles();
@@ -122,7 +116,7 @@ public class PlayerTest {
     @Test
     void testSwapZeroTiles() {
         assertEquals(testPlayer.getNumTilesOnRack(), 0);
-        testBag.drawTiles(testPlayer);
+        game.drawTiles(testPlayer);
         assertEquals(testPlayer.getNumTilesOnRack(), TileBag.MAX_NUM_PLAYER_TILES);
         
         List<LetterTile> initialLetters = testPlayer.getTilesOnRack();
@@ -141,7 +135,7 @@ public class PlayerTest {
 
     @Test
     void testSwapTiles() {
-        testBag.drawTiles(testPlayer);
+        game.drawTiles(testPlayer);
         testPlayer.selectTile(0);
         testPlayer.selectTile(5);
         game.swapTiles(testPlayer);
@@ -167,18 +161,18 @@ public class PlayerTest {
     @Test
     void testTileAddedToRackIsRemovedFromTileBag() {
         assertEquals(testPlayer.getNumTilesOnRack(), 0);
-        assertEquals(testBag.numTilesRemaining(), TileBag.TOTAL_LETTERS_INITIALLY);
-        testBag.drawTiles(testPlayer);
+        assertEquals(game.getTileBag().numTilesRemaining(), TileBag.TOTAL_LETTERS_INITIALLY);
+        game.drawTiles(testPlayer);
         List<LetterTile> drawnTiles = testPlayer.getTilesOnRack();
         for (LetterTile drawnTile : drawnTiles) {
-            assertFalse(testBag.contains(drawnTile));
+            assertFalse(game.getTileBag().contains(drawnTile));
         }
         assertEquals(testPlayer.getNumTilesOnRack(), 7);
     }
 
     @Test
     void testSelectTile() {
-        testBag.drawTiles(testPlayer);
+        game.drawTiles(testPlayer);
         List<LetterTile> drawnTiles = testPlayer.getTilesOnRack();
         //Player.MAX_NUM_TILES == 7
         assertEquals(testPlayer.getNumTilesOnRack(), TileBag.MAX_NUM_PLAYER_TILES);
@@ -209,7 +203,7 @@ public class PlayerTest {
 
     @Test
     void testGetNumEachCharOnMyRackFullRack() {
-        testBag.drawTiles(testPlayer);
+        game.drawTiles(testPlayer);
         assertEquals(TileBag.MAX_NUM_PLAYER_TILES, testPlayer.getTilesOnRack().size());
         Map<Character, Integer> rackCharCounts = testPlayer.getNumEachCharOnMyRack();
         assertFalse(rackCharCounts.keySet().isEmpty());
@@ -223,7 +217,7 @@ public class PlayerTest {
 
     @Test
     void testRemoveSelectedTiles() {
-        testBag.drawTiles(testPlayer);
+        game.drawTiles(testPlayer);
         testPlayer.selectTile(0);
         testPlayer.selectTile(5);
         List<LetterTile> selectedTilesTemp = testPlayer.getSelectedTiles();
@@ -257,7 +251,7 @@ public class PlayerTest {
     
     @Test 
     void testCopySelectedTiles() {
-        testBag.drawTiles(testPlayer);
+        game.drawTiles(testPlayer);
         testPlayer.selectTile(0);
         List<LetterTile> copy = testPlayer.copySelectedTiles();
         assertEquals(copy.size(), 1);
@@ -269,12 +263,12 @@ public class PlayerTest {
         game.logSkippedTurn(testPlayer);
         assertEquals(testPlayer.getMoves().size(), 1);
         assertEquals(testPlayer.getMoves().get(0).getMoveType(), MoveType.SKIP);
-        testBag.drawTiles(testPlayer);
+        game.drawTiles(testPlayer);
         testPlayer.selectTile(0);
         testPlayer.selectTile(1);
         List<LetterTile> lettersToSwap = testPlayer.getSelectedTiles();
         assertEquals(testPlayer.getMoves().get(0).getPointsForMove(), 0);
-        testBoard.playWord(lettersToSwap, 0, 0, Direction.DOWN);
+        game.getBoard().playWord(lettersToSwap, 0, 0, Direction.DOWN);
         List<LetterTile> tilesAfterSwap = testPlayer.getTilesOnRack();
         game.logSwap(testPlayer, getStringFromLetters(lettersToSwap), getStringFromLetters(tilesAfterSwap));
         assertEquals(testPlayer.getMoves().size(), 2);

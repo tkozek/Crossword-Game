@@ -30,9 +30,9 @@ public class JsonWriterTest extends JsonTest {
 
     @BeforeEach
     void setup() {
-        board = new Board();
-        tileBag = new TileBag();
-        game = new ScrabbleGame("Test", board, tileBag);
+        game = new ScrabbleGame("Test");
+        tileBag = game.getTileBag();
+        board = game.getBoard();
         player = new Player("Tester");
     }
 

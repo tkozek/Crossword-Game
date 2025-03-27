@@ -6,7 +6,6 @@ import org.junit.jupiter.api.Test;
 
 import model.Direction;
 import model.Player;
-import model.ScrabbleGame;
 import model.tile.LetterTile;
 import model.tile.TileBag;
 import model.tile.TileType;
@@ -48,7 +47,6 @@ public class BoardTest {
         a1 = new LetterTile('A',1);
         b1 = new LetterTile('B',3);
         c1 = new LetterTile('C', 3);
-        
         e1 = new LetterTile('E', 1);
         g1 = new LetterTile('G', 2);
         h1 = new LetterTile('H', 4);
@@ -62,50 +60,7 @@ public class BoardTest {
         y1 = new LetterTile('Y', 4);
         s1 = new LetterTile('S', 1);
     }
-
-    
-    /* @Test
-    void testSectionContainsWithAllTypes() {
-        assertTrue(board.sectionContainsTileType(letters,1,0,Direction.DOWN, TileType.DOUBLE_LETTER));
-        assertTrue(board.sectionContainsTileType(letters,1,0,Direction.DOWN, TileType.TRIPLE_WORD));
-        assertTrue(board.sectionContainsTileType(letters,1,0,Direction.RIGHT, TileType.DOUBLE_WORD));
-        assertTrue(board.sectionContainsTileType(letters,1,0,Direction.RIGHT, TileType.TRIPLE_LETTER));
-    } */
-
-    /* @Test
-    void testSquareIsTypeAllTypes() {
-        assertTrue(board.squareisTileType(7,7,TileType.DOUBLE_WORD));
-        assertFalse(board.squareisTileType(7,7,TileType.DOUBLE_LETTER));
-        assertFalse(board.squareisTileType(7,7,TileType.TRIPLE_LETTER));
-        assertFalse(board.squareisTileType(7,7,TileType.TRIPLE_WORD));
-        //It's normal
-        assertFalse(board.squareisTileType(4,5,TileType.DOUBLE_LETTER));
-        assertTrue(board.squareisTileType(4,5,TileType.NORMAL));
-
-        assertTrue(board.squareisTileType(5,13,TileType.TRIPLE_LETTER));
-        assertFalse(board.squareisTileType(5,13,TileType.DOUBLE_LETTER));
-        assertFalse(board.squareisTileType(5,13,TileType.DOUBLE_WORD));
-        assertFalse(board.squareisTileType(5,13,TileType.TRIPLE_WORD));
-
-        assertTrue(board.squareisTileType(14,14,TileType.TRIPLE_WORD));
-        assertFalse(board.squareisTileType(14,14,TileType.DOUBLE_LETTER));
-        assertFalse(board.squareisTileType(14,14,TileType.DOUBLE_WORD));
-        assertFalse(board.squareisTileType(14,14,TileType.TRIPLE_LETTER));
-
-    } */
-
-
-   /*  @Test 
-    public void testSquareIsAvailable() {
-        assertTrue(board.squareIsAvailable(0, 0));
-        assertTrue(board.squareIsAvailable(14, 14));
-        assertTrue(board.squareIsAvailable(7, 7));
-        assertTrue(board.squareIsAvailable(8, 1));
-        assertTrue(board.squareIsAvailable(1, 13));
-
-    } */
-
-   
+ 
     @Test 
     public void testSectionIsAvailableNothingAddedGoingRight() {
         testBag.drawTiles(testPlayer);

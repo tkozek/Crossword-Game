@@ -34,6 +34,15 @@ public class ScrabbleGame implements Writable {
         this.firstPlayerIndex = 0;
     }
 
+    public ScrabbleGame(String name) {
+        this.name = name;
+        this.board = new Board();
+        this.tileBag = new TileBag();
+        this.history = new History();
+        this.players = new ArrayList<>();
+        this.firstPlayerIndex = 0;
+    }
+
     // EFFECTS: Names this game
     public void setName(String name) {
         this.name = name;
@@ -343,8 +352,8 @@ public class ScrabbleGame implements Writable {
     // MODIFIES: this
     // EFFECTS: fills players tile rack with as
     // many tiles as allowed from the game's tilebag
-    public void drawTiles(Player p) {
-        tileBag.drawTiles(p);
+    public void drawTiles(Player player) {
+        tileBag.drawTiles(player);
     }
 
     // EFFECTS: returns the player with the highest score

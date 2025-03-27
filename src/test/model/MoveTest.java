@@ -4,39 +4,30 @@ import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import model.board.Board;
-import model.move.Move;
-import model.move.MoveType;
+import model.move.*;
 import model.tile.LetterTile;
-import model.tile.TileBag;
 
 
 import java.util.List;
 
 public class MoveTest {
     
-    private Board board;
-    private TileBag testBag;
     private Player testPlayer;
     private Player testPlayer2;
     private List<LetterTile> p1Letters;
     private List<LetterTile> p2Letters;
     private Move playWord;
     private Move swap;
-    //private Move endGameWinner;
-    //private Move endGameLoser;
     private String alphabet;
     private ScrabbleGame game;
 
     @BeforeEach
     void runBefore() {
-        testBag = new TileBag();
-        board =  new Board();
-        game = new ScrabbleGame("alphabet", board, testBag);
+        game = new ScrabbleGame("alphabet");
         testPlayer = new Player("Trevor");
         testPlayer2 = new Player("Rovert");
-        testBag.drawTiles(testPlayer);
-        testBag.drawTiles(testPlayer2);
+        game.drawTiles(testPlayer);
+        game.drawTiles(testPlayer2);
         p1Letters = testPlayer.getTilesOnRack();
         p2Letters = testPlayer2.getTilesOnRack();
         

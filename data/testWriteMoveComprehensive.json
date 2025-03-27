@@ -228,56 +228,55 @@
     ],
     "TileBag": {
         "A": 7,
-        "B": 1,
-        "C": 2,
-        "D": 4,
-        "E": 9,
+        "B": 2,
+        "C": 1,
+        "D": 3,
+        "E": 12,
         "F": 2,
         "G": 3,
-        "H": 1,
-        "I": 8,
+        "I": 6,
+        "J": 1,
         "K": 1,
-        "L": 2,
+        "L": 4,
         "M": 2,
         "N": 6,
-        "O": 8,
-        "P": 1,
+        "O": 7,
+        "P": 2,
         "Q": 1,
         "R": 6,
         "S": 4,
         "T": 6,
         "U": 3,
-        "V": 1,
-        "W": 2,
+        "V": 2,
+        "W": 1,
         "X": 1,
-        "Y": 2,
-        "Z": 1,
+        "Y": 1,
         "-": 2
     },
     "GameName": "Test",
     "History": [
         {
             "PlayerName": "Tester",
-            "AfterSwapLetters": "JVEHPAE",
-            "InitialLetters": "DBOEITI",
+            "AfterSwapLetters": "IHCHOZY",
+            "InitialLetters": "AVEOHAN",
             "MoveType": "SWAP_TILES"
         },
         {
             "PlayerName": "John",
-            "AfterSwapLetters": "UBILLEA",
-            "InitialLetters": "AEALNSE",
+            "AfterSwapLetters": "IADWIAU",
+            "InitialLetters": "OATIEAD",
             "MoveType": "SWAP_TILES"
         },
         {
             "PlayerName": "Tester",
-            "AfterSwapLetters": "JVEHPAE",
-            "InitialLetters": "DBOEITI",
+            "AfterSwapLetters": "IHCHOZY",
+            "InitialLetters": "AVEOHAN",
             "MoveType": "SWAP_TILES"
         },
         {
             "PlayerName": "John",
-            "AfterSwapLetters": "UBILLEA",
-            "InitialLetters": "AEALNSE",
+            "AfterSwapLetters": "IADWIAU",
+            "InitialLetters": "OATIEAD",
             "MoveType": "SWAP_TILES"
         },
         {
@@ -289,7 +288,7 @@
             "Points": 70,
             "PlayerName": "John",
             "MoveType": "PLAY_WORD",
-            "LettersPlayed": "UBILLEA",
+            "LettersPlayed": "IADWIAU",
             "Row": 7,
             "Direction": "D"
         },
@@ -309,26 +308,26 @@
             "score": 0,
             "name": "Tester",
             "tileRack": [
-                {"J": 8},
-                {"V": 4},
-                {"E": 1},
+                {"I": 1},
                 {"H": 4},
-                {"P": 3},
-                {"A": 1},
-                {"E": 1}
+                {"C": 3},
+                {"H": 4},
+                {"O": 1},
+                {"Z": 10},
+                {"Y": 4}
             ]
         },
         {
             "score": 0,
             "name": "John",
             "tileRack": [
-                {"U": 1},
-                {"B": 3},
                 {"I": 1},
-                {"L": 1},
-                {"L": 1},
-                {"E": 1},
-                {"A": 1}
+                {"A": 1},
+                {"D": 2},
+                {"W": 4},
+                {"I": 1},
+                {"A": 1},
+                {"U": 1}
             ]
         }
     ]

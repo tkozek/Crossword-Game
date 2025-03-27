@@ -29,7 +29,6 @@ public class ScrabbleConsoleApp extends ScrabbleUserInterface {
         System.out.println("Welcome to Scrabble in Java");
         printoutSpacer();
         scanner = new Scanner(System.in);
-        TileBag tileBag = new TileBag();
         System.out.println("(L)oad your old game or (p)lay a new one?");
         switch (scanner.nextLine().toLowerCase()) {
             case "p":
@@ -49,7 +48,7 @@ public class ScrabbleConsoleApp extends ScrabbleUserInterface {
     // EFFECTS: creates assets for a new game and prompts user input
     // for setup parameters
     public void initializeNewGame() {
-        game = new ScrabbleGame("", new Board(), new TileBag());
+        game = new ScrabbleGame("");
         this.gameRunning = true;
         initializePlayers();
     }
@@ -457,13 +456,6 @@ public class ScrabbleConsoleApp extends ScrabbleUserInterface {
         }
         System.out.println(spacer);
     }
-
-    // MODIFIES: this
-    // EFFECTS: Ends the Scrabble Game
-    public void endGame() {
-        this.gameRunning = false;
-    }
-
 
     public void handleEndGame(Player lastPlayer) {
         this.gameRunning = false;

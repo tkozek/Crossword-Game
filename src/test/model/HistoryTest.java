@@ -4,11 +4,9 @@ import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import model.board.Board;
 import model.move.Move;
 import model.move.MoveType;
 import model.tile.LetterTile;
-import model.tile.TileBag;
 
 
 import java.util.List;
@@ -16,8 +14,6 @@ import java.util.ArrayList;
 
 public class HistoryTest {
     
-    private Board board;
-    private TileBag testBag;
     private Player testPlayer;
     private Player testPlayer2;
     private List<LetterTile> p1Letters;
@@ -31,9 +27,7 @@ public class HistoryTest {
 
     @BeforeEach
     void runBefore() {
-        testBag = new TileBag();
-        board =  new Board();
-        game = new ScrabbleGame("alphabet", board, testBag);
+        game = new ScrabbleGame("alphabet");
         testPlayer = new Player("Trevor");
         testPlayer2 = new Player("Rovert");
         p1Letters = testPlayer.getTilesOnRack();
@@ -135,7 +129,7 @@ public class HistoryTest {
 
         game.logWord(testPlayer, getStringFromLetters(p1Letters), 0, 4, 15, Direction.RIGHT);
 
-        testBag.drawTiles(testPlayer);
+        game.drawTiles(testPlayer);
         testPlayer.selectTile(1);
 
         game.logWord(testPlayer, getStringFromLetters(p1Letters), 0, 0, 5, Direction.DOWN);
@@ -156,7 +150,7 @@ public class HistoryTest {
         // Adds move that isn't a word played [1]
         game.logSkippedTurn(testPlayer);
         assertTrue(testPlayer.getHistory().getMovesWithWordPlayed().isEmpty());
-        testBag.drawTiles(testPlayer);
+       // game.getTileBag();.drawTiles(testPlayer);
         //logs word played [1]
         game.logWord(testPlayer, (getStringFromLetters(testPlayer.getTilesOnRack())), 7,7,10,Direction.DOWN);
         assertEquals(testPlayer.getHistory().getMovesWithWordPlayed().size(), 1);
