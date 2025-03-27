@@ -82,3 +82,10 @@ design choices which make sense to share between the two interfaces remain in sy
 
 I might also refactor to make History specific to ScrabbleGame, rather than to both Player and ScrabbleGame. Then History could simply filter itself to present moves from a given Player,
 providing the same functionality that currently exists. This removes unnecessary coupling between Player and History. 
+
+I would remove the JsonReader, JsonWriter, Board, TileBag, and List<Player> fields from all UI classes. I would instead have the given UI class call ScrabbleGame to access ScrabbleGame's board, tileBag, etc.  
+When the user indicates they want to save or load, I would then instantiate a new JsonReader or JsonWriter for the specified file location. This reduces coupling, and allows greater flexibility in terms of save location. If the user  
+wants to manually input their save location, then it doesn't make sense to instantiate a Writer with some predetermined writing destination before the user even indicates they need to write. There may be many instances of the UI classes  
+where the user doesn't need to write, so it doesn't make sense to always instantiate these objects on startup.
+
+I may refactor to have the Board and TileBag classes employ the Singleton design pattern, since their state is supposed to be shared between all players.

@@ -37,13 +37,11 @@ public class BoardTest {
     private LetterTile t1;
     private LetterTile y1;
     private LetterTile z1;
-    private ScrabbleGame game;
 
     @BeforeEach
     void runBefore() {
         testBag = new TileBag();
         board =  new Board();
-        game = new ScrabbleGame("alphabet", board, testBag);
         testPlayer = new Player("Trevor");
         testBag.drawTiles(testPlayer);
         letters = testPlayer.getTilesOnRack();
