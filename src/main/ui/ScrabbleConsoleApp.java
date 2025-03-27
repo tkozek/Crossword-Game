@@ -4,32 +4,23 @@ import java.util.Scanner;
 import java.util.List;
 import java.util.Map;
 import java.io.IOException;
-import java.util.ArrayList;
+
 import model.*;
-import model.board.Board;
-import model.board.BoardTile;
+import model.board.*;
 import model.move.Move;
-import model.tile.LetterTile;
-import model.tile.Tile;
-import model.tile.TileBag;
-import model.tile.TileType;
-import persistance.JsonReader;
-import persistance.JsonWriter;
+import model.tile.*;
+import persistance.*;
 
 // Citation: Saving and loading are based on JSON example from edX
 // Represents a game of Scrabble
-public class ScrabbleConsoleApp {
+public class ScrabbleConsoleApp extends ScrabbleUserInterface {
     private static final String JSON_STORE = "./data/gameToPlayTest.json";
-    private Player player;
-    private Board board;
-    private TileBag tileBag;
+    private static final int BOARD_LENGTH = 15;
+
     private boolean gameRunning;
     private Scanner scanner;
-    private List<Player> players;
     private int numPlayers; 
-    private ScrabbleGame scrabbleGame;
-    private JsonWriter jsonWriter;
-    private JsonReader jsonReader;
+    private ScrabbleGame game;
     
     //EFFECTS: Creates new ScrabbleApp with
     //        a board and tile bag
@@ -38,9 +29,7 @@ public class ScrabbleConsoleApp {
         System.out.println("Welcome to Scrabble in Java");
         printoutSpacer();
         scanner = new Scanner(System.in);
-        jsonWriter = new JsonWriter(JSON_STORE);
-        jsonReader = new JsonReader(JSON_STORE);
-        tileBag = new TileBag();
+        TileBag tileBag = new TileBag();
         System.out.println("(L)oad your old game or (p)lay a new one?");
         switch (scanner.nextLine().toLowerCase()) {
             case "p":
@@ -56,28 +45,24 @@ public class ScrabbleConsoleApp {
         handleGameplay();
     }
     
-    // MODIFIES: player, board, tileBag
+    // MODIFIES: player
     // EFFECTS: creates assets for a new game and prompts user input
     // for setup parameters
     public void initializeNewGame() {
-        board = new Board();
-        tileBag = new TileBag();
-        scrabbleGame = new ScrabbleGame("", board, tileBag);
+        game = new ScrabbleGame("", new Board(), new TileBag());
         this.gameRunning = true;
         initializePlayers();
     }
 
-    // MODIFIES: scrabbleGame, players, tileBag, board, numPlayers
+    // MODIFIES: scrabbleGame, players, board, numPlayers
     // EFFECTS: loads assets from previously saved game
     private void loadOldGame() {
         this.gameRunning = true;
         try {
-            scrabbleGame = jsonReader.read();
-            this.players = scrabbleGame.getPlayers();
-            this.board = scrabbleGame.getBoard();
-            this.tileBag = scrabbleGame.getTileBag();
-            this.numPlayers = players.size();
-            System.out.println("Loaded " + scrabbleGame.getName() + " with " + String.valueOf(numPlayers) 
+            JsonReader jsonReader = new JsonReader(JSON_STORE);
+            game = jsonReader.read();
+            this.numPlayers = game.getNumPlayers();
+            System.out.println("Loaded " + game.getName() + " with " + String.valueOf(numPlayers) 
                     + " players from " + JSON_STORE + "\n");
         } catch (IOException e) {
             System.out.println("Unable to read game from file: " + JSON_STORE);
@@ -112,18 +97,15 @@ public class ScrabbleConsoleApp {
     // EFFECTS: Prompts player to enter players' names
     //         in the desired order of play.
     public void requestPlayerNames(int numPlayers) {
-        players = new ArrayList<>();
         System.out.println(
                 "Please enter each player's name separately, in the order you want to play");
-        while (players.size() < numPlayers) {
+        while (game.getNumPlayers() < numPlayers) {
             String inputPlayerName = scanner.nextLine();
             System.out.println("You entered " 
                     + inputPlayerName + ". Press (Y) to confirm or (N) to cancel and re-enter");
             String confirmName = scanner.nextLine();
             if (confirmName.equals("Y")) {
-                player = new Player(inputPlayerName);
-                players.add(player);
-                scrabbleGame.addPlayer(player);
+                game.addPlayer(inputPlayerName);
             } else if (confirmName.equals("N")) {
                 System.out.println("Okay, name wasn't saved. Please re-enter the correct name");
             } else {
@@ -133,7 +115,7 @@ public class ScrabbleConsoleApp {
         }
     }
 
-    // MODIFIES: player, board, tileBag
+    // MODIFIES: player, board
     // EFFECTS: Manages order of turn taking, 
     // and ensures player's draw new tiles
     // when they are supposed to
@@ -141,10 +123,10 @@ public class ScrabbleConsoleApp {
         int index;
         while (gameRunning) {
             for (int i = 0; i < numPlayers; i++) {
-                index = (i + scrabbleGame.getFirstPlayerIndex()) % numPlayers;
-                getBoardPrintOut(board);
-                Player playerToPlayNext = players.get(index);
-                scrabbleGame.drawTiles(playerToPlayNext);
+                index = (i + game.getFirstPlayerIndex()) % numPlayers;
+                getBoardPrintOut(game.getBoard());
+                Player playerToPlayNext = game.getPlayerByIndex(index);
+                game.drawTiles(playerToPlayNext);
                 handleTurn(playerToPlayNext);
                 if (playerToPlayNext.outOfTiles()) {
                     handleEndGame(playerToPlayNext);
@@ -153,32 +135,32 @@ public class ScrabbleConsoleApp {
         }
     }
 
-    // MODIFIES: player, board, tileBag
+    // MODIFIES: player, board
     // EFFECTS: prompts player to decide which 
     // type their next move will be, or if they
     // want to view something
-    public void handleTurn(Player p) {
-        System.out.println("\n Here are your tiles: " + p.getPlayerName());
-        getTilePrintOut(p);
+    public void handleTurn(Player player) {
+        System.out.println("\n Here are your tiles: " + player.getPlayerName());
+        getTilePrintOut(player);
         System.out.println("Type whether you'd like to (P)lay, (S)wap, S(k)ip, or (o)ther.");
         switch (scanner.nextLine().toLowerCase()) {
             case "p":
-                handlePlay(p);
+                handlePlay(player);
                 scanner.nextLine();
                 break;
             case "s":
-                handleSwap(p);
+                handleSwap(player);
                 scanner.nextLine();
                 break;
             case "k":
-                handleSkip(p);
+                handleSkip(player);
                 scanner.nextLine();
                 break;
             case "o":
-                handleNonPlayOptions(p);
+                handleNonPlayOptions(player);
                 break;
             default:
-                handleTurn(p);
+                handleTurn(player);
         }
     }
 
@@ -210,42 +192,42 @@ public class ScrabbleConsoleApp {
     // EFFECTS: Prompts user for what they
     // would like to view about the game,
     // displays that.
-    public void handleViewings(Player p) {
+    public void handleViewings(Player player) {
         System.out.println("\n Type whether you'd like to view current (b)oard, (w)ords played, all (m)oves,"
                 + " (f)iltered moves, (r)emaining tile counts, or anything else to cancel");
         switch (scanner.nextLine().toLowerCase()) {
             case "b":
-                getBoardPrintOut(board);
+                getBoardPrintOut(game.getBoard());
                 break;
             case "w":
-                printWordsPlayed(p);
+                printWordsPlayed(player);
                 break;
             case "m":
-                printAllMovesSummary(p);
+                printAllMovesSummary(player);
                 break;
             case "f":
-                handleShowFilteredMoves(p);
+                handleShowFilteredMoves(player);
                 break;
             case "r":
-                getRemainingCharacterCounts(p);
+                getRemainingCharacterCounts(player);
                 break;
         }
-        handleTurn(p);
+        handleTurn(player);
     }
 
     // EFFECTS: Returns summary of all words player has played
     // which contains their input letter, or indicates of 
     // no such words exist.
-    private void handleShowFilteredMoves(Player p) {
+    private void handleShowFilteredMoves(Player player) {
         System.out.println("Enter a character to view all your words played which contained that character");
         String entry = scanner.nextLine().toUpperCase();
         Character character = entry.charAt(0);
-        List<Move> moves = p.getHistory().getListOfWordsPlayedContainingLetter(character);
+        List<Move> moves = player.getHistory().getListOfWordsPlayedContainingLetter(character);
         if (moves.isEmpty()) {
             System.out.println("You haven't played any words containing " + character.toString());
         } else {
             for (Move move : moves) {
-                getWordPrintout(move, p);
+                System.out.println(game.getWordDescription(move, player));
             }
         }
         scanner.nextLine();
@@ -255,11 +237,12 @@ public class ScrabbleConsoleApp {
     // EFFECTS: Saves game to file
     private void handleSave(Player player) {
         try {
-            scrabbleGame.setFirstPlayer(player);
+            JsonWriter jsonWriter = new JsonWriter(JSON_STORE);
+            game.setFirstPlayer(player);
             jsonWriter.open();
-            jsonWriter.write(scrabbleGame);
+            jsonWriter.write(game);
             jsonWriter.close();
-            System.out.println("Saved" + scrabbleGame.getName() + " with " + String.valueOf(numPlayers)
+            System.out.println("Saved" + game.getName() + " with " + String.valueOf(numPlayers)
                     + " players to " + JSON_STORE);
         } catch (IOException e) {
             System.out.println("Unable to write to file " + JSON_STORE);
@@ -269,91 +252,70 @@ public class ScrabbleConsoleApp {
     // EFFECTS: Prints all player moves
     // in order, including playing words,
     // swaps, skips
-    public void printAllMovesSummary(Player p) {
-        List<Move> allMoves = p.getMoves();
+    public void printAllMovesSummary(Player player) {
+        List<Move> allMoves = player.getMoves();
+        String description = "";
         for (Move move : allMoves) {
             switch (move.getMoveType()) {
                 case PLAY_WORD:
-                    getWordPrintout(move, p);
+                    description = game.getWordDescription(move, player);
                     break;
                 case SWAP_TILES:
-                    printSwapSummary(move, p);
+                    description = game.getSwapDescription(move, player);
                     break;
                 case SKIP:
-                    printSkipSummary(move, p);
+                    description = game.getSkipDescription(move, player);
                     break;
                 case END_GAME_ADJUSTMENT:
-                    printSingleEndGameAdjustmentSummary(move, p);
+                    description = game.getEndGameDescription(move, player);
                     break;
             }
+            System.out.println(description);
         }
         scanner.nextLine();
     }
 
-    // EFFECTS: Summarizes an end game adjustment
-    public void printSingleEndGameAdjustmentSummary(Move move, Player player) {
-        String playerName = player.getPlayerName();
-        String lastPlayer = move.getLastPlayer().getPlayerName();
-        int pointChange = move.getPointsForMove();
-        int absolutePointChange = Math.abs(pointChange);
-        String gainOrLoss = (pointChange >= 0) ? " gained " : " lost ";
-        String pluralOrNot = (absolutePointChange != 1) ? "s" : "";
-        System.out.println(lastPlayer + " used all their tiles first. \n" 
-                + playerName + gainOrLoss + absolutePointChange + pluralOrNot);
-    }
+    // // EFFECTS: Summarizes an end game adjustment
+    // public void printSingleEndGameAdjustmentSummary(Move move, Player player) {
+    //     String playerName = player.getPlayerName();
+    //     String lastPlayer = move.getLastPlayer().getPlayerName();
+    //     int pointChange = move.getPointsForMove();
+    //     int absolutePointChange = Math.abs(pointChange);
+    //     String gainOrLoss = (pointChange >= 0) ? " gained " : " lost ";
+    //     String pluralOrNot = (absolutePointChange != 1) ? "s" : "";
+    //     System.out.println(lastPlayer + " used all their tiles first. \n" 
+    //             + playerName + gainOrLoss + absolutePointChange + pluralOrNot);
+    // }
 
-    //EFFECTS: Prints summary of a player swap
-    public void printSwapSummary(Move swap, Player p) {
-        String printout = "\n" + p.getPlayerName() + " swapped tiles. ";
-        String preAndPostLetters = swap.getLettersInvolved();
-        int halfLength = preAndPostLetters.length() / 2;
-        String preSwapLetters = preAndPostLetters.substring(0, halfLength);
-        String postSwapLetters = preAndPostLetters.substring(halfLength);
-        String points = String.valueOf(swap.getPointsForMove());
-        printout += "Their tiles before swapping were: " + preSwapLetters + " and their tiles after swapping were " 
-                 + postSwapLetters + ", earning " + points + " points.";
-        System.out.println(printout);
-    }
+    // //EFFECTS: Prints summary of a player swap
+    // public void printSwapSummary(Move swap, Player p) {
+    //     String printout = "\n" + p.getPlayerName() + " swapped tiles. ";
+    //     String preAndPostLetters = swap.getLettersInvolved();
+    //     int halfLength = preAndPostLetters.length() / 2;
+    //     String preSwapLetters = preAndPostLetters.substring(0, halfLength);
+    //     String postSwapLetters = preAndPostLetters.substring(halfLength);
+    //     String points = String.valueOf(swap.getPointsForMove());
+    //     printout += "Their tiles before swapping were: " + preSwapLetters + " and their tiles after swapping were " 
+    //              + postSwapLetters + ", earning " + points + " points.";
+    //     System.out.println(printout);
+    // }
 
-    // EFFECTS: Prints summary of a skipped turn
-    public void printSkipSummary(Move skip, Player p) {
-        System.out.println("\n" + p.getPlayerName() + " skipped their turn");
-    }
+    // // EFFECTS: Prints summary of a skipped turn
+    // public void printSkipSummary(Move skip, Player p) {
+    //     System.out.println("\n" + p.getPlayerName() + " skipped their turn");
+    // }
 
     // EFFECTS: prints summary of all
     // words played by the player.
-    public void printWordsPlayed(Player p) {
-        List<Move> wordsPlayed = p.getHistory().getMovesWithWordPlayed();
+    public void printWordsPlayed(Player player) {
+        List<Move> wordsPlayed = player.getHistory().getMovesWithWordPlayed();
         for (Move word : wordsPlayed) {
-            getWordPrintout(word, p);
+            System.out.println(game.getWordDescription(word, player));
         }
     }
 
-    // EFFECTS: merges letters' characters into one
-    // string in their original order
-    public String getWordString(List<LetterTile> letters) {
-        String toDisplay = "";
-        for (LetterTile letter : letters) {
-            toDisplay += getLetterString(letter);
-        }
-        return toDisplay;
-    }
 
-    // EFFECTS: prints summary of a word played
-    public void getWordPrintout(Move word, Player p) {
-        String printout = "\n" + p.getPlayerName() + " played ";
-        String wordString = word.getLettersInvolved();
-        String startRow = String.valueOf(word.getStartRow());
-        String startCol = String.valueOf(word.getStartColumn());
-        String coordinates = "(" + startRow + "," + startCol + ")";
-        String direction = (word.getDirection() == Direction.RIGHT) ? "to the right" : "down";
-        String points = String.valueOf(word.getPointsForMove());
-        printout += wordString + " starting at " + coordinates + " and moving " 
-                + direction + " earning " + points + " points.";
-        System.out.println(printout);
-    }
-
-    // MODIFIES: player, board, tileBag
+    // MODIFIES: player, Board, TileBag
     // EFFECTS: Prompts player to input directions
     // to place a word on the board
     public void handlePlay(Player player) {
@@ -374,7 +336,7 @@ public class ScrabbleConsoleApp {
         }
     }
 
-    // MODIFIES: player, board, tileBag
+    // MODIFIES: player, Board, TileBag
     // EFFECTS: Prompts player for position and direction 
     // instructions, then places and logs the turn
     // their selected tiles as directed 
@@ -390,8 +352,8 @@ public class ScrabbleConsoleApp {
         scanner.nextLine();
         System.out.println("Now enter direction (R)ight or (D)own (default)");
         Direction dir = (scanner.nextLine().toLowerCase().equals("r")) ? Direction.RIGHT : Direction.DOWN;
-        if (board.sectionIsAvailable(player.getSelectedTiles(), row, col, dir)) {
-            int score = scrabbleGame.playWord(player, row, col, dir);
+        if (game.getBoard().sectionIsAvailable(player.getSelectedTiles(), row, col, dir)) {
+            int score = game.playWord(player, row, col, dir);
             System.out.println("\nYour new tiles are:");
             getTilePrintOut(player);
             System.out.println(player.getPlayerName() + " earned " + score + " points!");
@@ -415,7 +377,7 @@ public class ScrabbleConsoleApp {
                 System.out.println("So far you've selected: ");
                 printSelectedTiles(player);
             } else if (scanner.hasNext("C")) {
-                scrabbleGame.swapTiles(player);
+                game.swapTiles(player);
                 System.out.println("\n Your new tiles are: ");
                 getTilePrintOut(player);
                 adjustScanner();
@@ -441,15 +403,15 @@ public class ScrabbleConsoleApp {
     // EFFECTS: deselects players tiles
     // logs the skipped turn and prints confirmation
     public void handleSkip(Player player) {
-        scrabbleGame.logSkippedTurn(player);
+        game.logSkippedTurn(player);
         System.out.println(player.getPlayerName() + " skipped their turn \n");
     }
 
     //EFFECTS: Prints out selected tiles
     // for player
-    public void printSelectedTiles(Player p) {
+    public void printSelectedTiles(Player player) {
         String tilePrintOut = "";
-        List<LetterTile> playersSelectedLetters = p.getSelectedTiles();
+        List<LetterTile> playersSelectedLetters = player.getSelectedTiles();
         for (LetterTile letter : playersSelectedLetters) {
             tilePrintOut += getLetterString(letter);
         }
@@ -458,9 +420,9 @@ public class ScrabbleConsoleApp {
 
     //EFFECTS: Prints out all tiles on the
     // player's tile rack
-    public void getTilePrintOut(Player p) {
+    public void getTilePrintOut(Player player) {
         String tilePrintOut = "";
-        List<LetterTile> playersLetters = p.getTilesOnRack();
+        List<LetterTile> playersLetters = player.getTilesOnRack();
         for (LetterTile letter : playersLetters) {
             tilePrintOut += getLetterString(letter);
         }
@@ -477,10 +439,10 @@ public class ScrabbleConsoleApp {
 
     // EFFECTS: Prints remaining character counts
     // for tiles not on the board or the player's tile rack
-    public void getRemainingCharacterCounts(Player p) {
+    public void getRemainingCharacterCounts(Player player) {
         printoutSpacer();
         System.out.println("The remaining tile counts in the format 'Letter : Count' are:");
-        Map<Character, Integer> remainingCounts = scrabbleGame.getNumEachCharInBagAndOpponents(p);
+        Map<Character, Integer> remainingCounts = game.getNumEachCharInBagAndOpponents(player);
         for (Map.Entry<Character, Integer> entry : remainingCounts.entrySet()) {
             System.out.println(entry.getKey() + " : " + entry.getValue());
         }
@@ -505,16 +467,17 @@ public class ScrabbleConsoleApp {
 
     public void handleEndGame(Player lastPlayer) {
         this.gameRunning = false;
-        scrabbleGame.performEndGameAdjustments(lastPlayer);
+        game.performEndGameAdjustments(lastPlayer);
         System.out.println(lastPlayer.getPlayerName() + " was the last to play");
-        System.out.println("The winner is " + scrabbleGame.highestScoringPlayer().getPlayerName());
+        System.out.println("The winner is " + game.highestScoringPlayer().getPlayerName());
         printScoreSummaries();
         printEventLog();
     }
 
     private void printScoreSummaries() {
-        for (Player p : players) {
-            System.out.println(p.getPlayerName() + " scored " + p.getPointsThisGame() + " points this game.\n");
+        List<Player> players = game.getPlayers();
+        for (Player player : players) {
+            System.out.println(player.getPlayerName() + " scored " + player.getPointsThisGame() + " points this game.\n");
         }
     }
 
@@ -522,14 +485,13 @@ public class ScrabbleConsoleApp {
     // EFFECTS: prints out the current board
     public void getBoardPrintOut(Board board) {
         printHeader();
-        for (int i = 0; i < Board.BOARD_LENGTH; i++) {
+        for (int i = 0; i < BOARD_LENGTH; i++) {
             String rowPrintOut = "";
-            for (int j = 0; j < Board.BOARD_LENGTH; j++) {
-                Tile tile = board.getTileAtPositionOnBoard(i,j);
+            for (int j = 0; j < BOARD_LENGTH; j++) {
+                Tile tile = game.getTileAtPositionOnBoard(i,j);
                 if (tile instanceof BoardTile) {
                     BoardTile boardTile = (BoardTile) tile;
                     rowPrintOut += getBoardTileSymbol(boardTile);
-                    
                 } else {
                     LetterTile letter = (LetterTile) tile;
                     rowPrintOut += "_" + getLetterString(letter) + "_| ";
@@ -565,23 +527,14 @@ public class ScrabbleConsoleApp {
         for (int i = 0; i <= 9; i++) {
             header += "_" + Integer.toString(i) + "_| ";
         }
-        for (int i = 10; i < Board.BOARD_LENGTH; i++) {
+        for (int i = 10; i < BOARD_LENGTH; i++) {
             header += Integer.toString(i) + "_| ";
         }
         System.out.println(header);
         printoutSpacer();
     }
 
-    // REQUIRES: user has quit application or the game has ended.
-    // EFFECTS: prints event log to console
-    private void printEventLog() {
-        EventLog log = EventLog.getInstance();
-        System.out.println();
-        System.out.println();
-        for (Event e : log) {
-            System.out.println(e.toString());
-        }
-    }
+    
     
     // Play the game
     public static void main(String[] args) {

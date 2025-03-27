@@ -10,6 +10,7 @@ import org.json.JSONObject;
 import model.board.Board;
 import model.move.Move;
 import model.tile.LetterTile;
+import model.tile.Tile;
 import model.tile.TileBag;
 import persistance.Writable;
 
@@ -46,9 +47,9 @@ public class ScrabbleGame implements Writable {
     // EFFECTS: returns player with given name
     // in this game
     public Player getPlayerByName(String name) {
-        for (Player p : this.players) {
-            if (p.getPlayerName().equals(name)) {
-                return p;
+        for (Player player : this.players) {
+            if (player.getPlayerName().equals(name)) {
+                return player;
             }
         }
         return null;
@@ -74,6 +75,12 @@ public class ScrabbleGame implements Writable {
     // EFFECTS: adds player to this game
     public void addPlayer(Player player) {
         this.players.add(player);
+    }
+
+    // MODIFIES: this
+    // EFFECTS: adds player to this game
+    public void addPlayer(String name) {
+        this.players.add(new Player(name));
     }
 
     // MODIFIES: this
@@ -105,6 +112,15 @@ public class ScrabbleGame implements Writable {
 
     public int getPlayerIndex(Player player) {
         return players.indexOf(player);
+    }
+
+    public Player getPlayerByIndex(int index) {
+        return players.get(index % players.size());
+    }
+
+
+    public Tile getTileAtPositionOnBoard(int row, int column) {
+        return board.getTileAtPositionOnBoard(row, column);
     }
     
     @Override
@@ -263,21 +279,21 @@ public class ScrabbleGame implements Writable {
         Move adjustment;
         String totalLetters = "";
         String letters = "";
-        for (Player p : players) {
-            if (p.equals(lastPlayer)) {
+        for (Player player : players) {
+            if (player.equals(lastPlayer)) {
                 continue;
             }
             playerLoss = 0;
             letters = "";
-            for (LetterTile letter : p.getTilesOnRack()) {
+            for (LetterTile letter : player.getTilesOnRack()) {
                 playerLoss += letter.getLetterPoints();
                 letters += letter.toDisplay();
             }
-            p.addPoints(-1 * playerLoss);
+            player.addPoints(-1 * playerLoss);
             total += playerLoss;
             totalLetters += letters;
-            adjustment = new Move(p, lastPlayer, letters, -1 * playerLoss);
-            updateHistoriesAndEventLog(adjustment, p);
+            adjustment = new Move(player, lastPlayer, letters, -1 * playerLoss);
+            updateHistoriesAndEventLog(adjustment, player);
         }
         lastPlayer.addPoints(total);
         updateHistoriesAndEventLog(new Move(lastPlayer, lastPlayer, totalLetters, total), lastPlayer);
@@ -339,9 +355,9 @@ public class ScrabbleGame implements Writable {
         }
         Player highestScoringPlayer = players.get(0);
         int highest = highestScoringPlayer.getPointsThisGame();
-        for (Player p : players) {
-            if (p.getPointsThisGame() > highest) {
-                highestScoringPlayer = p;
+        for (Player player : players) {
+            if (player.getPointsThisGame() > highest) {
+                highestScoringPlayer = player;
             }
         }
         return highestScoringPlayer;

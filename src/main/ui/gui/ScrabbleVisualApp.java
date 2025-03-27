@@ -1,5 +1,8 @@
 package ui.gui;
 
+import java.util.List;
+import java.util.Map;
+
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
@@ -12,24 +15,18 @@ import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.io.IOException;
 
-import model.Direction;
+import model.*;
 import model.Event;
-import model.EventLog;
-import model.Player;
-import model.ScrabbleGame;
-import model.board.Board;
-import model.move.Move;
-import model.move.MoveType;
-import model.tile.LetterTile;
-import model.tile.TileBag;
+import model.board.*;
+import model.tile.*;
+import model.move.*;
+import ui.ScrabbleUserInterface;
+
 import persistance.JsonReader;
 import persistance.JsonWriter;
 
-import java.util.List;
-import java.util.Map;
-
 // A Graphical user interface for Scrabble
-public class ScrabbleVisualApp {
+public class ScrabbleVisualApp extends ScrabbleUserInterface {
     
     private static final String JSON_STORE = "./data/gameToPlayTest.json";
     private static final String REQUEST_PLAYER_NAME_TEXT = "Type player name then click add";
@@ -52,7 +49,7 @@ public class ScrabbleVisualApp {
 
     private Board board;
     private TileBag tileBag;
-    private ScrabbleGame scrabbleGame;
+    private ScrabbleGame game;
     private boolean gameRunning;
     private JPanel boardPanel;
     private JPanel rackPanel;
@@ -68,8 +65,6 @@ public class ScrabbleVisualApp {
     private JTextField searchRemainingCountsTextField;
     private JTabbedPane infoTabs;
 
-    private JsonWriter jsonWriter;
-    private JsonReader jsonReader;
     private List<Player> players;
     private int numPlayers;
     private JFrame frame;
@@ -102,8 +97,6 @@ public class ScrabbleVisualApp {
 
     // EFFECTS: Loads start menu frame to user screen.
     public ScrabbleVisualApp() {
-        jsonWriter = new JsonWriter(JSON_STORE);
-        jsonReader = new JsonReader(JSON_STORE);
         dir = Direction.DOWN;
         tileBag = new TileBag(); // this needs to be here due to static tilebag and nature of json reader
         initializeStartMenu();
@@ -162,12 +155,13 @@ public class ScrabbleVisualApp {
     private void loadOldGame() {
         this.gameRunning = true;
         try {
-            scrabbleGame = jsonReader.read();
-            this.players = scrabbleGame.getPlayers();
-            this.board = scrabbleGame.getBoard();
-            this.tileBag = scrabbleGame.getTileBag();
+            JsonReader jsonReader = new JsonReader(JSON_STORE);
+            game = jsonReader.read();
+            this.players = game.getPlayers();
+            this.board = game.getBoard();
+            this.tileBag = game.getTileBag();
             this.numPlayers = players.size();
-            handleGame(scrabbleGame.getFirstPlayerIndex());
+            handleGame(game.getFirstPlayerIndex());
         } catch (IOException e) {
             System.out.println("Unable to read game from file: " + JSON_STORE);
         }
@@ -179,7 +173,7 @@ public class ScrabbleVisualApp {
     private void initializeNewGame() {
         this.board = new Board();
         this.tileBag = new TileBag();
-        this.scrabbleGame = new ScrabbleGame("game", board, tileBag);
+        this.game = new ScrabbleGame("game", board, tileBag);
         this.numPlayers = 0;
         requestPlayerNames();
         //scrabbleGame.setFirstPlayer(players.get(0)); // !!! Todo add exception handling
@@ -231,7 +225,7 @@ public class ScrabbleVisualApp {
             // EFFECTS: begins game with players that have been added
             public void actionPerformed(ActionEvent e) {
                 getPlayerNamesFrame.setVisible(false);
-                players = scrabbleGame.getPlayers();
+                players = game.getPlayers();
                 gameRunning = true;
                 handleGame(0);
             }
@@ -276,9 +270,9 @@ public class ScrabbleVisualApp {
         frame.setLayout(new BorderLayout());
         getBoardPanel(board);
         Player playerToPlayNext = players.get(index);
-        scrabbleGame.drawTiles(playerToPlayNext);
+        game.drawTiles(playerToPlayNext);
         getRackPanel(playerToPlayNext);
-        getScorePanel(scrabbleGame);
+        getScorePanel(game);
         getInformationPanel(playerToPlayNext);
         frame.add(boardPanel, BorderLayout.CENTER);
         frame.add(rackPanel, BorderLayout.SOUTH);
@@ -374,23 +368,23 @@ public class ScrabbleVisualApp {
     private void addMoveButtonActionListeners(Player player) {
         playWordButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                scrabbleGame.playWord(player, startRow, startCol, dir);
+                game.playWord(player, startRow, startCol, dir);
                 frame.setVisible(false);
-                handleGame(scrabbleGame.getPlayerIndex(player) + 1);
+                handleGame(game.getPlayerIndex(player) + 1);
             }
         });
         swapTilesButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                scrabbleGame.swapTiles(player);
+                game.swapTiles(player);
                 frame.setVisible(false);
-                handleGame(scrabbleGame.getPlayerIndex(player) + 1);
+                handleGame(game.getPlayerIndex(player) + 1);
             }
         });
         skipTurnButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                scrabbleGame.logSkippedTurn(player);
+                game.logSkippedTurn(player);
                 frame.setVisible(false);
-                handleGame(scrabbleGame.getPlayerIndex(player) + 1);
+                handleGame(game.getPlayerIndex(player) + 1);
             }
         });
     }
@@ -443,9 +437,10 @@ public class ScrabbleVisualApp {
     // EFFECTS: Saves game to file
     private void handleSave(Player player) {
         try {
-            scrabbleGame.setFirstPlayer(player);
+            JsonWriter jsonWriter = new JsonWriter(JSON_STORE);
+            game.setFirstPlayer(player);
             jsonWriter.open();
-            jsonWriter.write(scrabbleGame);
+            jsonWriter.write(game);
             jsonWriter.close();
             // !!! ToDo Add "Okay" button to click before closing
         } catch (IOException e) {
@@ -560,16 +555,16 @@ public class ScrabbleVisualApp {
         for (Move move : player.getHistory().getMoves()) {
             switch (move.getMoveType()) {
                 case PLAY_WORD:
-                    summary = getWordString(move, player);
+                    summary = game.getWordDescription(move, player);
                     break;
                 case SWAP_TILES:
-                    summary = getSwapSummary(move, player);
+                    summary = game.getSwapDescription(move, player);
                     break;
                 case SKIP:
-                    summary = getSkipSummary(move, player);
+                    summary = game.getSkipDescription(move, player);
                     break;
                 case END_GAME_ADJUSTMENT:
-                    summary = getSingleEndGameAdjustmentSummary(move, player);
+                    summary = game.getEndGameDescription(move, player);
                     break;
             }
             JTextArea moveSummary = getFormattedTextArea(summary, 100);
@@ -627,7 +622,7 @@ public class ScrabbleVisualApp {
                 if (searchWordsTextField.getText().isEmpty()) {
                     for (Move move : player.getMoves()) {
                         if (move.getMoveType() == MoveType.PLAY_WORD) {
-                            filteredWordsPanel.add(getFormattedTextArea(getWordString(move, player), 100));
+                            filteredWordsPanel.add(getFormattedTextArea(game.getWordDescription(move, player), 100));
                         }
                     }
                 }
@@ -637,7 +632,7 @@ public class ScrabbleVisualApp {
                 } else {
                     for (Move move : player.getMoves()) {
                         if (move.getMoveType() == MoveType.PLAY_WORD && move.moveContainsLetter(letter)) {
-                            filteredWordsPanel.add(getFormattedTextArea(getWordString(move, player), 100));
+                            filteredWordsPanel.add(getFormattedTextArea(game.getWordDescription(move, player), 100));
                         }
                     }
                 }
@@ -663,7 +658,7 @@ public class ScrabbleVisualApp {
     // to the information tabbed pane
     private void addRemainingTileCountsPanel(Player player) {
         remainingTileCountsPanel = new JPanel();
-        Map<Character, Integer> remainingCounts = scrabbleGame.getNumEachCharInBagAndOpponents(player);
+        Map<Character, Integer> remainingCounts = game.getNumEachCharInBagAndOpponents(player);
         searchRemainingCountsButton = new JButton("Search");
         searchRemainingCountsTextField = new JTextField(SEARCH_REMAINING_COUNTS_DEFAULT_DISPLAY_TEXT);
         searchRemainingCountsButton.addActionListener(new ActionListener() {
@@ -712,51 +707,6 @@ public class ScrabbleVisualApp {
         panel.revalidate();
     }
 
-    // EFFECTS: Returns string summary of a word played
-    public String getWordString(Move word, Player p) {
-        String printout = "\n" + p.getPlayerName() + " played ";
-        String wordString = word.getLettersInvolved();
-        String startRow = String.valueOf(word.getStartRow());
-        String startCol = String.valueOf(word.getStartColumn());
-        String coordinates = "(" + startRow + "," + startCol + ")";
-        String direction = (word.getDirection() == Direction.RIGHT) ? "to the right" : "down";
-        String points = String.valueOf(word.getPointsForMove());
-        printout += wordString + " starting at " + coordinates + " and moving " 
-                + direction + " earning " + points + " points.";
-        return printout;
-    } 
-
-    //EFFECTS: Returns string summary of a player swap
-    public String getSwapSummary(Move swap, Player p) {
-        String printout = "\n" + p.getPlayerName() + " swapped tiles. ";
-        String preAndPostLetters = swap.getLettersInvolved();
-        int halfLength = preAndPostLetters.length() / 2;
-        String preSwapLetters = preAndPostLetters.substring(0, halfLength);
-        String postSwapLetters = preAndPostLetters.substring(halfLength);
-        String points = String.valueOf(swap.getPointsForMove());
-        printout += "Their tiles before swapping were: " + preSwapLetters + " and their tiles after swapping were " 
-                 + postSwapLetters + ", earning " + points + " points.";
-        return printout;
-    }
-
-    // EFFECTS: Returns string summary of a skipped turn
-    public String getSkipSummary(Move skip, Player p) {
-        return p.getPlayerName() + " skipped their turn";
-    }
-
-    // EFFECTS: Returns string summary of an end game adjustment
-    public String getSingleEndGameAdjustmentSummary(Move move, Player player) {
-        String playerName = player.getPlayerName();
-        String lastPlayer = move.getLastPlayer().getPlayerName();
-        int pointChange = move.getPointsForMove();
-        int absolutePointChange = Math.abs(pointChange);
-        String gainOrLoss = (pointChange >= 0) ? " gained " : " lost ";
-        String pluralOrNot = (absolutePointChange != 1) ? "s." : ".";
-        return lastPlayer + " used all their tiles first. " + playerName + gainOrLoss 
-                + absolutePointChange + " point" + pluralOrNot;
-    }
-
-    
     // MODIFIES: this
     // EFFECTS: adds a new player to the game
     // who's name is the text currently in 
@@ -764,19 +714,8 @@ public class ScrabbleVisualApp {
     private void addPlayer() {
         String name = requestPlayerNameText.getText();
         Player player = new Player(name);
-        scrabbleGame.addPlayer(player);
+        game.addPlayer(player);
         numPlayers++;
-    }
-
-    // REQUIRES: user has quit application or the game has ended.
-    // EFFECTS: prints event log to console
-    private void printEventLog() {
-        EventLog log = EventLog.getInstance();
-        System.out.println();
-        System.out.println();
-        for (Event e : log) {
-            System.out.println(e.toString());
-        }
     }
 
     // EFFECTS: Start the Graphical User Interface
