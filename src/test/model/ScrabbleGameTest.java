@@ -170,7 +170,7 @@ public class ScrabbleGameTest {
         assertEquals(player2.getNumTilesOnRack(), 7);
         int scoreToLoseP2 = 0;
         for (LetterTile unplayedLetter : player2.getTilesOnRack()) {
-            scoreToLoseP2 += unplayedLetter.getLetterPoints();
+            scoreToLoseP2 += unplayedLetter.getPoints();
         }
         player2.setPoints(scoreToLoseP2);
         //player goes out, gains all those unplayed points

@@ -27,7 +27,6 @@ public class BoardTile implements Tile {
         return this.tileType.equals(tileType);
     }
 
-
     public int getRow() {
         return this.row;
     }
@@ -43,6 +42,7 @@ public class BoardTile implements Tile {
     // EFFECTS: returns string which 
     // represents the tile based on 
     // its point modifier
+    @Override
     public String toDisplay() {
         switch (tileType) {
             case DOUBLE_LETTER:
@@ -56,6 +56,34 @@ public class BoardTile implements Tile {
             default:
                 return " ";
         }
+    }
+
+    @Override
+    public String getTerminalPrintoutString() {
+        switch (tileType) {
+            case NORMAL:
+                return "___| ";
+            case DOUBLE_LETTER:
+                return "DLS| ";                   
+            case DOUBLE_WORD:
+                return "DWS| ";
+            case TRIPLE_LETTER:
+                return "TLS| ";
+            case TRIPLE_WORD:
+                return "TWS| ";
+            default:
+                return "";
+        }
+    }
+
+    @Override
+    public boolean occupiesBoardSpot() {
+        return false;
+    }
+
+    @Override
+    public int getPoints() {
+        return 0;
     }
 
 }

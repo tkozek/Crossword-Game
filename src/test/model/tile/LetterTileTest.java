@@ -34,21 +34,21 @@ public class LetterTileTest {
         assertEquals('Q', testTileQ.getCharacter());
         assertEquals('-', testBlankTile.getCharacter());
         
-        assertEquals(1, testTileA.getLetterPoints());
-        assertEquals(10, testTileQ.getLetterPoints());
-        assertEquals(0, testBlankTile.getLetterPoints());      
+        assertEquals(1, testTileA.getPoints());
+        assertEquals(10, testTileQ.getPoints());
+        assertEquals(0, testBlankTile.getPoints());      
     }
 
     @Test
     void testDeepCopyConstructor() {
         LetterTile copyLetter = new LetterTile(testTileB);
         assertEquals('B', copyLetter.getCharacter());
-        assertEquals(3, copyLetter.getLetterPoints());
+        assertEquals(3, copyLetter.getPoints());
         assertFalse(copyLetter == testTileB);
         testTileB = null;
         assertFalse(copyLetter == null);
         assertEquals('B', copyLetter.getCharacter());
-        assertEquals(3, copyLetter.getLetterPoints());
+        assertEquals(3, copyLetter.getPoints());
         assertTrue(testTileB == null);
     }
 
@@ -57,10 +57,10 @@ public class LetterTileTest {
         LetterTile copyLetter = new LetterTile(testTileB);
         LetterTile copyQ = new LetterTile(testTileQ);
         assertEquals('Q', copyQ.getCharacter());
-        assertEquals(10, copyQ.getLetterPoints());
+        assertEquals(10, copyQ.getPoints());
 
         assertEquals('B', copyLetter.getCharacter());
-        assertEquals(3, copyLetter.getLetterPoints());
+        assertEquals(3, copyLetter.getPoints());
 
         assertFalse(copyQ == testTileQ);
         assertFalse(copyLetter == testTileB);
@@ -68,12 +68,12 @@ public class LetterTileTest {
         testTileB = null;
         assertFalse(copyLetter == null);
         assertEquals('B', copyLetter.getCharacter());
-        assertEquals(3, copyLetter.getLetterPoints());
+        assertEquals(3, copyLetter.getPoints());
         assertTrue(testTileB == null);
 
         assertFalse(copyQ == null);
         assertEquals('Q', copyQ.getCharacter());
-        assertEquals(10, copyQ.getLetterPoints());
+        assertEquals(10, copyQ.getPoints());
         assertTrue(testTileQ == null);
     }
 
@@ -88,7 +88,7 @@ public class LetterTileTest {
     void testCharacterOnlyConstructor() {
         // Works as long as some instance of TileBag has been instantiated
         LetterTile c = new LetterTile('C');
-        assertEquals(c.getLetterPoints(), 3);
+        assertEquals(c.getPoints(), 3);
     }
 
 }

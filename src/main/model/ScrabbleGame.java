@@ -133,9 +133,9 @@ public class ScrabbleGame implements Writable {
         return board.getTileAtPositionOnBoard(row, column);
     }
     
-    @Override
     // EFFECTS: Creates a JSONObject
     // from the ScrabbleGame state
+    @Override
     public JSONObject toJson() {
         JSONObject json = new JSONObject();
         json.put("GameName", this.getName());
@@ -300,7 +300,7 @@ public class ScrabbleGame implements Writable {
                 playerLoss = 0;
                 letters = "";
                 for (LetterTile letter : player.getTilesOnRack()) {
-                    playerLoss += letter.getLetterPoints();
+                    playerLoss += letter.getPoints();
                     letters += letter.toDisplay();
                 }
                 player.addPoints(-1 * playerLoss);

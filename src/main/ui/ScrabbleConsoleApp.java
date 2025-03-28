@@ -14,21 +14,23 @@ import persistance.*;
 // Citation: Saving and loading are based on JSON example from edX
 // Represents a game of Scrabble
 public class ScrabbleConsoleApp extends ScrabbleUserInterface {
+
     private static final String JSON_STORE = "./data/gameToPlayTest.json";
+    private static final String GREETING_TEXT = "Welcome to Scrabble in Java";
+    private static final String START_MENU_PROMPT = "(L)oad your old game or (p)lay a new one?";
     private static final int BOARD_LENGTH = 15;
 
-    private boolean gameRunning;
     private Scanner scanner;
-    private int numPlayers; 
-    private ScrabbleGame game;
+    
     
     //EFFECTS: Creates new Scrabble Terminal App
     public ScrabbleConsoleApp() {        
+        super();
         printoutSpacer();
-        System.out.println("Welcome to Scrabble in Java");
+        System.out.println(GREETING_TEXT);
         printoutSpacer();
         scanner = new Scanner(System.in);
-        System.out.println("(L)oad your old game or (p)lay a new one?");
+        System.out.println(START_MENU_PROMPT);
         switch (scanner.nextLine().toLowerCase()) {
             case "p":
                 initializeNewGame();
@@ -74,11 +76,10 @@ public class ScrabbleConsoleApp extends ScrabbleUserInterface {
         System.out.println("Please enter the number of players [1,4]");
         int numPlayers = this.scanner.nextInt();
         String numPlayerConfirmation = Integer.toString(numPlayers);
-        System.out.println("You entered " 
-                + numPlayerConfirmation 
+        System.out.println("You entered " + numPlayerConfirmation 
                 + " players. Is that correct? Press (Y) to confirm or (N) to cancel and re-enter");
         scanner.nextLine();
-        String confirmOrCancel = this.scanner.nextLine();
+        String confirmOrCancel = this.scanner.nextLine().toUpperCase();
         printoutSpacer();
         if (confirmOrCancel.equals("Y")) {
             this.numPlayers = numPlayers;
@@ -101,7 +102,7 @@ public class ScrabbleConsoleApp extends ScrabbleUserInterface {
             String inputPlayerName = scanner.nextLine();
             System.out.println("You entered " 
                     + inputPlayerName + ". Press (Y) to confirm or (N) to cancel and re-enter");
-            String confirmName = scanner.nextLine();
+            String confirmName = scanner.nextLine().toUpperCase();
             if (confirmName.equals("Y")) {
                 game.addPlayer(inputPlayerName);
             } else if (confirmName.equals("N")) {
@@ -207,7 +208,7 @@ public class ScrabbleConsoleApp extends ScrabbleUserInterface {
                 handleShowFilteredMoves(player);
                 break;
             case "r":
-                getRemainingCharacterCounts(player);
+                printLetterDistribution(player);
                 break;
         }
         handleTurn(player);
@@ -281,7 +282,6 @@ public class ScrabbleConsoleApp extends ScrabbleUserInterface {
             System.out.println(game.getWordDescription(word, player));
         }
     }
-
 
     // MODIFIES: player, Board, TileBag
     // EFFECTS: Prompts player to input directions
@@ -381,7 +381,7 @@ public class ScrabbleConsoleApp extends ScrabbleUserInterface {
         String tilePrintOut = "";
         List<LetterTile> playersSelectedLetters = player.getSelectedTiles();
         for (LetterTile letter : playersSelectedLetters) {
-            tilePrintOut += getLetterString(letter);
+            tilePrintOut += letter.toDisplay();
         }
         System.out.println(tilePrintOut + "\n");
     }
@@ -392,22 +392,14 @@ public class ScrabbleConsoleApp extends ScrabbleUserInterface {
         String tilePrintOut = "";
         List<LetterTile> playersLetters = player.getTilesOnRack();
         for (LetterTile letter : playersLetters) {
-            tilePrintOut += getLetterString(letter);
+            tilePrintOut += letter.toDisplay();
         }
         System.out.println(tilePrintOut + "\n");
     }
 
-    
-    // EFFECTS: returns string representing
-    // a letter's character such as "A".
-    public String getLetterString(LetterTile letter) {
-        char character = letter.getCharacter();
-        return String.valueOf(character);
-    }
-
     // EFFECTS: Prints remaining character counts
     // for tiles not on the board or the player's tile rack
-    public void getRemainingCharacterCounts(Player player) {
+    public void printLetterDistribution(Player player) {
         printoutSpacer();
         System.out.println("The remaining tile counts in the format 'Letter : Count' are:");
         Map<Character, Integer> remainingCounts = game.getNumEachCharInBagAndOpponents(player);
@@ -443,49 +435,25 @@ public class ScrabbleConsoleApp extends ScrabbleUserInterface {
         }
     }
 
-
     // EFFECTS: prints out the current board
     public void getBoardPrintOut(Board board) {
         printHeader();
         for (int i = 0; i < BOARD_LENGTH; i++) {
-            String rowPrintOut = "";
+            String rowPrintout = "";
             for (int j = 0; j < BOARD_LENGTH; j++) {
                 Tile tile = game.getTileAtPositionOnBoard(i,j);
-                if (tile instanceof BoardTile) {
-                    BoardTile boardTile = (BoardTile) tile;
-                    rowPrintOut += getBoardTileSymbol(boardTile);
-                } else {
-                    LetterTile letter = (LetterTile) tile;
-                    rowPrintOut += "_" + getLetterString(letter) + "_| ";
-                }
+                rowPrintout += tile.getTerminalPrintoutString();
             }
-            System.out.println(rowPrintOut + "|" + Integer.toString(i) +  "\n");
+            System.out.println(rowPrintout + "|" + Integer.toString(i) +  "\n");
         }
     }
 
-    // EFFECTS: returns a string representing
-    // the type of given board tile.
-    public String getBoardTileSymbol(BoardTile boardTile) {
-        TileType type = boardTile.getTileType();
-        switch (type) {
-            case NORMAL:
-                return "___| ";
-            case DOUBLE_LETTER:
-                return "DLS| ";                   
-            case DOUBLE_WORD:
-                return "DWS| ";
-            case TRIPLE_LETTER:
-                return "TLS| ";
-            case TRIPLE_WORD:
-                return "TWS| ";
-            default:
-                return "";
-        }
-    }
 
     // EFFECTS: prints header for board display
     public void printHeader() {
         String header = "|";
+        // Need to adjust based on single digit or two digit row/column
+        // so that elements are aligned with board display
         for (int i = 0; i <= 9; i++) {
             header += "_" + Integer.toString(i) + "_| ";
         }
@@ -496,8 +464,6 @@ public class ScrabbleConsoleApp extends ScrabbleUserInterface {
         printoutSpacer();
     }
 
-    
-    
     // Play the game
     public static void main(String[] args) {
         new ScrabbleConsoleApp();

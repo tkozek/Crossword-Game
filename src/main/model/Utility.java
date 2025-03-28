@@ -41,8 +41,6 @@ public class Utility {
         letterPointsMap.put('-', 0);
     }
 
-
-
     public static int getLetterPoints(char letter) {
         return letterPointsMap.get(letter);
     }

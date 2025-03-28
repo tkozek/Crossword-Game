@@ -170,9 +170,9 @@ public class Player implements Writable {
         return copyLetterTiles(this.getSelectedTiles());
     }
 
-    @Override
     // EFFECTS: represents this player
     // as a JSONObject
+    @Override
     public JSONObject toJson() {
         JSONObject json = new JSONObject();
         json.put("name", this.name);

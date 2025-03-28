@@ -166,10 +166,10 @@ public class JsonWriterTest extends JsonTest {
             for (int i = 0; i < 7; i++) {
                 LetterTile letterP1 = player.getTilesOnRack().get(i);
                 assertEquals(letterP1.getCharacter(), copyP1.getTilesOnRack().get(i).getCharacter());
-                assertEquals(letterP1.getLetterPoints(), copyP1.getTilesOnRack().get(i).getLetterPoints());
+                assertEquals(letterP1.getPoints(), copyP1.getTilesOnRack().get(i).getPoints());
                 LetterTile letterP2 = player2.getTilesOnRack().get(i);
                 assertEquals(letterP2.getCharacter(), copyP2.getTilesOnRack().get(i).getCharacter());
-                assertEquals(letterP2.getLetterPoints(), copyP2.getTilesOnRack().get(i).getLetterPoints());
+                assertEquals(letterP2.getPoints(), copyP2.getTilesOnRack().get(i).getPoints());
             }
             List<Move> p1Moves = player.getMoves();
             List<Move> p2Moves = player2.getMoves();
@@ -334,7 +334,7 @@ public class JsonWriterTest extends JsonTest {
     private int getTotalValueFromLetters(List<LetterTile> letters) {
         int total = 0;
         for (LetterTile letter : letters) {
-            total += letter.getLetterPoints();
+            total += letter.getPoints();
         }
         return total;
     }

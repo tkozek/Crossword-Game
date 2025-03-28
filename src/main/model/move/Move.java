@@ -107,9 +107,9 @@ public class Move implements Writable {
     }
 
 
-    @Override
     // EFFECTS: returns JSONObject representing
     // the this move, depending on its type
+    @Override
     public JSONObject toJson() {
         JSONObject json = new JSONObject();
         json.put("MoveType", moveType);

@@ -22,7 +22,7 @@ public class LetterTile implements Tile, Writable {
     // letter
     public LetterTile(LetterTile letter) {
         this.character = letter.getCharacter();
-        this.points = letter.getLetterPoints();
+        this.points = letter.getPoints();
     }
 
     public LetterTile(char character) {
@@ -30,24 +30,34 @@ public class LetterTile implements Tile, Writable {
         this.points = Utility.getLetterPoints(character);
     }
     
-
     public char getCharacter() {
         return this.character;
     }
     
-    public int getLetterPoints() {
+    @Override
+    public int getPoints() {
         return this.points;
     }
 
     @Override
     public JSONObject toJson() {
         JSONObject json = new JSONObject();
-        json.put(String.valueOf(getCharacter()), getLetterPoints());
+        json.put(String.valueOf(getCharacter()), getPoints());
         return json;
     }
 
+    @Override
     public String toDisplay() {
         return String.valueOf(character);
     }
 
+    @Override
+    public String getTerminalPrintoutString() {
+        return " " + toDisplay() + "_| ";
+    }
+
+    @Override
+    public boolean occupiesBoardSpot() {
+        return true;
+    }
 }

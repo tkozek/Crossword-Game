@@ -1,9 +1,14 @@
 package ui;
 
 import model.EventLog;
+import model.ScrabbleGame;
 import model.Event;
 
 public abstract class ScrabbleUserInterface {
+
+    protected ScrabbleGame game;
+    protected int numPlayers;
+    protected boolean gameRunning;
 
     // Represents a user interface for Scrabble
     public ScrabbleUserInterface() {

@@ -48,8 +48,7 @@ public class ScrabbleVisualApp extends ScrabbleUserInterface {
     private static final String SEARCH_REMAINING_COUNTS_DEFAULT_DISPLAY_TEXT = "";
     //"Enter a letter to get its remaining "+ "count in draw pile and opponent racks\n or blank to see all";
 
-    private ScrabbleGame game;
-    private boolean gameRunning;
+    
     private JPanel boardPanel;
     private JPanel rackPanel;
     private JPanel scorePanel;
@@ -64,7 +63,6 @@ public class ScrabbleVisualApp extends ScrabbleUserInterface {
     private JTextField searchLetterCountsField;
     private JTabbedPane infoTabs;
 
-    private int numPlayers;
     private JFrame frame;
     
     private JButton saveAndQuit;
@@ -95,6 +93,7 @@ public class ScrabbleVisualApp extends ScrabbleUserInterface {
 
     // EFFECTS: Loads start menu frame to user screen.
     public ScrabbleVisualApp() {
+        super();
         dir = Direction.DOWN;
         initializeStartMenu();
     }
@@ -512,7 +511,6 @@ public class ScrabbleVisualApp extends ScrabbleUserInterface {
         infoPanel.add(infoTabs);
     }
 
-
     // MODIFIES: infoTabs       
     // EFFECTs: adds a panel to show summary of all moves
     // to the information tabbed pane
@@ -663,7 +661,6 @@ public class ScrabbleVisualApp extends ScrabbleUserInterface {
             }
         });
     }
-
 
     // MODIFIES: panel
     // EFFECTS: repaints and revalidates the panel

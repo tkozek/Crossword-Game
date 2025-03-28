@@ -158,7 +158,7 @@ public class Board {
     // returns false if startRow,startCol is out of bounds.
     public boolean sectionIsAvailable(List<LetterTile> letters, int startRow, int startCol, Direction dir) {
         int length = letters.size();
-        if (startRow < 0 || startCol < 0 || boardTiles[startRow][startCol] instanceof LetterTile) {
+        if (startRow < 0 || startCol < 0 || boardTiles[startRow][startCol].occupiesBoardSpot()) {
             return false;
         }
         int rowInc = (dir == Direction.DOWN) ? 1 : 0;
@@ -168,7 +168,7 @@ public class Board {
             if (startRow + rowInc * i >= BOARD_LENGTH || startCol + colInc * i >= BOARD_LENGTH) {
                 return false;
             }
-            if (!(boardTiles[startRow + rowInc * i][startCol + colInc * i] instanceof BoardTile)) {
+            if ((boardTiles[startRow + rowInc * i][startCol + colInc * i].occupiesBoardSpot())) {
                 length++;
             }
             i++;
@@ -199,17 +199,17 @@ public class Board {
         int numPlaced = 0;
         int i = 0;
         while (numPlaced < letters.size()) {
-            if (boardTiles[startRow + i * rowInc][ startCol + i * colInc] instanceof BoardTile) {
+            if (!(boardTiles[startRow + i * rowInc][ startCol + i * colInc].occupiesBoardSpot())) {
                 // we can place a letter here, and need recursive calls
                 LetterTile letter = letters.get(numPlaced);
                 Coordinate coord = new Coordinate(startRow + i * rowInc, startCol + i * colInc);
                 adjTotal += scorePerpendicularWord(letter, coord.getRow(), coord.getCol(), colInc, rowInc);
                 wordMultiplier *= findWordMultiplier(coord, false);
                 numPlaced++;
-                total += letter.getLetterPoints() * findLetterMultiplier(coord, false);
+                total += letter.getPoints() * findLetterMultiplier(coord, false);
             } else {
                 LetterTile alreadyPlacedLetter = (LetterTile) boardTiles[startRow + i * rowInc][startCol + i * colInc];
-                total += alreadyPlacedLetter.getLetterPoints();
+                total += alreadyPlacedLetter.getPoints();
                 // add that score but no recursive calls and no new letters placed
             }
             i++;
@@ -226,17 +226,17 @@ public class Board {
         int total = 0;
         // start at point after final placed tile
         while ((startRow + rowInc * shift) < BOARD_LENGTH && (startCol + colInc * shift) < BOARD_LENGTH 
-                && boardTiles[startRow + rowInc * shift][startCol + colInc * shift] instanceof LetterTile) {
+                && boardTiles[startRow + rowInc * shift][startCol + colInc * shift].occupiesBoardSpot()) {
             LetterTile letter = (LetterTile) boardTiles[startRow + rowInc * shift][startCol + colInc * shift];
-            total += letter.getLetterPoints();
+            total += letter.getPoints();
             shift++;
         }
         shift = -1;
         // then go back starting from one space before first tile
         while ((startRow + rowInc * shift) >= 0 && (startCol + colInc * shift) >= 0 
-            && boardTiles[startRow + rowInc * shift][startCol + colInc * shift] instanceof LetterTile) {
+            && boardTiles[startRow + rowInc * shift][startCol + colInc * shift].occupiesBoardSpot()) {
             LetterTile letter = (LetterTile) boardTiles[startRow + rowInc * shift][startCol + colInc * shift];
-            total += letter.getLetterPoints();
+            total += letter.getPoints();
             shift--;
         }
         return total;
@@ -249,7 +249,7 @@ public class Board {
     private int scorePerpendicularWord(LetterTile letter, int startRow, int startCol, int rowInc, int colInc) {
         Coordinate coord = new Coordinate(startRow, startCol);
         int total = 0;
-        int letterPoints = letter.getLetterPoints();
+        int letterPoints = letter.getPoints();
         boolean blankStarter = letterPoints == 0; // display may change, but value of blank is always zero
         total += scorePosAdjacent(startRow, startCol, rowInc, colInc);
         total += scoreNegAdjacent(startRow, startCol, rowInc, colInc);
@@ -264,9 +264,8 @@ public class Board {
         int i = 1;
         int total = 0;
         while (inBounds(startRow + rowInc * i, startCol + colInc * i)) {
-            if (boardTiles[startRow + rowInc * i][startCol + colInc * i] instanceof LetterTile) {
-                LetterTile letter = (LetterTile) boardTiles[startRow + rowInc * i][startCol + colInc * i];
-                total += letter.getLetterPoints();
+            if (boardTiles[startRow + rowInc * i][startCol + colInc * i].occupiesBoardSpot()) {
+                total += boardTiles[startRow + rowInc * i][startCol + colInc * i].getPoints();
             } else {
                 break;
             }
@@ -279,9 +278,8 @@ public class Board {
         int i = -1;
         int total = 0;
         while (inBounds(startRow + rowInc * i, startCol + colInc * i)) {
-            if (boardTiles[startRow + rowInc * i][startCol + colInc * i] instanceof LetterTile) {
-                LetterTile letter = (LetterTile) boardTiles[startRow + rowInc * i][startCol + colInc * i];
-                total += letter.getLetterPoints();
+            if (boardTiles[startRow + rowInc * i][startCol + colInc * i].occupiesBoardSpot()) {
+                total += boardTiles[startRow + rowInc * i][startCol + colInc * i].getPoints();
             } else {
                 break;
             }
@@ -347,7 +345,7 @@ public class Board {
         while (lettersPlaced < numLetters) {
             int row = startRow + i * rowIncrement;
             int col = startCol + i * colIncrement;
-            if (!(boardTiles[row][col] instanceof LetterTile)) {
+            if (!(boardTiles[row][col].occupiesBoardSpot())) {
                 boardTiles[row][col] = letters.get(lettersPlaced);
                 lettersPlaced++;
             }
@@ -374,9 +372,7 @@ public class Board {
         Map<Character, Integer> charCounts = new HashMap<>();
         for (int i = 0; i < BOARD_LENGTH; i++) {
             for (int j = 0; j < BOARD_LENGTH; j++) {
-                if (boardTiles[i][j] instanceof BoardTile) {
-                    continue;
-                } else { //(boardTiles[i][j] instanceof LetterTile) {
+                if (boardTiles[i][j].occupiesBoardSpot()) {
                     LetterTile tile = (LetterTile) boardTiles[i][j];
                     char letterChar = tile.getCharacter();
                     charCounts.put(letterChar, charCounts.getOrDefault(letterChar,0) + 1);
@@ -390,17 +386,13 @@ public class Board {
         return boardTiles[row][column];
     }
 
+    @Override
     public JSONArray toJson() {
         JSONArray json = new JSONArray();
         for (int i = 0; i < BOARD_LENGTH; i++) {
             for (int j = 0; j < BOARD_LENGTH; j++) {
-                if (boardTiles[i][j] instanceof LetterTile) {
-                    LetterTile letterTile = (LetterTile) boardTiles[i][j];
-                    json.put(String.valueOf(letterTile.getCharacter()));
-                } else {
-                    BoardTile boardTile = (BoardTile) boardTiles[i][j];
-                    json.put(boardTile.toDisplay());
-                }
+                Tile tile = boardTiles[i][j];
+                json.put(tile.toDisplay());
             }
         }
         return json;

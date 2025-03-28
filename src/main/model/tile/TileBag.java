@@ -21,7 +21,6 @@ public class TileBag implements Writable {
     private List<LetterTile> drawPile;
     private Random randomIndexGenerator;
     
-
     //Initializes tile bag with number of each 
     //letter standard to a Scrabble Game
     public TileBag() {
@@ -180,11 +179,10 @@ public class TileBag implements Writable {
         return curCounts;
     }
 
-
-    @Override
     // EFFECTS: returns the string corresponding to each remaining
     // tile in the draw pile and its remaining frequency as a key value
     // pair in the form "character" : frequency
+    @Override
     public JSONObject toJson() {
         JSONObject json = new JSONObject();
         Map<Character, Integer> currentLetterFrequencies = getCurrentLetterFrequencies();

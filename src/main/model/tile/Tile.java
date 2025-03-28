@@ -4,4 +4,10 @@ package model.tile;
 public interface Tile {
 
     String toDisplay();
+
+    String getTerminalPrintoutString();
+
+    boolean occupiesBoardSpot();
+
+    int getPoints();
 }
