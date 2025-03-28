@@ -20,7 +20,7 @@ public class TileBagTest {
     private LetterTile b2;
 
     @BeforeEach
-    void runBefore() {
+    public void runBefore() {
         game = new ScrabbleGame("alphabet");
         testPlayer = new Player("tester");
         b1 = new LetterTile('B', 3);
@@ -29,13 +29,13 @@ public class TileBagTest {
     }
 
     @Test
-    void testConstructor() {
+    public void testConstructor() {
         //100 tiles initially
         assertEquals(game.getTileBag().numTilesRemaining(), 100);
     }
 
     @Test
-    void testDrawTileStartGameCase() {
+    public void testDrawTileStartGameCase() {
         //0 tiles on rack initially
         assertEquals(testPlayer.getNumTilesOnRack(),0);
         //No tiles removed yet
@@ -51,7 +51,7 @@ public class TileBagTest {
     }
 
     @Test
-    void testEmptyDrawPile() {
+    public void testEmptyDrawPile() {
         game.getTileBag().emptyDrawPile();
         assertEquals(0, game.getTileBag().numTilesRemaining());
         assertEquals(-1, game.getTileBag().drawTiles(testPlayer));
@@ -59,7 +59,7 @@ public class TileBagTest {
     }
     
     @Test
-    void testDrawTilesEmptyPile() {
+    public void testDrawTilesEmptyPile() {
         game.getTileBag().emptyDrawPile();
         LetterTile letter = new LetterTile('A', 1);
         game.getTileBag().addTile(letter);
@@ -71,7 +71,7 @@ public class TileBagTest {
     }
 
     @Test
-    void testGetCurrentLetterFrequencies() {
+    public void testGetCurrentLetterFrequencies() {
         game.getTileBag().emptyDrawPile();
         assertTrue(game.getTileBag().getCurrentLetterFrequencies().keySet().isEmpty());
         assertTrue(game.getTileBag().getCurrentLetterFrequencies().values().isEmpty());

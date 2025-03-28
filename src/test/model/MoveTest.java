@@ -22,7 +22,7 @@ public class MoveTest {
     private ScrabbleGame game;
 
     @BeforeEach
-    void runBefore() {
+    public void runBefore() {
         game = new ScrabbleGame("alphabet");
         testPlayer = new Player("Trevor");
         testPlayer2 = new Player("Rovert");
@@ -34,7 +34,7 @@ public class MoveTest {
     }
 
     @Test
-    void testConstructorForPlayedWord() {
+    public void testConstructorForPlayedWord() {
         playWord = new Move(testPlayer, getStringFromLetters(p1Letters), 7,7, 10, Direction.DOWN);
         assertEquals(playWord.getMoveType(), MoveType.PLAY_WORD);
         assertEquals(playWord.getPlayer(), testPlayer);
@@ -47,7 +47,7 @@ public class MoveTest {
     }
 
     @Test
-    void testMoveContainsCharacter() {
+    public void testMoveContainsCharacter() {
         playWord = new Move(testPlayer, getStringFromLetters(p1Letters), 1,8, 10, Direction.DOWN);
         LetterTile letter = p1Letters.get(0);
         char firstChar = letter.getCharacter();
@@ -79,7 +79,7 @@ public class MoveTest {
     }  
     
     @Test
-    void testConstructorForSwappedWord() {
+    public void testConstructorForSwappedWord() {
         swap = new Move(testPlayer2, getStringFromLetters(p1Letters), getStringFromLetters(p2Letters));
         assertEquals(swap.getPlayer(), testPlayer2);
         assertEquals(swap.getMoveType(), MoveType.SWAP_TILES);
@@ -89,7 +89,7 @@ public class MoveTest {
     }
     
    /*  @Test
-    void testConstructorForEndGameAdjustment() {
+    public void testConstructorForEndGameAdjustment() {
         endGameLoser = new Move(testPlayer, board, false, p1Letters, 7);
         assertEquals(endGameLoser.getPlayer(), testPlayer);
         assertEquals(endGameLoser.getMoveType(), MoveType.END_GAME_LOSER);
@@ -101,7 +101,7 @@ public class MoveTest {
     } */
 
     @Test
-    void testConstructorSkip() {
+    public void testConstructorSkip() {
         Move skip = new Move(testPlayer);
         assertEquals(skip.getPointsForMove(), 0);
         assertEquals(skip.getMoveType(), MoveType.SKIP);
@@ -109,7 +109,7 @@ public class MoveTest {
     }
 
     @Test
-    void testGetLastPlayer() {
+    public void testGetLastPlayer() {
         Move endGame = new Move(testPlayer, testPlayer2, "ADC", 6);
         assertEquals(testPlayer2, endGame.getLastPlayer());
         assertFalse(testPlayer.equals(endGame.getLastPlayer()));

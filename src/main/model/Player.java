@@ -31,8 +31,7 @@ public class Player {
         this.history = new History();
         this.tileRack = new ArrayList<>();
         this.selectedTiles = new ArrayList<>();
-        this.points = 0;
-        
+        this.points = 0;   
     }
 
     public int getNumTilesOnRack() {
@@ -59,14 +58,12 @@ public class Player {
         return this.points;
     }
 
-
     // REQUIRES: getNumTilesOnRack() < MAX_NUM_TILES
     // MODIFIES: this
     //EFFECTS: Adds drawnLetter to player's tile rack
     public void addTile(LetterTile drawnLetter) {
         this.tileRack.add(drawnLetter);
     }
-
 
     // EFFECTS: returns deep copy of given list of letters.
     public List<LetterTile> copyLetterTiles(List<LetterTile> lettersToCopy) {
@@ -77,7 +74,7 @@ public class Player {
         return copiedLetters;
     }
 
-    // REQUIRES: 0 <= index <     public int getNumTilesOnRack() {
+    // REQUIRES: 0 <= index < getNumTilesOnRack() {
     // MODIFIES: this
     // EFFECTS: returns true if tile at index
     //          was successfully selected
@@ -128,7 +125,6 @@ public class Player {
         }
         return playerCharCounts;
     }
-
 
     public History getHistory() {
         return this.history;
@@ -181,12 +177,11 @@ public class Player {
 
     // EFFECTS: returns JSONArray representing
     // tiles on this player's rack
-    public JSONArray tileRackToJson() {
+    private JSONArray tileRackToJson() {
         JSONArray json = new JSONArray();
         for (LetterTile letter : tileRack) {
             json.put(letter.toJson());
         }
         return json;
     }    
-
 }

@@ -18,14 +18,14 @@ public class ScrabbleGameTest {
     private Player player2;
 
     @BeforeEach
-    void setup() {
+    public void setup() {
         game = new ScrabbleGame("test");
         player = new Player("playerTest");
         player2 = new Player("P");
     }
 
     @Test
-    void testConstructor() {
+    public void testConstructor() {
         assertEquals("test", game.getName());
         game.addPlayer(player);
         assertEquals(game.getNumPlayers(), 1);
@@ -37,7 +37,7 @@ public class ScrabbleGameTest {
     }
 
     @Test
-    void testSetName() {
+    public void testSetName() {
         game.setName("Trevor's game");
         assertEquals(game.getName(), "Trevor's game");
     }
@@ -53,7 +53,7 @@ public class ScrabbleGameTest {
     }  
     
     @Test
-    void testAddMoves() {
+    public void testAddMoves() {
         game.setName("Trevor's game");
         assertEquals(game.getName(), "Trevor's game");
         //tileBag.drawTiles(player);
@@ -73,7 +73,7 @@ public class ScrabbleGameTest {
     }
 
     @Test
-    void testGetPlayerByName() {
+    public void testGetPlayerByName() {
         game.addPlayer(player);
         Player player2 = new Player("otherPlayer");
         game.addPlayer(player2);
@@ -83,7 +83,7 @@ public class ScrabbleGameTest {
     }
 
     @Test
-    void testFirstPlayerAndIndexOf() {
+    public void testFirstPlayerAndIndexOf() {
         assertEquals(0, game.getFirstPlayerIndex());
         game.addPlayer(player);
         game.addPlayer(player2);
@@ -96,7 +96,7 @@ public class ScrabbleGameTest {
     }
 
     @Test 
-    void testGetNumEachCharInBagAndOpponentsNoLettersOnRackOrBoard() {
+    public void testGetNumEachCharInBagAndOpponentsNoLettersOnRackOrBoard() {
         //List<LetterTile> letters = new ArrayList<>();
         Map<Character, Integer> counts = game.getNumEachCharInBagAndOpponents(player);
         Map<Character, Integer> drawPileCounts = game.getTileBag().getInitialLetterFrequencies();
@@ -111,7 +111,7 @@ public class ScrabbleGameTest {
     }
 
     @Test
-    void testScorePerpendicularConnectedByBlank() {
+    public void testScorePerpendicularConnectedByBlank() {
         player.addTile(new LetterTile('B', 3));
         player.addTile(new LetterTile('R', 1));
         player.addTile(new LetterTile('I', 1));
@@ -158,7 +158,7 @@ public class ScrabbleGameTest {
     }
 
     @Test
-    void testEndGameAdjustments() {
+    public void testEndGameAdjustments() {
         game.addPlayer(player);
         game.addPlayer(player2);
         game.drawTiles(player2);
@@ -185,7 +185,7 @@ public class ScrabbleGameTest {
     }
 
     @Test
-    void testHighestScoringPlayer() {
+    public void testHighestScoringPlayer() {
         assertEquals(null, game.highestScoringPlayer());
         Player p3 = new Player("trevor");
         game.addPlayer(player);

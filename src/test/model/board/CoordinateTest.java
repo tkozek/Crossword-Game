@@ -1,7 +1,6 @@
 package model.board;
 
 import static org.junit.jupiter.api.Assertions.*;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 
@@ -9,11 +8,6 @@ public class CoordinateTest {
     
     private Coordinate c1;
     private Coordinate c2;
-
-    @BeforeEach
-    void runBefore() {
-        
-    }
 
     @Test
     public void testGetRow() {
@@ -93,7 +87,6 @@ public class CoordinateTest {
 
         assertFalse(c1.equals(c2));
         assertFalse(c2.equals(c1));
-
 
         c1 = new Coordinate(9,3);
         c2 = new Coordinate(10,3);
@@ -303,7 +296,6 @@ public class CoordinateTest {
 
         c1 = new Coordinate(0,14);
         c2 = new Coordinate(14,0);
-
         assertNotEquals(c1.hashCode(),c2.hashCode());
     }
 

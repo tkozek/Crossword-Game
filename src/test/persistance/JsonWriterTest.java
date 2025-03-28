@@ -28,7 +28,7 @@ public class JsonWriterTest extends JsonTest {
     private Player player;
 
     @BeforeEach
-    void setup() {
+    public void setup() {
         game = new ScrabbleGame("Test");
         tileBag = game.getTileBag();
         board = game.getBoard();
@@ -36,7 +36,7 @@ public class JsonWriterTest extends JsonTest {
     }
 
     @Test
-    void testWriterInvalidFile() {
+    public void testWriterInvalidFile() {
         try {
             JsonWriter writer = new JsonWriter("./data/my\0illegal:fileName.json");
             writer.open();
@@ -47,7 +47,7 @@ public class JsonWriterTest extends JsonTest {
     }
 
     @Test
-    void testWriterInitialGame() {
+    public void testWriterInitialGame() {
         try {
             JsonWriter writer = new JsonWriter("./data/testWriterInitialGame.json");
             writer.open();
@@ -68,7 +68,7 @@ public class JsonWriterTest extends JsonTest {
     }
 
     @Test
-    void testWriterTwoMovesHaveBeenPlayed() {
+    public void testWriterTwoMovesHaveBeenPlayed() {
         try {
             game.addPlayer(player);
             tileBag.drawTiles(player);
@@ -125,7 +125,7 @@ public class JsonWriterTest extends JsonTest {
     }
 
     @Test
-    void testWriterTwoPlayersEachSwapped() {
+    public void testWriterTwoPlayersEachSwapped() {
         try {
             Player player2 = new Player("John");
             game.addPlayer(player);
@@ -188,7 +188,7 @@ public class JsonWriterTest extends JsonTest {
     }
 
     @Test
-    void testWriteMoveComprehensive() {
+    public void testWriteMoveComprehensive() {
         try {
             Player player2 = new Player("John");
             game.addPlayer(player);
@@ -248,7 +248,7 @@ public class JsonWriterTest extends JsonTest {
     } 
 
     @Test
-    void testWriteEndGame() {
+    public void testWriteEndGame() {
         try {
             Player player1 = new Player("Player1");
             Player player2 = new Player("Player2");

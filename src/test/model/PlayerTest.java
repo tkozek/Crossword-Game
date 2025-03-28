@@ -19,13 +19,13 @@ public class PlayerTest {
     private ScrabbleGame game;
     
     @BeforeEach
-    void runBefore() {
+    public void runBefore() {
         game = new ScrabbleGame("n");
         testPlayer = new Player("Trevor");
     }
 
     @Test
-    void testConstructor() {
+    public void testConstructor() {
         assertEquals(0, testPlayer.getPointsThisGame());
         assertEquals(0, testPlayer.getMoves().size());
         assertEquals(0, testPlayer.getNumTilesOnRack());
@@ -34,7 +34,7 @@ public class PlayerTest {
     }
 
     @Test
-    void testSelectTileAlreadySelected() {
+    public void testSelectTileAlreadySelected() {
         game.drawTiles(testPlayer);
         assertEquals(testPlayer.getNumTilesOnRack(), 7);
         assertTrue(testPlayer.selectTile(0));
@@ -47,13 +47,13 @@ public class PlayerTest {
     }
 
     @Test
-    void testClearSelectedTilesNoneSelected() {
+    public void testClearSelectedTilesNoneSelected() {
         game.drawTiles(testPlayer);
         assertFalse(testPlayer.clearSelectedTiles());
     }
 
     @Test
-    void testClearSelectedTiles() {
+    public void testClearSelectedTiles() {
         game.drawTiles(testPlayer);
         assertEquals(testPlayer.getNumTilesOnRack(), 7);
         assertTrue(testPlayer.selectTile(0));
@@ -63,28 +63,28 @@ public class PlayerTest {
     }
 
     @Test
-    void testPlayedAllTiles() {
+    public void testPlayedAllTiles() {
         assertTrue(testPlayer.outOfTiles());
         game.drawTiles(testPlayer);
         assertFalse(testPlayer.outOfTiles());
     }
 
     @Test
-    void testSetPlayerName() {
+    public void testSetPlayerName() {
         assertEquals("Trevor", testPlayer.getPlayerName());
         testPlayer.setPlayerName("Michael");
         assertEquals("Michael", testPlayer.getPlayerName());
     }
 
     @Test
-    void testDrawTilesEmptyRack() {
+    public void testDrawTilesEmptyRack() {
         assertEquals(testPlayer.getNumTilesOnRack(), 0);
         game.drawTiles(testPlayer);
         assertEquals(testPlayer.getNumTilesOnRack(), TileBag.MAX_NUM_PLAYER_TILES);
     }
 
     @Test
-    void testSetPlayerPoints() {
+    public void testSetPlayerPoints() {
         testPlayer.setPoints(10);
         assertEquals(testPlayer.getPointsThisGame(), 10);
     }
@@ -100,7 +100,7 @@ public class PlayerTest {
     }  
 
     @Test
-    void testMakeMove() {
+    public void testMakeMove() {
         game.drawTiles(testPlayer);
         testPlayer.selectTile(0);
         testPlayer.selectTile(6);
@@ -114,7 +114,7 @@ public class PlayerTest {
 
 
     @Test
-    void testSwapZeroTiles() {
+    public void testSwapZeroTiles() {
         assertEquals(testPlayer.getNumTilesOnRack(), 0);
         game.drawTiles(testPlayer);
         assertEquals(testPlayer.getNumTilesOnRack(), TileBag.MAX_NUM_PLAYER_TILES);
@@ -134,7 +134,7 @@ public class PlayerTest {
     }
 
     @Test
-    void testSwapTiles() {
+    public void testSwapTiles() {
         game.drawTiles(testPlayer);
         testPlayer.selectTile(0);
         testPlayer.selectTile(5);
@@ -143,7 +143,7 @@ public class PlayerTest {
 
 
     @Test
-    void testGetNumCharOnRackZeroChars() {
+    public void testGetNumCharOnRackZeroChars() {
         Player playerTest = new Player("name");
         Map<Character,Integer> counts = playerTest.getNumEachCharOnMyRack();
         assertTrue(counts.values().isEmpty());
@@ -151,7 +151,7 @@ public class PlayerTest {
     }
 
     @Test
-    void testAddtile() {
+    public void testAddtile() {
         assertEquals(testPlayer.getNumTilesOnRack(), 0);
         LetterTile a = new LetterTile('A',1);
         testPlayer.addTile(a);
@@ -159,7 +159,7 @@ public class PlayerTest {
     }
 
     @Test
-    void testTileAddedToRackIsRemovedFromTileBag() {
+    public void testTileAddedToRackIsRemovedFromTileBag() {
         assertEquals(testPlayer.getNumTilesOnRack(), 0);
         assertEquals(game.getTileBag().numTilesRemaining(), TileBag.TOTAL_LETTERS_INITIALLY);
         game.drawTiles(testPlayer);
@@ -171,7 +171,7 @@ public class PlayerTest {
     }
 
     @Test
-    void testSelectTile() {
+    public void testSelectTile() {
         game.drawTiles(testPlayer);
         List<LetterTile> drawnTiles = testPlayer.getTilesOnRack();
         //Player.MAX_NUM_TILES == 7
@@ -194,7 +194,7 @@ public class PlayerTest {
     
 
     @Test
-    void testGetNumEachCharOnMyRackEmptyRack() {
+    public void testGetNumEachCharOnMyRackEmptyRack() {
         assertEquals(0, testPlayer.getTilesOnRack().size());
         Map<Character, Integer> rackCharCounts = testPlayer.getNumEachCharOnMyRack();
         assertTrue(rackCharCounts.keySet().isEmpty());
@@ -202,7 +202,7 @@ public class PlayerTest {
     }
 
     @Test
-    void testGetNumEachCharOnMyRackFullRack() {
+    public void testGetNumEachCharOnMyRackFullRack() {
         game.drawTiles(testPlayer);
         assertEquals(TileBag.MAX_NUM_PLAYER_TILES, testPlayer.getTilesOnRack().size());
         Map<Character, Integer> rackCharCounts = testPlayer.getNumEachCharOnMyRack();
@@ -216,7 +216,7 @@ public class PlayerTest {
     }
 
     @Test
-    void testRemoveSelectedTiles() {
+    public void testRemoveSelectedTiles() {
         game.drawTiles(testPlayer);
         testPlayer.selectTile(0);
         testPlayer.selectTile(5);
@@ -240,7 +240,7 @@ public class PlayerTest {
     }
 
     @Test
-    void testAddPoints() {
+    public void testAddPoints() {
         assertEquals(0, testPlayer.getPointsThisGame());
         testPlayer.addPoints(10);
         assertEquals(10, testPlayer.getPointsThisGame());
@@ -250,7 +250,7 @@ public class PlayerTest {
     }
     
     @Test 
-    void testCopySelectedTiles() {
+    public void testCopySelectedTiles() {
         game.drawTiles(testPlayer);
         testPlayer.selectTile(0);
         List<LetterTile> copy = testPlayer.copySelectedTiles();
@@ -259,7 +259,7 @@ public class PlayerTest {
     }
 
     @Test
-    void testLogSwappedAndLogSkippedTurn() {
+    public void testLogSwappedAndLogSkippedTurn() {
         game.logSkippedTurn(testPlayer);
         assertEquals(testPlayer.getMoves().size(), 1);
         assertEquals(testPlayer.getMoves().get(0).getMoveType(), MoveType.SKIP);

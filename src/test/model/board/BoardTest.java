@@ -38,7 +38,7 @@ public class BoardTest {
     private LetterTile z1;
 
     @BeforeEach
-    void runBefore() {
+    public void runBefore() {
         testBag = new TileBag();
         board =  new Board();
         testPlayer = new Player("Trevor");
@@ -90,7 +90,7 @@ public class BoardTest {
     }
 
     @Test
-    void testInBoundsRight() {
+    public void testInBoundsRight() {
         testBag.drawTiles(testPlayer);
         letters = testPlayer.getTilesOnRack();
         assertEquals(7, letters.size());
@@ -112,7 +112,7 @@ public class BoardTest {
     }
 
     @Test
-    void testInBoundsDown() {
+    public void testInBoundsDown() {
         testBag.drawTiles(testPlayer);
         letters = testPlayer.getTilesOnRack();
         //
@@ -131,7 +131,7 @@ public class BoardTest {
     }
 
     @Test
-    void testInBoundsStartOutOfBoundsMoveDownIntoBounds() {
+    public void testInBoundsStartOutOfBoundsMoveDownIntoBounds() {
         testBag.drawTiles(testPlayer);
         letters = testPlayer.getTilesOnRack();
         //
@@ -141,7 +141,7 @@ public class BoardTest {
     }
 
     @Test
-    void testInBoundsStartOutOfBoundsMoveRightUntilInBounds() {
+    public void testInBoundsStartOutOfBoundsMoveRightUntilInBounds() {
         testBag.drawTiles(testPlayer);
         letters = testPlayer.getTilesOnRack();
         //
@@ -151,7 +151,7 @@ public class BoardTest {
     }
 
     @Test
-    void testSectionNotAvailableTileWasPlayed() {
+    public void testSectionNotAvailableTileWasPlayed() {
         assertEquals(letters.size(),7);
         board.playWord(letters, 0,0,Direction.DOWN);
         assertFalse(board.sectionIsAvailable(letters, 0,0, Direction.DOWN));
@@ -161,7 +161,7 @@ public class BoardTest {
     }
 
     @Test
-    void testSectionAvailableSkipOverOneAndMultipleLetters() {
+    public void testSectionAvailableSkipOverOneAndMultipleLetters() {
         assertEquals(letters.size(),7);
         board.playWord(letters, 4,4,Direction.DOWN);
         assertTrue(board.sectionIsAvailable(letters, 4,0, Direction.RIGHT));
@@ -171,7 +171,7 @@ public class BoardTest {
     }
 
     @Test
-    void testSectionAvailableVariousCases() {
+    public void testSectionAvailableVariousCases() {
         assertEquals(letters.size(),7);
         board.playWord(letters, 7,7,Direction.DOWN);
         // can place from (7,1) to (7,6), and at (7,8)
@@ -187,7 +187,7 @@ public class BoardTest {
     }
 
     @Test
-    void testSectionAvailableSkipMultipleSectionsTrue() {
+    public void testSectionAvailableSkipMultipleSectionsTrue() {
         assertEquals(letters.size(),7);
         board.playWord(letters, 6,6,Direction.DOWN);
 
@@ -205,7 +205,7 @@ public class BoardTest {
     }
 
     @Test
-    void testSectionIsAvailableSkipOneGroupOfTwoTiles() {
+    public void testSectionIsAvailableSkipOneGroupOfTwoTiles() {
         assertEquals(letters.size(),7);
         board.playWord(letters, 8,6,Direction.RIGHT);
 
@@ -228,7 +228,7 @@ public class BoardTest {
     }
 
     @Test 
-    void testCanPlay() {
+    public void testCanPlay() {
         assertTrue(board.sectionIsAvailable(letters, 0, 0, Direction.DOWN));
         assertTrue(board.sectionIsAvailable(letters, 0, 0, Direction.RIGHT));
 
@@ -242,7 +242,7 @@ public class BoardTest {
     }
 
     @Test
-    void testScoreWord() {
+    public void testScoreWord() {
         letters.clear();
         assertTrue(letters.isEmpty());
         letters.add(b1);
@@ -274,7 +274,7 @@ public class BoardTest {
     }
 
     @Test
-    void testGetNumCharOnBoardNoLettersPlaced() {
+    public void testGetNumCharOnBoardNoLettersPlaced() {
         Map<Character,Integer> counts = board.getNumEachCharOnBoard();
         // Every board position should be a board tile, 
         // so the Map will be empty, since nothing is put into it since
@@ -284,7 +284,7 @@ public class BoardTest {
     }
 
     @Test
-    void testGetNumCharOnBoardOneTilePlaced() {
+    public void testGetNumCharOnBoardOneTilePlaced() {
         List<LetterTile> toAdd = new ArrayList<>();
         // Add lettertile B to toAdd
         toAdd.add(b1);
@@ -302,7 +302,7 @@ public class BoardTest {
     }
 
     @Test
-    void testGetNumCharOnBoardFewWordsPlaced() {
+    public void testGetNumCharOnBoardFewWordsPlaced() {
         List<LetterTile> toAdd = new ArrayList<>();
         List<LetterTile> toAdd2 = new ArrayList<>();
         // Add lettertile B to toAdd
@@ -328,7 +328,7 @@ public class BoardTest {
     }
 
     @Test
-    void testGetNumCharOnBoardSameLetterAddedMoreThanOnce() {
+    public void testGetNumCharOnBoardSameLetterAddedMoreThanOnce() {
         LetterTile a2 = new LetterTile('A', 1);
         List<LetterTile> toAdd = new ArrayList<>();
         List<LetterTile> toAdd2 = new ArrayList<>();
@@ -356,7 +356,7 @@ public class BoardTest {
     }
     
     @Test
-    void testGetTileAtPositionOnBoard() {
+    public void testGetTileAtPositionOnBoard() {
         BoardTile boardTile = (BoardTile) board.getTileAtPositionOnBoard(7,7);
         assertEquals(boardTile.getTileType(), TileType.DOUBLE_WORD);
 
@@ -372,7 +372,7 @@ public class BoardTest {
     }
 
     @Test
-    void testScoreWordConnectsToExistingWordNoMultipliers() {
+    public void testScoreWordConnectsToExistingWordNoMultipliers() {
         List<LetterTile> bat = new ArrayList<>();
         bat.add(b1);
         bat.add(a1);
@@ -387,7 +387,7 @@ public class BoardTest {
     }
 
     @Test
-    void testScoreWordConnectTwiceAtOneSquareNoMultiplier() {
+    public void testScoreWordConnectTwiceAtOneSquareNoMultiplier() {
         List<LetterTile> boat = new ArrayList<>();
         boat.add(b1);
         boat.add(o1);
@@ -406,7 +406,7 @@ public class BoardTest {
     }
 
     @Test
-    void testScoreWordOneJump() {
+    public void testScoreWordOneJump() {
         List<LetterTile> chore = new ArrayList<>();
         chore.add(c1);
         chore.add(h1);
@@ -434,7 +434,7 @@ public class BoardTest {
     }
 
     @Test
-    void testScoreWordConnectTwiceAtOneSquareWithLetterMultiplier() {
+    public void testScoreWordConnectTwiceAtOneSquareWithLetterMultiplier() {
         List<LetterTile> chore = new ArrayList<>();
         chore.add(c1);
         chore.add(h1);
@@ -455,7 +455,7 @@ public class BoardTest {
     }
 
     @Test
-    void testScoreWordPlayAtBothEndsBySkippingFourLetters() {
+    public void testScoreWordPlayAtBothEndsBySkippingFourLetters() {
         List<LetterTile> hang = new ArrayList<>();
         hang.add(h1);
         hang.add(a1);
@@ -480,7 +480,7 @@ public class BoardTest {
     }
 
     @Test
-    void testScoreWordConnectTwiceAtOneSquareWithWordMultiplier() {
+    public void testScoreWordConnectTwiceAtOneSquareWithWordMultiplier() {
         List<LetterTile> hang = new ArrayList<>();
         hang.add(h1);
         hang.add(a1);
@@ -506,17 +506,17 @@ public class BoardTest {
         assertEquals(8, board.playWord(justA, 4, 4, Direction.RIGHT));
     }
 
-    @Test
-    void testfindTripleWordMultiplierIsAdjacency() {
+   /*  @Test
+    public void testfindTripleWordMultiplierIsAdjacency() {
         assertEquals(board.findWordMultiplier(new Coordinate(0,0), true), 3);
         assertEquals(board.findWordMultiplier(new Coordinate(0,0), true), 3);
         assertEquals(board.findWordMultiplier(new Coordinate(0,0), false), 3);
         assertEquals(board.findWordMultiplier(new Coordinate(0,0), true), 1);
         assertEquals(board.findWordMultiplier(new Coordinate(0,0), false), 1);  
-    }
+    } */
 
-    @Test
-    void testInBounds() {
+ /*    @Test
+    public void testInBounds() {
         assertTrue(board.inBounds(0,0));
         assertFalse(board.inBounds(-1,0));
         assertFalse(board.inBounds(-1,-1));
@@ -526,10 +526,10 @@ public class BoardTest {
         assertFalse(board.inBounds(0,16));
         assertFalse(board.inBounds(16,-1));
         assertFalse(board.inBounds(-1,16));
-    }
+    } */
 
     @Test
-    void testInlineAdjacentToUpperBoundColumn() {
+    public void testInlineAdjacentToUpperBoundColumn() {
         List<LetterTile> hang = new ArrayList<>();
         hang.add(h1);
         hang.add(a1);

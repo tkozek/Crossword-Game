@@ -17,7 +17,7 @@ public class BoardTileTest {
     BoardTile regularTile;
 
     @BeforeEach
-    void runBefore() {
+    public void runBefore() {
         doubleWordTile = new BoardTile(1,1,TileType.DOUBLE_WORD);
         tripleWordTile = new BoardTile(0,0,TileType.TRIPLE_WORD);
         doubleLetterTile = new BoardTile(0,3,TileType.DOUBLE_LETTER);
@@ -26,9 +26,7 @@ public class BoardTileTest {
     }
 
     @Test
-    void testConstructor() {
-
-
+    public void testConstructor() {
         assertTrue(doubleLetterTile.checkIsTileType(TileType.DOUBLE_LETTER));
         assertFalse(doubleLetterTile.checkIsTileType(TileType.TRIPLE_WORD));
         
@@ -46,11 +44,10 @@ public class BoardTileTest {
        
         assertEquals(0,doubleLetterTile.getRow());
         assertEquals(3,doubleLetterTile.getCol());
-
     }
 
     @Test
-    void testToDisplay() {
+    public void testToDisplay() {
         assertEquals("DWS", doubleWordTile.toDisplay());
         assertEquals("TWS", tripleWordTile.toDisplay());
         assertEquals("DLS", doubleLetterTile.toDisplay());
@@ -59,7 +56,7 @@ public class BoardTileTest {
     }
 
     @Test
-    void testGetTerminalPrintoutString() {
+    public void testGetTerminalPrintoutString() {
         assertEquals("DWS| ", doubleWordTile.getTerminalPrintoutString());
         assertEquals("TWS| ", tripleWordTile.getTerminalPrintoutString());
         assertEquals("DLS| ", doubleLetterTile.getTerminalPrintoutString());
@@ -68,7 +65,7 @@ public class BoardTileTest {
     }
 
     @Test
-    void testOccupiesBoardSpot() {
+    public void testOccupiesBoardSpot() {
         assertFalse(doubleWordTile.occupiesBoardSpot());
         assertFalse(tripleWordTile.occupiesBoardSpot());
         assertFalse(doubleLetterTile.occupiesBoardSpot());
@@ -77,7 +74,7 @@ public class BoardTileTest {
     }
 
     @Test
-    void testGetPoints() {
+    public void testGetPoints() {
         assertEquals(0, doubleWordTile.getPoints());
         assertEquals(0, tripleWordTile.getPoints());
         assertEquals(0, doubleLetterTile.getPoints());
@@ -86,7 +83,7 @@ public class BoardTileTest {
     }
     
     @Test
-    void testGetTileTypeAllTypes() {
+    public void testGetTileTypeAllTypes() {
         assertEquals(doubleWordTile.getTileType(), TileType.DOUBLE_WORD);
         assertEquals(doubleLetterTile.getTileType(), TileType.DOUBLE_LETTER);
         assertEquals(tripleLetterTile.getTileType(), TileType.TRIPLE_LETTER);

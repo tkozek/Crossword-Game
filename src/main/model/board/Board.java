@@ -28,10 +28,8 @@ public class Board {
     // Double Letter, Triple Letter Tiles
 
     public Board() {
-        
         boardTiles = new Tile[BOARD_LENGTH][BOARD_LENGTH];
         initializeBoard();
-
     }
 
     // MODIFIES: this
@@ -251,16 +249,18 @@ public class Board {
         int total = 0;
         int letterPoints = letter.getPoints();
         boolean blankStarter = letterPoints == 0; // display may change, but value of blank is always zero
-        total += scorePosAdjacent(startRow, startCol, rowInc, colInc);
-        total += scoreNegAdjacent(startRow, startCol, rowInc, colInc);
+        total += scorePerpendicularAdjacent(startRow, startCol, rowInc, colInc);
+        total += scorePerpendicularAdjacent(startRow, startCol, -1* rowInc, -1 * colInc);
         if (total == 0 && !blankStarter) {
             return 0;
         } else {
             return (total + letterPoints * findLetterMultiplier(coord, true)) * findWordMultiplier(coord, true);
         }
     }
-
-    private int scorePosAdjacent(int startRow, int startCol, int rowInc, int colInc) {
+    
+    // EFFECTS: iterates beginning at starting coordinates according to provided
+    // incrementers, returns sum of points of letters up until first BoardTile is encountered
+    private int scorePerpendicularAdjacent(int startRow, int startCol, int rowInc, int colInc) {
         int i = 1;
         int total = 0;
         while (inBounds(startRow + rowInc * i, startCol + colInc * i)) {
@@ -274,21 +274,7 @@ public class Board {
         return total;
     }
 
-    private int scoreNegAdjacent(int startRow, int startCol, int rowInc, int colInc) {
-        int i = -1;
-        int total = 0;
-        while (inBounds(startRow + rowInc * i, startCol + colInc * i)) {
-            if (boardTiles[startRow + rowInc * i][startCol + colInc * i].occupiesBoardSpot()) {
-                total += boardTiles[startRow + rowInc * i][startCol + colInc * i].getPoints();
-            } else {
-                break;
-            }
-            i--;
-        }
-        return total;
-    }
-
-    public boolean inBounds(int row, int col) {
+    private boolean inBounds(int row, int col) {
         return (row >= 0 && row < BOARD_LENGTH && col >= 0 && col < BOARD_LENGTH);
     }
 
@@ -296,7 +282,7 @@ public class Board {
     // EFFECTS: returns the word multiplier for the
     // board space at coord, removes multiplier from 
     // that coordinate so that it isn't used a second time
-    public int findWordMultiplier(Coordinate coord, boolean isAdjacency) {
+    private int findWordMultiplier(Coordinate coord, boolean isAdjacency) {
         if (doubleWordCoordinates.contains(coord)) {
             if (!isAdjacency) {
                 doubleWordCoordinates.remove(coord);
@@ -314,9 +300,12 @@ public class Board {
 
     // MODIFIES: this
     // EFFECTS: returns the letter multiplier for the
-    // board space at coord, removes multiplier from 
+    // board space at coord. If this is an adjacent call then the 
+    // multiplier at that coordinate remains intact, so that it
+    // can be applied to the remaining calls required to completely score
+    // the turn. Otherwise removes multiplier from 
     // that coordinate so that it isn't used a second time
-    public int findLetterMultiplier(Coordinate coord, boolean isAdjacency) {
+    private int findLetterMultiplier(Coordinate coord, boolean isAdjacency) {
         if (doubleLetterCoordinates.contains(coord)) {
             if (!isAdjacency) {
                 doubleLetterCoordinates.remove(coord);
@@ -336,7 +325,7 @@ public class Board {
     // MODIFIES: this
     // EFFECTS: places letters onto board in the given direction
     // beginning at starting coordinates
-    public void placeWord(List<LetterTile> letters, int startRow, int startCol, Direction dir) {
+    private void placeWord(List<LetterTile> letters, int startRow, int startCol, Direction dir) {
         int numLetters = letters.size();
         int rowIncrement = (dir == Direction.DOWN) ? 1 : 0;
         int colIncrement = (dir == Direction.RIGHT) ? 1 : 0;
@@ -386,7 +375,6 @@ public class Board {
         return boardTiles[row][column];
     }
 
-    
     public JSONArray toJson() {
         JSONArray json = new JSONArray();
         for (int i = 0; i < BOARD_LENGTH; i++) {

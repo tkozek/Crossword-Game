@@ -26,7 +26,7 @@ public class HistoryTest {
     private ScrabbleGame game;
 
     @BeforeEach
-    void runBefore() {
+    public void runBefore() {
         game = new ScrabbleGame("alphabet");
         testPlayer = new Player("Trevor");
         testPlayer2 = new Player("Rovert");
@@ -51,13 +51,13 @@ public class HistoryTest {
     }  
 
     @Test
-    void testConstructor() {
+    public void testConstructor() {
         assertTrue(history.getMoves().isEmpty());
         assertTrue(history.getWordsContainingLetter('A').isEmpty());
     }
 
     @Test
-    void testAddMoveOneMove() {
+    public void testAddMoveOneMove() {
         assertTrue(history.getMoves().isEmpty());
         history.addMove(moveToAdd);
         assertEquals(history.getMoves().size(), 1);
@@ -66,7 +66,7 @@ public class HistoryTest {
     }
 
     @Test
-    void testAddTwoMoves() {
+    public void testAddTwoMoves() {
         assertTrue(history.getMoves().isEmpty());
         history.addMove(otherMoveToAdd);
         history.addMove(moveToAdd);
@@ -76,7 +76,7 @@ public class HistoryTest {
     }
 
     @Test
-    void testGetListOfMoveContainingLetterOneMove() {
+    public void testGetListOfMoveContainingLetterOneMove() {
         List<LetterTile> playedLetters = new ArrayList<>();
         playedLetters.add(a1);
         playedLetters.add(z1);
@@ -89,7 +89,7 @@ public class HistoryTest {
     }
     
     @Test
-    void testGetListOfMoveContainingLetterTwoMoves() {
+    public void testGetListOfMoveContainingLetterTwoMoves() {
         List<LetterTile> playedLetters = new ArrayList<>();
         playedLetters.add(a1);
         playedLetters.add(b1); // AB
@@ -119,7 +119,7 @@ public class HistoryTest {
     }
 
     @Test
-    void testGetAllWordsPlayed() {
+    public void testGetAllWordsPlayed() {
         List<Move> wordsPlayed = testPlayer.getHistory().getMovesWithWordPlayed();
         assertTrue(wordsPlayed.isEmpty());
         // uses selected tiles within player, doesn't need non null tiles selected to make a move
@@ -146,7 +146,7 @@ public class HistoryTest {
     }
 
     @Test
-    void testGetMovesWithWordsPlayedSomeAreSwapsAndSkips() {
+    public void testGetMovesWithWordsPlayedSomeAreSwapsAndSkips() {
         // Adds move that isn't a word played [1]
         game.logSkippedTurn(testPlayer);
         assertTrue(testPlayer.getHistory().getMovesWithWordPlayed().isEmpty());

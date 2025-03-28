@@ -17,7 +17,7 @@ public class LetterTileTest {
     TileBag bag;
 
     @BeforeEach
-    void runBefore() {
+    public void runBefore() {
         testTileA = new LetterTile('A',1);
         testTileB = new LetterTile('B',3);
         testTileC = new LetterTile('C',3);
@@ -29,7 +29,7 @@ public class LetterTileTest {
     }
 
     @Test
-    void testConstructor() {
+    public void testConstructor() {
         assertEquals('A', testTileA.getCharacter());
         assertEquals('Q', testTileQ.getCharacter());
         assertEquals('-', testBlankTile.getCharacter());
@@ -40,7 +40,7 @@ public class LetterTileTest {
     }
 
     @Test
-    void testDeepCopyConstructor() {
+    public void testDeepCopyConstructor() {
         LetterTile copyLetter = new LetterTile(testTileB);
         assertEquals('B', copyLetter.getCharacter());
         assertEquals(3, copyLetter.getPoints());
@@ -53,7 +53,7 @@ public class LetterTileTest {
     }
 
     @Test
-    void testDeepCopyConstructorMultipleTiles() {
+    public void testDeepCopyConstructorMultipleTiles() {
         LetterTile copyLetter = new LetterTile(testTileB);
         LetterTile copyQ = new LetterTile(testTileQ);
         assertEquals('Q', copyQ.getCharacter());
@@ -78,22 +78,21 @@ public class LetterTileTest {
     }
 
     @Test
-    void testToDisplay() {
+    public void testToDisplay() {
         assertEquals("A", testTileA.toDisplay());
         assertEquals("Q", testTileQ.toDisplay());
         assertEquals("-", testBlankTile.toDisplay());           
     }
 
     @Test
-    void testGetTerminalPrintout() {
+    public void testGetTerminalPrintout() {
         assertEquals(" A_| ", testTileA.getTerminalPrintoutString());
         assertEquals(" Q_| ", testTileQ.getTerminalPrintoutString());
         assertEquals(" -_| ", testBlankTile.getTerminalPrintoutString());           
     }
 
-
     @Test
-    void testCharacterOnlyConstructor() {
+    public void testCharacterOnlyConstructor() {
         // Works as long as some instance of TileBag has been instantiated
         LetterTile c = new LetterTile('C');
         assertEquals(c.getPoints(), 3);
