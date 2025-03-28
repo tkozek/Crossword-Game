@@ -148,7 +148,8 @@ public class JsonReader {
         String moveType;
         String name;
         Player player;
-        for (int i = 0; i < historyArray.length(); i++) {
+        int numMoves = historyArray.length();
+        for (int i = 0; i < numMoves; i++) {
             JSONObject moveObject = historyArray.getJSONObject(i);
             moveType = moveObject.getString("MoveType");
             name = moveObject.getString("PlayerName");

@@ -97,7 +97,8 @@ public class Move implements Writable {
     // EFFECTS: returns true if at least one 
     // letter in the move matches the given letter.
     public boolean moveContainsLetter(char letter) {
-        for (int i = 0; i < lettersInvolved.length(); i++) {
+        int length = lettersInvolved.length();
+        for (int i = 0; i < length; i++) {
             if (lettersInvolved.charAt(i) == letter) {
                 return true;
             }
@@ -160,8 +161,4 @@ public class Move implements Writable {
         json.put("LettersAccountedFor", lettersInvolved);
         json.put("ChangeInPoints", pointsForMove);
     }
-
-
-    
-
 }

@@ -339,12 +339,12 @@ public class Board {
     // EFFECTS: places letters onto board in the given direction
     // beginning at starting coordinates
     public void placeWord(List<LetterTile> letters, int startRow, int startCol, Direction dir) {
-        int length = letters.size();
+        int numLetters = letters.size();
         int rowIncrement = (dir == Direction.DOWN) ? 1 : 0;
         int colIncrement = (dir == Direction.RIGHT) ? 1 : 0;
         int i = 0;
         int lettersPlaced = 0;
-        while (lettersPlaced < length) {
+        while (lettersPlaced < numLetters) {
             int row = startRow + i * rowIncrement;
             int col = startCol + i * colIncrement;
             if (!(boardTiles[row][col] instanceof LetterTile)) {
@@ -372,8 +372,8 @@ public class Board {
     //   mapped to their number of occurences on board
     public Map<Character, Integer> getNumEachCharOnBoard() {
         Map<Character, Integer> charCounts = new HashMap<>();
-        for (int i = 0; i < 15; i++) {
-            for (int j = 0; j < 15; j++) {
+        for (int i = 0; i < BOARD_LENGTH; i++) {
+            for (int j = 0; j < BOARD_LENGTH; j++) {
                 if (boardTiles[i][j] instanceof BoardTile) {
                     continue;
                 } else { //(boardTiles[i][j] instanceof LetterTile) {

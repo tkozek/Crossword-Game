@@ -39,7 +39,7 @@ public class Coordinate {
     // so that HashSet can be used to initialize 
     // the board's special tiles
     public int hashCode() {
-        return Objects.hash(row,column);
+        return Objects.hash(row, column);
     }
     
 }

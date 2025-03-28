@@ -30,9 +30,11 @@ public class ScrabbleVisualApp extends ScrabbleUserInterface {
     private static final String JSON_STORE = "./data/gameToPlayTest.json";
     private static final String REQUEST_PLAYER_NAME_TEXT = "Type player name then click add";
     private static final int FRAME_SIDE_LENGTH = 1000;
+    private static final int TILE_SIZE = 30;
+    private static final int BOARD_PANEL_LENGTH = Board.BOARD_LENGTH * TILE_SIZE;
     private static final int REQUEST_NAMES_FRAME_WIDTH = 1000 * 2 / 3;
     private static final int REQUEST_NAMES_FRAME_HEIGHT = 100;
-    private static final int TILE_SIZE = 30;
+    private static final Font TILE_FONT = new Font("Arial", Font.BOLD, 14);
     private static final int REMAINING_TILE_PRINTOUT_HEIGHT = 20;
     private static final Color DOUBLE_LETTER_COLOR = new Color(173, 216, 230);
     private static final Color TRIPLE_LETTER_COLOR = new Color(5, 127, 187);
@@ -52,41 +54,40 @@ public class ScrabbleVisualApp extends ScrabbleUserInterface {
     private JPanel rackPanel;
     private JPanel scorePanel;
 
-    private JPanel informationPanel;
-    private JPanel allMovesPanel;
-    private JPanel filteredWordsPanel;
+    private JPanel infoPanel;
+    private JPanel movesPanel;
+    private JPanel wordsPanel;
     private JButton searchWordsButton;
-    private JTextField searchWordsTextField;
-    private JPanel remainingTileCountsPanel;
-    private JButton searchRemainingCountsButton;
-    private JTextField searchRemainingCountsTextField;
+    private JTextField wordFilterField;
+    private JPanel letterDistributionPanel;
+    private JButton searchLetterCountsButton;
+    private JTextField searchLetterCountsField;
     private JTabbedPane infoTabs;
 
-    private List<Player> players;
     private int numPlayers;
     private JFrame frame;
     
-    private JButton saveAndQuitButton;
-    private JButton quitWithoutSavingButton;
+    private JButton saveAndQuit;
+    private JButton quitWithoutSaving;
     private JLabel coverPhoto;
     private JFrame loadOrPlayFrame;
-    private JButton newGameButton;
-    private JButton loadGameButton;
+    private JButton newGame;
+    private JButton loadGame;
 
-    private JFrame getPlayerNamesFrame;
-    private JPanel requestPlayerNamePanel;
-    private JTextField requestPlayerNameText;
+    private JFrame playerNameFrame;
+    private JPanel addPlayerPanel;
+    private JTextField nameInput;
     private JButton addPlayerButton;
-    private JButton confirmAllPlayersButton;
+    private JButton startButton;
 
     private JPanel moveButtons;
     private JPanel otherOptionButtons;
-    private JButton playWordButton;
-    private JButton swapTilesButton;
-    private JButton skipTurnButton;
+    private JButton playButton;
+    private JButton swapButton;
+    private JButton skipButton;
     
-    private JButton toggleDirectionButton;
-    private JButton clearSelectionsButton;
+    private JButton directionToggle;
+    private JButton clearSelections;
     private JPanel actionPanel;
     private int startRow;
     private int startCol;
@@ -105,40 +106,44 @@ public class ScrabbleVisualApp extends ScrabbleUserInterface {
     private void initializeStartMenu() {
         loadOrPlayFrame = new JFrame("Start Menu");
         loadOrPlayFrame.setSize(FRAME_SIDE_LENGTH, FRAME_SIDE_LENGTH);
+
         Image originalImage = new ImageIcon("./data/startMenuBackgroundPhoto.jpg").getImage();
         Image scaledImage = originalImage.getScaledInstance(FRAME_SIDE_LENGTH, FRAME_SIDE_LENGTH, Image.SCALE_SMOOTH);
         ImageIcon newIcon = new ImageIcon(scaledImage);
+
         coverPhoto = new JLabel(newIcon);
         coverPhoto.setLayout(new BoxLayout(coverPhoto, BoxLayout.Y_AXIS));
-        newGameButton = new JButton("New Game");
-        loadGameButton = new JButton("Load Game");
+        newGame = new JButton("New Game");
+        loadGame = new JButton("Load Game");
         
-        addNewAndLoadGameButtonActionListeners();
+        addStartMenuListeners();
         Box.Filler verticalFiller = new Box.Filler(
                 new Dimension(400, 850), // Horizontal size (0), Vertical size (100 pixels)
                 new Dimension(400, 850),
                 new Dimension(400, 850)
         );
         coverPhoto.add(verticalFiller);
-        coverPhoto.add(newGameButton, new GridBagConstraints());
-        coverPhoto.add(loadGameButton, new GridBagConstraints());
+        coverPhoto.add(newGame, new GridBagConstraints());
+        coverPhoto.add(loadGame, new GridBagConstraints());
         
         loadOrPlayFrame.add(coverPhoto);
         loadOrPlayFrame.repaint();
         loadOrPlayFrame.setVisible(true);
     }
 
+
+
     //REQUIRES: newGameButton and loadGameButton have been initialized
     //MODIFIES: newGameButton and loadGameButton 
     //EFFECTS: adds action listeners for newGameButton and loadGameButton 
-    private void addNewAndLoadGameButtonActionListeners() {
-        newGameButton.addActionListener(new ActionListener() {
+    private void addStartMenuListeners() {
+        newGame.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 loadOrPlayFrame.setVisible(false);
                 initializeNewGame();
             }
         });
-        loadGameButton.addActionListener(new ActionListener() {
+        loadGame.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 loadOrPlayFrame.setVisible(false);
                 loadOldGame(); 
@@ -153,8 +158,7 @@ public class ScrabbleVisualApp extends ScrabbleUserInterface {
         try {
             JsonReader jsonReader = new JsonReader(JSON_STORE);
             game = jsonReader.read();
-            this.players = game.getPlayers();
-            this.numPlayers = players.size();
+            this.numPlayers = game.getNumPlayers();
             handleGame(game.getFirstPlayerIndex());
         } catch (IOException e) {
             System.out.println("Unable to read game from file: " + JSON_STORE);
@@ -168,56 +172,41 @@ public class ScrabbleVisualApp extends ScrabbleUserInterface {
         this.game = new ScrabbleGame("game");
         this.numPlayers = 0;
         requestPlayerNames();
-        //scrabbleGame.setFirstPlayer(players.get(0)); // !!! Todo add exception handling
+        // !!! TODO add exception handling
     }
 
     // MODIFIES: this
     // EFFECTS: Prompts player to enter players' names
     //         in the desired order of play.
     private void requestPlayerNames() {
-        getPlayerNamesFrame = new JFrame("Request Player Names");
-        getPlayerNamesFrame.setSize(REQUEST_NAMES_FRAME_WIDTH, REQUEST_NAMES_FRAME_HEIGHT);
-        requestPlayerNamePanel = new JPanel();
-        requestPlayerNameText = new JTextField(REQUEST_PLAYER_NAME_TEXT);
+        playerNameFrame = new JFrame("Request Player Names");
+        playerNameFrame.setSize(REQUEST_NAMES_FRAME_WIDTH, REQUEST_NAMES_FRAME_HEIGHT);
+        addPlayerPanel = new JPanel();
+        nameInput = new JTextField(REQUEST_PLAYER_NAME_TEXT);
         addPlayerButton = new JButton("Add player with name in textbox");
-        confirmAllPlayersButton = new JButton("Start Game");
-        addRequestNamesListeners();
-
-        requestPlayerNamePanel.add(requestPlayerNameText);
-        requestPlayerNamePanel.add(addPlayerButton);
-        requestPlayerNamePanel.add(confirmAllPlayersButton);
-        getPlayerNamesFrame.add(requestPlayerNamePanel);
-        getPlayerNamesFrame.setVisible(true);
-    }
-
-    // REQUIRES: addPlayerButton, confirmAllPlayersButton, and requestPlayerNameText 
-    // are initialized.
-    //MODIFIES: addPlayerButton, confirmAllPlayersButton, requestPlayerNameText
-    //EFFECTS: Adds ActionListeners to buttons in getPlayerNamesFrame 
-    // and adds FocusListeners to textfield in getPlayerNamesFrame
-    private void addRequestNamesListeners() {
-        addRequestNamesActionListeners();
-        addRequestNamesFocusListeners();
+        startButton = new JButton("Start Game");
+        addNameActionListeners();
+        addNameFocusListeners();
+        addPlayerPanel.add(nameInput);
+        addPlayerPanel.add(addPlayerButton);
+        addPlayerPanel.add(startButton);
+        playerNameFrame.add(addPlayerPanel);
+        playerNameFrame.setVisible(true);
     }
 
     // MODIFIES: addPlayerButton, confirmAllPlayersButton
     // EFFECTS: adds ActionListeners to addPlayerButton and confirmAllPlayersButton
-    private void addRequestNamesActionListeners() {
+    private void addNameActionListeners() {
         addPlayerButton.addActionListener(new ActionListener() {
-            // MODIFIES: scrabbleGame, requestPlayerNameText
-            // EFFECTS: Adds player to game and resets requestPlayerNameText
             public void actionPerformed(ActionEvent e) {
                 addPlayer();
-                requestPlayerNameText.setText(REQUEST_PLAYER_NAME_TEXT);
+                nameInput.setText(REQUEST_PLAYER_NAME_TEXT);
             }
         });
         
-        confirmAllPlayersButton.addActionListener(new ActionListener() {
-            // MODIFIES: this
-            // EFFECTS: begins game with players that have been added
+        startButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                getPlayerNamesFrame.setVisible(false);
-                players = game.getPlayers();
+                playerNameFrame.setVisible(false);
                 gameRunning = true;
                 handleGame(0);
             }
@@ -226,25 +215,19 @@ public class ScrabbleVisualApp extends ScrabbleUserInterface {
 
     // MODIFIES: requestPlayerNameText
     // EFFECTS: adds FocusListener to requestPlayerNameText
-    private void addRequestNamesFocusListeners() {
-        requestPlayerNameText.addFocusListener(new FocusAdapter() {
+    private void addNameFocusListeners() {
+        nameInput.addFocusListener(new FocusAdapter() {
             @Override
-            // MODIFIES: requestPlayerNameText
-            // EFFECTS: clears requestPlayerNameText if it is in focus
-            // and displaying default text
             public void focusGained(FocusEvent e) {
-                if (requestPlayerNameText.getText().equals(REQUEST_PLAYER_NAME_TEXT)) {
-                    requestPlayerNameText.setText("");
+                if (nameInput.getText().equals(REQUEST_PLAYER_NAME_TEXT)) {
+                    nameInput.setText("");
                 }
             }
 
             @Override
-            // MODIFIES: requestPlayerNameText
-            // EFFECTS: sets requestPlayerNameText to default if it is out of focus
-            // and empty
             public void focusLost(FocusEvent e) {
-                if (requestPlayerNameText.getText().isEmpty()) {
-                    requestPlayerNameText.setText(REQUEST_PLAYER_NAME_TEXT);
+                if (nameInput.getText().isEmpty()) {
+                    nameInput.setText(REQUEST_PLAYER_NAME_TEXT);
                 }
             }
         });
@@ -260,28 +243,28 @@ public class ScrabbleVisualApp extends ScrabbleUserInterface {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(FRAME_SIDE_LENGTH, FRAME_SIDE_LENGTH);
         frame.setLayout(new BorderLayout());
-        getBoardPanel(game.getBoard());
-        Player playerToPlayNext = players.get(index);
+        getBoardPanel();
+        Player playerToPlayNext = game.getPlayerByIndex(index);
         game.drawTiles(playerToPlayNext);
         getRackPanel(playerToPlayNext);
-        getScorePanel(game);
-        getInformationPanel(playerToPlayNext);
+        updateScorePanel(game);
+        getInfoPanel(playerToPlayNext);
         frame.add(boardPanel, BorderLayout.CENTER);
         frame.add(rackPanel, BorderLayout.SOUTH);
         frame.add(scorePanel, BorderLayout.WEST);
-        frame.add(informationPanel, BorderLayout.EAST);
+        frame.add(infoPanel, BorderLayout.EAST);
         frame.repaint();
         frame.setVisible(true);
     }
 
     // EFFECTS: adds players' names to along with their score
     // to scorePanel in the format name: score
-    private void getScorePanel(ScrabbleGame scrabbleGame) {
+    private void updateScorePanel(ScrabbleGame scrabbleGame) {
         scorePanel = new JPanel();
-        List<Player> players = scrabbleGame.getPlayers();
         scorePanel.setLayout(new BoxLayout(scorePanel, BoxLayout.Y_AXIS));
-        for (Player player : players) {
-            JLabel playerLabel = new JLabel(player.getPlayerName() + ": " + player.getPointsThisGame());
+        Map<String, Integer> playerScoreMap = game.getPlayerScoreMap();
+        for (Map.Entry<String, Integer> entry : playerScoreMap.entrySet()) {
+            JLabel playerLabel = new JLabel(entry.getKey() + ": " + entry.getValue());
             scorePanel.add(playerLabel);
         }
     }
@@ -296,7 +279,8 @@ public class ScrabbleVisualApp extends ScrabbleUserInterface {
         actionPanel.setLayout(new BoxLayout(actionPanel, BoxLayout.Y_AXIS));
         addActionButtons(player);
         List<LetterTile> letters = player.getTilesOnRack();
-        for (int i = 0; i < letters.size(); i++) {
+        int numLetters = letters.size();
+        for (int i = 0; i < numLetters; i++) {
             rackPanel.add(createTilePanel(player, letters.get(i), i));
         }
     }
@@ -306,73 +290,66 @@ public class ScrabbleVisualApp extends ScrabbleUserInterface {
     private void addActionButtons(Player player) {
         moveButtons = new JPanel();
         otherOptionButtons = new JPanel();
+
         moveButtons.setLayout(new BoxLayout(moveButtons, BoxLayout.X_AXIS));
         otherOptionButtons.setLayout(new BoxLayout(otherOptionButtons, BoxLayout.X_AXIS));
         moveButtons.setAlignmentX(Component.CENTER_ALIGNMENT);
         otherOptionButtons.setAlignmentX(Component.CENTER_ALIGNMENT);
-        playWordButton = new JButton("Play");
-        swapTilesButton = new JButton("Swap");
-        skipTurnButton = new JButton("Skip");
+
+        playButton = new JButton("Play");
+        swapButton = new JButton("Swap");
+        skipButton = new JButton("Skip");
+
         String directionString = (dir == Direction.DOWN) ? "Down" : "Right";
-        toggleDirectionButton = new JButton(directionString);
-        clearSelectionsButton = new JButton("Clear selection");
-        saveAndQuitButton = new JButton("Save and Quit");
-        quitWithoutSavingButton = new JButton("Quit without Saving");
-        addActionButtonActionListeners(player);
-        addActionButtonsToActionButtonPanels();
+        directionToggle = new JButton(directionString);
+        clearSelections = new JButton("Clear selection");
+
+        saveAndQuit = new JButton("Save and Quit");
+        quitWithoutSaving = new JButton("Quit without Saving");
+        addMoveListeners(player);
+        addOtherOptionsListeners(player);
+        addButtonsToActionPanel();
 
     }
 
     // MODIFIES: this
     // EFFECTS: puts available action buttons into appropriate panels
-    private void addActionButtonsToActionButtonPanels() {
-        moveButtons.add(playWordButton);
-        moveButtons.add(swapTilesButton);
-        moveButtons.add(skipTurnButton);
+    private void addButtonsToActionPanel() {
+        moveButtons.add(playButton);
+        moveButtons.add(swapButton);
+        moveButtons.add(skipButton);
 
-        otherOptionButtons.add(toggleDirectionButton);
-        otherOptionButtons.add(clearSelectionsButton);
-        otherOptionButtons.add(saveAndQuitButton);
-        otherOptionButtons.add(quitWithoutSavingButton);
+        otherOptionButtons.add(directionToggle);
+        otherOptionButtons.add(clearSelections);
+        otherOptionButtons.add(saveAndQuit);
+        otherOptionButtons.add(quitWithoutSaving);
 
         actionPanel.add(moveButtons);
         actionPanel.add(otherOptionButtons);
         
         rackPanel.add(actionPanel);
     }
-    
-    // REQUIRES: playWordButton, swapTilesButton, skipTurnButton,
-    // toggleDirectionButton, and clearSelectionsButton have been
-    // initialized
-    // MODIFIES: this
-    // EFFECTS: adds play, swap, and skip action listeners,
-    // as well as clear selected tiles, direction, save and quit,
-    // and quit without saving action listeners.
-    private void addActionButtonActionListeners(Player player) {
-        addMoveButtonActionListeners(player);
-        addOtherButtonOptionsActionListeners(player);
-    }
 
     // REQUIRES: playWordButton, swapTilesButton, skipTurnButton
     // have been initialized
     // MODIFIES: this
     // EFFECTS: adds play, swap, and skip action listeners
-    private void addMoveButtonActionListeners(Player player) {
-        playWordButton.addActionListener(new ActionListener() {
+    private void addMoveListeners(Player player) {
+        playButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 game.playWord(player, startRow, startCol, dir);
                 frame.setVisible(false);
                 handleGame(game.getPlayerIndex(player) + 1);
             }
         });
-        swapTilesButton.addActionListener(new ActionListener() {
+        swapButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 game.swapTiles(player);
                 frame.setVisible(false);
                 handleGame(game.getPlayerIndex(player) + 1);
             }
         });
-        skipTurnButton.addActionListener(new ActionListener() {
+        skipButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 game.logSkippedTurn(player);
                 frame.setVisible(false);
@@ -386,22 +363,20 @@ public class ScrabbleVisualApp extends ScrabbleUserInterface {
     // MODIFIES: this
     // EFFECTS: adds clear selected tiles, direction, save and quit,
     // and quit without saving action listeners.
-    private void addOtherButtonOptionsActionListeners(Player player) {
-        toggleDirectionButton.addActionListener(new ActionListener() {
+    private void addOtherOptionsListeners(Player player) {
+        directionToggle.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 Direction newDirection = (dir == Direction.DOWN) ? Direction.RIGHT : Direction.DOWN;
                 dir = newDirection;
                 String newText = (dir == Direction.DOWN) ? "Down" : "Right";
-                toggleDirectionButton.setText(newText);
+                directionToggle.setText(newText);
             }
         });
-        clearSelectionsButton.addActionListener(new ActionListener() {
+        clearSelections.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 player.clearSelectedTiles();
                 getRackPanel(player);
                 repaintAndRevalidate(rackPanel);
-                // getRackPanel(player);
-                // frame.repaint();
             }
         });
         addSaveAndQuitActionListeners(player);
@@ -410,14 +385,14 @@ public class ScrabbleVisualApp extends ScrabbleUserInterface {
     // MODIFIES: this
     // EFFECTS: adds save and quit, and quit without saving action listeners.
     private void addSaveAndQuitActionListeners(Player player) {
-        saveAndQuitButton.addActionListener(new ActionListener() {
+        saveAndQuit.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 handleSave(player);
                 printEventLog();
                 System.exit(0);
             }
         });
-        quitWithoutSavingButton.addActionListener(new ActionListener() {
+        quitWithoutSaving.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 printEventLog();
                 System.exit(0);
@@ -462,17 +437,17 @@ public class ScrabbleVisualApp extends ScrabbleUserInterface {
     // MODIFIES: this
     // EFFECTS: Adds panel representing the current board
     // to the frame
-    private void getBoardPanel(Board board) {
+    private void getBoardPanel() {
         boardPanel = new JPanel();
         boardPanel.setLayout(new GridLayout(Board.BOARD_LENGTH, Board.BOARD_LENGTH));
-        boardPanel.setPreferredSize(new Dimension(Board.BOARD_LENGTH * TILE_SIZE, Board.BOARD_LENGTH * TILE_SIZE));
+        boardPanel.setPreferredSize(new Dimension(BOARD_PANEL_LENGTH, BOARD_PANEL_LENGTH));
         for (int i = 0; i < Board.BOARD_LENGTH; i++) {
             for (int j = 0; j < Board.BOARD_LENGTH; j++) {
-                String toDisplay = board.getTileAtPositionOnBoard(i, j).toDisplay();
+                String toDisplay = game.getTileAtPositionOnBoard(i, j).toDisplay();
                 JButton tile = new JButton(toDisplay);
                 tile.setBackground(selectBoardTileColor(toDisplay));
                 tile.setBorder(BorderFactory.createLineBorder(Color.BLACK));
-                tile.setFont(new Font("Arial", Font.BOLD, 14));
+                tile.setFont(TILE_FONT);
                 final int row = i;
                 final int col = j;
                 tile.addActionListener(new ActionListener() {
@@ -515,34 +490,34 @@ public class ScrabbleVisualApp extends ScrabbleUserInterface {
 
     // MODIFIES: this
     // EFFECTS: adds tabbed information panel to frame
-    private void getInformationPanel(Player player) {
-        informationPanel = new JPanel();
-        informationPanel.setLayout(new CardLayout());
-        informationPanel.setPreferredSize(new Dimension(175, FRAME_SIDE_LENGTH));
+    private void getInfoPanel(Player player) {
+        infoPanel = new JPanel();
+        infoPanel.setLayout(new CardLayout());
+        infoPanel.setPreferredSize(new Dimension(175, FRAME_SIDE_LENGTH));
         infoTabs = new JTabbedPane();
-        addAllMovesPanel(player);
-        addFilteredWordsPanel(player);
-        addRemainingTileCountsPanel(player);
+        addMovesTab(player);
+        addWordsTab(player);
+        addLetterDistributionTab(player);
 
         infoTabs.addChangeListener(new ChangeListener() {
             public void stateChanged(ChangeEvent e) {
                 int selectedIndex = infoTabs.getSelectedIndex();
                 if (selectedIndex == 2) {
-                    resetTabbedPanePanel(remainingTileCountsPanel);
+                    resetTab(letterDistributionPanel);
                 } else if (selectedIndex == 1) {
-                    resetTabbedPanePanel(filteredWordsPanel);
+                    resetTab(wordsPanel);
                 } 
             }
         });
-        informationPanel.add(infoTabs);
+        infoPanel.add(infoTabs);
     }
 
 
     // MODIFIES: infoTabs       
     // EFFECTs: adds a panel to show summary of all moves
     // to the information tabbed pane
-    private void addAllMovesPanel(Player player) {
-        allMovesPanel = new JPanel();
+    private void addMovesTab(Player player) {
+        movesPanel = new JPanel();
         String summary = "";
         for (Move move : player.getHistory().getMoves()) {
             switch (move.getMoveType()) {
@@ -561,11 +536,11 @@ public class ScrabbleVisualApp extends ScrabbleUserInterface {
             }
             JTextArea moveSummary = getFormattedTextArea(summary, 100);
             
-            allMovesPanel.add(moveSummary);
-            allMovesPanel.setMaximumSize(new Dimension(200,500));
-            allMovesPanel.setBorder(BorderFactory.createLineBorder(Color.black));
+            movesPanel.add(moveSummary);
+            movesPanel.setMaximumSize(new Dimension(200,500));
+            movesPanel.setBorder(BorderFactory.createLineBorder(Color.black));
         }
-        infoTabs.add(allMovesPanel, "All Moves");
+        infoTabs.add(movesPanel, "My Move History");
     }
 
     // EFFECTS: returns JTextArea with given text and 
@@ -584,51 +559,49 @@ public class ScrabbleVisualApp extends ScrabbleUserInterface {
     // MODIFIES: infoTabs       
     // EFFECTs: adds a panel to show filtered word summary
     // to the information tabbed pane
-    private void addFilteredWordsPanel(Player player) {
-        filteredWordsPanel = new JPanel();
+    private void addWordsTab(Player player) {
+        wordsPanel = new JPanel();
         searchWordsButton = new JButton("Search");
-        searchWordsTextField = new JTextField(SEARCH_WORDS_DEFAULT_DISPLAY_TEXT);
-        addSearchWordsButtonActionListener(player);
-        searchWordsTextField.addFocusListener(new FocusListener() {
+        wordFilterField = new JTextField(SEARCH_WORDS_DEFAULT_DISPLAY_TEXT);
+        addSearchWordsButtonListener(player);
+        wordFilterField.addFocusListener(new FocusListener() {
             @Override
             public void focusGained(FocusEvent e) {
-                searchWordsTextField.setText("");
+                wordFilterField.setText("");
             }
 
             @Override
             public void focusLost(FocusEvent e) {
-                
             }
         });
-        filteredWordsPanel.add(searchWordsTextField);
-        filteredWordsPanel.add(searchWordsButton);
-        infoTabs.add(filteredWordsPanel, "Filtered Words");
+        wordsPanel.add(wordFilterField);
+        wordsPanel.add(searchWordsButton);
+        infoTabs.add(wordsPanel, "Word Filter");
     }
 
     // MODIFIES: searchWordsButton
     // EFFECTS: adds action listener to the button in Filtered Words tab
-    private void addSearchWordsButtonActionListener(Player player) {
+    private void addSearchWordsButtonListener(Player player) {
         searchWordsButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                resetTabbedPanePanel(filteredWordsPanel);
-                if (searchWordsTextField.getText().isEmpty()) {
+                resetTab(wordsPanel);
+                if (wordFilterField.getText().isEmpty()) {
                     for (Move move : player.getMoves()) {
                         if (move.getMoveType() == MoveType.PLAY_WORD) {
-                            filteredWordsPanel.add(getFormattedTextArea(game.getWordDescription(move, player), 100));
+                            wordsPanel.add(getFormattedTextArea(game.getWordDescription(move, player), 100));
                         }
                     }
                 }
-                char letter = searchWordsTextField.getText().toUpperCase().charAt(0);
-                if (player.getHistory().getListOfWordsPlayedContainingLetter(letter).isEmpty()) {
-                    filteredWordsPanel.add(getFormattedTextArea("You haven't played a word with that letter", 100));
+                char letter = wordFilterField.getText().toUpperCase().charAt(0);
+                List<Move> words = player.getHistory().getWordsContainingLetter(letter);
+                if (words.isEmpty()) {
+                    wordsPanel.add(getFormattedTextArea("You haven't played a word with that letter", 100));
                 } else {
-                    for (Move move : player.getMoves()) {
-                        if (move.getMoveType() == MoveType.PLAY_WORD && move.moveContainsLetter(letter)) {
-                            filteredWordsPanel.add(getFormattedTextArea(game.getWordDescription(move, player), 100));
+                    for (Move word : words) {
+                        wordsPanel.add(getFormattedTextArea(game.getWordDescription(word, player), 100));
                         }
                     }
-                }
-                repaintAndRevalidate(filteredWordsPanel);
+                repaintAndRevalidate(wordsPanel);
             }
         });
     }
@@ -636,7 +609,7 @@ public class ScrabbleVisualApp extends ScrabbleUserInterface {
     // MODIFIES: panel
     // EFFECTS: removes all JTextArea components
     // from panel
-    private void resetTabbedPanePanel(JPanel panel) {
+    private void resetTab(JPanel panel) {
         for (Component component : panel.getComponents()) {
             if (component instanceof JTextArea) {
                 panel.remove(component);
@@ -648,41 +621,41 @@ public class ScrabbleVisualApp extends ScrabbleUserInterface {
     // MODIFIES: infoTabs
     // EFFECTs: adds a panel to show remaining tile counts
     // to the information tabbed pane
-    private void addRemainingTileCountsPanel(Player player) {
-        remainingTileCountsPanel = new JPanel();
-        Map<Character, Integer> remainingCounts = game.getNumEachCharInBagAndOpponents(player);
-        searchRemainingCountsButton = new JButton("Search");
-        searchRemainingCountsTextField = new JTextField(SEARCH_REMAINING_COUNTS_DEFAULT_DISPLAY_TEXT);
-        searchRemainingCountsButton.addActionListener(new ActionListener() {
+    private void addLetterDistributionTab(Player player) {
+        letterDistributionPanel = new JPanel();
+        Map<Character, Integer> distributionMap = game.getNumEachCharInBagAndOpponents(player);
+        searchLetterCountsButton = new JButton("Search");
+        searchLetterCountsField = new JTextField(SEARCH_REMAINING_COUNTS_DEFAULT_DISPLAY_TEXT);
+        searchLetterCountsButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                resetTabbedPanePanel(remainingTileCountsPanel);
-                if (searchRemainingCountsTextField.getText().isEmpty()) {
-                    for (Map.Entry<Character, Integer> entry : remainingCounts.entrySet()) {
-                        remainingTileCountsPanel.add(getFormattedTextArea(entry.getKey() + " : " 
+                resetTab(letterDistributionPanel);
+                if (searchLetterCountsField.getText().isEmpty()) {
+                    for (Map.Entry<Character, Integer> entry : distributionMap.entrySet()) {
+                        letterDistributionPanel.add(getFormattedTextArea(entry.getKey() + " : " 
                                 + entry.getValue(), 20));
                     }
                 } else {
-                    char key = searchRemainingCountsTextField.getText().toUpperCase().charAt(0);
-                    remainingTileCountsPanel.add(getFormattedTextArea(key + " : " + remainingCounts.get(key), 20));
-                    repaintAndRevalidate(remainingTileCountsPanel);
+                    char key = searchLetterCountsField.getText().toUpperCase().charAt(0);
+                    letterDistributionPanel.add(getFormattedTextArea(key + " : " + distributionMap.get(key), 20));
+                    repaintAndRevalidate(letterDistributionPanel);
                 }
             }
         });
-        addRemainingTileCountsFocusListener();
-        remainingTileCountsPanel.add(searchRemainingCountsTextField);
-        remainingTileCountsPanel.add(searchRemainingCountsButton);
-        infoTabs.add(remainingTileCountsPanel, "Remaining Tile Counts");
+        addLetterDistributionFocusListener();
+        letterDistributionPanel.add(searchLetterCountsField);
+        letterDistributionPanel.add(searchLetterCountsButton);
+        infoTabs.add(letterDistributionPanel, "Letter Distribution");
     }
 
     // MODIFIES: searchRemainingCountsTextField
     // EFFECTS: searchRemainingCountsTextField has been initialized
-    private void addRemainingTileCountsFocusListener() {
-        searchRemainingCountsTextField.addFocusListener(new FocusListener() {
+    private void addLetterDistributionFocusListener() {
+        searchLetterCountsField.addFocusListener(new FocusListener() {
             @Override
             // MODIFIES: searchRemainingCountsTextField
             // EFFECTS: sets searchRemainingCountsTextField text to empty string
             public void focusGained(FocusEvent e) {
-                searchRemainingCountsTextField.setText("");
+                searchLetterCountsField.setText("");
             }
 
             @Override
@@ -704,9 +677,7 @@ public class ScrabbleVisualApp extends ScrabbleUserInterface {
     // who's name is the text currently in 
     // requestPlayerNameText
     private void addPlayer() {
-        String name = requestPlayerNameText.getText();
-        Player player = new Player(name);
-        game.addPlayer(player);
+        game.addPlayer(new Player(nameInput.getText()));
         numPlayers++;
     }
 

@@ -1,6 +1,7 @@
 package model;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -182,6 +183,14 @@ public class ScrabbleGame implements Writable {
         return jsonArray;
     }
 
+    public Map<String, Integer> getPlayerScoreMap() {
+        Map<String, Integer> scores = new LinkedHashMap<>();
+        for (Player player : players) {
+            scores.put(player.getPlayerName(), player.getPointsThisGame());
+        }
+        return scores;
+    }
+
     // EFFECTS: Adds up total occurences of every character on board,
     // and on this player's rack. Combines those and subtracts from
     // initial counts in draw pile to get remaining number of each
@@ -287,20 +296,19 @@ public class ScrabbleGame implements Writable {
         String totalLetters = "";
         String letters = "";
         for (Player player : players) {
-            if (player.equals(lastPlayer)) {
-                continue;
+            if (!(player.equals(lastPlayer))) {
+                playerLoss = 0;
+                letters = "";
+                for (LetterTile letter : player.getTilesOnRack()) {
+                    playerLoss += letter.getLetterPoints();
+                    letters += letter.toDisplay();
+                }
+                player.addPoints(-1 * playerLoss);
+                total += playerLoss;
+                totalLetters += letters;
+                adjustment = new Move(player, lastPlayer, letters, -1 * playerLoss);
+                updateHistoriesAndEventLog(adjustment, player);
             }
-            playerLoss = 0;
-            letters = "";
-            for (LetterTile letter : player.getTilesOnRack()) {
-                playerLoss += letter.getLetterPoints();
-                letters += letter.toDisplay();
-            }
-            player.addPoints(-1 * playerLoss);
-            total += playerLoss;
-            totalLetters += letters;
-            adjustment = new Move(player, lastPlayer, letters, -1 * playerLoss);
-            updateHistoriesAndEventLog(adjustment, player);
         }
         lastPlayer.addPoints(total);
         updateHistoriesAndEventLog(new Move(lastPlayer, lastPlayer, totalLetters, total), lastPlayer);
@@ -344,8 +352,6 @@ public class ScrabbleGame implements Writable {
         history.addMove(move);
         player.addMove(move);
     }
-
-
 
     // MODIFIES: this
     // EFFECTS: fills players tile rack with as
@@ -418,5 +424,4 @@ public class ScrabbleGame implements Writable {
         return lastPlayer + " used all their tiles first. \n" 
                 + playerName + gainOrLoss + absolutePointChange + pluralOrNot;
     }
-
 }

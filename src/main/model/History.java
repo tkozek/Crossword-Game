@@ -23,6 +23,10 @@ public class History {
         return this.moveHistory;
     }
 
+    public List<Move> getMoves(Player player) {
+        return null; // !!! TODO remove player's sense of history
+    }
+
     // EFFECTS: Returns only the moves where a word was 
     // played. Excludes any turns which were swaps
     // or skips
@@ -49,7 +53,7 @@ public class History {
     // EFFECTS: Filters player's words played and returns
     // them in order least to most recent, only including
     // moves which used the given letter at least once
-    public List<Move> getListOfWordsPlayedContainingLetter(char letter) {
+    public List<Move> getWordsContainingLetter(char letter) {
         List<Move> movesWithLetter = new ArrayList<>();
         List<Move> playedWords = this.getMovesWithWordPlayed();
         for (Move move : playedWords) {

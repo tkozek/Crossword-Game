@@ -220,7 +220,7 @@ public class ScrabbleConsoleApp extends ScrabbleUserInterface {
         System.out.println("Enter a character to view all your words played which contained that character");
         String entry = scanner.nextLine().toUpperCase();
         Character character = entry.charAt(0);
-        List<Move> moves = player.getHistory().getListOfWordsPlayedContainingLetter(character);
+        List<Move> moves = player.getHistory().getWordsContainingLetter(character);
         if (moves.isEmpty()) {
             System.out.println("You haven't played any words containing " + character.toString());
         } else {
