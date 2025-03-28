@@ -46,10 +46,10 @@ public class LetterTileTest {
         assertEquals(3, copyLetter.getPoints());
         assertFalse(copyLetter == testTileB);
         testTileB = null;
-        assertFalse(copyLetter == null);
+        assertNotNull(copyLetter);
         assertEquals('B', copyLetter.getCharacter());
         assertEquals(3, copyLetter.getPoints());
-        assertTrue(testTileB == null);
+        assertNull(testTileB);
     }
 
     @Test
@@ -66,23 +66,31 @@ public class LetterTileTest {
         assertFalse(copyLetter == testTileB);
         testTileQ = null;
         testTileB = null;
-        assertFalse(copyLetter == null);
+        assertNotNull(copyLetter);
         assertEquals('B', copyLetter.getCharacter());
         assertEquals(3, copyLetter.getPoints());
-        assertTrue(testTileB == null);
+        assertNull(testTileB);
 
-        assertFalse(copyQ == null);
+        assertNotNull(copyQ);
         assertEquals('Q', copyQ.getCharacter());
         assertEquals(10, copyQ.getPoints());
-        assertTrue(testTileQ == null);
+        assertNull(testTileQ);
     }
 
-   /*  @Test
-    void testGetCharacterAsString() {
-        assertEquals("A", testTileA.getStringToDisplay());
-        assertEquals("Q", testTileQ.getStringToDisplay());
-        assertEquals("-", testBlankTile.getStringToDisplay());           
-    } */
+    @Test
+    void testToDisplay() {
+        assertEquals("A", testTileA.toDisplay());
+        assertEquals("Q", testTileQ.toDisplay());
+        assertEquals("-", testBlankTile.toDisplay());           
+    }
+
+    @Test
+    void testGetTerminalPrintout() {
+        assertEquals(" A_| ", testTileA.getTerminalPrintoutString());
+        assertEquals(" Q_| ", testTileQ.getTerminalPrintoutString());
+        assertEquals(" -_| ", testBlankTile.getTerminalPrintoutString());           
+    }
+
 
     @Test
     void testCharacterOnlyConstructor() {

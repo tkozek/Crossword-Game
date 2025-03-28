@@ -12,7 +12,6 @@ import org.json.JSONObject;
 
 import model.move.Move;
 import model.tile.LetterTile;
-import persistance.Writable;
 
 // Represents a player in the Scrabble Game
 

@@ -4,11 +4,9 @@ import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import model.board.Board;
 import model.move.Move;
 import model.move.MoveType;
 import model.tile.LetterTile;
-import model.tile.TileBag;
 
 import java.util.List;
 import java.util.Map;
@@ -16,11 +14,8 @@ import java.util.Map;
 public class ScrabbleGameTest {
 
     private ScrabbleGame game;
-    private Board board;
-    private TileBag tileBag;
     private Player player;
     private Player player2;
-
 
     @BeforeEach
     void setup() {

@@ -48,14 +48,42 @@ public class BoardTileTest {
         assertEquals(3,doubleLetterTile.getCol());
 
     }
-    /* @Test
-    void testgetStringToDisplay() {
-        assertEquals("DW", doubleWordTile.getStringToDisplay());
-        assertEquals("TW", tripleWordTile.getStringToDisplay());
-        assertEquals("DL", doubleLetterTile.getStringToDisplay());
-        assertEquals("TL", tripleLetterTile.getStringToDisplay());
-        assertEquals("_", regularTile.getStringToDisplay());
-    } */
+
+    @Test
+    void testToDisplay() {
+        assertEquals("DWS", doubleWordTile.toDisplay());
+        assertEquals("TWS", tripleWordTile.toDisplay());
+        assertEquals("DLS", doubleLetterTile.toDisplay());
+        assertEquals("TLS", tripleLetterTile.toDisplay());
+        assertEquals(" ", regularTile.toDisplay());
+    }
+
+    @Test
+    void testGetTerminalPrintoutString() {
+        assertEquals("DWS| ", doubleWordTile.getTerminalPrintoutString());
+        assertEquals("TWS| ", tripleWordTile.getTerminalPrintoutString());
+        assertEquals("DLS| ", doubleLetterTile.getTerminalPrintoutString());
+        assertEquals("TLS| ", tripleLetterTile.getTerminalPrintoutString());
+        assertEquals("___| ", regularTile.getTerminalPrintoutString());
+    }
+
+    @Test
+    void testOccupiesBoardSpot() {
+        assertFalse(doubleWordTile.occupiesBoardSpot());
+        assertFalse(tripleWordTile.occupiesBoardSpot());
+        assertFalse(doubleLetterTile.occupiesBoardSpot());
+        assertFalse(tripleLetterTile.occupiesBoardSpot());
+        assertFalse(regularTile.occupiesBoardSpot());
+    }
+
+    @Test
+    void testGetPoints() {
+        assertEquals(0, doubleWordTile.getPoints());
+        assertEquals(0, tripleWordTile.getPoints());
+        assertEquals(0, doubleLetterTile.getPoints());
+        assertEquals(0, tripleLetterTile.getPoints());
+        assertEquals(0, regularTile.getPoints());
+    }
     
     @Test
     void testGetTileTypeAllTypes() {

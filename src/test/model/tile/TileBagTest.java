@@ -11,6 +11,8 @@ import model.ScrabbleGame;
 
 public class TileBagTest {
     
+    private static final int NUM_TILES_TILEBAG_INITIALLY = TileBag.TOTAL_LETTERS_INITIALLY;
+    private static final int MAX_NUM_TILES = TileBag.MAX_NUM_PLAYER_TILES;
     private Player testPlayer;
     private ScrabbleGame game;
     private LetterTile b1;
@@ -37,13 +39,13 @@ public class TileBagTest {
         //0 tiles on rack initially
         assertEquals(testPlayer.getNumTilesOnRack(),0);
         //No tiles removed yet
-        assertEquals(game.getTileBag().numTilesRemaining(), TileBag.TOTAL_LETTERS_INITIALLY);
+        assertEquals(game.getTileBag().numTilesRemaining(), NUM_TILES_TILEBAG_INITIALLY);
         // Enough tiles removed from bag to fill player's rack
-        assertEquals(game.getTileBag().drawTiles(testPlayer), TileBag.MAX_NUM_PLAYER_TILES);
+        assertEquals(game.getTileBag().drawTiles(testPlayer), MAX_NUM_TILES);
         //Enough tiles removed from bag to fill player's rack
-        assertEquals(game.getTileBag().numTilesRemaining(), TileBag.TOTAL_LETTERS_INITIALLY -  TileBag.MAX_NUM_PLAYER_TILES);
+        assertEquals(game.getTileBag().numTilesRemaining(), NUM_TILES_TILEBAG_INITIALLY -  MAX_NUM_TILES);
         // MAX_NUM_TILES get added to rack
-        assertEquals(testPlayer.getNumTilesOnRack(), TileBag.MAX_NUM_PLAYER_TILES);
+        assertEquals(testPlayer.getNumTilesOnRack(), MAX_NUM_TILES);
         //Cannot draw more tiles 
         assertEquals(0, game.getTileBag().drawTiles(testPlayer));
     }
@@ -61,7 +63,7 @@ public class TileBagTest {
         game.getTileBag().emptyDrawPile();
         LetterTile letter = new LetterTile('A', 1);
         game.getTileBag().addTile(letter);
-        assertTrue(testPlayer.getNumTilesOnRack() + 1 < TileBag.MAX_NUM_PLAYER_TILES);
+        assertEquals(0, testPlayer.getNumTilesOnRack());
         // the single A we added will be drawn, then 
         // loop stops executing since the pile is empty, even though Player still 
         // doesnt have a full rack
@@ -83,4 +85,3 @@ public class TileBagTest {
         assertEquals(2, game.getTileBag().getCurrentLetterFrequencies().get('B'));
     }
 }
-

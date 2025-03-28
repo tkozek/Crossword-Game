@@ -14,7 +14,6 @@ import model.move.MoveType;
 import model.tile.LetterTile;
 import model.tile.TileBag;
 
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;

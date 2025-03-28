@@ -44,7 +44,7 @@ public class JsonReaderTest extends JsonTest {
             ScrabbleGame game = reader.read();
             assertEquals(game.getName(), "EmptyGameName");
             assertEquals(game.getNumPlayers(), 0);
-            assertFalse(game.getBoard() == null);
+            assertNotNull(game.getBoard());
         } catch (IOException e) {
             fail("Couldn't read file");
         }
@@ -59,7 +59,7 @@ public class JsonReaderTest extends JsonTest {
             assertEquals(game.getName(), "Initial Game");
             assertEquals(game.getNumPlayers(), 3);
             // Override Board.equals() and update line below this
-            assertFalse(game.getBoard() == null);
+            assertNotNull(game.getBoard());
             assertEquals(game.getTileBag().getCurrentLetterFrequencies(), testBag.getInitialLetterFrequencies());
             assertEquals(game.getHistory().getMoves().size(), 3);
             Player player = game.getPlayers().get(0);
@@ -80,7 +80,7 @@ public class JsonReaderTest extends JsonTest {
             assertEquals(game.getName(), "Initial Game");
             assertEquals(game.getNumPlayers(), 2);
             // Override Board.equals() and update line below this
-            assertFalse(game.getBoard() == null);
+            assertNotNull(game.getBoard());
             assertFalse(game.getTileBag().getCurrentLetterFrequencies().equals(testBag.getInitialLetterFrequencies()));
 
             assertEquals(game.getTileBag().numTilesRemaining(), 100 - 7 * 2 - 2 - 5);
@@ -100,7 +100,6 @@ public class JsonReaderTest extends JsonTest {
         }
     }
     
-
     @Test
     public void testReaderEndGame() {
         JsonReader reader = new JsonReader("./data/testReadEndGame.json");
@@ -110,7 +109,7 @@ public class JsonReaderTest extends JsonTest {
             assertEquals(game.getName(), "End Game");
             assertEquals(game.getNumPlayers(), 14);
             // Override Board.equals() and update line below this
-            assertFalse(game.getBoard() == null);
+            assertNotNull(game.getBoard());
             assertTrue(game.getTileBag().getCurrentLetterFrequencies().isEmpty());
 
             assertEquals(game.getTileBag().numTilesRemaining(), 0);
