@@ -16,9 +16,8 @@ import persistance.Writable;
 
 // Represents a player in the Scrabble Game
 
-public class Player implements Writable {
+public class Player {
  
-    
     private String name;
     private History history;
     private List<LetterTile> tileRack;
@@ -170,9 +169,9 @@ public class Player implements Writable {
         return copyLetterTiles(this.getSelectedTiles());
     }
 
+    
     // EFFECTS: represents this player
     // as a JSONObject
-    @Override
     public JSONObject toJson() {
         JSONObject json = new JSONObject();
         json.put("name", this.name);

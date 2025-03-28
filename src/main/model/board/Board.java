@@ -386,7 +386,7 @@ public class Board {
         return boardTiles[row][column];
     }
 
-    @Override
+    
     public JSONArray toJson() {
         JSONArray json = new JSONArray();
         for (int i = 0; i < BOARD_LENGTH; i++) {
