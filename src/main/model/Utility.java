@@ -7,6 +7,10 @@ public class Utility {
     
     private static Map<Character, Integer> letterPointsMap = new HashMap<>();
 
+    // MODIFIES: this
+    // EFFECTS: Adds Tile Point Values to 
+    //   Point map for Letters N, O,....,Z,_,
+    //     inclusive
     static {
         letterPointsMap.put('A', 1); 
         letterPointsMap.put('B', 3); 

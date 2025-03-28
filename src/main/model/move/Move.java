@@ -14,7 +14,7 @@ public class Move implements Writable {
     private Direction direction;
     private int startRow;
     private int startCol;
-    private Player player;
+    private Player player; // !!! TODO make move only have player names, then move wont have reference to player
     private Player lastPlayer;
 
     // Constructor if the player played a word on a board
@@ -105,15 +105,6 @@ public class Move implements Writable {
         return false;
     }
 
-   /*  // EFFECTS: returns list of letter tiles
-    // based on input string
-    private String getStringFromLetters(List<LetterTile> letters) {
-        String result = "";
-        for (LetterTile letter : letters) {
-            result += letter.getString();
-        }
-        return result;
-    }    */
 
     @Override
     // EFFECTS: returns JSONObject representing

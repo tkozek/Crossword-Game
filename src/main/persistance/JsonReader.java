@@ -53,8 +53,8 @@ public class JsonReader {
     private ScrabbleGame parseGame(JSONObject jsonObject) {
         String gameName = jsonObject.getString("GameName");
         Board board = new Board();
-        updateBoardToStoredState(board, jsonObject);
         TileBag tileBag = new TileBag();
+        updateBoardToStoredState(board, jsonObject);
         updateTileBagToStoredState(tileBag, jsonObject);
         ScrabbleGame game = new ScrabbleGame(gameName, board, tileBag);
         addPlayers(game, jsonObject);

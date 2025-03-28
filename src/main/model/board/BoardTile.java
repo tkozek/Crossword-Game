@@ -27,12 +27,6 @@ public class BoardTile implements Tile {
         return this.tileType.equals(tileType);
     }
 
-    // EFFECTS: returns true if this tile
-    // has a letter or word multiplier 
-    // associated with it that isn't 1.
-    public boolean isSpecial() {
-        return this.tileType != TileType.NORMAL;
-    }
 
     public int getRow() {
         return this.row;

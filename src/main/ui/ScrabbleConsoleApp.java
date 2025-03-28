@@ -22,8 +22,7 @@ public class ScrabbleConsoleApp extends ScrabbleUserInterface {
     private int numPlayers; 
     private ScrabbleGame game;
     
-    //EFFECTS: Creates new ScrabbleApp with
-    //        a board and tile bag
+    //EFFECTS: Creates new Scrabble Terminal App
     public ScrabbleConsoleApp() {        
         printoutSpacer();
         System.out.println("Welcome to Scrabble in Java");
@@ -53,7 +52,7 @@ public class ScrabbleConsoleApp extends ScrabbleUserInterface {
         initializePlayers();
     }
 
-    // MODIFIES: scrabbleGame, players, board, numPlayers
+    // MODIFIES: game, numPlayers
     // EFFECTS: loads assets from previously saved game
     private void loadOldGame() {
         this.gameRunning = true;
@@ -68,7 +67,7 @@ public class ScrabbleConsoleApp extends ScrabbleUserInterface {
         }
     }
 
-    // MODIFIES: players
+    // MODIFIES: game
     // EFFECTS: Prompts input for number of player's
     // and requests their names
     public void initializePlayers() {
@@ -114,7 +113,7 @@ public class ScrabbleConsoleApp extends ScrabbleUserInterface {
         }
     }
 
-    // MODIFIES: player, board
+    // MODIFIES: game
     // EFFECTS: Manages order of turn taking, 
     // and ensures player's draw new tiles
     // when they are supposed to
@@ -232,7 +231,7 @@ public class ScrabbleConsoleApp extends ScrabbleUserInterface {
         scanner.nextLine();
     }
 
-    // MODIFIES: scrabbleGame
+    // MODIFIES: game
     // EFFECTS: Saves game to file
     private void handleSave(Player player) {
         try {
@@ -273,36 +272,6 @@ public class ScrabbleConsoleApp extends ScrabbleUserInterface {
         }
         scanner.nextLine();
     }
-
-    // // EFFECTS: Summarizes an end game adjustment
-    // public void printSingleEndGameAdjustmentSummary(Move move, Player player) {
-    //     String playerName = player.getPlayerName();
-    //     String lastPlayer = move.getLastPlayer().getPlayerName();
-    //     int pointChange = move.getPointsForMove();
-    //     int absolutePointChange = Math.abs(pointChange);
-    //     String gainOrLoss = (pointChange >= 0) ? " gained " : " lost ";
-    //     String pluralOrNot = (absolutePointChange != 1) ? "s" : "";
-    //     System.out.println(lastPlayer + " used all their tiles first. \n" 
-    //             + playerName + gainOrLoss + absolutePointChange + pluralOrNot);
-    // }
-
-    // //EFFECTS: Prints summary of a player swap
-    // public void printSwapSummary(Move swap, Player p) {
-    //     String printout = "\n" + p.getPlayerName() + " swapped tiles. ";
-    //     String preAndPostLetters = swap.getLettersInvolved();
-    //     int halfLength = preAndPostLetters.length() / 2;
-    //     String preSwapLetters = preAndPostLetters.substring(0, halfLength);
-    //     String postSwapLetters = preAndPostLetters.substring(halfLength);
-    //     String points = String.valueOf(swap.getPointsForMove());
-    //     printout += "Their tiles before swapping were: " + preSwapLetters + " and their tiles after swapping were " 
-    //              + postSwapLetters + ", earning " + points + " points.";
-    //     System.out.println(printout);
-    // }
-
-    // // EFFECTS: Prints summary of a skipped turn
-    // public void printSkipSummary(Move skip, Player p) {
-    //     System.out.println("\n" + p.getPlayerName() + " skipped their turn");
-    // }
 
     // EFFECTS: prints summary of all
     // words played by the player.
@@ -398,7 +367,7 @@ public class ScrabbleConsoleApp extends ScrabbleUserInterface {
         scanner.nextLine();
     }
 
-    // MODIFIES: player
+    // MODIFIES: game, player
     // EFFECTS: deselects players tiles
     // logs the skipped turn and prints confirmation
     public void handleSkip(Player player) {
@@ -469,7 +438,8 @@ public class ScrabbleConsoleApp extends ScrabbleUserInterface {
     private void printScoreSummaries() {
         List<Player> players = game.getPlayers();
         for (Player player : players) {
-            System.out.println(player.getPlayerName() + " scored " + player.getPointsThisGame() + " points this game.\n");
+            System.out.println(player.getPlayerName() + " scored " + player.getPointsThisGame() 
+                    + " points this game.\n");
         }
     }
 

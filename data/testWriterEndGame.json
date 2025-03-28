@@ -112,7 +112,7 @@
         " ",
         " ",
         " ",
-        "T",
+        "A",
         " ",
         " ",
         " ",
@@ -127,7 +127,7 @@
         " ",
         " ",
         "DLS",
-        "O",
+        "E",
         "DLS",
         " ",
         " ",
@@ -142,7 +142,7 @@
         " ",
         "TLS",
         " ",
-        "A",
+        "Q",
         " ",
         "TLS",
         " ",
@@ -157,7 +157,7 @@
         "DWS",
         " ",
         " ",
-        "V",
+        "R",
         " ",
         " ",
         "DWS",
@@ -172,7 +172,7 @@
         " ",
         " ",
         " ",
-        "Y",
+        "I",
         " ",
         " ",
         " ",
@@ -187,7 +187,7 @@
         " ",
         " ",
         "DLS",
-        "N",
+        "E",
         "DLS",
         " ",
         " ",
@@ -234,28 +234,28 @@
             "Points": 34,
             "PlayerName": "Player1",
             "MoveType": "PLAY_WORD",
-            "LettersPlayed": "TOAVYNE",
+            "LettersPlayed": "AEQRIEE",
             "Row": 7,
             "Direction": "D"
         },
         {
-            "LettersAccountedFor": "UUIMLDO",
+            "LettersAccountedFor": "TXRDAEU",
             "FinalPlayer": "Player1",
-            "ChangeInPoints": -10,
+            "ChangeInPoints": -15,
             "PlayerName": "Player2",
             "MoveType": "END_GAME_ADJUSTMENT"
         },
         {
-            "LettersAccountedFor": "AIZHRYK",
+            "LettersAccountedFor": "N-OLYBO",
             "FinalPlayer": "Player1",
-            "ChangeInPoints": -26,
+            "ChangeInPoints": -11,
             "PlayerName": "Player3",
             "MoveType": "END_GAME_ADJUSTMENT"
         },
         {
-            "LettersAccountedFor": "UUIMLDOAIZHRYK",
+            "LettersAccountedFor": "TXRDAEUN-OLYBO",
             "FinalPlayer": "Player1",
-            "ChangeInPoints": 36,
+            "ChangeInPoints": 26,
             "PlayerName": "Player1",
             "MoveType": "END_GAME_ADJUSTMENT"
         }
@@ -263,34 +263,34 @@
     "FirstPlayer": 0,
     "Players": [
         {
-            "score": 70,
+            "score": 60,
             "name": "Player1",
             "tileRack": []
         },
         {
-            "score": -10,
+            "score": -15,
             "name": "Player2",
             "tileRack": [
-                {"U": 1},
-                {"U": 1},
-                {"I": 1},
-                {"M": 3},
-                {"L": 1},
+                {"T": 1},
+                {"X": 8},
+                {"R": 1},
                 {"D": 2},
-                {"O": 1}
+                {"A": 1},
+                {"E": 1},
+                {"U": 1}
             ]
         },
         {
-            "score": -26,
+            "score": -11,
             "name": "Player3",
             "tileRack": [
-                {"A": 1},
-                {"I": 1},
-                {"Z": 10},
-                {"H": 4},
-                {"R": 1},
+                {"N": 1},
+                {"-": 0},
+                {"O": 1},
+                {"L": 1},
                 {"Y": 4},
-                {"K": 5}
+                {"B": 3},
+                {"O": 1}
             ]
         }
     ]

@@ -27,12 +27,7 @@ public class BoardTileTest {
 
     @Test
     void testConstructor() {
-        assertTrue(doubleWordTile.isSpecial());
-        assertTrue(tripleWordTile.isSpecial());
-        assertTrue(tripleLetterTile.isSpecial());
-        assertTrue(doubleLetterTile.isSpecial());
 
-        assertFalse(regularTile.isSpecial());
 
         assertTrue(doubleLetterTile.checkIsTileType(TileType.DOUBLE_LETTER));
         assertFalse(doubleLetterTile.checkIsTileType(TileType.TRIPLE_WORD));

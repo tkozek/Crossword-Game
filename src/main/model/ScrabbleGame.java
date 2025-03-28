@@ -275,8 +275,6 @@ public class ScrabbleGame implements Writable {
         updateHistories(skip, player);
     }
 
-
-
     // MODIFIES: this
     // EFFECTS: subtracts score of unplayed tiles on the rack
     // of all players except firstToUseAllTiles, adds this pooled
@@ -374,8 +372,8 @@ public class ScrabbleGame implements Writable {
     
     // REQUIRES: skip.getMoveType() == MoveType.PLAY_WORD
     // EFFECTS: returns summary of a word played
-    public String getWordDescription(Move word, Player p) {
-        String printout = p.getPlayerName() + " played ";
+    public String getWordDescription(Move word, Player player) {
+        String printout = player.getPlayerName() + " played ";
         String wordString = word.getLettersInvolved();
         String startRow = String.valueOf(word.getStartRow());
         String startCol = String.valueOf(word.getStartColumn());
@@ -390,8 +388,8 @@ public class ScrabbleGame implements Writable {
 
     // REQUIRES: skip.getMoveType() == MoveType.SWAP_TILES
     //EFFECTS: returns summary of a player swap
-    public String getSwapDescription(Move swap, Player p) {
-        String printout = p.getPlayerName() + " swapped tiles. ";
+    public String getSwapDescription(Move swap, Player player) {
+        String printout = player.getPlayerName() + " swapped tiles. ";
         String preAndPostLetters = swap.getLettersInvolved();
         int halfLength = preAndPostLetters.length() / 2;
         String preSwapLetters = preAndPostLetters.substring(0, halfLength);
@@ -404,8 +402,8 @@ public class ScrabbleGame implements Writable {
 
     // REQUIRES: skip.getMoveType() == MoveType.SKIP
     // EFFECTS: returns summary of a skipped turn
-    public String getSkipDescription(Move skip, Player p) {
-        return p.getPlayerName() + " skipped their turn.";
+    public String getSkipDescription(Move skip, Player player) {
+        return player.getPlayerName() + " skipped their turn.";
     }
 
     // REQUIRES: skip.getMoveType() == MoveType.END_GAME_ADJUSTMENT

@@ -189,27 +189,6 @@ public class Board {
         return score;
     }
 
-
-  /*   // REQUIRES: sectionIsAvailable() is true for given arguments
-    // EFFECTS: Returns the score earned for playing letters in the given direction
-    // beginning at starting coordinates
-    public int scoreWord(List<LetterTile> letters, int startRow, int startCol, Direction dir) {
-        int wordMultiplier = 1;
-        int total = 0;
-        int rowInc = (dir == Direction.DOWN) ? 1 : 0;
-        int colInc = (dir == Direction.RIGHT) ? 1 : 0;
-        for (int i = 0; i < letters.size(); i++) {
-            int letterPoints = letters.get(i).getLetterPoints();
-            Coordinate coord = new Coordinate(startRow + i * rowInc, startCol + i * colInc);
-            int tempWordMultiplier = findWordMultiplier(coord);
-            int tempLetterMultiplier = findLetterMultiplier(coord);
-            letterPoints *= tempLetterMultiplier;
-            wordMultiplier *= tempWordMultiplier;
-            total += letterPoints;
-        }
-        return total * wordMultiplier;
-    } */
-
       // REQUIRES: sectionIsAvailable() is true for given arguments
     // EFFECTS: Returns the score earned for playing letters in the given direction
     // beginning at starting coordinates
@@ -388,45 +367,6 @@ public class Board {
         tripleLetterCoordinates.remove(coord);
         tripleWordCoordinates.remove(coord);
     }
-
-   /*  //REQUIRES: sectionIsAvailable() is true with same arguments
-    //EFFECTS:  returns true if board[row][col] contains a board tile of given tile type
-    public boolean sectionContainsTileType(List<LetterTile> letters, int startRow, 
-                int startCol, Direction dir, TileType tileType) {
-        int length = letters.size();
-        int rowIncrement = (dir == Direction.DOWN) ? 1 : 0;
-        int colIncrement = (dir == Direction.RIGHT) ? 1 : 0;
-        for (int i = 0; i < length; i++) {
-            int row = startRow + i * rowIncrement;
-            int col = startCol + i * colIncrement;
-            Coordinate coord = new Coordinate(row, col);
-            if (tileType == TileType.DOUBLE_LETTER && doubleLetterCoordinates.contains(coord) 
-                    || tileType == TileType.DOUBLE_WORD && doubleWordCoordinates.contains(coord) 
-                    || tileType == TileType.TRIPLE_LETTER && tripleLetterCoordinates.contains(coord) 
-                    || tileType == TileType.TRIPLE_WORD && tripleWordCoordinates.contains(coord)) {
-                return true;
-            }
-        }
-        return false;
-    } */
-
-    /* //REQUIRES: squareIsAvailable() is true with same arguments
-    //EFFECTS: returns true if board[row][col] contains a board tile of given tile type
-    public boolean squareisTileType(int row, int col, TileType tileType) {
-        Coordinate coord = new Coordinate(row,col);
-        if (tileType == TileType.DOUBLE_LETTER) {
-            return doubleLetterCoordinates.contains(coord);
-        } else if (tileType == TileType.DOUBLE_WORD) {
-            return doubleWordCoordinates.contains(coord);
-        } else if (tileType == TileType.TRIPLE_LETTER) {
-            return tripleLetterCoordinates.contains(coord);
-        } else if (tileType == TileType.TRIPLE_WORD) {
-            return tripleWordCoordinates.contains(coord);
-        } else {
-            return false;
-        }
-    } */
-
 
     //EFFECTS: returns Chacters 'A' to 'Z' and '_'
     //   mapped to their number of occurences on board
