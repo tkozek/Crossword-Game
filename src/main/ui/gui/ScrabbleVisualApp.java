@@ -245,11 +245,11 @@ public class ScrabbleVisualApp extends ScrabbleUserInterface {
         getBoardPanel();
         Player playerToPlayNext = game.getPlayerByIndex(index);
         game.drawTiles(playerToPlayNext);
-        getRackPanel(playerToPlayNext);
+        
         updateScorePanel(game);
         getInfoPanel(playerToPlayNext);
         frame.add(boardPanel, BorderLayout.CENTER);
-        frame.add(rackPanel, BorderLayout.SOUTH);
+        frame.add(getRackPanel(playerToPlayNext), BorderLayout.SOUTH);
         frame.add(scorePanel, BorderLayout.WEST);
         frame.add(infoPanel, BorderLayout.EAST);
         frame.repaint();
@@ -271,7 +271,7 @@ public class ScrabbleVisualApp extends ScrabbleUserInterface {
     // MODIFIES: this
     // EFFECTS: loads panel with player's tiles,
     // along with their available action buttons
-    private void getRackPanel(Player player) {
+    private JPanel getRackPanel(Player player) {
         rackPanel = new JPanel();
         rackPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
         actionPanel = new JPanel();
@@ -282,6 +282,7 @@ public class ScrabbleVisualApp extends ScrabbleUserInterface {
         for (int i = 0; i < numLetters; i++) {
             rackPanel.add(createTilePanel(player, letters.get(i), i));
         }
+        return rackPanel;
     }
 
     // MODIFIES: this
@@ -374,8 +375,11 @@ public class ScrabbleVisualApp extends ScrabbleUserInterface {
         clearSelections.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 player.clearSelectedTiles();
-                getRackPanel(player);
-                repaintAndRevalidate(rackPanel);
+                SwingUtilities.invokeLater(() -> {
+                    frame.remove(rackPanel);
+                    frame.add(getRackPanel(player), BorderLayout.SOUTH);
+                    repaintAndRevalidate(rackPanel);
+                });                
             }
         });
         addSaveAndQuitActionListeners(player);
@@ -664,9 +668,9 @@ public class ScrabbleVisualApp extends ScrabbleUserInterface {
 
     // MODIFIES: panel
     // EFFECTS: repaints and revalidates the panel
-    private void repaintAndRevalidate(JPanel panel) {
-        panel.repaint();
-        panel.revalidate();
+    private void repaintAndRevalidate(JComponent component) {
+        component.repaint();
+        component.revalidate();
     }
 
     // MODIFIES: this

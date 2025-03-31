@@ -250,7 +250,7 @@ public class Board {
         int letterPoints = letter.getPoints();
         boolean blankStarter = letterPoints == 0; // display may change, but value of blank is always zero
         total += scorePerpendicularAdjacent(startRow, startCol, rowInc, colInc);
-        total += scorePerpendicularAdjacent(startRow, startCol, -1* rowInc, -1 * colInc);
+        total += scorePerpendicularAdjacent(startRow, startCol, -1 * rowInc, -1 * colInc);
         if (total == 0 && !blankStarter) {
             return 0;
         } else {
