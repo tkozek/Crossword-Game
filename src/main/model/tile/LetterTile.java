@@ -29,6 +29,11 @@ public class LetterTile implements Tile, Writable {
         this.character = character;
         this.points = Utility.getLetterPoints(character);
     }
+
+    public LetterTile(String character) {
+        this.character = character.charAt(0);
+        this.points = Utility.getLetterPoints(this.character);
+    }
     
     public char getCharacter() {
         return this.character;

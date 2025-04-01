@@ -84,13 +84,13 @@ public class ScrabbleGameTest {
 
     @Test
     public void testFirstPlayerAndIndexOf() {
-        assertEquals(0, game.getFirstPlayerIndex());
+        assertEquals(0, game.getCurrentPlayerIndex());
         game.addPlayer(player);
         game.addPlayer(player2);
-        game.setFirstPlayerIndex(1);
-        assertEquals(1, game.getFirstPlayerIndex());
-        game.setFirstPlayer(player);
-        assertEquals(0, game.getFirstPlayerIndex());
+        game.setCurrentPlayerIndex(1);
+        assertEquals(1, game.getCurrentPlayerIndex());
+        game.setCurrentPlayer(player);
+        assertEquals(0, game.getCurrentPlayerIndex());
         assertEquals(0, game.getPlayerIndex(player));
         assertEquals(1, game.getPlayerIndex(player2));
     }

@@ -36,7 +36,7 @@ public class ScrabbleVisualApp extends ScrabbleUserInterface {
     private static final int REQUEST_NAMES_FRAME_WIDTH = 1000 * 2 / 3;
     private static final int REQUEST_NAMES_FRAME_HEIGHT = 100;
     private static final Font TILE_FONT = new Font("Arial", Font.BOLD, 14);
-    private static final int REMAINING_TILE_PRINTOUT_HEIGHT = 20;
+    //private static final int REMAINING_TILE_PRINTOUT_HEIGHT = 20;
     private static final Color DOUBLE_LETTER_COLOR = new Color(173, 216, 230);
     private static final Color TRIPLE_LETTER_COLOR = new Color(5, 127, 187);
     private static final Color DOUBLE_WORD_COLOR =  Color.PINK;
@@ -79,6 +79,9 @@ public class ScrabbleVisualApp extends ScrabbleUserInterface {
     private JButton addPlayerButton;
     private JButton startButton;
 
+    private JButton confirm;
+    private JButton cancel;
+
     private JPanel moveButtons;
     private JPanel otherOptionButtons;
     private JButton playButton;
@@ -107,7 +110,7 @@ public class ScrabbleVisualApp extends ScrabbleUserInterface {
         this.numPlayers = game.getNumPlayers();
         this.gameRunning = true;
         dir = Direction.DOWN;
-        handleGame(game.getFirstPlayerIndex());
+        handleGame(game.getCurrentPlayerIndex());
     }
 
     // MODIFIES: this
@@ -170,7 +173,7 @@ public class ScrabbleVisualApp extends ScrabbleUserInterface {
             JsonReader jsonReader = new JsonReader(JSON_STORE);
             game = jsonReader.read();
             this.numPlayers = game.getNumPlayers();
-            handleGame(game.getFirstPlayerIndex());
+            handleGame(game.getCurrentPlayerIndex());
         } catch (IOException e) {
             System.out.println("Unable to read game from file: " + JSON_STORE);
         }
@@ -256,14 +259,14 @@ public class ScrabbleVisualApp extends ScrabbleUserInterface {
         updateScorePanel(game);
         Double scorePanelWidth = scorePanel.getPreferredSize().getWidth();
         frame.setSize(FRAME_SIDE_LENGTH - 15 + scorePanelWidth.intValue(), FRAME_SIDE_LENGTH);
-        Player playerToPlayNext = game.getPlayerByIndex(index);
-        game.drawTiles(playerToPlayNext);
+        Player playerToPlayNext = game.getPlayerByIndex(index); //curPlayer
+        game.drawTiles(playerToPlayNext); //curPlayer
         
         
         frame.add(getBoardPanel(), BorderLayout.CENTER);
-        frame.add(getRackPanel(playerToPlayNext), BorderLayout.SOUTH);
+        frame.add(getRackPanel(playerToPlayNext), BorderLayout.SOUTH); //curPlayer
         frame.add(scorePanel, BorderLayout.WEST);
-        frame.add(getInfoPanel(playerToPlayNext), BorderLayout.EAST);
+        frame.add(getInfoPanel(playerToPlayNext), BorderLayout.EAST); //curPlayer
         
         frame.repaint();
         frame.setVisible(true);
@@ -377,6 +380,60 @@ public class ScrabbleVisualApp extends ScrabbleUserInterface {
                 handleGame(game.getPlayerIndex(player) + 1);
             }
         });
+        
+        previewButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                SwingUtilities.invokeLater(() -> {
+                    frame.remove(boardPanel);
+                    frame.add(getPreviewBoardPanel(player), BorderLayout.CENTER);
+                    repaintAndRevalidate(boardPanel);
+                    SwingUtilities.invokeLater(() -> {
+                        frame.remove(rackPanel);
+                        frame.add(getConfirmOrCancelRackPanel(player), BorderLayout.SOUTH);
+                        repaintAndRevalidate(rackPanel);
+                        repaintAndRevalidate(boardPanel);
+                    });
+                });   
+            }
+        });
+    }
+
+    private JPanel getConfirmOrCancelRackPanel(Player player) {
+        rackPanel = new JPanel();
+        actionPanel = new JPanel();
+        actionPanel.setLayout(new BoxLayout(actionPanel, BoxLayout.Y_AXIS));
+        confirm = new JButton("Confirm");
+        cancel = new JButton("Cancel");
+
+        confirm.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                game.playWord(player, startRow, startCol, dir);
+                frame.setVisible(false);
+                handleGame(game.getPlayerIndex(player) + 1);
+            }
+        });
+        cancel.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                SwingUtilities.invokeLater(() -> {
+                    frame.remove(rackPanel);
+                    frame.remove(boardPanel);
+                    player.clearSelectedTiles();
+                    frame.add(getRackPanel(player), BorderLayout.SOUTH);
+                    frame.add(getBoardPanel(), BorderLayout.CENTER);
+                    repaintAndRevalidate(rackPanel);
+                    repaintAndRevalidate(boardPanel);
+                });
+            }
+        });
+
+        actionPanel.add(confirm);
+        actionPanel.add(cancel);
+        rackPanel.add(actionPanel);
+        List<LetterTile> letters = player.getTilesOnRack();
+        for (int i = 0; i < letters.size(); i++) {
+            rackPanel.add(createTilePanel(player, letters.get(i), i));
+        }
+        return rackPanel;
     }
 
     // REQUIRES: toggleDirectionButton, and clearSelectionsButton 
@@ -387,7 +444,7 @@ public class ScrabbleVisualApp extends ScrabbleUserInterface {
     private void addOtherOptionsListeners(Player player) {
         terminalUIButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                game.setFirstPlayer(player);
+                game.setCurrentPlayer(player);
                 frame.setVisible(false);
                 new ScrabbleConsoleApp(game);
                 gameRunning = false;
@@ -437,7 +494,7 @@ public class ScrabbleVisualApp extends ScrabbleUserInterface {
     private void handleSave(Player player) {
         try {
             JsonWriter jsonWriter = new JsonWriter(JSON_STORE);
-            game.setFirstPlayer(player);
+            game.setCurrentPlayer(player);
             jsonWriter.open();
             jsonWriter.write(game);
             jsonWriter.close();
@@ -492,6 +549,31 @@ public class ScrabbleVisualApp extends ScrabbleUserInterface {
             }
         }
     return boardPanel;
+    }
+
+    // MODIFIES: this
+    // EFFECTS: Adds panel representing the current board
+    // to the frame
+    private JPanel getPreviewBoardPanel(Player player) {
+        boardPanel = new JPanel();
+        boardPanel.setLayout(new GridLayout(Board.BOARD_LENGTH, Board.BOARD_LENGTH));
+        boardPanel.setPreferredSize(new Dimension(BOARD_PANEL_LENGTH, BOARD_PANEL_LENGTH));
+        String[][] previewBoardDisplay = game.previewBoardDisplay(player, startRow, startCol, dir);
+        for (int i = 0; i < Board.BOARD_LENGTH; i++) {
+            for (int j = 0; j < Board.BOARD_LENGTH; j++) {
+                String toDisplay = previewBoardDisplay[i][j];
+                
+                JButton tile = new JButton(toDisplay);
+                tile.setBackground(selectBoardTileColor(toDisplay));
+                tile.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+                if (!(toDisplay.equals(game.getTileAtPositionOnBoard(i, j).toDisplay()))) {
+                    tile.setBorder(BorderFactory.createLineBorder(Color.ORANGE));
+                }
+                tile.setFont(TILE_FONT);
+                boardPanel.add(tile);
+            }
+        }
+        return boardPanel;
     }
 
     // EFFECTS: returns appropriate display color given

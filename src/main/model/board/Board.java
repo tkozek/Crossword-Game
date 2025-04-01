@@ -32,6 +32,20 @@ public class Board {
         initializeBoard();
     }
 
+    public Board(Board board) {
+        boardTiles = new Tile[BOARD_LENGTH][BOARD_LENGTH];
+        for (int i = 0; i < BOARD_LENGTH; i++) {
+            for (int j = 0; j < BOARD_LENGTH; j++) {
+                Tile tile = board.getTileAtPositionOnBoard(i, j);
+                if (tile.occupiesBoardSpot()) {
+                    boardTiles[i][j] = new LetterTile(tile.toDisplay());
+                } else {
+                    boardTiles[i][j] = new BoardTile(i, j, board.getTileTypeByCoordinate(i, j));
+                }
+            }
+        }
+    }
+
     // MODIFIES: this
     // EFFECTS: Places special tiles at appropriate positions on board
     private void initializeBoard() {
@@ -49,21 +63,27 @@ public class Board {
         TileType tileType;
         for (int i = 0; i < BOARD_LENGTH; i++) {
             for (int j = 0; j < BOARD_LENGTH; j++) {
-                Coordinate coord = new Coordinate(i,j);
-                if (doubleLetterCoordinates.contains(coord)) {
-                    tileType = TileType.DOUBLE_LETTER;
-                } else if (doubleWordCoordinates.contains(coord)) {
-                    tileType = TileType.DOUBLE_WORD;
-                } else if (tripleLetterCoordinates.contains(coord)) {
-                    tileType = TileType.TRIPLE_LETTER;
-                } else if (tripleWordCoordinates.contains(coord)) {
-                    tileType = TileType.TRIPLE_WORD;
-                } else {
-                    tileType = TileType.NORMAL;
-                }
-                boardTiles[i][j] = new BoardTile(i,j,tileType);
+                tileType = getTileTypeByCoordinate(i, j);
+                boardTiles[i][j] = new BoardTile(i, j, tileType);
             }
         }
+    }
+
+    public TileType getTileTypeByCoordinate(int row, int column) {
+        TileType tileType;
+        Coordinate coord = new Coordinate(row, column);
+        if (doubleLetterCoordinates.contains(coord)) {
+            tileType = TileType.DOUBLE_LETTER;
+        } else if (doubleWordCoordinates.contains(coord)) {
+            tileType = TileType.DOUBLE_WORD;
+        } else if (tripleLetterCoordinates.contains(coord)) {
+            tileType = TileType.TRIPLE_LETTER;
+        } else if (tripleWordCoordinates.contains(coord)) {
+            tileType = TileType.TRIPLE_WORD;
+        } else {
+            tileType = TileType.NORMAL;
+        }
+        return tileType;
     }
     
     // MODIFIES: this

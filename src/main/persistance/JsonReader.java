@@ -58,7 +58,7 @@ public class JsonReader {
         updateTileBagToStoredState(tileBag, jsonObject);
         ScrabbleGame game = new ScrabbleGame(gameName, board, tileBag);
         addPlayers(game, jsonObject);
-        game.setFirstPlayerIndex(jsonObject.getInt("FirstPlayer"));
+        game.setCurrentPlayerIndex(jsonObject.getInt("CurrentPlayer"));
         addGameHistory(game, jsonObject);
         return game;
     }

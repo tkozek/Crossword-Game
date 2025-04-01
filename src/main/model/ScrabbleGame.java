@@ -21,7 +21,7 @@ public class ScrabbleGame implements Writable {
     private TileBag tileBag;
     private History history;
     private List<Player> players;
-    private int firstPlayerIndex;
+    private int currentPlayerIndex;
 
     // Represents a Scrabble game and its assets,
     // including the current board, tile bag, 
@@ -32,7 +32,7 @@ public class ScrabbleGame implements Writable {
         this.tileBag = tileBag;
         this.history = new History();
         this.players = new ArrayList<>();
-        this.firstPlayerIndex = 0;
+        this.currentPlayerIndex = 0;
     }
 
     public ScrabbleGame(String name) {
@@ -41,7 +41,7 @@ public class ScrabbleGame implements Writable {
         this.tileBag = new TileBag();
         this.history = new History();
         this.players = new ArrayList<>();
-        this.firstPlayerIndex = 0;
+        this.currentPlayerIndex = 0;
     }
 
     // EFFECTS: Names this game
@@ -116,8 +116,8 @@ public class ScrabbleGame implements Writable {
     // EFFECTS: returns index of 
     // first player to play once
     // turn-taking begins
-    public int getFirstPlayerIndex() {
-        return firstPlayerIndex;
+    public int getCurrentPlayerIndex() {
+        return currentPlayerIndex;
     }
 
     public int getPlayerIndex(Player player) {
@@ -139,7 +139,7 @@ public class ScrabbleGame implements Writable {
     public JSONObject toJson() {
         JSONObject json = new JSONObject();
         json.put("GameName", this.getName());
-        json.put("FirstPlayer", this.firstPlayerIndex);
+        json.put("CurrentPlayer", this.currentPlayerIndex);
         json.put("Board", this.board.toJson());
         json.put("TileBag", this.tileBag.toJson());
         json.put("Players", playersToJson());
@@ -161,16 +161,16 @@ public class ScrabbleGame implements Writable {
     // MODIFIES: this
     // EFFECTS: sets first player index
     // to be the index of given player
-    public void setFirstPlayer(Player player) {
-        this.firstPlayerIndex = players.indexOf(player);
+    public void setCurrentPlayer(Player player) {
+        this.currentPlayerIndex = players.indexOf(player);
     }
 
     // REQUIRES: 0 <= firstPlayerIndex < getNumPlayers()
     // MODIFIES: this
     // EFFECTS: sets first player index using index
     // of players
-    public void setFirstPlayerIndex(int firstPlayerIndex) {
-        this.firstPlayerIndex = firstPlayerIndex;
+    public void setCurrentPlayerIndex(int currentPlayerIndex) {
+        this.currentPlayerIndex = currentPlayerIndex;
     }
 
     // EFFECTS: returns players in this Scrabble Game 
@@ -374,6 +374,18 @@ public class ScrabbleGame implements Writable {
             }
         }
         return highestScoringPlayer;
+    }
+
+    public String[][] previewBoardDisplay(Player player, int row, int column, Direction dir) {
+        Board copyBoard = new Board(board);
+        copyBoard.playWord(player.getSelectedTiles(), row, column, dir);
+        String[][] previewDisplay = new String[Board.BOARD_LENGTH][Board.BOARD_LENGTH];
+        for (int i = 0; i < Board.BOARD_LENGTH; i++) {
+            for (int j = 0; j < Board.BOARD_LENGTH; j++) {
+                previewDisplay[i][j] = copyBoard.getTileAtPositionOnBoard(i, j).toDisplay();
+            }
+        }
+        return previewDisplay;
     }
     
     // REQUIRES: skip.getMoveType() == MoveType.PLAY_WORD

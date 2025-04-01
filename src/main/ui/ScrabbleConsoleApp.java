@@ -132,7 +132,7 @@ public class ScrabbleConsoleApp extends ScrabbleUserInterface {
         int index;
         while (gameRunning) {
             for (int i = 0; i < numPlayers; i++) {
-                index = (i + game.getFirstPlayerIndex()) % numPlayers;
+                index = (i + game.getCurrentPlayerIndex()) % numPlayers;
                 getBoardPrintOut(game.getBoard());
                 Player playerToPlayNext = game.getPlayerByIndex(index);
                 game.drawTiles(playerToPlayNext);
@@ -187,7 +187,7 @@ public class ScrabbleConsoleApp extends ScrabbleUserInterface {
                 handleViewings(player);
                 break;
             case "s":
-                game.setFirstPlayer(player);
+                game.setCurrentPlayer(player);
                 this.gameRunning = false;
                 new ScrabbleVisualApp(game);
                 try {
@@ -260,7 +260,7 @@ public class ScrabbleConsoleApp extends ScrabbleUserInterface {
     private void handleSave(Player player) {
         try {
             JsonWriter jsonWriter = new JsonWriter(JSON_STORE);
-            game.setFirstPlayer(player);
+            game.setCurrentPlayer(player);
             jsonWriter.open();
             jsonWriter.write(game);
             jsonWriter.close();
