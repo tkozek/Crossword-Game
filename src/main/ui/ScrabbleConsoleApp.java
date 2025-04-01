@@ -10,6 +10,7 @@ import model.board.*;
 import model.move.Move;
 import model.tile.*;
 import persistance.*;
+import ui.gui.ScrabbleVisualApp;
 
 // Citation: Saving and loading are based on JSON example from edX
 // Represents a game of Scrabble
@@ -44,6 +45,15 @@ public class ScrabbleConsoleApp extends ScrabbleUserInterface {
         this.gameRunning = true;
         handleGameplay();
     }
+
+    public ScrabbleConsoleApp(ScrabbleGame game) { 
+        super(); 
+        this.game = game;
+        this.numPlayers = game.getNumPlayers();
+        this.gameRunning = true;
+        scanner = new Scanner(System.in);
+        handleGameplay();
+    }
     
     // MODIFIES: player
     // EFFECTS: creates assets for a new game and prompts user input
@@ -56,7 +66,7 @@ public class ScrabbleConsoleApp extends ScrabbleUserInterface {
 
     // MODIFIES: game, numPlayers
     // EFFECTS: loads assets from previously saved game
-    private void loadOldGame() {
+    public void loadOldGame() {
         this.gameRunning = true;
         try {
             JsonReader jsonReader = new JsonReader(JSON_STORE);
@@ -130,6 +140,9 @@ public class ScrabbleConsoleApp extends ScrabbleUserInterface {
                 if (playerToPlayNext.outOfTiles()) {
                     handleEndGame(playerToPlayNext);
                 }
+                if (!gameRunning) {
+                    break;
+                }
             }
         }
     }
@@ -166,15 +179,25 @@ public class ScrabbleConsoleApp extends ScrabbleUserInterface {
     // MODIFIES: this
     // EFFECTS: Let's player decide to view
     // game related info, or save and quit
-    private void handleNonPlayOptions(Player p) {
-        System.out.println("\nType whether you'd like to (v)iew something, s(a)ve and quit, "
+    private void handleNonPlayOptions(Player player) {
+        System.out.println("\nType whether you'd like to (v)iew something, (s)witch to GUI, s(a)ve and quit, "
                 + "or (q)uit without saving");
         switch (scanner.nextLine().toLowerCase()) {
             case "v":
-                handleViewings(p);
+                handleViewings(player);
+                break;
+            case "s":
+                game.setFirstPlayer(player);
+                this.gameRunning = false;
+                new ScrabbleVisualApp(game);
+                try {
+                Object lock = new Object();
+                lock.notifyAll();
+                } catch (IllegalMonitorStateException e) {
+                }
                 break;
             case "a":
-                handleSave(p);
+                handleSave(player);
                 this.gameRunning = false;
                 printEventLog();
                 System.exit(0);
@@ -184,7 +207,7 @@ public class ScrabbleConsoleApp extends ScrabbleUserInterface {
                 printEventLog();
                 System.exit(0);
             default:
-                handleNonPlayOptions(p);
+                handleNonPlayOptions(player);
         }
     }
 
@@ -241,7 +264,7 @@ public class ScrabbleConsoleApp extends ScrabbleUserInterface {
             jsonWriter.open();
             jsonWriter.write(game);
             jsonWriter.close();
-            System.out.println("Saved" + game.getName() + " with " + String.valueOf(numPlayers)
+            System.out.println("Saved " + game.getName() + " with " + String.valueOf(numPlayers)
                     + " players to " + JSON_STORE);
         } catch (IOException e) {
             System.out.println("Unable to write to file " + JSON_STORE);

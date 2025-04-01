@@ -19,6 +19,7 @@ import model.*;
 import model.board.*;
 import model.tile.*;
 import model.move.*;
+import ui.ScrabbleConsoleApp;
 import ui.ScrabbleUserInterface;
 
 import persistance.JsonReader;
@@ -83,6 +84,8 @@ public class ScrabbleVisualApp extends ScrabbleUserInterface {
     private JButton playButton;
     private JButton swapButton;
     private JButton skipButton;
+    private JButton previewButton;
+    private JButton terminalUIButton;
     
     private JButton directionToggle;
     private JButton clearSelections;
@@ -96,6 +99,15 @@ public class ScrabbleVisualApp extends ScrabbleUserInterface {
         super();
         dir = Direction.DOWN;
         initializeStartMenu();
+    }
+
+    public ScrabbleVisualApp(ScrabbleGame game) {
+        super();
+        this.game = game;
+        this.numPlayers = game.getNumPlayers();
+        this.gameRunning = true;
+        dir = Direction.DOWN;
+        handleGame(game.getFirstPlayerIndex());
     }
 
     // MODIFIES: this
@@ -240,18 +252,19 @@ public class ScrabbleVisualApp extends ScrabbleUserInterface {
         int index = nextPlayer % numPlayers;
         frame = new JFrame("Scrabble Game");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(FRAME_SIDE_LENGTH, FRAME_SIDE_LENGTH);
         frame.setLayout(new BorderLayout());
-        getBoardPanel();
+        updateScorePanel(game);
+        Double scorePanelWidth = scorePanel.getPreferredSize().getWidth();
+        frame.setSize(FRAME_SIDE_LENGTH - 15 + scorePanelWidth.intValue(), FRAME_SIDE_LENGTH);
         Player playerToPlayNext = game.getPlayerByIndex(index);
         game.drawTiles(playerToPlayNext);
         
-        updateScorePanel(game);
-        getInfoPanel(playerToPlayNext);
-        frame.add(boardPanel, BorderLayout.CENTER);
+        
+        frame.add(getBoardPanel(), BorderLayout.CENTER);
         frame.add(getRackPanel(playerToPlayNext), BorderLayout.SOUTH);
         frame.add(scorePanel, BorderLayout.WEST);
-        frame.add(infoPanel, BorderLayout.EAST);
+        frame.add(getInfoPanel(playerToPlayNext), BorderLayout.EAST);
+        
         frame.repaint();
         frame.setVisible(true);
     }
@@ -261,6 +274,9 @@ public class ScrabbleVisualApp extends ScrabbleUserInterface {
     private void updateScorePanel(ScrabbleGame scrabbleGame) {
         scorePanel = new JPanel();
         scorePanel.setLayout(new BoxLayout(scorePanel, BoxLayout.Y_AXIS));
+        JLabel scoreLabel = new JLabel("<html><u>Scoreboard</u></html>");
+        scoreLabel.setFont(new Font("Dialog", Font.BOLD, 14));
+        scorePanel.add(scoreLabel);
         Map<String, Integer> playerScoreMap = game.getPlayerScoreMap();
         for (Map.Entry<String, Integer> entry : playerScoreMap.entrySet()) {
             JLabel playerLabel = new JLabel(entry.getKey() + ": " + entry.getValue());
@@ -295,14 +311,15 @@ public class ScrabbleVisualApp extends ScrabbleUserInterface {
         otherOptionButtons.setLayout(new BoxLayout(otherOptionButtons, BoxLayout.X_AXIS));
         moveButtons.setAlignmentX(Component.CENTER_ALIGNMENT);
         otherOptionButtons.setAlignmentX(Component.CENTER_ALIGNMENT);
-
+        previewButton = new JButton("Preview");
         playButton = new JButton("Play");
         swapButton = new JButton("Swap");
         skipButton = new JButton("Skip");
 
+        terminalUIButton = new JButton("Terminal UI");
         String directionString = (dir == Direction.DOWN) ? "Down" : "Right";
         directionToggle = new JButton(directionString);
-        clearSelections = new JButton("Clear selection");
+        clearSelections = new JButton("Clear Selection");
 
         saveAndQuit = new JButton("Save and Quit");
         quitWithoutSaving = new JButton("Quit without Saving");
@@ -315,14 +332,18 @@ public class ScrabbleVisualApp extends ScrabbleUserInterface {
     // MODIFIES: this
     // EFFECTS: puts available action buttons into appropriate panels
     private void addButtonsToActionPanel() {
+        
         moveButtons.add(playButton);
         moveButtons.add(swapButton);
         moveButtons.add(skipButton);
+        moveButtons.add(previewButton);
 
+        
         otherOptionButtons.add(directionToggle);
         otherOptionButtons.add(clearSelections);
         otherOptionButtons.add(saveAndQuit);
         otherOptionButtons.add(quitWithoutSaving);
+        otherOptionButtons.add(terminalUIButton);
 
         actionPanel.add(moveButtons);
         actionPanel.add(otherOptionButtons);
@@ -364,6 +385,14 @@ public class ScrabbleVisualApp extends ScrabbleUserInterface {
     // EFFECTS: adds clear selected tiles, direction, save and quit,
     // and quit without saving action listeners.
     private void addOtherOptionsListeners(Player player) {
+        terminalUIButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                game.setFirstPlayer(player);
+                frame.setVisible(false);
+                new ScrabbleConsoleApp(game);
+                gameRunning = false;
+            }
+        });
         directionToggle.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 Direction newDirection = (dir == Direction.DOWN) ? Direction.RIGHT : Direction.DOWN;
@@ -440,7 +469,7 @@ public class ScrabbleVisualApp extends ScrabbleUserInterface {
     // MODIFIES: this
     // EFFECTS: Adds panel representing the current board
     // to the frame
-    private void getBoardPanel() {
+    private JPanel getBoardPanel() {
         boardPanel = new JPanel();
         boardPanel.setLayout(new GridLayout(Board.BOARD_LENGTH, Board.BOARD_LENGTH));
         boardPanel.setPreferredSize(new Dimension(BOARD_PANEL_LENGTH, BOARD_PANEL_LENGTH));
@@ -462,6 +491,7 @@ public class ScrabbleVisualApp extends ScrabbleUserInterface {
                 boardPanel.add(tile);
             }
         }
+    return boardPanel;
     }
 
     // EFFECTS: returns appropriate display color given
@@ -493,7 +523,7 @@ public class ScrabbleVisualApp extends ScrabbleUserInterface {
 
     // MODIFIES: this
     // EFFECTS: adds tabbed information panel to frame
-    private void getInfoPanel(Player player) {
+    private JPanel getInfoPanel(Player player) {
         infoPanel = new JPanel();
         infoPanel.setLayout(new CardLayout());
         infoPanel.setPreferredSize(new Dimension(175, FRAME_SIDE_LENGTH));
@@ -513,6 +543,7 @@ public class ScrabbleVisualApp extends ScrabbleUserInterface {
             }
         });
         infoPanel.add(infoTabs);
+        return infoPanel;
     }
 
     // MODIFIES: infoTabs       

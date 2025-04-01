@@ -24,5 +24,6 @@ public abstract class ScrabbleUserInterface {
         for (Event event : log) {
             System.out.println(event.toString());
         }
+        log.clear();
     }
 }
