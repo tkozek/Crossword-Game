@@ -13,6 +13,8 @@ import java.awt.event.ActionListener;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.io.File;
 import java.io.IOException;
 
@@ -235,8 +237,29 @@ public class ScrabbleVisualApp extends ScrabbleUserInterface {
     private void requestPlayerNames() {
         playerNameFrame = new JFrame("Request Player Names");
         playerNameFrame.setSize(REQUEST_NAMES_FRAME_WIDTH, REQUEST_NAMES_FRAME_HEIGHT);
+        
+        //playerNameFrame.addKeyListener()
         addPlayerPanel = new JPanel();
         nameInput = new JTextField(REQUEST_PLAYER_NAME_TEXT);
+        nameInput.addKeyListener(new KeyListener() {
+            @Override
+            public void keyTyped(KeyEvent e) {
+            }
+
+            @Override
+            public void keyReleased(KeyEvent e) {
+            }
+
+            @Override
+            public void keyPressed(KeyEvent e) {
+                if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+                    addPlayer();
+                    nameInput.setText("");
+                }
+            }
+        });
+
+        
         addPlayerButton = new JButton("Add player with name in textbox");
         startButton = new JButton("Start Game");
         addNameActionListeners();
@@ -257,6 +280,24 @@ public class ScrabbleVisualApp extends ScrabbleUserInterface {
                 nameInput.setText(REQUEST_PLAYER_NAME_TEXT);
             }
         });
+
+        /* addPlayerButton.addKeyListener(new KeyListener() {
+            @Override
+            public void keyTyped(KeyEvent e) {
+            }
+
+            @Override
+            public void keyReleased(KeyEvent e) {
+            }
+
+            @Override
+            public void keyPressed(KeyEvent e) {
+                if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+                    addPlayer();
+                    nameInput.setText(REQUEST_PLAYER_NAME_TEXT);
+                }
+            }
+        }); */
         
         startButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
@@ -301,7 +342,6 @@ public class ScrabbleVisualApp extends ScrabbleUserInterface {
         frame.setSize(FRAME_SIDE_LENGTH - 15 + scorePanelWidth.intValue(), FRAME_SIDE_LENGTH);
         Player playerToPlayNext = game.getPlayerByIndex(index); //curPlayer
         game.drawTiles(playerToPlayNext); //curPlayer
-        
         
         frame.add(getBoardPanel(), BorderLayout.CENTER);
         frame.add(getRackPanel(playerToPlayNext), BorderLayout.SOUTH); //curPlayer
@@ -414,7 +454,11 @@ public class ScrabbleVisualApp extends ScrabbleUserInterface {
             public void actionPerformed(ActionEvent e) {
                 game.playWord(player, startRow, startCol, dir);
                 frame.setVisible(false);
-                handleGame(game.getPlayerIndex(player) + 1);
+                if (player.outOfTiles()) {
+                    handleEndGame(player);
+                } else {
+                    handleGame(game.getPlayerIndex(player) + 1);
+                }
             }
         });
         swapButton.addActionListener(new ActionListener() {
@@ -460,7 +504,11 @@ public class ScrabbleVisualApp extends ScrabbleUserInterface {
             public void actionPerformed(ActionEvent e) {
                 game.playWord(player, startRow, startCol, dir);
                 frame.setVisible(false);
-                handleGame(game.getPlayerIndex(player) + 1);
+                if (player.outOfTiles()) {
+                    handleEndGame(player);
+                } else {
+                    handleGame(game.getPlayerIndex(player) + 1);
+                }
             }
         });
         cancel.addActionListener(new ActionListener() {

@@ -445,22 +445,9 @@ public class ScrabbleConsoleApp extends ScrabbleUserInterface {
         System.out.println(spacer);
     }
 
-    private void handleEndGame(Player lastPlayer) {
-        this.gameRunning = false;
-        game.performEndGameAdjustments(lastPlayer);
-        System.out.println(lastPlayer.getPlayerName() + " was the last to play");
-        System.out.println("The winner is " + game.highestScoringPlayer().getPlayerName());
-        printScoreSummaries();
-        printEventLog();
-    }
+    
 
-    private void printScoreSummaries() {
-        List<Player> players = game.getPlayers();
-        for (Player player : players) {
-            System.out.println(player.getPlayerName() + " scored " + player.getPointsThisGame() 
-                    + " points this game.\n");
-        }
-    }
+    
 
     // EFFECTS: prints out the current board
     private void getBoardPrintOut(Board board) {
