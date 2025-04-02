@@ -227,57 +227,57 @@
         "TWS"
     ],
     "TileBag": {
-        "A": 9,
-        "B": 1,
+        "A": 7,
+        "B": 2,
         "C": 2,
-        "D": 4,
-        "E": 10,
+        "D": 3,
+        "E": 12,
         "F": 2,
         "G": 3,
-        "H": 1,
-        "I": 8,
+        "H": 2,
+        "I": 7,
         "J": 1,
         "K": 1,
         "L": 4,
-        "M": 2,
-        "N": 4,
-        "O": 6,
+        "N": 6,
+        "O": 8,
         "P": 2,
-        "R": 5,
-        "S": 4,
+        "Q": 1,
+        "R": 6,
+        "S": 3,
         "T": 4,
         "U": 4,
-        "V": 2,
+        "V": 1,
         "W": 2,
-        "X": 1,
         "Y": 1,
         "Z": 1,
-        "-": 2
+        "-": 1
     },
+    "CurrentPlayer": 0,
     "GameName": "Test",
     "History": [
         {
             "PlayerName": "Tester",
-            "AfterSwapLetters": "ONOBNET",
-            "InitialLetters": "WRRVAAG",
+            "AfterSwapLetters": "SIAXYIV",
+            "InitialLetters": "MORGTLD",
             "MoveType": "SWAP_TILES"
         },
         {
             "PlayerName": "John",
-            "AfterSwapLetters": "QRYTIEH",
-            "InitialLetters": "UDJEHAA",
+            "AfterSwapLetters": "M-TDTAM",
+            "InitialLetters": "BEPTFNV",
             "MoveType": "SWAP_TILES"
         },
         {
             "PlayerName": "Tester",
-            "AfterSwapLetters": "ONOBNET",
-            "InitialLetters": "WRRVAAG",
+            "AfterSwapLetters": "SIAXYIV",
+            "InitialLetters": "MORGTLD",
             "MoveType": "SWAP_TILES"
         },
         {
             "PlayerName": "John",
-            "AfterSwapLetters": "QRYTIEH",
-            "InitialLetters": "UDJEHAA",
+            "AfterSwapLetters": "M-TDTAM",
+            "InitialLetters": "BEPTFNV",
             "MoveType": "SWAP_TILES"
         },
         {
@@ -289,7 +289,7 @@
             "Points": 70,
             "PlayerName": "John",
             "MoveType": "PLAY_WORD",
-            "LettersPlayed": "QRYTIEH",
+            "LettersPlayed": "M-TDTAM",
             "Row": 7,
             "Direction": "D"
         },
@@ -303,32 +303,31 @@
             "Direction": "R"
         }
     ],
-    "FirstPlayer": 0,
     "Players": [
         {
             "score": 0,
             "name": "Tester",
             "tileRack": [
-                {"O": 1},
-                {"N": 1},
-                {"O": 1},
-                {"B": 3},
-                {"N": 1},
-                {"E": 1},
-                {"T": 1}
+                {"S": 1},
+                {"I": 1},
+                {"A": 1},
+                {"X": 8},
+                {"Y": 4},
+                {"I": 1},
+                {"V": 4}
             ]
         },
         {
             "score": 0,
             "name": "John",
             "tileRack": [
-                {"Q": 10},
-                {"R": 1},
-                {"Y": 4},
+                {"M": 3},
+                {"-": 0},
                 {"T": 1},
-                {"I": 1},
-                {"E": 1},
-                {"H": 4}
+                {"D": 2},
+                {"T": 1},
+                {"A": 1},
+                {"M": 3}
             ]
         }
     ]

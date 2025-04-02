@@ -1,6 +1,6 @@
 {
     "GameName": "End Game",
-    "FirstPlayer": 1,
+    "CurrentPlayer": 1,
     "Board": [
         "TWS", " ", " ", "DLS", " ", " ", " ", "TWS", " ", " ", " ", "DLS", " ", " ", "TWS",
         " ", "DWS", " ", " ", " ", "TLS", " ", " ", " ", "TLS", " ", " ", " ", "DWS", " ",

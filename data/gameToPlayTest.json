@@ -274,7 +274,7 @@
             "MoveType": "SKIP"
         }
     ],
-    "FirstPlayer": 0,
+    "CurrentPlayer": 0,
     "Players": [{
         "score": 51,
         "name": "retete",

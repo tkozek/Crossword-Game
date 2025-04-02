@@ -255,8 +255,8 @@
         "Z": 1,
         "-": 2
     },
+    "CurrentPlayer": 0,
     "GameName": "Test",
     "History": [],
-    "FirstPlayer": 0,
     "Players": []
 }

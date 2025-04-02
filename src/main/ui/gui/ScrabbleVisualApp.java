@@ -431,7 +431,7 @@ public class ScrabbleVisualApp extends ScrabbleUserInterface {
         rackPanel.add(actionPanel);
         List<LetterTile> letters = player.getTilesOnRack();
         for (int i = 0; i < letters.size(); i++) {
-            rackPanel.add(createTilePanel(player, letters.get(i), i));
+            rackPanel.add(createTilePanelNotClickable(player, letters.get(i), i));
         }
         return rackPanel;
     }
@@ -522,6 +522,19 @@ public class ScrabbleVisualApp extends ScrabbleUserInterface {
         });
         return tileButton;
     }
+
+    // MODIFIES: this
+    // EFFECTS: Adds panel representing player's tiles
+    // to the frame
+    private JButton createTilePanelNotClickable(Player player, LetterTile letter, int letterIndex) {
+        JButton tileButton = new JButton(letter.toDisplay());
+        tileButton.setPreferredSize(new Dimension(40, 40));
+        tileButton.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+        tileButton.setBackground(DEFAULT_LETTER_TILE_COLOR);
+        tileButton.setFont(new Font("Arial", Font.BOLD, 16));
+        
+        return tileButton;
+    }
     
     // MODIFIES: this
     // EFFECTS: Adds panel representing the current board
@@ -548,7 +561,7 @@ public class ScrabbleVisualApp extends ScrabbleUserInterface {
                 boardPanel.add(tile);
             }
         }
-    return boardPanel;
+        return boardPanel;
     }
 
     // MODIFIES: this
@@ -677,8 +690,8 @@ public class ScrabbleVisualApp extends ScrabbleUserInterface {
     private void addWordsTab(Player player) {
         wordsPanel = new JPanel();
         searchWordsButton = new JButton("Search");
-        wordFilterField = new JTextField(SEARCH_WORDS_DEFAULT_DISPLAY_TEXT);
-        addSearchWordsButtonListener(player);
+        wordFilterField = new JTextField(SEARCH_WORDS_DEFAULT_DISPLAY_TEXT, 2);
+        addSearchWordsButtonListener(player);   
         wordFilterField.addFocusListener(new FocusListener() {
             @Override
             public void focusGained(FocusEvent e) {
@@ -700,23 +713,24 @@ public class ScrabbleVisualApp extends ScrabbleUserInterface {
         searchWordsButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 resetTab(wordsPanel);
-                if (wordFilterField.getText().isEmpty()) {
+                if (wordFilterField.getText().trim().isEmpty()) {
                     for (Move move : player.getMoves()) {
                         if (move.getMoveType() == MoveType.PLAY_WORD) {
                             wordsPanel.add(getFormattedTextArea(game.getWordDescription(move, player), 100));
                         }
                     }
-                }
-                char letter = wordFilterField.getText().toUpperCase().charAt(0);
-                List<Move> words = player.getHistory().getWordsContainingLetter(letter);
-                if (words.isEmpty()) {
-                    wordsPanel.add(getFormattedTextArea("You haven't played a word with that letter", 100));
                 } else {
-                    for (Move word : words) {
-                        wordsPanel.add(getFormattedTextArea(game.getWordDescription(word, player), 100));
+                    char letter = wordFilterField.getText().trim().toUpperCase().charAt(0);
+                    List<Move> words = player.getHistory().getWordsContainingLetter(letter);
+                    if (words.isEmpty()) {
+                        wordsPanel.add(getFormattedTextArea("You haven't played a word with that letter", 100));
+                    } else {
+                        for (Move word : words) {
+                            wordsPanel.add(getFormattedTextArea(game.getWordDescription(word, player), 100));
                         }
                     }
-                repaintAndRevalidate(wordsPanel);
+                    repaintAndRevalidate(wordsPanel);
+                }
             }
         });
     }
@@ -740,17 +754,17 @@ public class ScrabbleVisualApp extends ScrabbleUserInterface {
         letterDistributionPanel = new JPanel();
         Map<Character, Integer> distributionMap = game.getNumEachCharInBagAndOpponents(player);
         searchLetterCountsButton = new JButton("Search");
-        searchLetterCountsField = new JTextField(SEARCH_REMAINING_COUNTS_DEFAULT_DISPLAY_TEXT);
+        searchLetterCountsField = new JTextField(SEARCH_REMAINING_COUNTS_DEFAULT_DISPLAY_TEXT, 2);
         searchLetterCountsButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 resetTab(letterDistributionPanel);
-                if (searchLetterCountsField.getText().isEmpty()) {
+                if (searchLetterCountsField.getText().trim().isEmpty()) {
                     for (Map.Entry<Character, Integer> entry : distributionMap.entrySet()) {
                         letterDistributionPanel.add(getFormattedTextArea(entry.getKey() + " : " 
                                 + entry.getValue(), 20));
                     }
                 } else {
-                    char key = searchLetterCountsField.getText().toUpperCase().charAt(0);
+                    char key = searchLetterCountsField.getText().toUpperCase().trim().charAt(0);
                     letterDistributionPanel.add(getFormattedTextArea(key + " : " + distributionMap.get(key), 20));
                     repaintAndRevalidate(letterDistributionPanel);
                 }
