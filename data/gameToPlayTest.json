@@ -1,6 +1,6 @@
 {
     "Board": [
-        "Z",
+        "TWS",
         " ",
         " ",
         "DLS",
@@ -15,7 +15,7 @@
         " ",
         " ",
         "TWS",
-        "A",
+        " ",
         "DWS",
         " ",
         " ",
@@ -30,7 +30,7 @@
         " ",
         "DWS",
         " ",
-        "Y",
+        " ",
         " ",
         "DWS",
         " ",
@@ -45,7 +45,7 @@
         "DWS",
         " ",
         " ",
-        "R",
+        "DLS",
         " ",
         " ",
         "DWS",
@@ -230,62 +230,44 @@
         "A": 8,
         "B": 2,
         "C": 2,
-        "D": 4,
-        "E": 11,
-        "F": 2,
+        "D": 3,
+        "E": 12,
+        "F": 1,
         "G": 3,
         "H": 2,
-        "I": 8,
+        "I": 9,
         "J": 1,
         "K": 1,
-        "L": 3,
+        "L": 4,
         "M": 2,
         "N": 6,
-        "O": 7,
+        "O": 8,
         "P": 2,
         "Q": 1,
-        "R": 5,
+        "R": 4,
         "S": 4,
-        "T": 5,
-        "U": 2,
+        "T": 6,
+        "U": 4,
         "V": 2,
         "W": 2,
         "X": 1,
-        "Y": 1,
+        "Z": 1,
         "-": 2
     },
-    "GameName": "game",
-    "History": [
-        {
-            "Col": 0,
-            "Points": 51,
-            "PlayerName": "retete",
-            "MoveType": "PLAY_WORD",
-            "LettersPlayed": "ZAYR",
-            "Row": 0,
-            "Direction": "D"
-        },
-        {
-            "PlayerName": "retete",
-            "MoveType": "SKIP"
-        },
-        {
-            "PlayerName": "retete",
-            "MoveType": "SKIP"
-        }
-    ],
     "CurrentPlayer": 0,
+    "GameName": "game",
+    "History": [],
     "Players": [{
-        "score": 51,
-        "name": "retete",
+        "score": 0,
+        "name": "lkn",
         "tileRack": [
-            {"I": 1},
-            {"U": 1},
-            {"L": 1},
-            {"T": 1},
-            {"E": 1},
-            {"U": 1},
-            {"O": 1}
+            {"D": 2},
+            {"Y": 4},
+            {"R": 1},
+            {"A": 1},
+            {"R": 1},
+            {"Y": 4},
+            {"F": 4}
         ]
     }]
 }

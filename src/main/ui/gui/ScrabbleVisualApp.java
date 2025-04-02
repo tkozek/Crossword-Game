@@ -13,6 +13,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
+import java.io.File;
 import java.io.IOException;
 
 import model.*;
@@ -28,7 +29,9 @@ import persistance.JsonWriter;
 // A Graphical user interface for Scrabble
 public class ScrabbleVisualApp extends ScrabbleUserInterface {
     
-    private static final String JSON_STORE = "./data/gameToPlayTest.json";
+    //private static final String JSON_STORE = "./data/savedgames/gameToPlayTest.json";
+    private static final String JSON_STORE = "./data/savedgames/defaultSaveFile.json";
+
     private static final String REQUEST_PLAYER_NAME_TEXT = "Type player name then click add";
     private static final int FRAME_SIDE_LENGTH = 1000;
     private static final int TILE_SIZE = 30;
@@ -67,11 +70,20 @@ public class ScrabbleVisualApp extends ScrabbleUserInterface {
     private JFrame frame;
     
     private JButton saveAndQuit;
+    private JButton saveAsAndQuit;
     private JButton quitWithoutSaving;
+    private JPanel saveSaveAsPanel;
+    private JPanel quitOrCancelPanel;
+    private JFileChooser fileChooser;
+
     private JLabel coverPhoto;
     private JFrame loadOrPlayFrame;
     private JButton newGame;
-    private JButton loadGame;
+    private JButton continueGame;
+    private JButton loadSelected;
+    private JComboBox saveGameDropdown;
+
+    private String selectedFileName;
 
     private JFrame playerNameFrame;
     private JPanel addPlayerPanel;
@@ -96,6 +108,8 @@ public class ScrabbleVisualApp extends ScrabbleUserInterface {
     private int startRow;
     private int startCol;
     private Direction dir;
+
+    private String lastGamePath;
 
     // EFFECTS: Loads start menu frame to user screen.
     public ScrabbleVisualApp() {
@@ -128,7 +142,9 @@ public class ScrabbleVisualApp extends ScrabbleUserInterface {
         coverPhoto = new JLabel(newIcon);
         coverPhoto.setLayout(new BoxLayout(coverPhoto, BoxLayout.Y_AXIS));
         newGame = new JButton("New Game");
-        loadGame = new JButton("Load Game");
+        continueGame = new JButton("Continue Game");
+        loadSelected = new JButton("Load Selected Game");
+        saveGameDropdown = new JComboBox<>(SavedGameManager.getAllSaveFiles());
         
         addStartMenuListeners();
         Box.Filler verticalFiller = new Box.Filler(
@@ -138,8 +154,11 @@ public class ScrabbleVisualApp extends ScrabbleUserInterface {
         );
         coverPhoto.add(verticalFiller);
         coverPhoto.add(newGame, new GridBagConstraints());
-        coverPhoto.add(loadGame, new GridBagConstraints());
-        
+        coverPhoto.add(continueGame, new GridBagConstraints());
+        coverPhoto.add(loadSelected, new GridBagConstraints());
+        coverPhoto.add(saveGameDropdown, new GridBagConstraints());
+
+
         loadOrPlayFrame.add(coverPhoto);
         loadOrPlayFrame.repaint();
         loadOrPlayFrame.setVisible(true);
@@ -157,25 +176,46 @@ public class ScrabbleVisualApp extends ScrabbleUserInterface {
                 initializeNewGame();
             }
         });
-        loadGame.addActionListener(new ActionListener() {
+        continueGame.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 loadOrPlayFrame.setVisible(false);
-                loadOldGame(); 
+                loadLastSavedGame(); 
+            }
+        });
+        loadSelected.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                loadSelectedGame();
             }
         });
     }
 
     // MODIFIES: scrabbleGame, players, numPlayers
     // EFFECTS: loads assets from previously saved game
-    private void loadOldGame() {
+    private void loadLastSavedGame() {
         this.gameRunning = true;
         try {
-            JsonReader jsonReader = new JsonReader(JSON_STORE);
+            lastGamePath = SavedGameManager.getLastGamePath();
+            JsonReader jsonReader = new JsonReader(lastGamePath);
             game = jsonReader.read();
             this.numPlayers = game.getNumPlayers();
             handleGame(game.getCurrentPlayerIndex());
         } catch (IOException e) {
-            System.out.println("Unable to read game from file: " + JSON_STORE);
+            System.out.println("Unable to read game from file: " + lastGamePath);
+        }
+    }
+
+    // MODIFIES: scrabbleGame, players, numPlayers
+    // EFFECTS: loads assets from previously saved game
+    private void loadSelectedGame() {
+        this.gameRunning = true;
+        try {
+            selectedFileName = SavedGameManager.getSavedGamesDirectory() + (String) saveGameDropdown.getSelectedItem();
+            JsonReader jsonReader = new JsonReader(selectedFileName);
+            game = jsonReader.read();
+            this.numPlayers = game.getNumPlayers();
+            handleGame(game.getCurrentPlayerIndex());
+        } catch (IOException e) {
+            System.out.println("Unable to read game from file: " + selectedFileName);
         }
     }
 
@@ -322,10 +362,22 @@ public class ScrabbleVisualApp extends ScrabbleUserInterface {
         terminalUIButton = new JButton("Terminal UI");
         String directionString = (dir == Direction.DOWN) ? "Down" : "Right";
         directionToggle = new JButton(directionString);
-        clearSelections = new JButton("Clear Selection");
+        clearSelections = new JButton("Clear");
 
         saveAndQuit = new JButton("Save and Quit");
-        quitWithoutSaving = new JButton("Quit without Saving");
+        saveAndQuit.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                SwingUtilities.invokeLater(() -> {
+                    frame.remove(rackPanel);
+                    frame.add(getSaveAndQuitRackPanel(player), BorderLayout.SOUTH);
+                    repaintAndRevalidate(rackPanel);
+                    repaintAndRevalidate(boardPanel);
+                });
+                //handleSave(player);
+                //printEventLog();
+                //System.exit(0);
+            }
+        });
         addMoveListeners(player);
         addOtherOptionsListeners(player);
         addButtonsToActionPanel();
@@ -344,10 +396,9 @@ public class ScrabbleVisualApp extends ScrabbleUserInterface {
         
         otherOptionButtons.add(directionToggle);
         otherOptionButtons.add(clearSelections);
-        otherOptionButtons.add(saveAndQuit);
-        otherOptionButtons.add(quitWithoutSaving);
         otherOptionButtons.add(terminalUIButton);
-
+        otherOptionButtons.add(saveAndQuit);
+    
         actionPanel.add(moveButtons);
         actionPanel.add(otherOptionButtons);
         
@@ -425,7 +476,6 @@ public class ScrabbleVisualApp extends ScrabbleUserInterface {
                 });
             }
         });
-
         actionPanel.add(confirm);
         actionPanel.add(cancel);
         rackPanel.add(actionPanel);
@@ -468,7 +518,7 @@ public class ScrabbleVisualApp extends ScrabbleUserInterface {
                 });                
             }
         });
-        addSaveAndQuitActionListeners(player);
+        //addSaveAndQuitActionListeners(player);
     }
 
     // MODIFIES: this
@@ -481,12 +531,78 @@ public class ScrabbleVisualApp extends ScrabbleUserInterface {
                 System.exit(0);
             }
         });
+        saveAsAndQuit.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                SwingUtilities.invokeLater(() -> {
+                    fileChooser = new JFileChooser(SavedGameManager.getSavedGamesDirectory());
+                    fileChooser.setDialogTitle(("Save game as"));
+                    int result = fileChooser.showSaveDialog(frame);
+                    if (result == JFileChooser.APPROVE_OPTION) {
+                        File selectedFile = fileChooser.getSelectedFile();
+                        if (!selectedFile.getName().endsWith(".json")) {
+                            selectedFile = new File(selectedFile.getAbsolutePath() + ".json");
+                        }
+                        handleSave(player, selectedFile.getAbsolutePath());
+                        System.out.println("Saving Game as : " + selectedFile.getName());
+                        printEventLog();
+                        System.exit(0);
+                    }
+                });
+                
+            }
+        });
         quitWithoutSaving.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 printEventLog();
                 System.exit(0);
             }
         });
+    }
+
+    private JPanel getSaveAndQuitRackPanel(Player player) {
+        rackPanel = new JPanel();
+        rackPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
+        actionPanel = new JPanel();
+        actionPanel.setLayout(new BoxLayout(actionPanel, BoxLayout.Y_AXIS));
+       // saveSaveAsPanel = new JPanel(new BoxLayout(saveSaveAsPanel, BoxLayout.X_AXIS));
+        saveSaveAsPanel = new JPanel();
+        quitOrCancelPanel = new JPanel();
+        saveSaveAsPanel.setLayout(new BoxLayout(saveSaveAsPanel, BoxLayout.X_AXIS));
+        quitOrCancelPanel.setLayout(new BoxLayout(quitOrCancelPanel, BoxLayout.X_AXIS));
+
+        saveSaveAsPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        quitOrCancelPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+        saveAndQuit = new JButton("Save & Quit");
+        saveAsAndQuit = new JButton("Save as & Quit");
+        quitWithoutSaving = new JButton("Quit without Saving");
+        addSaveAndQuitActionListeners(player);
+        cancel = new JButton("Cancel");
+        cancel.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                SwingUtilities.invokeLater(() -> {
+                    frame.remove(rackPanel);
+                    frame.remove(boardPanel);
+                    player.clearSelectedTiles();
+                    frame.add(getRackPanel(player), BorderLayout.SOUTH);
+                    frame.add(getBoardPanel(), BorderLayout.CENTER);
+                    repaintAndRevalidate(rackPanel);
+                    repaintAndRevalidate(boardPanel);
+                });
+            }
+        });
+        saveSaveAsPanel.add(saveAndQuit);
+        saveSaveAsPanel.add(saveAsAndQuit);
+        quitOrCancelPanel.add(quitWithoutSaving);
+        quitOrCancelPanel.add(cancel);
+        actionPanel.add(saveSaveAsPanel);
+        actionPanel.add(quitOrCancelPanel);
+        rackPanel.add(actionPanel);
+        List<LetterTile> letters = player.getTilesOnRack();
+        for (int i = 0; i < letters.size(); i++) {
+            rackPanel.add(createTilePanelNotClickable(player, letters.get(i), i));
+        }
+        return rackPanel;
     }
 
     // MODIFIES: scrabbleGame
@@ -503,6 +619,23 @@ public class ScrabbleVisualApp extends ScrabbleUserInterface {
             System.out.println("Unable to write to file " + JSON_STORE);
         }
     }
+
+    // MODIFIES: scrabbleGame
+    // EFFECTS: Saves game to file
+    private void handleSave(Player player, String filePath) {
+        try {
+            JsonWriter jsonWriter = new JsonWriter(filePath);
+            game.setCurrentPlayer(player);
+            jsonWriter.open();
+            jsonWriter.write(game);
+            jsonWriter.close();
+            // !!! ToDo Add "Okay" button to click before closing
+        } catch (IOException e) {
+            System.out.println("Unable to write to file " + filePath);
+        }
+    }
+
+
 
     
     // MODIFIES: this

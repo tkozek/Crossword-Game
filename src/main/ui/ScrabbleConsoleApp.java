@@ -10,17 +10,19 @@ import model.board.*;
 import model.move.Move;
 import model.tile.*;
 import persistance.*;
+import ui.gui.SavedGameManager;
 import ui.gui.ScrabbleVisualApp;
 
 // Citation: Saving and loading are based on JSON example from edX
 // Represents a game of Scrabble
 public class ScrabbleConsoleApp extends ScrabbleUserInterface {
 
-    private static final String JSON_STORE = "./data/gameToPlayTest.json";
+    private static final String JSON_STORE = "./data/savedgames/gameToPlayTest.json";
     private static final String GREETING_TEXT = "Welcome to Scrabble in Java";
     private static final String START_MENU_PROMPT = "(L)oad your old game or (p)lay a new one?";
     private static final int BOARD_LENGTH = 15;
-
+    
+    private String lastGamePath;
     private Scanner scanner;
     
     
@@ -69,13 +71,14 @@ public class ScrabbleConsoleApp extends ScrabbleUserInterface {
     public void loadOldGame() {
         this.gameRunning = true;
         try {
-            JsonReader jsonReader = new JsonReader(JSON_STORE);
+            lastGamePath = SavedGameManager.getLastGamePath();
+            JsonReader jsonReader = new JsonReader(lastGamePath);
             game = jsonReader.read();
             this.numPlayers = game.getNumPlayers();
             System.out.println("Loaded " + game.getName() + " with " + String.valueOf(numPlayers) 
-                    + " players from " + JSON_STORE + "\n");
+                    + " players from " + lastGamePath + "\n");
         } catch (IOException e) {
-            System.out.println("Unable to read game from file: " + JSON_STORE);
+            System.out.println("Unable to read game from file: " + lastGamePath);
         }
     }
 
@@ -259,15 +262,16 @@ public class ScrabbleConsoleApp extends ScrabbleUserInterface {
     // EFFECTS: Saves game to file
     private void handleSave(Player player) {
         try {
-            JsonWriter jsonWriter = new JsonWriter(JSON_STORE);
+            lastGamePath = SavedGameManager.getLastGamePath();
+            JsonWriter jsonWriter = new JsonWriter(lastGamePath);
             game.setCurrentPlayer(player);
             jsonWriter.open();
             jsonWriter.write(game);
             jsonWriter.close();
             System.out.println("Saved " + game.getName() + " with " + String.valueOf(numPlayers)
-                    + " players to " + JSON_STORE);
+                    + " players to " + lastGamePath);
         } catch (IOException e) {
-            System.out.println("Unable to write to file " + JSON_STORE);
+            System.out.println("Unable to write to file " + lastGamePath);
         }
     }
 
