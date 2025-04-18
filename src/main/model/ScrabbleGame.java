@@ -434,6 +434,6 @@ public class ScrabbleGame implements Writable {
         String gainOrLoss = (pointChange >= 0) ? " gained " : " lost ";
         String pluralOrNot = (absolutePointChange != 1) ? "s" : "";
         return lastPlayer + " used all their tiles first. \n" 
-                + playerName + gainOrLoss + absolutePointChange + pluralOrNot;
+                + playerName + gainOrLoss + absolutePointChange + " point" + pluralOrNot;
     }
 }
