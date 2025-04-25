@@ -12,7 +12,6 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import model.move.Move;
-import model.move.MoveType;
 import model.tile.LetterTile;
 import persistance.JsonWritable;
 
@@ -26,9 +25,8 @@ public class Player implements JsonWritable<JSONObject>, Iterable<Move> {
     private List<LetterTile> selectedTiles;
     private int points;
     
-// Initializes a player with given name, zero points, no history of moves,
-//   an empty tile rack, no selected tiles, zero remaining tiles, the game they will play in.
-//      Their next turn will be their first.
+    // EFFECTS: Initializes a player with given name, zero points, no history of moves,
+    //   an empty tile rack, no selected tiles, zero remaining tiles, the game they will play in.
     public Player(String name) {
         this.name = name;
         this.history = new History();
@@ -37,8 +35,7 @@ public class Player implements JsonWritable<JSONObject>, Iterable<Move> {
         this.points = 0;   
     }
 
-    // EFFECTS: represents this player
-    // as a JSONObject
+    // EFFECTS: represents this player as a JSONObject
     @Override
     public JSONObject toJson() {
         JSONObject json = new JSONObject();
@@ -64,8 +61,7 @@ public class Player implements JsonWritable<JSONObject>, Iterable<Move> {
 
     // REQUIRES: 0 <= index < getNumTilesOnRack() {
     // MODIFIES: this
-    // EFFECTS: returns true if tile at index
-    //          was successfully selected
+    // EFFECTS: returns true if tile at index was successfully selected
     public boolean selectTile(int index) {
         if (!selectedTiles.contains(tileRack.get(index))) {
             this.selectedTiles.add(tileRack.get(index));
@@ -75,8 +71,7 @@ public class Player implements JsonWritable<JSONObject>, Iterable<Move> {
     }
 
 
-    // EFFECTS: returns true iff
-    // there are no tiles on this player's rack
+    // EFFECTS: returns true iff there are no tiles on this player's rack
     public boolean outOfTiles() {
         return tileRack.isEmpty();
     }
@@ -106,14 +101,13 @@ public class Player implements JsonWritable<JSONObject>, Iterable<Move> {
 
     // REQUIRES: getNumTilesOnRack() < MAX_NUM_TILES
     // MODIFIES: this
-    //EFFECTS: Adds drawnLetter to player's tile rack
+    // EFFECTS: Adds drawnLetter to player's tile rack
     public void addTile(LetterTile drawnLetter) {
         this.tileRack.add(drawnLetter);
     }
 
     // MODFIFIES: this
-    // EFFECTS: Adds specified number of points to 
-    // players points
+    // EFFECTS: Adds specified number of points to players points
     public void addPoints(int points) {
         this.points += points;
     }
@@ -124,8 +118,7 @@ public class Player implements JsonWritable<JSONObject>, Iterable<Move> {
         history.addMove(move);
     }
 
-    //EFFECTS: returns deep copy of player's
-    // selected tiles
+    // EFFECTS: returns deep copy of player's selected tiles
     public List<LetterTile> copySelectedTiles() {
         return copyLetterTiles(this.getSelectedTiles());
     }
@@ -144,14 +137,12 @@ public class Player implements JsonWritable<JSONObject>, Iterable<Move> {
     }
 
     // EFFECTS: Returns only the moves where a word was 
-    // played. Excludes any turns which were swaps
-    // or skips
+    // played. Excludes any turns which were swaps or skips
     public List<Move> getWordsPlayed() {
         return history.getWordsPlayed();
     }
 
-    //EFFECTS: returns chars corresponding to letters 
-    //      on the player's tile rack
+    //EFFECTS: returns chars corresponding to letters on the player's tile rack
     public List<LetterTile> getTilesOnRack() {
         return this.tileRack;
     }
@@ -173,8 +164,7 @@ public class Player implements JsonWritable<JSONObject>, Iterable<Move> {
     }
 
     // EFFECTS: updates player's name, does
-    // not update their entries in history or
-    // history name
+    // not update their entries in history or history name
     public void setPlayerName(String name) {
         this.name = name;
     }
@@ -188,7 +178,7 @@ public class Player implements JsonWritable<JSONObject>, Iterable<Move> {
         this.points = points;
     }
 
-    //EFFECTS: returns Chacters 'A' to 'Z' and '_'
+    //EFFECTS: returns Characters 'A' to 'Z' and '_'
     //   mapped to their number of occurences on tile rack
     public Map<Character, Integer> getNumEachCharOnMyRack() {
         HashMap<Character,Integer> playerCharCounts = new HashMap<>();
@@ -200,8 +190,7 @@ public class Player implements JsonWritable<JSONObject>, Iterable<Move> {
         return playerCharCounts;
     }
 
-    // EFFECTS: returns JSONArray representing
-    // tiles on this player's rack
+    // EFFECTS: returns JSONArray representing tiles on this player's rack
     private JSONArray tileRackToJson() {
         JSONArray json = new JSONArray();
         for (LetterTile letter : tileRack) {

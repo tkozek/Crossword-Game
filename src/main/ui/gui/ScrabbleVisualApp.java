@@ -130,8 +130,7 @@ public class ScrabbleVisualApp extends ScrabbleUserInterface {
 
     // MODIFIES: this
     // EFFECTS: Creates start menu frame for player to select
-    // whether they would like to play a new game or load 
-    // a saved game.
+    // whether they would like to play a new game or load a saved game.
     private void initializeStartMenu() {
         loadOrPlayFrame = new JFrame("Start Menu");
         loadOrPlayFrame.setSize(FRAME_SIDE_LENGTH, FRAME_SIDE_LENGTH);
@@ -159,15 +158,14 @@ public class ScrabbleVisualApp extends ScrabbleUserInterface {
         coverPhoto.add(loadSelected, new GridBagConstraints());
         coverPhoto.add(saveGameDropdown, new GridBagConstraints());
 
-
         loadOrPlayFrame.add(coverPhoto);
         loadOrPlayFrame.repaint();
         loadOrPlayFrame.setVisible(true);
     }
 
-    //REQUIRES: newGameButton and loadGameButton have been initialized
-    //MODIFIES: newGameButton and loadGameButton 
-    //EFFECTS: adds action listeners for newGameButton and loadGameButton 
+    //REQUIRES: NewGame and LoadGame buttons have been initialized
+    //MODIFIES: NewGame and LoadGame buttons
+    //EFFECTS: adds action listeners for NewGame and LoadGame buttons
     private void addStartMenuListeners() {
         newGame.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
@@ -188,7 +186,7 @@ public class ScrabbleVisualApp extends ScrabbleUserInterface {
         });
     }
 
-    // MODIFIES: scrabbleGame, players, numPlayers
+    // MODIFIES: this, scrabbleGame
     // EFFECTS: loads assets from previously saved game
     private void loadLastSavedGame() {
         this.gameRunning = true;
@@ -203,7 +201,7 @@ public class ScrabbleVisualApp extends ScrabbleUserInterface {
         }
     }
 
-    // MODIFIES: scrabbleGame, players, numPlayers
+    // MODIFIES: this, scrabbleGame
     // EFFECTS: loads assets from previously saved game
     private void loadSelectedGame() {
         this.gameRunning = true;
@@ -219,8 +217,7 @@ public class ScrabbleVisualApp extends ScrabbleUserInterface {
     }
 
     // MODIFIES: scrabbleGame
-    // EFFECTS: creates assets for a new game and prompts user input
-    // for setup parameters
+    // EFFECTS: creates assets for a new game and prompts user input for setup parameters
     private void initializeNewGame() {
         this.game = new ScrabbleGame();
         this.numPlayers = 0;
@@ -229,13 +226,11 @@ public class ScrabbleVisualApp extends ScrabbleUserInterface {
     }
 
     // MODIFIES: this
-    // EFFECTS: Prompts player to enter players' names
-    //         in the desired order of play.
+    // EFFECTS: Prompts player to enter players' names in the desired order of play.
     private void requestPlayerNames() {
         playerNameFrame = new JFrame("Request Player Names");
         playerNameFrame.setSize(REQUEST_NAMES_FRAME_WIDTH, REQUEST_NAMES_FRAME_HEIGHT);
         
-        //playerNameFrame.addKeyListener()
         addPlayerPanel = new JPanel();
         nameInput = new JTextField(REQUEST_PLAYER_NAME_TEXT);
         nameInput.addKeyListener(new KeyListener() {
@@ -266,7 +261,7 @@ public class ScrabbleVisualApp extends ScrabbleUserInterface {
         playerNameFrame.setVisible(true);
     }
 
-    // MODIFIES: addPlayerButton, confirmAllPlayersButton
+    // MODIFIES: add Player and confirm Players buttons
     // EFFECTS: adds ActionListeners to addPlayerButton and confirmAllPlayersButton
     private void addNameActionListeners() {
         addPlayerButton.addActionListener(new ActionListener() {
@@ -274,26 +269,7 @@ public class ScrabbleVisualApp extends ScrabbleUserInterface {
                 addPlayer();
                 nameInput.setText(REQUEST_PLAYER_NAME_TEXT);
             }
-        });
-
-        /* addPlayerButton.addKeyListener(new KeyListener() {
-            @Override
-            public void keyTyped(KeyEvent e) {
-            }
-
-            @Override
-            public void keyReleased(KeyEvent e) {
-            }
-
-            @Override
-            public void keyPressed(KeyEvent e) {
-                if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-                    addPlayer();
-                    nameInput.setText(REQUEST_PLAYER_NAME_TEXT);
-                }
-            }
-        }); */
-        
+        });        
         startButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 playerNameFrame.setVisible(false);
@@ -303,7 +279,7 @@ public class ScrabbleVisualApp extends ScrabbleUserInterface {
         });
     }
 
-    // MODIFIES: requestPlayerNameText
+    // MODIFIES: input player name textfield
     // EFFECTS: adds FocusListener to requestPlayerNameText
     private void addNameFocusListeners() {
         nameInput.addFocusListener(new FocusAdapter() {
@@ -324,8 +300,7 @@ public class ScrabbleVisualApp extends ScrabbleUserInterface {
     }
 
     // MODIFIES: player
-    // EFFECTS: Manages order of turn taking, 
-    // and ensures player's draw new tiles
+    // EFFECTS: Manages order of turn taking, and ensures player's draw new tiles
     // when they are supposed to
     private void handleGame(int nextPlayer) {
         int index = nextPlayer % numPlayers;
@@ -363,8 +338,7 @@ public class ScrabbleVisualApp extends ScrabbleUserInterface {
     }
 
     // MODIFIES: this
-    // EFFECTS: loads panel with player's tiles,
-    // along with their available action buttons
+    // EFFECTS: loads panel with player's tiles, along with their available action buttons
     private JPanel getRackPanel(Player player) {
         rackPanel = new JPanel();
         rackPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
@@ -416,18 +390,15 @@ public class ScrabbleVisualApp extends ScrabbleUserInterface {
         addMoveListeners(player);
         addOtherOptionsListeners(player);
         addButtonsToActionPanel();
-
     }
 
     // MODIFIES: this
     // EFFECTS: puts available action buttons into appropriate panels
     private void addButtonsToActionPanel() {
-        
         moveButtons.add(playButton);
         moveButtons.add(swapButton);
         moveButtons.add(skipButton);
         moveButtons.add(previewButton);
-
         
         otherOptionButtons.add(directionToggle);
         otherOptionButtons.add(clearSelections);
@@ -440,8 +411,7 @@ public class ScrabbleVisualApp extends ScrabbleUserInterface {
         rackPanel.add(actionPanel);
     }
 
-    // REQUIRES: playWordButton, swapTilesButton, skipTurnButton
-    // have been initialized
+    // REQUIRES: play, swap, and skip buttons have been initialized
     // MODIFIES: this
     // EFFECTS: adds play, swap, and skip action listeners
     private void addMoveListeners(Player player) {
@@ -470,7 +440,6 @@ public class ScrabbleVisualApp extends ScrabbleUserInterface {
                 handleGame(game.getPlayerIndex(player) + 1);
             }
         });
-        
         previewButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 SwingUtilities.invokeLater(() -> {
@@ -488,6 +457,8 @@ public class ScrabbleVisualApp extends ScrabbleUserInterface {
         });
     }
 
+    // EFFECTS: returns JPanel representing Player's rack and available options,
+    // along with confirm or cancel buttons.
     private JPanel getConfirmOrCancelRackPanel(Player player) {
         rackPanel = new JPanel();
         actionPanel = new JPanel();
@@ -591,7 +562,6 @@ public class ScrabbleVisualApp extends ScrabbleUserInterface {
                         System.exit(0);
                     }
                 });
-                
             }
         });
         quitWithoutSaving.addActionListener(new ActionListener() {
@@ -602,6 +572,8 @@ public class ScrabbleVisualApp extends ScrabbleUserInterface {
         });
     }
 
+    // EFFECTS: returns JPanel representing Player's rack and available options,
+    // along with various save and quit options.
     private JPanel getSaveAndQuitRackPanel(Player player) {
         rackPanel = new JPanel();
         rackPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
@@ -679,8 +651,7 @@ public class ScrabbleVisualApp extends ScrabbleUserInterface {
     }
     
     // MODIFIES: this
-    // EFFECTS: Adds panel representing player's tiles
-    // to the frame
+    // EFFECTS: Adds panel representing player's tiles to the frame
     private JButton createTilePanel(Player player, LetterTile letter, int letterIndex) {
         JButton tileButton = new JButton(letter.toDisplay());
         tileButton.setPreferredSize(new Dimension(40, 40));
@@ -697,8 +668,7 @@ public class ScrabbleVisualApp extends ScrabbleUserInterface {
     }
 
     // MODIFIES: this
-    // EFFECTS: Adds panel representing player's tiles
-    // to the frame
+    // EFFECTS: Adds panel representing player's tiles to the frame
     private JButton createTilePanelNotClickable(Player player, LetterTile letter, int letterIndex) {
         JButton tileButton = new JButton(letter.toDisplay());
         tileButton.setPreferredSize(new Dimension(40, 40));
@@ -710,8 +680,7 @@ public class ScrabbleVisualApp extends ScrabbleUserInterface {
     }
     
     // MODIFIES: this
-    // EFFECTS: Adds panel representing the current board
-    // to the frame
+    // EFFECTS: Adds panel representing the current board to the frame
     private JPanel getBoardPanel() {
         boardPanel = new JPanel();
         boardPanel.setLayout(new GridLayout(Board.BOARD_LENGTH, Board.BOARD_LENGTH));
@@ -738,8 +707,7 @@ public class ScrabbleVisualApp extends ScrabbleUserInterface {
     }
 
     // MODIFIES: this
-    // EFFECTS: Adds panel representing the current board
-    // to the frame
+    // EFFECTS: Adds panel representing the current board to the frame
     private JPanel getPreviewBoardPanel(Player player) {
         boardPanel = new JPanel();
         boardPanel.setLayout(new GridLayout(Board.BOARD_LENGTH, Board.BOARD_LENGTH));
@@ -814,9 +782,8 @@ public class ScrabbleVisualApp extends ScrabbleUserInterface {
         return infoPanel;
     }
 
-    // MODIFIES: infoTabs       
-    // EFFECTs: adds a panel to show summary of all moves
-    // to the information tabbed pane
+    // MODIFIES: Tabbed Information Pane      
+    // EFFECTs: adds a panel to show summary of all moves to the information tabbed pane
     private void addMovesTab(Player player) {
         movesPanel = new JPanel();
         String summary = "";
@@ -843,8 +810,7 @@ public class ScrabbleVisualApp extends ScrabbleUserInterface {
         infoTabs.add(movesPanel, "My Move History");
     }
 
-    // EFFECTS: returns JTextArea with given text and 
-    // standardized formatting
+    // EFFECTS: returns JTextArea with given text and standardized formatting
     private JTextArea getFormattedTextArea(String text, int height) {
         JTextArea textArea = new JTextArea(text);
         textArea.setFont(new Font("Arial", Font.ITALIC, 12));
@@ -856,9 +822,8 @@ public class ScrabbleVisualApp extends ScrabbleUserInterface {
         return textArea;
     }
 
-    // MODIFIES: infoTabs       
-    // EFFECTs: adds a panel to show filtered word summary
-    // to the information tabbed pane
+    // MODIFIES: Tabbed Information Pane      
+    // EFFECTs: adds a panel to show filtered word summary to the information tabbed pane
     private void addWordsTab(Player player) {
         wordsPanel = new JPanel();
         searchWordsButton = new JButton("Search");
@@ -879,7 +844,7 @@ public class ScrabbleVisualApp extends ScrabbleUserInterface {
         infoTabs.add(wordsPanel, "Word Filter");
     }
 
-    // MODIFIES: searchWordsButton
+    // MODIFIES: search filtered words button
     // EFFECTS: adds action listener to the button in Filtered Words tab
     private void addSearchWordsButtonListener(Player player) {
         searchWordsButton.addActionListener(new ActionListener() {
@@ -908,8 +873,7 @@ public class ScrabbleVisualApp extends ScrabbleUserInterface {
     }
 
     // MODIFIES: panel
-    // EFFECTS: removes all JTextArea components
-    // from panel
+    // EFFECTS: removes all JTextArea components from panel
     private void resetTab(JPanel panel) {
         for (Component component : panel.getComponents()) {
             if (component instanceof JTextArea) {
@@ -919,9 +883,8 @@ public class ScrabbleVisualApp extends ScrabbleUserInterface {
         repaintAndRevalidate(panel);
     }
 
-    // MODIFIES: infoTabs
-    // EFFECTs: adds a panel to show remaining tile counts
-    // to the information tabbed pane
+    // MODIFIES: Tabbed Information Pane      
+    // EFFECTs: adds a panel to show remaining tile counts to the information tabbed pane
     private void addLetterDistributionTab(Player player) {
         letterDistributionPanel = new JPanel();
         Map<Character, Integer> distributionMap = game.getNumEachCharInBagAndOpponents(player);
@@ -948,13 +911,11 @@ public class ScrabbleVisualApp extends ScrabbleUserInterface {
         infoTabs.add(letterDistributionPanel, "Letter Distribution");
     }
 
-    // MODIFIES: searchRemainingCountsTextField
+    // MODIFIES: remaining tile counts textfield
     // EFFECTS: searchRemainingCountsTextField has been initialized
     private void addLetterDistributionFocusListener() {
         searchLetterCountsField.addFocusListener(new FocusListener() {
             @Override
-            // MODIFIES: searchRemainingCountsTextField
-            // EFFECTS: sets searchRemainingCountsTextField text to empty string
             public void focusGained(FocusEvent e) {
                 searchLetterCountsField.setText("");
             }

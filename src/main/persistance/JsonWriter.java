@@ -7,7 +7,6 @@ import java.io.*;
 
 // Represents a writer that writes JSON 
 // representation of Scrabble game to file
-// Citation: Based on WorkRoom example on edX
 public class JsonWriter {
     private static final int TAB = 4;
     private PrintWriter writer;
@@ -26,8 +25,7 @@ public class JsonWriter {
     }
 
     // MODIFIES: this
-    // EFFECTS: writes JSON representation of 
-    // Scrabble Game to file
+    // EFFECTS: writes JSON representation of Scrabble Game to file
     public void write(ScrabbleGame game) {
         JSONObject json = game.toJson();
         saveToFile(json.toString(TAB));

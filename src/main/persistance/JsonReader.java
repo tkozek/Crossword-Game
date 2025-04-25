@@ -26,7 +26,6 @@ public class JsonReader {
 
     // EFFECTS: constructs reader that reads 
     // from data stored in file at source
-    // Citation: Based on WorkRoom example on edX
     public JsonReader(String source) {
         this.source = source;
     }
@@ -94,8 +93,7 @@ public class JsonReader {
     }
 
     // MODIFIES: game
-    // EFFECTS: parses players (LetterTile or BoardTile) from JSON object and adds it to 
-    // the Scrabble Game
+    // EFFECTS: parses players from JSON object and adds them to the Scrabble Game
     private void addPlayers(ScrabbleGame game, JSONObject jsonObject) {
         JSONArray jsonArray = jsonObject.getJSONArray("Players");
         for (Object json : jsonArray) {
@@ -105,8 +103,7 @@ public class JsonReader {
     }
 
     // MODIFIES: game
-    // EFFECTS: parses player (LetterTile or BoardTile) from JSON object and adds it to 
-    // the Scrabble Game
+    // EFFECTS: parses player from JSON object and adds it to the Scrabble Game
     private void addPlayer(ScrabbleGame game, JSONObject nextPlayer) {
         String name = nextPlayer.getString("name");
         int score = nextPlayer.getInt("score");
@@ -117,8 +114,7 @@ public class JsonReader {
     }
 
     // MODIFIES: player
-    // EFFECTS: adds tiles from player's saved
-    // tile rack to their current rack
+    // EFFECTS: adds tiles from player's saved tile rack to their current rack
     private void addTilesFromSavedRack(Player player, JSONObject jsonObject) {
         JSONArray tileRack = jsonObject.getJSONArray("tileRack");
         for (Object json : tileRack) {
@@ -129,8 +125,7 @@ public class JsonReader {
     }
 
     // MODIFIES: player
-    // EFFECTS: adds a new Letter Tile to player's rack
-    // where the only key in tile is the character,
+    // EFFECTS: parses Letter Tile from JSON object and adds it to player's rack
     private void addTileFromSavedRack(Player player, JSONObject tile) {
         // Loop executes exactly once
         for (String key : tile.keySet()) { 
@@ -140,8 +135,7 @@ public class JsonReader {
     }
 
     // MODIFIES: game
-    // EFFECTS: parses full game history (all player histories combined)
-    // from JSON object and adds it to the Scrabble Game
+    // EFFECTS: parses full game history from JSON object and adds it to the Scrabble Game
     private void addGameHistory(ScrabbleGame game, JSONObject jsonObject) {
         JSONArray historyArray = jsonObject.getJSONArray("History");
         String moveType;
@@ -170,8 +164,7 @@ public class JsonReader {
     }
     
     // MODIFIES: player, game
-    // EFFECTS: adds move of type PLAY to 
-    // both player and game history
+    // EFFECTS: adds move of type PLAY to both player and game history
     private void addWordPlayed(ScrabbleGame game, JSONObject moveObject, Player player) {
         int points = moveObject.getInt("Points");
         int row = moveObject.getInt("Row");
@@ -182,8 +175,7 @@ public class JsonReader {
     }
 
     // MODIFIES: player, game
-    // EFFECTS: adds move of type SWAP to 
-    // both player and game history
+    // EFFECTS: adds move of type SWAP to both player and game history
     private void addSwap(ScrabbleGame game, JSONObject moveObject, Player player) {
         String initialLetters = moveObject.getString("InitialLetters");
         String postSwapLetters = moveObject.getString("AfterSwapLetters");
@@ -191,8 +183,7 @@ public class JsonReader {
     }
 
     // MODIFIES: player, game
-    // EFFECTS: adds move of type SWAP to 
-    // both player and game history
+    // EFFECTS: adds move of type END_GAME_ADJUSTMENT to both player and game history
     private void addEndGame(ScrabbleGame game, JSONObject moveObject, Player player) {
         String letters = moveObject.getString("LettersAccountedFor");
         Player lastPlayer = game.getPlayerByName(moveObject.getString("FinalPlayer"));

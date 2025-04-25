@@ -112,7 +112,7 @@
         " ",
         " ",
         " ",
-        "E",
+        "P",
         " ",
         " ",
         " ",
@@ -227,12 +227,12 @@
         "TWS"
     ],
     "TileBag": {
-        "A": 8,
+        "A": 7,
         "B": 2,
-        "C": 1,
+        "C": 2,
         "D": 3,
-        "E": 10,
-        "F": 1,
+        "E": 11,
+        "F": 2,
         "G": 3,
         "H": 2,
         "I": 8,
@@ -242,7 +242,7 @@
         "M": 2,
         "N": 6,
         "O": 8,
-        "P": 2,
+        "P": 1,
         "Q": 1,
         "R": 6,
         "S": 4,
@@ -253,16 +253,15 @@
         "X": 1,
         "Y": 2,
         "Z": 1,
-        "-": 2
+        "-": 1
     },
     "CurrentPlayer": 0,
-    "GameName": "Test",
     "History": [{
         "Col": 7,
-        "Points": 2,
+        "Points": 6,
         "PlayerName": "Tester",
         "MoveType": "PLAY_WORD",
-        "LettersPlayed": "E",
+        "LettersPlayed": "P",
         "Row": 7,
         "Direction": "D"
     }],
@@ -270,12 +269,12 @@
         "score": 0,
         "name": "Tester",
         "tileRack": [
-            {"A": 1},
             {"D": 2},
-            {"E": 1},
+            {"-": 0},
+            {"A": 1},
             {"I": 1},
-            {"C": 3},
-            {"F": 4}
+            {"E": 1},
+            {"A": 1}
         ]
     }]
 }

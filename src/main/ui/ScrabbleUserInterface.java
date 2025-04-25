@@ -8,16 +8,12 @@ import java.util.List;
 
 import model.Event;
 
+// Represents a user interface for Scrabble
 public abstract class ScrabbleUserInterface {
 
     protected ScrabbleGame game;
     protected int numPlayers;
     protected boolean gameRunning;
-
-    // Represents a user interface for Scrabble
-    public ScrabbleUserInterface() {
-
-    }
 
     protected void printScoreSummaries() {
         List<Player> players = game.getPlayers();
@@ -44,7 +40,6 @@ public abstract class ScrabbleUserInterface {
         game.performEndGameAdjustments(lastPlayer);
         System.out.println(lastPlayer.getPlayerName() + " was the last to play");
         System.out.println("The winner is " + game.getHighestScoringPlayer().getPlayerName());
-        
         printEventLog();
         printScoreSummaries();
     }

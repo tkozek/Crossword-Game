@@ -3,7 +3,6 @@ package model.move;
 import org.json.JSONObject;
 
 import model.Direction;
-import model.Player;
 import persistance.JsonWritable;
 
 // A move made by a player, either a word played or a swap
@@ -14,7 +13,7 @@ public class Move implements JsonWritable<JSONObject> {
     private Direction direction;
     private int startRow;
     private int startCol;
-    private String playerName; // !!! TODO make move only have player names, then move wont have reference to player
+    private String playerName;
     private String lastPlayer;
 
     // Constructor if the player played a word on a board
@@ -45,13 +44,12 @@ public class Move implements JsonWritable<JSONObject> {
     }
 
      // Constructor for end of game where last player gains points from unplayed tiles on opponent racks
-    // REQUIRES: Exchanged points >= 0;
-    public Move(String player, String lastPlayer, String lettersAccountedFor, int exchangedPoints) {
+    public Move(String player, String lastPlayer, String lettersAccountedFor, int pointChange) {
         this.moveType = MoveType.END_GAME_ADJUSTMENT;
         this.playerName = player;
         this.lastPlayer = lastPlayer;
         this.lettersInvolved = lettersAccountedFor;  
-        this.pointsForMove = exchangedPoints;
+        this.pointsForMove = pointChange;
     }
 
     // EFFECTS: returns JSONObject representing
@@ -77,7 +75,7 @@ public class Move implements JsonWritable<JSONObject> {
         return json;
     }
 
-    // REQUIRES: getMoveType() == MoveType.PLAY_WORD, letter is 
+    // REQUIRES: MoveType is PLAY_WORD, letter is 
     // uppercase between 'A' to 'Z' or '-'
     // EFFECTS: returns true if at least one 
     // letter in the move matches the given letter.
@@ -130,9 +128,8 @@ public class Move implements JsonWritable<JSONObject> {
     }
 
     // REQUIRES: this is a move of type PLAY_WORD
-    // MODIFIES: json
-    // EFFECTS: adds information about this move
-    // to json
+    // MODIFIES: input JSONObject
+    // EFFECTS: adds information about this move to JSONObject
     private void playWordToJson(JSONObject json) {
         json.put("LettersPlayed", lettersInvolved);
         json.put("Row", startRow);
@@ -143,18 +140,16 @@ public class Move implements JsonWritable<JSONObject> {
     }
 
     // REQUIRES: this is a move of type SWAP_TILES
-    // MODIFIES: json
-    // EFFECTS: adds information about this move
-    // to json
+    // MODIFIES: input JSONObject
+    // EFFECTS: adds information about this move to JSONObject
     private void swapTilesToJson(JSONObject json) {
         json.put("InitialLetters", lettersInvolved.substring(0,7));
         json.put("AfterSwapLetters", lettersInvolved.substring(7,lettersInvolved.length()));
     }
 
     // REQUIRES: this is a move of type END_GAME_ADJUSTMENT
-    // MODIFIES: json
-    // EFFECTS: adds information about this move
-    // to json
+    // MODIFIES: input JSONObject
+    // EFFECTS: adds information about this move to JSONObject
     private void endGameAdjustmentToJson(JSONObject json) {
         json.put("FinalPlayer", lastPlayer);
         json.put("LettersAccountedFor", lettersInvolved);

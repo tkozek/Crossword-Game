@@ -14,22 +14,25 @@ public class Coordinate {
         this.column = column;
     }
 
+    
+    // EFFECTS: returns true if input has the same
+    //  row and column coordinate as this
     @Override
-    // REQUIRES: coord is of type Coordinate.
-    // EFFECTS: returns true if 
-    // this.getRow() == coord.getRow()
-    // AND this.getColumn() == coord.getColumn()
     public boolean equals(Object coord) {
+        if (this == coord) {
+            return true;
+        }
+        if (coord == null || getClass() != coord.getClass()) {
+            return false;
+        }
         Coordinate toCompareCoord = (Coordinate) coord;
         return row == toCompareCoord.row && column == toCompareCoord.column;
           
     }
     
-    @Override
     // EFFECTS: hashes the coordinate object
     // based on row and column values
-    // so that HashSet can be used to initialize 
-    // the board's special tiles
+    @Override
     public int hashCode() {
         return Objects.hash(row, column);
     }

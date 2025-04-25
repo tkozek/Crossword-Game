@@ -26,7 +26,7 @@ public class TileBag implements JsonWritable<JSONObject> {
     //letter standard to a Scrabble Game
     public TileBag() {
         drawPile = new ArrayList<>();
-        initializeMaps();
+        initializeFrequencyMap(letterFrequencyMap);
         initializeTiles(letterFrequencyMap);
         randomIndexGenerator = new Random();
     }
@@ -95,8 +95,7 @@ public class TileBag implements JsonWritable<JSONObject> {
     // occurences it has in the draw pile of a new game
     public Map<Character, Integer> getInitialLetterFrequencies() {
         Map<Character, Integer> copy = new HashMap<>();
-        initializeFrequenciesAThroughM(copy);
-        initializeFrequenciesNThroughBlank(copy);
+        initializeFrequencyMap(copy);
         return (Map<Character,Integer>) copy;
     }
 
@@ -149,7 +148,7 @@ public class TileBag implements JsonWritable<JSONObject> {
 
     // MODIFIES: this
     // EFFECTS: Adds Tile Point Values to 
-    // Point map for Letters A,B,C,....,Z,_. (Inclusive)
+    // Point map for Letters A,B,C,....,Z,-. (Inclusive)
     private static Map<Character, Integer> getLetterPointsMap() {
         Map<Character, Integer> letterPointsMap = new HashMap<>();
         letterPointsMap.put('A', 1); 
@@ -184,18 +183,8 @@ public class TileBag implements JsonWritable<JSONObject> {
 
     // MODIFIES: this
     // EFFECTS: Puts appropriate frequencies 
-    // and points values in point and frequency 
-    // maps, for each valid character in Scrabble
-    private void initializeMaps() {
-        initializeFrequenciesAThroughM(letterFrequencyMap);
-        initializeFrequenciesNThroughBlank(letterFrequencyMap);
-    }
-
-    // MODIFIES: this
-    // EFFECTS: Adds Tile Frequencies to 
-    //   Frequency map for Letters A, B, C,....,M
-    //     inclusive
-    private void initializeFrequenciesAThroughM(Map<Character, Integer> letterFrequencyMap) {
+    // in frequency map for each valid character
+    private void initializeFrequencyMap(Map<Character, Integer> letterFrequencyMap) {
         letterFrequencyMap.put('A', 9); 
         letterFrequencyMap.put('B', 2); 
         letterFrequencyMap.put('C', 2);
@@ -209,13 +198,6 @@ public class TileBag implements JsonWritable<JSONObject> {
         letterFrequencyMap.put('K', 1); 
         letterFrequencyMap.put('L', 4);
         letterFrequencyMap.put('M', 2); 
-    }
-    
-    // MODIFIES: this
-    // EFFECTS: Adds Tile Frequencies to 
-    //   Frequency map for Letters N, O,....,Z,_,
-    //     inclusive
-    private void initializeFrequenciesNThroughBlank(Map<Character, Integer> letterFrequencyMap) {
         letterFrequencyMap.put('N', 6); 
         letterFrequencyMap.put('O', 8);
         letterFrequencyMap.put('P', 2); 

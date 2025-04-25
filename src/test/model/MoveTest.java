@@ -94,7 +94,7 @@ public class MoveTest {
     @Test
     public void testGetLastPlayer() {
         Move endGame = new Move(testPlayer.getPlayerName(), testPlayer2.getPlayerName(), "ADC", 6);
-        assertEquals(testPlayer2, endGame.getLastPlayerName());
+        assertEquals(testPlayer2.getPlayerName(), endGame.getLastPlayerName());
         assertFalse(testPlayer.getPlayerName().equals(endGame.getLastPlayerName()));
     }
 

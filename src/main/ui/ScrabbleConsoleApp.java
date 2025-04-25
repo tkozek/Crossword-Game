@@ -104,7 +104,6 @@ public class ScrabbleConsoleApp extends ScrabbleUserInterface {
         }
     }
     
-    // REQUIRES: First move of the game hasn't been played.
     // MODIFIES: this
     // EFFECTS: Prompts player to enter players' names
     //         in the desired order of play.
@@ -215,8 +214,7 @@ public class ScrabbleConsoleApp extends ScrabbleUserInterface {
     }
 
     // EFFECTS: Prompts user for what they
-    // would like to view about the game,
-    // displays that.
+    // would like to view about the game, displays that.
     private void handleViewings(Player player) {
         System.out.println("\n Type whether you'd like to view current (b)oard, (w)ords played, all (m)oves,"
                 + " (f)iltered moves, (r)emaining tile counts, or anything else to cancel");
@@ -276,8 +274,7 @@ public class ScrabbleConsoleApp extends ScrabbleUserInterface {
     }
 
     // EFFECTS: Prints all player moves
-    // in order, including playing words,
-    // swaps, skips
+    // in order, including playing words, swaps, skips
     private void printAllMovesSummary(Player player) {
         String description = "";
         for (Move move : player) {
@@ -330,13 +327,12 @@ public class ScrabbleConsoleApp extends ScrabbleUserInterface {
         }
     }
 
-    // MODIFIES: player, Board, TileBag
+    // MODIFIES: game, player
     // EFFECTS: Prompts player for position and direction 
     // instructions, then places and logs the turn
     // their selected tiles as directed 
     // OR 
-    // prints error message if instructions
-    // were invalid
+    // prints error message if instructions were invalid
     private void handlePositionAndDirectionSelection(Player player) {
         adjustScanner();
         System.out.println("Enter the row index you'd like to start your word at \n ");
@@ -401,8 +397,7 @@ public class ScrabbleConsoleApp extends ScrabbleUserInterface {
         System.out.println(player.getPlayerName() + " skipped their turn \n");
     }
 
-    //EFFECTS: Prints out selected tiles
-    // for player
+    //EFFECTS: Prints out selected tiles for player
     private void printSelectedTiles(Player player) {
         String tilePrintOut = "";
         List<LetterTile> playersSelectedLetters = player.getSelectedTiles();
@@ -412,8 +407,7 @@ public class ScrabbleConsoleApp extends ScrabbleUserInterface {
         System.out.println(tilePrintOut + "\n");
     }
 
-    //EFFECTS: Prints out all tiles on the
-    // player's tile rack
+    //EFFECTS: Prints out all tiles on the player's tile rack
     private void getTilePrintOut(Player player) {
         String tilePrintOut = "";
         List<LetterTile> playersLetters = player.getTilesOnRack();
@@ -444,10 +438,6 @@ public class ScrabbleConsoleApp extends ScrabbleUserInterface {
         System.out.println(spacer);
     }
 
-    
-
-    
-
     // EFFECTS: prints out the current board
     private void getBoardPrintOut(Board board) {
         printHeader();
@@ -460,7 +450,6 @@ public class ScrabbleConsoleApp extends ScrabbleUserInterface {
             System.out.println(rowPrintout + "|" + Integer.toString(i) +  "\n");
         }
     }
-
 
     // EFFECTS: prints header for board display
     private void printHeader() {

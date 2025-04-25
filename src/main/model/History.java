@@ -35,7 +35,6 @@ public class History implements Iterable<Move> {
         return movesWithLetter;
     }
 
-    // REQUIRES: Move was made by user with this.getName()
     // MODIFIES: this
     // EFFECTS: adds move to this history
     public void addMove(Move move) {

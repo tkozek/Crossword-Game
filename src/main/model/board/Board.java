@@ -61,7 +61,7 @@ public class Board implements JsonWritable<JSONArray> {
 
     // EFFECTS: returns true if and only if all letters can be placed without going
     // out of bounds, skips over spaces where a letter is already played
-    // returns false if startRow,startCol is out of bounds.
+    // returns false if start coordinate is out of bounds.
     public boolean sectionIsAvailable(List<LetterTile> letters, int startRow, int startCol, Direction dir) {
         int length = letters.size();
         if (startRow < 0 || startCol < 0 || boardTiles[startRow][startCol].occupiesBoardSpot()) {
@@ -158,7 +158,7 @@ public class Board implements JsonWritable<JSONArray> {
         return tileType;
     }
 
-    //EFFECTS: returns Chacters 'A' to 'Z' and '_'
+    //EFFECTS: returns Characters 'A' to 'Z' and '_'
     //   mapped to their number of occurences on board
     public Map<Character, Integer> getNumEachCharOnBoard() {
         Map<Character, Integer> charCounts = new HashMap<>();
@@ -195,8 +195,7 @@ public class Board implements JsonWritable<JSONArray> {
         }
     }
 
-    // REQUIRES: startRow and startCol are both in bounds, shift >= 0, exactly one of rowInc and colInc are 
-    // 1 and 0 respectively.
+    // REQUIRES: start coordinate is in bounds, incrementation is only horizontal or vertical but not both
     // EFFECTS: returns any points earned from existing tiles prior to first letter placed and after last letter
     // placed in this turn. 
     private int getInlineAdjacentPoints(int startRow, int startCol, int rowInc, int colInc, int shift) {
@@ -219,10 +218,11 @@ public class Board implements JsonWritable<JSONArray> {
         return total;
     }
 
+    // REQUIRES: start coordinate is in bounds, incrementation is only horizontal or vertical but not both
     // EFFECTS: Checks for multipliers at the starting coordinate, then
     // iteratively adds points from already placed in-line letter tiles
     // which connect to the starting coordinate. returns score
-    // after applying relevant multiplier.
+    // after applying the relevant multiplier.
     private int scorePerpendicularWord(LetterTile letter, int startRow, int startCol, int rowInc, int colInc) {
         Coordinate coord = new Coordinate(startRow, startCol);
         int total = 0;
@@ -237,8 +237,9 @@ public class Board implements JsonWritable<JSONArray> {
         }
     }
     
-    // EFFECTS: iterates beginning at starting coordinates according to provided
-    // incrementers, returns sum of points of letters up until first BoardTile is encountered
+    // REQUIRES: start coordinate is in bounds, incrementation is only horizontal or vertical but not both
+    // EFFECTS: iterates beginning at start coordinates according to specified incrementation
+    //          returns sum of points of letters up until first BoardTile is encountered
     private int scorePerpendicularAdjacent(int startRow, int startCol, int rowInc, int colInc) {
         int i = 1;
         int total = 0;
@@ -260,9 +261,9 @@ public class Board implements JsonWritable<JSONArray> {
     }
 
     // MODIFIES: this
-    // EFFECTS: returns the word multiplier for the
-    // board space at coord, removes multiplier from 
-    // that coordinate so that it isn't used a second time
+    // EFFECTS: returns the word multiplier at the coordinate, 
+    // removes multiplier from that coordinate iff this was applied to the primary
+    // word played in the turn. 
     private int findWordMultiplier(Coordinate coord, boolean isAdjacency) {
         if (doubleWordCoordinates.contains(coord)) {
             if (!isAdjacency) {
@@ -280,12 +281,9 @@ public class Board implements JsonWritable<JSONArray> {
     }
 
     // MODIFIES: this
-    // EFFECTS: returns the letter multiplier for the
-    // board space at coord. If this is an adjacent call then the 
-    // multiplier at that coordinate remains intact, so that it
-    // can be applied to the remaining calls required to completely score
-    // the turn. Otherwise removes multiplier from 
-    // that coordinate so that it isn't used a second time
+    // EFFECTS: returns the letter multiplier at the coordinate, 
+    // removes multiplier from that coordinate iff this was applied to the primary
+    // word played in the turn. 
     private int findLetterMultiplier(Coordinate coord, boolean isAdjacency) {
         if (doubleLetterCoordinates.contains(coord)) {
             if (!isAdjacency) {

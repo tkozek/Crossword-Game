@@ -107,7 +107,7 @@ public class PlayerTest {
         assertEquals(letters.size(), 2);
         game.logWord(testPlayer, getStringFromLetters(letters),2, 2, 10, Direction.DOWN);
         assertEquals(testPlayer.getMoves().size(), 1);
-        assertEquals(testPlayer.getMoves().get(0).getPlayerName(), testPlayer);
+        assertEquals(testPlayer.getMoves().get(0).getPlayerName(), testPlayer.getPlayerName());
     }
 
 

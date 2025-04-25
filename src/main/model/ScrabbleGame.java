@@ -41,8 +41,7 @@ public class ScrabbleGame implements JsonWritable<JSONObject> {
         this.currentPlayerIndex = 0;
     }
     
-    // EFFECTS: Creates a JSONObject
-    // from the ScrabbleGame state
+    // EFFECTS: Creates a JSONObject from this
     @Override
     public JSONObject toJson() {
         JSONObject json = new JSONObject();
@@ -75,7 +74,7 @@ public class ScrabbleGame implements JsonWritable<JSONObject> {
         return score;
     }
 
-    //REQUIRES: getSelectedTiles.size() <= tileBag.size()
+    //REQUIRES: number of selected tiles <= tileBag.size()
     //MODIFIES: this, tileBag
     //EFFECTS: Adds specified tiles back to common draw bag, then replaces
     //          same number of tiles with random tiles from draw bag.
@@ -106,8 +105,8 @@ public class ScrabbleGame implements JsonWritable<JSONObject> {
 
     // MODIFIES: this
     // EFFECTS: subtracts score of unplayed tiles on the rack
-    // of all players except firstToUseAllTiles, adds this pooled
-    // score to firstToUseAllTiles' score. Logs these adjustments
+    // of all players except the one who played all their tiles, adds this pooled
+    // score to the last player's score. Logs these adjustments
     // in game and players' histories.
     public void performEndGameAdjustments(Player lastPlayer) {
         int total = 0;
@@ -162,8 +161,7 @@ public class ScrabbleGame implements JsonWritable<JSONObject> {
 
     // REQUIRES: getPlayers() contains player
     // MODIFIES: this, player
-    // EFFECTS; logs a skipped turn in this history
-    // and this player's history
+    // EFFECTS; logs a skipped turn in this history and this player's history
     public void logSkipFromHistory(Player player) {
         player.clearSelectedTiles();
         Move skip = new Move(player.getPlayerName());
@@ -190,7 +188,7 @@ public class ScrabbleGame implements JsonWritable<JSONObject> {
     }
     
     
-    // REQUIRES: skip.getMoveType() == MoveType.PLAY_WORD
+    // REQUIRES: MoveType is PLAY_WORD
     // EFFECTS: returns summary of a word played
     public String getWordDescription(Move word, Player player) {
         String printout = player.getPlayerName() + " played ";
@@ -206,7 +204,7 @@ public class ScrabbleGame implements JsonWritable<JSONObject> {
     }
 
 
-    // REQUIRES: skip.getMoveType() == MoveType.SWAP_TILES
+    // REQUIRES: MoveType is SWAP_TILES
     //EFFECTS: returns summary of a player swap
     public String getSwapDescription(Move swap, Player player) {
         String printout = player.getPlayerName() + " swapped tiles. ";
@@ -220,13 +218,13 @@ public class ScrabbleGame implements JsonWritable<JSONObject> {
         return printout;
     }
 
-    // REQUIRES: skip.getMoveType() == MoveType.SKIP
+    // REQUIRES: MoveType is SKIP
     // EFFECTS: returns summary of a skipped turn
     public String getSkipDescription(Move skip, Player player) {
         return player.getPlayerName() + " skipped their turn.";
     }
 
-    // REQUIRES: skip.getMoveType() == MoveType.END_GAME_ADJUSTMENT
+    // REQUIRES: MoveType is END_GAME_ADJUSTMENT
     // EFFECTS: returns summary of a end game adjustment
     public String getEndGameDescription(Move move, Player player) {
         String playerName = player.getPlayerName();
@@ -276,14 +274,12 @@ public class ScrabbleGame implements JsonWritable<JSONObject> {
 
     // MODIFIES: this
     // EFFECTS: adds move to game history
-    // DOES NOT add to associated player's
-    // history
+    // DOES NOT add to associated player's history
     public void addMove(Move move) {
         this.history.addMove(move);
     }
 
-    // EFFECTS: returns the player with the highest score
-    // in this game
+    // EFFECTS: returns the player with the highest score in this game
     public Player getHighestScoringPlayer() {
         if (players.isEmpty()) {
             return null;
@@ -302,8 +298,7 @@ public class ScrabbleGame implements JsonWritable<JSONObject> {
         return players.get(index % players.size());
     }
 
-    // EFFECTS: returns player with given name
-    // in this game
+    // EFFECTS: returns player with given name in this game
     public Player getPlayerByName(String name) {
         for (Player player : this.players) {
             if (player.getPlayerName().equals(name)) {
@@ -333,15 +328,12 @@ public class ScrabbleGame implements JsonWritable<JSONObject> {
         return this.history;
     }
 
-    // EFFECTS: returns players associated
-    // with this game
+    // EFFECTS: returns players associated with this game
     public List<Player> getPlayers() {
         return this.players;
     }
 
-    // EFFECTS: returns index of 
-    // first player to play once
-    // turn-taking begins
+    // EFFECTS: returns index of current player
     public int getCurrentPlayerIndex() {
         return currentPlayerIndex;
     }
@@ -352,22 +344,19 @@ public class ScrabbleGame implements JsonWritable<JSONObject> {
 
     // REQUIRES: this.getPlayers() contains player
     // MODIFIES: this
-    // EFFECTS: sets first player index
-    // to be the index of given player
+    // EFFECTS: sets first player index to be the index of given player
     public void setCurrentPlayer(Player player) {
         this.currentPlayerIndex = players.indexOf(player);
     }
 
     // REQUIRES: 0 <= firstPlayerIndex < getNumPlayers()
     // MODIFIES: this
-    // EFFECTS: sets first player index using index
-    // of players
+    // EFFECTS: sets first player index using index of players
     public void setCurrentPlayerIndex(int currentPlayerIndex) {
         this.currentPlayerIndex = currentPlayerIndex;
     }
 
-    // EFFECTS: returns number of players
-    // in the game.
+    // EFFECTS: returns number of players in the game.
     public int getNumPlayers() {
         return this.players.size();
     }
@@ -407,8 +396,7 @@ public class ScrabbleGame implements JsonWritable<JSONObject> {
         player.addMove(move);
     }
 
-    // EFFECTS: returns players in this Scrabble Game 
-    // as a JSONArray
+    // EFFECTS: returns players in this Scrabble Game as a JSONArray
     private JSONArray playersToJson() {
         JSONArray jsonArray = new JSONArray();
         for (Player player : players) {
@@ -417,8 +405,7 @@ public class ScrabbleGame implements JsonWritable<JSONObject> {
         return jsonArray;
     }
 
-    // EFFECTS: returns players in this Scrabble Game 
-    // as a JSONArray
+    // EFFECTS: returns players in this Scrabble Game as a JSONArray
     private JSONArray historyToJson() {
         JSONArray jsonArray = new JSONArray();
         for (Move move : history) {
