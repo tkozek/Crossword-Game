@@ -130,7 +130,8 @@ public class ScrabbleGame implements JsonWritable<JSONObject> {
             }
         }
         lastPlayer.addPoints(total);
-        updateHistoriesAndEventLog(new Move(lastPlayer.getPlayerName(), lastPlayer.getPlayerName(), totalLetters, total), lastPlayer);
+        Move move = new Move(lastPlayer.getPlayerName(), lastPlayer.getPlayerName(), totalLetters, total);
+        updateHistoriesAndEventLog(move, lastPlayer);
     }
 
     // MODIFIES: this, player
@@ -170,8 +171,8 @@ public class ScrabbleGame implements JsonWritable<JSONObject> {
 
     // MODIFIES: this, player
     // EFFECTS: Logs an end game adjustment into player and game's history
-    public void logEndGameAdjustment(Player player, Player lastPlayer, String lettersInvolved, int pointChange) {
-        Move endGameAdjustment = new Move(player.getPlayerName(), lastPlayer.getPlayerName(), lettersInvolved, pointChange);
+    public void logEndGameAdjustment(Player player, Player lastPlayer, String letters, int pointChange) {
+        Move endGameAdjustment = new Move(player.getPlayerName(), lastPlayer.getPlayerName(), letters, pointChange);
         updateHistoriesAndEventLog(endGameAdjustment, player);
     }
 

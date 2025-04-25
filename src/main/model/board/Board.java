@@ -322,6 +322,7 @@ public class Board implements JsonWritable<JSONArray> {
             }
         }
     }
+    
     // MODIFIES: this
     // EFFECTS: Indicates coordinates where a Double Letter Square
     //          should exist at the start of the game

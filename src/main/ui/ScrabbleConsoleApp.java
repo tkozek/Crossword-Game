@@ -193,9 +193,10 @@ public class ScrabbleConsoleApp extends ScrabbleUserInterface {
                 this.gameRunning = false;
                 new ScrabbleVisualApp(game);
                 try {
-                Object lock = new Object();
-                lock.notifyAll();
+                    Object lock = new Object();
+                    lock.notifyAll();
                 } catch (IllegalMonitorStateException e) {
+                    //
                 }
                 break;
             case "a":
