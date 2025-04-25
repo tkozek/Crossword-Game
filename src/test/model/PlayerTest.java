@@ -20,7 +20,7 @@ public class PlayerTest {
     
     @BeforeEach
     public void runBefore() {
-        game = new ScrabbleGame("n");
+        game = new ScrabbleGame();
         testPlayer = new Player("Trevor");
     }
 
@@ -30,7 +30,6 @@ public class PlayerTest {
         assertEquals(0, testPlayer.getMoves().size());
         assertEquals(0, testPlayer.getNumTilesOnRack());
         assertEquals("Trevor", testPlayer.getPlayerName());
-
     }
 
     @Test
@@ -108,8 +107,7 @@ public class PlayerTest {
         assertEquals(letters.size(), 2);
         game.logWord(testPlayer, getStringFromLetters(letters),2, 2, 10, Direction.DOWN);
         assertEquals(testPlayer.getMoves().size(), 1);
-        assertEquals(testPlayer.getMoves().get(0).getPlayer(), testPlayer);
-
+        assertEquals(testPlayer.getMoves().get(0).getPlayerName(), testPlayer);
     }
 
 
@@ -129,8 +127,6 @@ public class PlayerTest {
         List<LetterTile> postSwapLetters = testPlayer.getTilesOnRack();
         
         assertEquals(postSwapLetters,initialLetters);
-    
-
     }
 
     @Test
@@ -188,7 +184,6 @@ public class PlayerTest {
         // Clear
         testPlayer.clearSelectedTiles();
         assertTrue(testPlayer.getSelectedTiles().isEmpty());
-
     }
 
     
@@ -275,7 +270,5 @@ public class PlayerTest {
         assertEquals(testPlayer.getMoves().get(1).getMoveType(), MoveType.SWAP_TILES);
         assertEquals(testPlayer.getMoves().get(1).getPointsForMove(), 0);
     }
-    
-
 }
 

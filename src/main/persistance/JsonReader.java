@@ -51,12 +51,11 @@ public class JsonReader {
 
     // EFFECTS: parses ScrabbleGame from JSON Object and returns it
     private ScrabbleGame parseGame(JSONObject jsonObject) {
-        String gameName = jsonObject.getString("GameName");
         Board board = new Board();
         TileBag tileBag = new TileBag();
         updateBoardToStoredState(board, jsonObject);
         updateTileBagToStoredState(tileBag, jsonObject);
-        ScrabbleGame game = new ScrabbleGame(gameName, board, tileBag);
+        ScrabbleGame game = new ScrabbleGame(board, tileBag);
         addPlayers(game, jsonObject);
         game.setCurrentPlayerIndex(jsonObject.getInt("CurrentPlayer"));
         addGameHistory(game, jsonObject);

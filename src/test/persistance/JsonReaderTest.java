@@ -27,7 +27,6 @@ public class JsonReaderTest extends JsonTest {
             fail("IOException expected");
         } catch (IOException e) {
             // passes test if it catches an exemption thrown
-            
         }
     }
 
@@ -36,7 +35,6 @@ public class JsonReaderTest extends JsonTest {
         JsonReader reader = new JsonReader("./data/emptyGame.json");
         try {
             ScrabbleGame game = reader.read();
-            assertEquals(game.getName(), "EmptyGameName");
             assertEquals(game.getNumPlayers(), 0);
             assertNotNull(game.getBoard());
         } catch (IOException e) {
@@ -50,7 +48,6 @@ public class JsonReaderTest extends JsonTest {
         testBag = new TileBag();
         try {
             ScrabbleGame game = reader.read();
-            assertEquals(game.getName(), "Initial Game");
             assertEquals(game.getNumPlayers(), 3);
             // Override Board.equals() and update line below this
             assertNotNull(game.getBoard());
@@ -71,7 +68,6 @@ public class JsonReaderTest extends JsonTest {
         testBag = new TileBag();
         try {
             ScrabbleGame game = reader.read();
-            assertEquals(game.getName(), "Initial Game");
             assertEquals(game.getNumPlayers(), 2);
             // Override Board.equals() and update line below this
             assertNotNull(game.getBoard());
@@ -100,7 +96,6 @@ public class JsonReaderTest extends JsonTest {
         testBag = new TileBag();
         try {
             ScrabbleGame game = reader.read();
-            assertEquals(game.getName(), "End Game");
             assertEquals(game.getNumPlayers(), 14);
             // Override Board.equals() and update line below this
             assertNotNull(game.getBoard());

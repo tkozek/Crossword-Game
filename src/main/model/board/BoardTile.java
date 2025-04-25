@@ -21,22 +21,9 @@ public class BoardTile implements Tile {
         this.tileType = tileType;
     }
 
-    // EFFECTS: returns true if and only if this has 
-    //   the desired tileType
-    public boolean checkIsTileType(TileType tileType) {
-        return this.tileType.equals(tileType);
-    }
-
-    public int getRow() {
-        return this.row;
-    }
-    
-    public int getCol() {
-        return this.col;
-    }
-
-    public TileType getTileType() {
-        return this.tileType;
+    @Override
+    public boolean occupiesBoardSpot() {
+        return false;
     }
 
     // EFFECTS: returns string which 
@@ -77,13 +64,25 @@ public class BoardTile implements Tile {
     }
 
     @Override
-    public boolean occupiesBoardSpot() {
-        return false;
-    }
-
-    @Override
     public int getPoints() {
         return 0;
     }
 
+    // EFFECTS: returns true if and only if this has 
+    //   the desired tileType
+    public boolean checkIsTileType(TileType tileType) {
+        return this.tileType.equals(tileType);
+    }
+
+    public int getRow() {
+        return this.row;
+    }
+    
+    public int getCol() {
+        return this.col;
+    }
+
+    public TileType getTileType() {
+        return this.tileType;
+    }
 }

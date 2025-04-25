@@ -54,7 +54,6 @@ public class ScrabbleVisualApp extends ScrabbleUserInterface {
     private static final String SEARCH_REMAINING_COUNTS_DEFAULT_DISPLAY_TEXT = "";
     //"Enter a letter to get its remaining "+ "count in draw pile and opponent racks\n or blank to see all";
 
-    
     private JPanel boardPanel;
     private JPanel rackPanel;
     private JPanel scorePanel;
@@ -225,7 +224,7 @@ public class ScrabbleVisualApp extends ScrabbleUserInterface {
     // EFFECTS: creates assets for a new game and prompts user input
     // for setup parameters
     private void initializeNewGame() {
-        this.game = new ScrabbleGame("game");
+        this.game = new ScrabbleGame();
         this.numPlayers = 0;
         requestPlayerNames();
         // !!! TODO add exception handling

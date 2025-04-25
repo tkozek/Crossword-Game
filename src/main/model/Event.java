@@ -22,24 +22,6 @@ public class Event {
         this.description = description;
     }
 
-    /**
-     * Gets the date of this event (includes time).
-     * 
-     * @return the date of the event
-     */
-    public Date getDate() {
-        return dateLogged;
-    }
-
-    /**
-     * Gets the description of this event.
-     * 
-     * @return the description of the event
-     */
-    public String getDescription() {
-        return description;
-    }
-
     @Override
     public boolean equals(Object other) {
         if (other == null) {
@@ -62,5 +44,23 @@ public class Event {
     @Override
     public String toString() {
         return dateLogged.toString() + "\n" + description;
+    }
+
+    /**
+     * Gets the date of this event (includes time).
+     * 
+     * @return the date of the event
+     */
+    public Date getDate() {
+        return dateLogged;
+    }
+
+    /**
+     * Gets the description of this event.
+     * 
+     * @return the description of the event
+     */
+    public String getDescription() {
+        return description;
     }
 }

@@ -270,7 +270,6 @@ public class BoardTest {
         //DL
         assertEquals(3 + 1 * 2 + 10, board.scoreWord(letters, 10,14, 1, 0));
         board = new Board();
-        
     }
 
     @Test
@@ -505,28 +504,6 @@ public class BoardTest {
         justA.add(new LetterTile('A'));
         assertEquals(8, board.playWord(justA, 4, 4, Direction.RIGHT));
     }
-
-   /*  @Test
-    public void testfindTripleWordMultiplierIsAdjacency() {
-        assertEquals(board.findWordMultiplier(new Coordinate(0,0), true), 3);
-        assertEquals(board.findWordMultiplier(new Coordinate(0,0), true), 3);
-        assertEquals(board.findWordMultiplier(new Coordinate(0,0), false), 3);
-        assertEquals(board.findWordMultiplier(new Coordinate(0,0), true), 1);
-        assertEquals(board.findWordMultiplier(new Coordinate(0,0), false), 1);  
-    } */
-
- /*    @Test
-    public void testInBounds() {
-        assertTrue(board.inBounds(0,0));
-        assertFalse(board.inBounds(-1,0));
-        assertFalse(board.inBounds(-1,-1));
-        assertFalse(board.inBounds(0,-1));
-        assertFalse(board.inBounds(15,0));
-        assertFalse(board.inBounds(15,15));
-        assertFalse(board.inBounds(0,16));
-        assertFalse(board.inBounds(16,-1));
-        assertFalse(board.inBounds(-1,16));
-    } */
 
     @Test
     public void testInlineAdjacentToUpperBoundColumn() {

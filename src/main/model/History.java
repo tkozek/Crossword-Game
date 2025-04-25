@@ -18,36 +18,6 @@ public class History {
         this.moveHistory = new ArrayList<>();
     }
 
-    
-    public List<Move> getMoves() {
-        return this.moveHistory;
-    }
-
-    public List<Move> getMoves(Player player) {
-        return null; // !!! TODO remove player's sense of history
-    }
-
-    // EFFECTS: Returns only the moves where a word was 
-    // played. Excludes any turns which were swaps
-    // or skips
-    public List<Move> getMovesWithWordPlayed() {
-        List<Move> allMoves = this.moveHistory;
-        List<Move> wordsPlayed = new ArrayList<>();
-        for (Move move : allMoves) {
-            if (move.getMoveType() == MoveType.PLAY_WORD) {
-                wordsPlayed.add(move);
-            }
-        }
-        return wordsPlayed;
-    }
-
-    // REQUIRES: Move was made by user with this.getName()
-    // MODIFIES: this
-    // EFFECTS: adds move to this history
-    public void addMove(Move move) {
-        this.moveHistory.add(move);
-    }
-
     // REQUIRES: letter is uppercase,
     //      between 'A' to 'Z' or '-'
     // EFFECTS: Filters player's words played and returns
@@ -63,4 +33,34 @@ public class History {
         }
         return movesWithLetter;
     }
+
+    // REQUIRES: Move was made by user with this.getName()
+    // MODIFIES: this
+    // EFFECTS: adds move to this history
+    public void addMove(Move move) {
+        this.moveHistory.add(move);
+    }
+
+    // EFFECTS: Returns only the moves where a word was 
+    // played. Excludes any turns which were swaps
+    // or skips
+    public List<Move> getMovesWithWordPlayed() {
+        List<Move> allMoves = this.moveHistory;
+        List<Move> wordsPlayed = new ArrayList<>();
+        for (Move move : allMoves) {
+            if (move.getMoveType() == MoveType.PLAY_WORD) {
+                wordsPlayed.add(move);
+            }
+        }
+        return wordsPlayed;
+    }
+    
+    public List<Move> getMoves() {
+        return this.moveHistory;
+    }
+
+    public List<Move> getMoves(Player player) {
+        return null; // !!! TODO remove player's sense of history
+    }
+
 }

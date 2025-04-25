@@ -27,7 +27,7 @@ public class HistoryTest {
 
     @BeforeEach
     public void runBefore() {
-        game = new ScrabbleGame("alphabet");
+        game = new ScrabbleGame();
         testPlayer = new Player("Trevor");
         testPlayer2 = new Player("Rovert");
         p1Letters = testPlayer.getTilesOnRack();
@@ -35,9 +35,8 @@ public class HistoryTest {
         a1 = new LetterTile('A',1);
         z1 = new LetterTile('Z',10);
         history = new History();
-        moveToAdd = new Move(testPlayer, getStringFromLetters(p1Letters), 1,8, 10, Direction.DOWN);
-        otherMoveToAdd = new Move(testPlayer2);
-
+        moveToAdd = new Move(testPlayer.getPlayerName(), getStringFromLetters(p1Letters), 1,8, 10, Direction.DOWN);
+        otherMoveToAdd = new Move(testPlayer2.getPlayerName());
     }
 
     // EFFECTS: returns list of letter tiles
@@ -80,7 +79,7 @@ public class HistoryTest {
         List<LetterTile> playedLetters = new ArrayList<>();
         playedLetters.add(a1);
         playedLetters.add(z1);
-        Move doesntHaveB = new Move(testPlayer, getStringFromLetters(playedLetters), 3, 5, 13, Direction.DOWN);
+        Move doesntHaveB = new Move(testPlayer.getPlayerName(), getStringFromLetters(playedLetters), 3, 5, 13, Direction.DOWN);
         history.addMove(doesntHaveB);
         assertEquals(history.getMoves().size(), 1);
         assertEquals(0, history.getWordsContainingLetter('B').size());
@@ -93,14 +92,14 @@ public class HistoryTest {
         List<LetterTile> playedLetters = new ArrayList<>();
         playedLetters.add(a1);
         playedLetters.add(b1); // AB
-        Move doesntHaveZ = new Move(testPlayer, getStringFromLetters(playedLetters), 7,9, 8,Direction.RIGHT);
+        Move doesntHaveZ = new Move(testPlayer.getPlayerName(), getStringFromLetters(playedLetters), 7,9, 8,Direction.RIGHT);
         history.addMove(doesntHaveZ);
 
         List<LetterTile> playedLetters2 = new ArrayList<>();
         playedLetters2.add(a1);
         playedLetters2.add(z1); //AZ
 
-        Move doesntHaveB = new Move(testPlayer, getStringFromLetters(playedLetters2), 3, 5, 13, Direction.DOWN);
+        Move doesntHaveB = new Move(testPlayer.getPlayerName(), getStringFromLetters(playedLetters2), 3, 5, 13, Direction.DOWN);
         history.addMove(doesntHaveB);
         assertEquals(history.getMoves().size(), 2);
         //BOTH HAVE A
@@ -115,7 +114,6 @@ public class HistoryTest {
         assertEquals(doesntHaveZ, history.getWordsContainingLetter('A').get(0));
 
         assertEquals(history.getWordsContainingLetter('B').get(0), doesntHaveZ);
-
     }
 
     @Test

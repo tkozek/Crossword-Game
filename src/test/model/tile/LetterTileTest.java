@@ -93,7 +93,6 @@ public class LetterTileTest {
 
     @Test
     public void testCharacterOnlyConstructor() {
-        // Works as long as some instance of TileBag has been instantiated
         LetterTile c = new LetterTile('C');
         assertEquals(c.getPoints(), 3);
     }

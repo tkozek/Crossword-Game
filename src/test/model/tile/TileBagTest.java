@@ -21,7 +21,7 @@ public class TileBagTest {
 
     @BeforeEach
     public void runBefore() {
-        game = new ScrabbleGame("alphabet");
+        game = new ScrabbleGame();
         testPlayer = new Player("tester");
         b1 = new LetterTile('B', 3);
         b2 = new LetterTile('B', 3);

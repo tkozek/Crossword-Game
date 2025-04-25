@@ -4,23 +4,23 @@ import org.json.JSONObject;
 
 import model.Direction;
 import model.Player;
-import persistance.Writable;
+import persistance.JsonWritable;
 
 // A move made by a player, either a word played or a swap
-public class Move implements Writable {
+public class Move implements JsonWritable<JSONObject> {
     private MoveType moveType;
     private int pointsForMove;
     private String lettersInvolved;
     private Direction direction;
     private int startRow;
     private int startCol;
-    private Player player; // !!! TODO make move only have player names, then move wont have reference to player
-    private Player lastPlayer;
+    private String playerName; // !!! TODO make move only have player names, then move wont have reference to player
+    private String lastPlayer;
 
     // Constructor if the player played a word on a board
-    public Move(Player player, String letters, int startRow, int startCol, int pointsEarned, Direction direction) {
+    public Move(String player, String letters, int startRow, int startCol, int pointsEarned, Direction direction) {
         this.moveType = MoveType.PLAY_WORD;
-        this.player = player;
+        this.playerName = player;
         this.pointsForMove = pointsEarned;
         this.lettersInvolved = letters;
         this.startRow = startRow;
@@ -29,33 +29,70 @@ public class Move implements Writable {
     }
 
     // Constructor if the player swapped letters
-    public Move(Player player, String swappedLetters, String postSwapLetters) {
+    public Move(String player, String swappedLetters, String postSwapLetters) {
         this.moveType = MoveType.SWAP_TILES;
-        this.player = player;
+        this.playerName = player;
         swappedLetters += postSwapLetters;
         this.lettersInvolved = swappedLetters;
         this.pointsForMove = 0;
     }
 
     // Constructor if the player skipped turn
-    public Move(Player player) {
+    public Move(String player) {
         this.moveType = MoveType.SKIP;
-        this.player = player;
+        this.playerName = player;
         this.pointsForMove = 0;
     }
 
      // Constructor for end of game where last player gains points from unplayed tiles on opponent racks
     // REQUIRES: Exchanged points >= 0;
-    public Move(Player player, Player lastPlayer, String lettersAccountedFor, int exchangedPoints) {
+    public Move(String player, String lastPlayer, String lettersAccountedFor, int exchangedPoints) {
         this.moveType = MoveType.END_GAME_ADJUSTMENT;
-        this.player = player;
+        this.playerName = player;
         this.lastPlayer = lastPlayer;
         this.lettersInvolved = lettersAccountedFor;  
         this.pointsForMove = exchangedPoints;
     }
 
-    public Player getPlayer() {
-        return this.player;
+    // EFFECTS: returns JSONObject representing
+    // the this move, depending on its type
+    @Override
+    public JSONObject toJson() {
+        JSONObject json = new JSONObject();
+        json.put("MoveType", moveType);
+        json.put("PlayerName", playerName);
+        switch (moveType) {
+            case PLAY_WORD:
+                playWordToJson(json);
+                break;
+            case SWAP_TILES:
+                swapTilesToJson(json);
+                break;
+            case END_GAME_ADJUSTMENT:
+                endGameAdjustmentToJson(json);
+                break;
+            default: // No additional information is added for SKIP
+                break;
+        }
+        return json;
+    }
+
+    // REQUIRES: getMoveType() == MoveType.PLAY_WORD, letter is 
+    // uppercase between 'A' to 'Z' or '-'
+    // EFFECTS: returns true if at least one 
+    // letter in the move matches the given letter.
+    public boolean moveContainsLetter(char letter) {
+        int length = lettersInvolved.length();
+        for (int i = 0; i < length; i++) {
+            if (lettersInvolved.charAt(i) == letter) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public String getPlayerName() {
+        return this.playerName;
     }
 
     public MoveType getMoveType() {
@@ -88,46 +125,8 @@ public class Move implements Writable {
     }
 
     // REQUIRES: this is an END_GAME_ADJUSTMENT
-    public Player getLastPlayer() {
+    public String getLastPlayerName() {
         return lastPlayer;
-    }
-
-    // REQUIRES: getMoveType() == MoveType.PLAY_WORD, letter is 
-    // uppercase between 'A' to 'Z' or '-'
-    // EFFECTS: returns true if at least one 
-    // letter in the move matches the given letter.
-    public boolean moveContainsLetter(char letter) {
-        int length = lettersInvolved.length();
-        for (int i = 0; i < length; i++) {
-            if (lettersInvolved.charAt(i) == letter) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-
-    // EFFECTS: returns JSONObject representing
-    // the this move, depending on its type
-    @Override
-    public JSONObject toJson() {
-        JSONObject json = new JSONObject();
-        json.put("MoveType", moveType);
-        json.put("PlayerName", player.getPlayerName());
-        switch (moveType) {
-            case PLAY_WORD:
-                playWordToJson(json);
-                break;
-            case SWAP_TILES:
-                swapTilesToJson(json);
-                break;
-            case END_GAME_ADJUSTMENT:
-                endGameAdjustmentToJson(json);
-                break;
-            default: // No additional information is added for SKIP
-                break;
-        }
-        return json;
     }
 
     // REQUIRES: this is a move of type PLAY_WORD
@@ -157,7 +156,7 @@ public class Move implements Writable {
     // EFFECTS: adds information about this move
     // to json
     private void endGameAdjustmentToJson(JSONObject json) {
-        json.put("FinalPlayer", lastPlayer.getPlayerName());
+        json.put("FinalPlayer", lastPlayer);
         json.put("LettersAccountedFor", lettersInvolved);
         json.put("ChangeInPoints", pointsForMove);
     }

@@ -61,7 +61,7 @@ public class ScrabbleConsoleApp extends ScrabbleUserInterface {
     // EFFECTS: creates assets for a new game and prompts user input
     // for setup parameters
     private void initializeNewGame() {
-        game = new ScrabbleGame("");
+        game = new ScrabbleGame();
         this.gameRunning = true;
         initializePlayers();
     }
@@ -75,7 +75,7 @@ public class ScrabbleConsoleApp extends ScrabbleUserInterface {
             JsonReader jsonReader = new JsonReader(lastGamePath);
             game = jsonReader.read();
             this.numPlayers = game.getNumPlayers();
-            System.out.println("Loaded " + game.getName() + " with " + String.valueOf(numPlayers) 
+            System.out.println("Loaded game with " + String.valueOf(numPlayers) 
                     + " players from " + lastGamePath + "\n");
         } catch (IOException e) {
             System.out.println("Unable to read game from file: " + lastGamePath);
@@ -268,7 +268,7 @@ public class ScrabbleConsoleApp extends ScrabbleUserInterface {
             jsonWriter.open();
             jsonWriter.write(game);
             jsonWriter.close();
-            System.out.println("Saved " + game.getName() + " with " + String.valueOf(numPlayers)
+            System.out.println("Saved game with " + String.valueOf(numPlayers)
                     + " players to " + lastGamePath);
         } catch (IOException e) {
             System.out.println("Unable to write to file " + lastGamePath);
@@ -465,7 +465,7 @@ public class ScrabbleConsoleApp extends ScrabbleUserInterface {
 
     // EFFECTS: prints header for board display
     private void printHeader() {
-        String header = "|";
+        String header = "\n|";
         // Need to adjust based on single digit or two digit row/column
         // so that elements are aligned with board display
         for (int i = 0; i <= 9; i++) {

@@ -2,12 +2,11 @@ package model.tile;
 
 import org.json.JSONObject;
 
-import model.Utility;
-import persistance.Writable;
+import persistance.JsonWritable;
 
 //Represents the playable tiles in a Scrabble Game
 
-public class LetterTile implements Tile, Writable {
+public class LetterTile implements Tile, JsonWritable<JSONObject> {
 
     private char character;
     private int points;
@@ -27,21 +26,12 @@ public class LetterTile implements Tile, Writable {
 
     public LetterTile(char character) {
         this.character = character;
-        this.points = Utility.getLetterPoints(character);
+        this.points = TileBag.getLetterPoints(this.character);
     }
 
     public LetterTile(String character) {
         this.character = character.charAt(0);
-        this.points = Utility.getLetterPoints(this.character);
-    }
-    
-    public char getCharacter() {
-        return this.character;
-    }
-    
-    @Override
-    public int getPoints() {
-        return this.points;
+        this.points = TileBag.getLetterPoints(this.character);
     }
 
     @Override
@@ -49,6 +39,11 @@ public class LetterTile implements Tile, Writable {
         JSONObject json = new JSONObject();
         json.put(String.valueOf(getCharacter()), getPoints());
         return json;
+    }
+
+    @Override
+    public boolean occupiesBoardSpot() {
+        return true;
     }
 
     @Override
@@ -62,7 +57,11 @@ public class LetterTile implements Tile, Writable {
     }
 
     @Override
-    public boolean occupiesBoardSpot() {
-        return true;
+    public int getPoints() {
+        return this.points;
+    }
+
+    public char getCharacter() {
+        return this.character;
     }
 }

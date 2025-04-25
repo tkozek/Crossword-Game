@@ -12,10 +12,11 @@ import org.json.JSONObject;
 
 import model.move.Move;
 import model.tile.LetterTile;
+import persistance.JsonWritable;
 
 // Represents a player in the Scrabble Game
 
-public class Player {
+public class Player implements JsonWritable<JSONObject>  {
  
     private String name;
     private History history;
@@ -34,35 +35,15 @@ public class Player {
         this.points = 0;   
     }
 
-    public int getNumTilesOnRack() {
-        return tileRack.size();
-    }
-    
-    public String getPlayerName() {
-        return this.name;
-    }
-
-    // EFFECTS: updates player's name, does
-    // not update their entries in history or
-    // history name
-    public void setPlayerName(String name) {
-        this.name = name;
-    }
-
-    //EFFECTS: sets points for testing purposes
-    public void setPoints(int points) {
-        this.points = points;
-    }
-
-    public int getPointsThisGame() {
-        return this.points;
-    }
-
-    // REQUIRES: getNumTilesOnRack() < MAX_NUM_TILES
-    // MODIFIES: this
-    //EFFECTS: Adds drawnLetter to player's tile rack
-    public void addTile(LetterTile drawnLetter) {
-        this.tileRack.add(drawnLetter);
+    // EFFECTS: represents this player
+    // as a JSONObject
+    @Override
+    public JSONObject toJson() {
+        JSONObject json = new JSONObject();
+        json.put("name", this.name);
+        json.put("score", this.points);
+        json.put("tileRack", tileRackToJson());
+        return json;
     }
 
     // EFFECTS: returns deep copy of given list of letters.
@@ -86,8 +67,22 @@ public class Player {
         return false;
     }
 
-    public List<LetterTile> getSelectedTiles() {
-        return this.selectedTiles;
+
+    // EFFECTS: returns true iff
+    // there are no tiles on this player's rack
+    public boolean outOfTiles() {
+        return tileRack.isEmpty();
+    }
+
+    // MODIFIES: this
+    // EFFECTS: removes all selected tiles
+    // from tile rack, and clears selected tiles
+    public void removeSelectedTiles() {
+        List<LetterTile> selectedTiles = this.getSelectedTiles();
+        for (LetterTile letter : selectedTiles) {
+            tileRack.remove(letter);
+        }
+        clearSelectedTiles();
     }
 
     // MODIFIES: this
@@ -102,47 +97,11 @@ public class Player {
         return true;
     }
 
-    // EFFECTS: returns true iff
-    // there are no tiles on this player's rack
-    public boolean outOfTiles() {
-        return tileRack.isEmpty();
-    }
-    
-    //EFFECTS: returns chars corresponding to letters 
-    //      on the player's tile rack
-    public List<LetterTile> getTilesOnRack() {
-        return this.tileRack;
-    }
-
-    //EFFECTS: returns Chacters 'A' to 'Z' and '_'
-    //   mapped to their number of occurences on tile rack
-    public Map<Character, Integer> getNumEachCharOnMyRack() {
-        HashMap<Character,Integer> playerCharCounts = new HashMap<>();
-        Set<LetterTile> letters = new HashSet<>(this.getTilesOnRack());
-        for (LetterTile letter : letters) {
-            char letterChar = letter.getCharacter();
-            playerCharCounts.put(letterChar, playerCharCounts.getOrDefault(letterChar,0) + 1);
-        }
-        return playerCharCounts;
-    }
-
-    public History getHistory() {
-        return this.history;
-    }
-
-    public List<Move> getMoves() {
-        return this.history.getMoves();
-    }
-
+    // REQUIRES: getNumTilesOnRack() < MAX_NUM_TILES
     // MODIFIES: this
-    // EFFECTS: removes all selected tiles
-    // from tile rack, and clears selected tiles
-    public void removeSelectedTiles() {
-        List<LetterTile> selectedTiles = this.getSelectedTiles();
-        for (LetterTile letter : selectedTiles) {
-            tileRack.remove(letter);
-        }
-        clearSelectedTiles();
+    //EFFECTS: Adds drawnLetter to player's tile rack
+    public void addTile(LetterTile drawnLetter) {
+        this.tileRack.add(drawnLetter);
     }
 
     // MODFIFIES: this
@@ -164,15 +123,58 @@ public class Player {
         return copyLetterTiles(this.getSelectedTiles());
     }
 
+    public List<LetterTile> getSelectedTiles() {
+        return this.selectedTiles;
+    }
+
+    //EFFECTS: returns chars corresponding to letters 
+    //      on the player's tile rack
+    public List<LetterTile> getTilesOnRack() {
+        return this.tileRack;
+    }
+
+    public History getHistory() {
+        return this.history;
+    }
+
+    public List<Move> getMoves() {
+        return this.history.getMoves();
+    }
+
+    public int getNumTilesOnRack() {
+        return tileRack.size();
+    }
     
-    // EFFECTS: represents this player
-    // as a JSONObject
-    public JSONObject toJson() {
-        JSONObject json = new JSONObject();
-        json.put("name", this.name);
-        json.put("score", this.points);
-        json.put("tileRack", tileRackToJson());
-        return json;
+    public String getPlayerName() {
+        return this.name;
+    }
+
+    // EFFECTS: updates player's name, does
+    // not update their entries in history or
+    // history name
+    public void setPlayerName(String name) {
+        this.name = name;
+    }
+
+    public int getPointsThisGame() {
+        return this.points;
+    }
+
+    //EFFECTS: sets points for testing purposes
+    public void setPoints(int points) {
+        this.points = points;
+    }
+
+    //EFFECTS: returns Chacters 'A' to 'Z' and '_'
+    //   mapped to their number of occurences on tile rack
+    public Map<Character, Integer> getNumEachCharOnMyRack() {
+        HashMap<Character,Integer> playerCharCounts = new HashMap<>();
+        Set<LetterTile> letters = new HashSet<>(this.getTilesOnRack());
+        for (LetterTile letter : letters) {
+            char letterChar = letter.getCharacter();
+            playerCharCounts.put(letterChar, playerCharCounts.getOrDefault(letterChar,0) + 1);
+        }
+        return playerCharCounts;
     }
 
     // EFFECTS: returns JSONArray representing

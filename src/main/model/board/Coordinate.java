@@ -14,14 +14,6 @@ public class Coordinate {
         this.column = column;
     }
 
-    public int getRow() {
-        return this.row;
-    }
-
-    public int getCol() {
-        return this.column;
-    }
-
     @Override
     // REQUIRES: coord is of type Coordinate.
     // EFFECTS: returns true if 
@@ -41,5 +33,12 @@ public class Coordinate {
     public int hashCode() {
         return Objects.hash(row, column);
     }
-    
+
+    public int getRow() {
+        return this.row;
+    }
+
+    public int getCol() {
+        return this.column;
+    }
 }

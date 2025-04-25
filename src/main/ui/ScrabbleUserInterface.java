@@ -44,7 +44,7 @@ public abstract class ScrabbleUserInterface {
         this.gameRunning = false;
         game.performEndGameAdjustments(lastPlayer);
         System.out.println(lastPlayer.getPlayerName() + " was the last to play");
-        System.out.println("The winner is " + game.highestScoringPlayer().getPlayerName());
+        System.out.println("The winner is " + game.getHighestScoringPlayer().getPlayerName());
         
         printEventLog();
         printScoreSummaries();

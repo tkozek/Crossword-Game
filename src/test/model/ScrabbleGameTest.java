@@ -19,14 +19,13 @@ public class ScrabbleGameTest {
 
     @BeforeEach
     public void setup() {
-        game = new ScrabbleGame("test");
+        game = new ScrabbleGame();
         player = new Player("playerTest");
         player2 = new Player("P");
     }
 
     @Test
     public void testConstructor() {
-        assertEquals("test", game.getName());
         game.addPlayer(player);
         assertEquals(game.getNumPlayers(), 1);
         assertEquals(game.getPlayers().get(0), player);
@@ -34,12 +33,6 @@ public class ScrabbleGameTest {
         //!!! ToDo Override board and tilebag.equals    
         //assertTrue(game.getBoard().equals(new Board()));
         //assertTrue(game.getTileBag().equals(new TileBag()));
-    }
-
-    @Test
-    public void testSetName() {
-        game.setName("Trevor's game");
-        assertEquals(game.getName(), "Trevor's game");
     }
 
 // EFFECTS: returns list of letter tiles
@@ -54,17 +47,15 @@ public class ScrabbleGameTest {
     
     @Test
     public void testAddMoves() {
-        game.setName("Trevor's game");
-        assertEquals(game.getName(), "Trevor's game");
         //tileBag.drawTiles(player);
         List<LetterTile> lettersToPlay = player.getTilesOnRack();
 
-        Move play = new Move(player, getStringFromLetters(lettersToPlay), 7, 7, 10, Direction.DOWN);
+        Move play = new Move(player.getPlayerName(), getStringFromLetters(lettersToPlay), 7, 7, 10, Direction.DOWN);
         game.addMove(play);
         List<Move> moves = game.getHistory().getMoves();
         assertEquals(moves.size(), 1);
         assertEquals(moves.get(0), play);
-        Move skip = new Move(player);
+        Move skip = new Move(player.getPlayerName());
         game.addMove(skip);
         moves = game.getHistory().getMoves();
         assertEquals(moves.size(), 2);
@@ -107,7 +98,6 @@ public class ScrabbleGameTest {
         //.equals for Map should compare that all keys and values are the same
         // in each map by default. which is the expected behaviour for this test
         assertTrue(counts.equals(drawPileCounts));
-        
     }
 
     @Test
@@ -181,12 +171,12 @@ public class ScrabbleGameTest {
         assertEquals(MoveType.END_GAME_ADJUSTMENT, player2.getMoves().get(0).getMoveType());
         assertEquals(MoveType.END_GAME_ADJUSTMENT, player.getMoves().get(0).getMoveType());
 
-        assertEquals(game.highestScoringPlayer(), player);
+        assertEquals(game.getHighestScoringPlayer(), player);
     }
 
     @Test
     public void testHighestScoringPlayer() {
-        assertEquals(null, game.highestScoringPlayer());
+        assertEquals(null, game.getHighestScoringPlayer());
         Player p3 = new Player("trevor");
         game.addPlayer(player);
         game.addPlayer(player2);
@@ -194,6 +184,6 @@ public class ScrabbleGameTest {
         player.setPoints(2);
         player2.setPoints(3);
         p3.setPoints(1);
-        assertEquals(player2, game.highestScoringPlayer());
+        assertEquals(player2, game.getHighestScoringPlayer());
     }
 }

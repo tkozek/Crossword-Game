@@ -13,10 +13,9 @@ import model.move.Move;
 import model.tile.LetterTile;
 import model.tile.Tile;
 import model.tile.TileBag;
-import persistance.Writable;
+import persistance.JsonWritable;
 
-public class ScrabbleGame implements Writable {
-    private String name;
+public class ScrabbleGame implements JsonWritable<JSONObject> {
     private Board board;
     private TileBag tileBag;
     private History history;
@@ -26,8 +25,7 @@ public class ScrabbleGame implements Writable {
     // Represents a Scrabble game and its assets,
     // including the current board, tile bag, 
     // move history, players involved
-    public ScrabbleGame(String name, Board board, TileBag tileBag) {
-        this.name = name;
+    public ScrabbleGame(Board board, TileBag tileBag) {
         this.board = board;
         this.tileBag = tileBag;
         this.history = new History();
@@ -35,102 +33,12 @@ public class ScrabbleGame implements Writable {
         this.currentPlayerIndex = 0;
     }
 
-    public ScrabbleGame(String name) {
-        this.name = name;
+    public ScrabbleGame() {
         this.board = new Board();
         this.tileBag = new TileBag();
         this.history = new History();
         this.players = new ArrayList<>();
         this.currentPlayerIndex = 0;
-    }
-
-    // EFFECTS: Names this game
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    // EFFECTS: returns this game's name
-    public String getName() {
-        return this.name;
-    }
-
-    // EFFECTS: returns player with given name
-    // in this game
-    public Player getPlayerByName(String name) {
-        for (Player player : this.players) {
-            if (player.getPlayerName().equals(name)) {
-                return player;
-            }
-        }
-        return null;
-    }
-
-    // EFFECTS: returns board
-    public Board getBoard() {
-        return this.board;
-    }
-    
-    // EFFECTS: returns tile bag
-    public TileBag getTileBag() {
-        return this.tileBag;
-    }
-
-    // EFFECTS: returns number of players
-    // in the game.
-    public int getNumPlayers() {
-        return this.players.size();
-    }
-
-    // MODIFIES: this
-    // EFFECTS: adds player to this game
-    public void addPlayer(Player player) {
-        this.players.add(player);
-    }
-
-    // MODIFIES: this
-    // EFFECTS: adds player to this game
-    public void addPlayer(String name) {
-        this.players.add(new Player(name));
-    }
-
-    // MODIFIES: this
-    // EFFECTS: adds move to game history
-    // DOES NOT add to associated player's
-    // history
-    public void addMove(Move move) {
-        this.history.addMove(move);
-    }
-
-    // EFFECTS: returns the history of all
-    // moves played by players during this game
-    public History getHistory() {
-        return this.history;
-    }
-
-    // EFFECTS: returns players associated
-    // with this game
-    public List<Player> getPlayers() {
-        return this.players;
-    }
-
-    // EFFECTS: returns index of 
-    // first player to play once
-    // turn-taking begins
-    public int getCurrentPlayerIndex() {
-        return currentPlayerIndex;
-    }
-
-    public int getPlayerIndex(Player player) {
-        return players.indexOf(player);
-    }
-
-    public Player getPlayerByIndex(int index) {
-        return players.get(index % players.size());
-    }
-
-
-    public Tile getTileAtPositionOnBoard(int row, int column) {
-        return board.getTileAtPositionOnBoard(row, column);
     }
     
     // EFFECTS: Creates a JSONObject
@@ -138,7 +46,6 @@ public class ScrabbleGame implements Writable {
     @Override
     public JSONObject toJson() {
         JSONObject json = new JSONObject();
-        json.put("GameName", this.getName());
         json.put("CurrentPlayer", this.currentPlayerIndex);
         json.put("Board", this.board.toJson());
         json.put("TileBag", this.tileBag.toJson());
@@ -147,63 +54,25 @@ public class ScrabbleGame implements Writable {
         return json;
     }
 
-    // EFFECTS: returns players in this Scrabble Game 
-    // as a JSONArray
-    private JSONArray playersToJson() {
-        JSONArray jsonArray = new JSONArray();
-        for (Player player : players) {
-            jsonArray.put(player.toJson());
+
+    // REQUIRES: Players selected tiles can be played on this board
+    // starting at (row, col) and proceeding in given direction
+    // MODIFIES: this, player, board, tileBag, EventLog
+    // EFFECTS: plays players selected tiles in desired manner on board,
+    // logs the move to EventLog, player history and game history. Replenishes player's tile
+    // rack, returns score.
+    public int playWord(Player player, int row, int col, Direction dir) {
+        String lettersPlayed = "";
+        for (LetterTile letter : player.getSelectedTiles()) {
+            lettersPlayed += letter.toDisplay();
         }
-        return jsonArray;
-    }
-
-    // REQUIRES: this.getPlayers() contains player
-    // MODIFIES: this
-    // EFFECTS: sets first player index
-    // to be the index of given player
-    public void setCurrentPlayer(Player player) {
-        this.currentPlayerIndex = players.indexOf(player);
-    }
-
-    // REQUIRES: 0 <= firstPlayerIndex < getNumPlayers()
-    // MODIFIES: this
-    // EFFECTS: sets first player index using index
-    // of players
-    public void setCurrentPlayerIndex(int currentPlayerIndex) {
-        this.currentPlayerIndex = currentPlayerIndex;
-    }
-
-    // EFFECTS: returns players in this Scrabble Game 
-    // as a JSONArray
-    private JSONArray historyToJson() {
-        JSONArray jsonArray = new JSONArray();
-        for (Move move : history.getMoves()) {
-            jsonArray.put(move.toJson());
-        }
-        return jsonArray;
-    }
-
-    public Map<String, Integer> getPlayerScoreMap() {
-        Map<String, Integer> scores = new LinkedHashMap<>();
-        for (Player player : players) {
-            scores.put(player.getPlayerName(), player.getPointsThisGame());
-        }
-        return scores;
-    }
-
-    // EFFECTS: Adds up total occurences of every character on board,
-    // and on this player's rack. Combines those and subtracts from
-    // initial counts in draw pile to get remaining number of each
-    // letter between the draw pile and opponents' racks
-    public Map<Character, Integer> getNumEachCharInBagAndOpponents(Player player) {
-        Map<Character, Integer> tileBagCounts = tileBag.getInitialLetterFrequencies();
-        Map<Character, Integer> playerCharCounts = player.getNumEachCharOnMyRack();
-        Map<Character, Integer> boardCounts = board.getNumEachCharOnBoard();
-        for (Character key : tileBagCounts.keySet()) {
-            int valueToSubtract = playerCharCounts.getOrDefault(key,0) + boardCounts.getOrDefault(key,0);
-            tileBagCounts.put(key, tileBagCounts.get(key) - valueToSubtract);
-        }
-        return tileBagCounts;
+        int score = board.playWord(player.getSelectedTiles(), row, col, dir);
+        Move wordPlayed = new Move(player.getPlayerName(), lettersPlayed, row, col, score, dir);
+        updateHistoriesAndEventLog(wordPlayed, player);
+        player.removeSelectedTiles();
+        player.addPoints(score);
+        tileBag.drawTiles(player);
+        return score;
     }
 
     //REQUIRES: getSelectedTiles.size() <= tileBag.size()
@@ -224,64 +93,15 @@ public class ScrabbleGame implements Writable {
         for (LetterTile letter : player.getTilesOnRack()) {
             postSwapLetters += letter.toDisplay();
         }
-        Move swap = new Move(player, preSwapLetters, postSwapLetters);
+        Move swap = new Move(player.getPlayerName(), preSwapLetters, postSwapLetters);
         updateHistoriesAndEventLog(swap, player);
     }
 
-    // MODIFIES: this, player
-    // EFFECTS: Logs a swap into player and game's history
-    public void logSwap(Player player, String initialLetters, String postSwapLetters) {
-        Move swap = new Move(player, initialLetters, postSwapLetters);
-        updateHistories(swap, player);
-    }
-
-    // REQUIRES: Players selected tiles can be played on this board
-    // starting at (row, col) and proceeding in given direction
-    // MODIFIES: this, player, board, tileBag, EventLog
-    // EFFECTS: plays players selected tiles in desired manner on board,
-    // logs the move to EventLog, player history and game history. Replenishes player's tile
-    // rack, returns score.
-    public int playWord(Player player, int row, int col, Direction dir) {
-        String lettersPlayed = "";
-        for (LetterTile letter : player.getSelectedTiles()) {
-            lettersPlayed += letter.toDisplay();
-        }
-        int score = board.playWord(player.getSelectedTiles(), row, col, dir);
-        Move wordPlayed = new Move(player, lettersPlayed, row, col, score, dir);
-        updateHistoriesAndEventLog(wordPlayed, player);
-        player.removeSelectedTiles();
-        player.addPoints(score);
+    // MODIFIES: this
+    // EFFECTS: fills players tile rack with as
+    // many tiles as allowed from the game's tilebag
+    public void drawTiles(Player player) {
         tileBag.drawTiles(player);
-        return score;
-    }
-
-    // MODIFIES: this, player
-    // EFFECTS: logs a previously played word to 
-    // both game history and player history. 
-    // DOES NOT impact score.
-    public void logWord(Player player, String letters, int row, int col, int points, Direction dir) {
-        Move word = new Move(player, letters, row, col, points, dir);
-        updateHistories(word, player);
-    }
-
-    // REQUIRES: getPlayers() contains player
-    // MODIFIES: this, player, EventLog
-    // EFFECTS; logs a skipped turn in this history
-    // and this player's history, and the EventLog
-    public void logSkippedTurn(Player player) {
-        player.clearSelectedTiles();
-        Move skip = new Move(player);
-        updateHistoriesAndEventLog(skip, player);
-    }
-
-    // REQUIRES: getPlayers() contains player
-    // MODIFIES: this, player
-    // EFFECTS; logs a skipped turn in this history
-    // and this player's history
-    public void logSkipFromHistory(Player player) {
-        player.clearSelectedTiles();
-        Move skip = new Move(player);
-        updateHistories(skip, player);
     }
 
     // MODIFIES: this
@@ -306,74 +126,55 @@ public class ScrabbleGame implements Writable {
                 player.addPoints(-1 * playerLoss);
                 total += playerLoss;
                 totalLetters += letters;
-                adjustment = new Move(player, lastPlayer, letters, -1 * playerLoss);
+                adjustment = new Move(player.getPlayerName(), lastPlayer.getPlayerName(), letters, -1 * playerLoss);
                 updateHistoriesAndEventLog(adjustment, player);
             }
         }
         lastPlayer.addPoints(total);
-        updateHistoriesAndEventLog(new Move(lastPlayer, lastPlayer, totalLetters, total), lastPlayer);
+        updateHistoriesAndEventLog(new Move(lastPlayer.getPlayerName(), lastPlayer.getPlayerName(), totalLetters, total), lastPlayer);
+    }
+
+    // MODIFIES: this, player
+    // EFFECTS: logs a previously played word to 
+    // both game history and player history. 
+    // DOES NOT impact score.
+    public void logWord(Player player, String letters, int row, int col, int points, Direction dir) {
+        Move word = new Move(player.getPlayerName(), letters, row, col, points, dir);
+        updateHistories(word, player);
+    }
+
+    // MODIFIES: this, player
+    // EFFECTS: Logs a swap into player and game's history
+    public void logSwap(Player player, String initialLetters, String postSwapLetters) {
+        Move swap = new Move(player.getPlayerName(), initialLetters, postSwapLetters);
+        updateHistories(swap, player);
+    }
+
+    // REQUIRES: getPlayers() contains player
+    // MODIFIES: this, player, EventLog
+    // EFFECTS; logs a skipped turn in this history
+    // and this player's history, and the EventLog
+    public void logSkippedTurn(Player player) {
+        player.clearSelectedTiles();
+        Move skip = new Move(player.getPlayerName());
+        updateHistoriesAndEventLog(skip, player);
+    }
+
+    // REQUIRES: getPlayers() contains player
+    // MODIFIES: this, player
+    // EFFECTS; logs a skipped turn in this history
+    // and this player's history
+    public void logSkipFromHistory(Player player) {
+        player.clearSelectedTiles();
+        Move skip = new Move(player.getPlayerName());
+        updateHistories(skip, player);
     }
 
     // MODIFIES: this, player
     // EFFECTS: Logs an end game adjustment into player and game's history
     public void logEndGameAdjustment(Player player, Player lastPlayer, String lettersInvolved, int pointChange) {
-        Move endGameAdjustment = new Move(player, lastPlayer, lettersInvolved, pointChange);
+        Move endGameAdjustment = new Move(player.getPlayerName(), lastPlayer.getPlayerName(), lettersInvolved, pointChange);
         updateHistoriesAndEventLog(endGameAdjustment, player);
-    }
-
-
-    // MODIFIES: this, player, EventLog
-    // EFFECTS: adds this move to both the game's and the player's history,
-    // and adds relevant Event to EventLog.
-    private void updateHistoriesAndEventLog(Move move, Player player) {
-        history.addMove(move);
-        player.addMove(move);
-        String description = "";
-        switch (move.getMoveType()) {
-            case PLAY_WORD:
-                description = getWordDescription(move, player);
-                break;
-            case SWAP_TILES:
-                description = getSwapDescription(move, player);
-                break;   
-            case SKIP:
-                description = getSkipDescription(move, player);
-                break;
-            default:
-                description = getEndGameDescription(move, player);
-        }
-        EventLog log = EventLog.getInstance();
-        log.logEvent(new Event(description));
-    }
-
-    // MODIFIES: this, player
-    // EFFECTS: adds this move to both the game's and the player's history
-    private void updateHistories(Move move, Player player) {
-        history.addMove(move);
-        player.addMove(move);
-    }
-
-    // MODIFIES: this
-    // EFFECTS: fills players tile rack with as
-    // many tiles as allowed from the game's tilebag
-    public void drawTiles(Player player) {
-        tileBag.drawTiles(player);
-    }
-
-    // EFFECTS: returns the player with the highest score
-    // in this game
-    public Player highestScoringPlayer() {
-        if (players.isEmpty()) {
-            return null;
-        }
-        Player highestScoringPlayer = players.get(0);
-        int highest = highestScoringPlayer.getPointsThisGame();
-        for (Player player : players) {
-            if (player.getPointsThisGame() > highest) {
-                highestScoringPlayer = player;
-            }
-        }
-        return highestScoringPlayer;
     }
 
     public String[][] previewBoardDisplay(Player player, int row, int column, Direction dir) {
@@ -387,6 +188,7 @@ public class ScrabbleGame implements Writable {
         }
         return previewDisplay;
     }
+    
     
     // REQUIRES: skip.getMoveType() == MoveType.PLAY_WORD
     // EFFECTS: returns summary of a word played
@@ -428,12 +230,196 @@ public class ScrabbleGame implements Writable {
     // EFFECTS: returns summary of a end game adjustment
     public String getEndGameDescription(Move move, Player player) {
         String playerName = player.getPlayerName();
-        String lastPlayer = move.getLastPlayer().getPlayerName();
+        String lastPlayer = move.getLastPlayerName();
         int pointChange = move.getPointsForMove();
         int absolutePointChange = Math.abs(pointChange);
         String gainOrLoss = (pointChange >= 0) ? " gained " : " lost ";
         String pluralOrNot = (absolutePointChange != 1) ? "s" : "";
         return lastPlayer + " used all their tiles first. \n" 
                 + playerName + gainOrLoss + absolutePointChange + " point" + pluralOrNot;
+    }
+
+    public Map<String, Integer> getPlayerScoreMap() {
+        Map<String, Integer> scores = new LinkedHashMap<>();
+        for (Player player : players) {
+            scores.put(player.getPlayerName(), player.getPointsThisGame());
+        }
+        return scores;
+    }
+
+    // EFFECTS: Adds up total occurences of every character on board,
+    // and on this player's rack. Combines those and subtracts from
+    // initial counts in draw pile to get remaining number of each
+    // letter between the draw pile and opponents' racks
+    public Map<Character, Integer> getNumEachCharInBagAndOpponents(Player player) {
+        Map<Character, Integer> tileBagCounts = tileBag.getInitialLetterFrequencies();
+        Map<Character, Integer> playerCharCounts = player.getNumEachCharOnMyRack();
+        Map<Character, Integer> boardCounts = board.getNumEachCharOnBoard();
+        for (Character key : tileBagCounts.keySet()) {
+            int valueToSubtract = playerCharCounts.getOrDefault(key,0) + boardCounts.getOrDefault(key,0);
+            tileBagCounts.put(key, tileBagCounts.get(key) - valueToSubtract);
+        }
+        return tileBagCounts;
+    }
+
+    // MODIFIES: this
+    // EFFECTS: adds player to this game
+    public void addPlayer(Player player) {
+        this.players.add(player);
+    }
+
+    // MODIFIES: this
+    // EFFECTS: adds player to this game
+    public void addPlayer(String name) {
+        this.players.add(new Player(name));
+    }
+
+    // MODIFIES: this
+    // EFFECTS: adds move to game history
+    // DOES NOT add to associated player's
+    // history
+    public void addMove(Move move) {
+        this.history.addMove(move);
+    }
+
+    // EFFECTS: returns the player with the highest score
+    // in this game
+    public Player getHighestScoringPlayer() {
+        if (players.isEmpty()) {
+            return null;
+        }
+        Player highestScoringPlayer = players.get(0);
+        int highest = highestScoringPlayer.getPointsThisGame();
+        for (Player player : players) {
+            if (player.getPointsThisGame() > highest) {
+                highestScoringPlayer = player;
+            }
+        }
+        return highestScoringPlayer;
+    }
+
+    public Player getPlayerByIndex(int index) {
+        return players.get(index % players.size());
+    }
+
+    // EFFECTS: returns player with given name
+    // in this game
+    public Player getPlayerByName(String name) {
+        for (Player player : this.players) {
+            if (player.getPlayerName().equals(name)) {
+                return player;
+            }
+        }
+        return null;
+    }
+
+    public Tile getTileAtPositionOnBoard(int row, int column) {
+        return board.getTileAtPositionOnBoard(row, column);
+    }
+
+    // EFFECTS: returns board
+    public Board getBoard() {
+        return this.board;
+    }
+    
+    // EFFECTS: returns tile bag
+    public TileBag getTileBag() {
+        return this.tileBag;
+    }
+
+    // EFFECTS: returns the history of all
+    // moves played by players during this game
+    public History getHistory() {
+        return this.history;
+    }
+
+    // EFFECTS: returns players associated
+    // with this game
+    public List<Player> getPlayers() {
+        return this.players;
+    }
+
+    // EFFECTS: returns index of 
+    // first player to play once
+    // turn-taking begins
+    public int getCurrentPlayerIndex() {
+        return currentPlayerIndex;
+    }
+
+    public int getPlayerIndex(Player player) {
+        return players.indexOf(player);
+    }
+
+    // REQUIRES: this.getPlayers() contains player
+    // MODIFIES: this
+    // EFFECTS: sets first player index
+    // to be the index of given player
+    public void setCurrentPlayer(Player player) {
+        this.currentPlayerIndex = players.indexOf(player);
+    }
+
+    // REQUIRES: 0 <= firstPlayerIndex < getNumPlayers()
+    // MODIFIES: this
+    // EFFECTS: sets first player index using index
+    // of players
+    public void setCurrentPlayerIndex(int currentPlayerIndex) {
+        this.currentPlayerIndex = currentPlayerIndex;
+    }
+
+    // EFFECTS: returns number of players
+    // in the game.
+    public int getNumPlayers() {
+        return this.players.size();
+    }
+
+    // MODIFIES: this, player, EventLog
+    // EFFECTS: adds this move to both the game's and the player's history,
+    // and adds relevant Event to EventLog.
+    private void updateHistoriesAndEventLog(Move move, Player player) {
+        history.addMove(move);
+        player.addMove(move);
+        String description = "";
+        switch (move.getMoveType()) {
+            case PLAY_WORD:
+                description = getWordDescription(move, player);
+                break;
+            case SWAP_TILES:
+                description = getSwapDescription(move, player);
+                break;   
+            case SKIP:
+                description = getSkipDescription(move, player);
+                break;
+            default:
+                description = getEndGameDescription(move, player);
+        }
+        EventLog log = EventLog.getInstance();
+        log.logEvent(new Event(description));
+    }
+
+    // MODIFIES: this, player
+    // EFFECTS: adds this move to both the game's and the player's history
+    private void updateHistories(Move move, Player player) {
+        history.addMove(move);
+        player.addMove(move);
+    }
+
+    // EFFECTS: returns players in this Scrabble Game 
+    // as a JSONArray
+    private JSONArray playersToJson() {
+        JSONArray jsonArray = new JSONArray();
+        for (Player player : players) {
+            jsonArray.put(player.toJson());
+        }
+        return jsonArray;
+    }
+
+    // EFFECTS: returns players in this Scrabble Game 
+    // as a JSONArray
+    private JSONArray historyToJson() {
+        JSONArray jsonArray = new JSONArray();
+        for (Move move : history.getMoves()) {
+            jsonArray.put(move.toJson());
+        }
+        return jsonArray;
     }
 }

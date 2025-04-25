@@ -29,7 +29,7 @@ public class JsonWriterTest extends JsonTest {
 
     @BeforeEach
     public void setup() {
-        game = new ScrabbleGame("Test");
+        game = new ScrabbleGame();
         tileBag = game.getTileBag();
         board = game.getBoard();
         player = new Player("Tester");
@@ -55,13 +55,9 @@ public class JsonWriterTest extends JsonTest {
             writer.close();
             JsonReader reader = new JsonReader("./data/testWriterInitialGame.json");
             game = reader.read();
-            assertEquals("Test", game.getName());
             assertTrue(game.getHistory().getMoves().isEmpty());
             TileBag bagThatWasReadFromJson = game.getTileBag();
-            assertEquals(bagThatWasReadFromJson.getCurrentLetterFrequencies(), tileBag.getCurrentLetterFrequencies()); 
-            // Should test board as well
-           // Player playerAddedToGameFromJson = game.getPlayers().get(0);
-           // assertEquals(playerAddedToGameFromJson.getPlayerName(), "Tester");
+            assertEquals(bagThatWasReadFromJson.getCurrentLetterFrequencies(), tileBag.getCurrentLetterFrequencies());
         } catch (IOException e) {
             fail("Exception should not have been thrown");
         }
@@ -88,8 +84,7 @@ public class JsonWriterTest extends JsonTest {
             // log word logs it to player's game too
             game.logWord(player, getStringFromLetters(selectedTiles), 7, 7, score, Direction.DOWN);
             player.removeSelectedTiles();
-            //player.logSkippedTurn(board);
-            // should expect there to be one letters played there that match
+            // expect there to be one letters played there that match
             // and expect tileBag to be missing the 7 originally drawn tiles      
             JsonWriter writer = new JsonWriter("./data/testWriterOneWordPlayed.json");
             writer.open();
@@ -183,8 +178,6 @@ public class JsonWriterTest extends JsonTest {
         } catch (IOException e) {
             fail("Exception should not have been thrown");
         }
-
-
     }
 
     @Test
@@ -293,7 +286,6 @@ public class JsonWriterTest extends JsonTest {
             assertEquals(p2Moves.size(), 1);
             assertEquals(p3Moves.size(), 1);
 
-
             assertEquals(p1Moves.get(0).getMoveType(), MoveType.PLAY_WORD);
             assertEquals(p1Moves.get(0).getPointsForMove(), scoreForP1Word);
             assertEquals(p1Moves.get(1).getMoveType(), MoveType.END_GAME_ADJUSTMENT);
@@ -314,7 +306,7 @@ public class JsonWriterTest extends JsonTest {
             assertEquals(p3Letters, p3Moves.get(0).getLettersInvolved());
 
             assertEquals(p2Letters + p3Letters, p1Moves.get(1).getLettersInvolved());
-            assertEquals(p1, game.highestScoringPlayer());
+            assertEquals(p1, game.getHighestScoringPlayer());
         } catch (IOException e) {
             fail("Exception should not have been thrown");
         }
@@ -337,6 +329,4 @@ public class JsonWriterTest extends JsonTest {
         }
         return total;
     }
- 
-    
 }

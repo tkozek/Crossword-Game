@@ -11,9 +11,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-/**
- * Unit tests for the EventLog class
- */
 public class EventLogTest {
     private Event e1;
     private Event e2;
@@ -38,7 +35,6 @@ public class EventLogTest {
         for (Event next : el) {
             l.add(next);
         }
-
         assertTrue(l.contains(e1));
         assertTrue(l.contains(e2));
         assertTrue(l.contains(e3));
