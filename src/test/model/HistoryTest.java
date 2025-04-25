@@ -118,11 +118,11 @@ public class HistoryTest {
 
     @Test
     public void testGetAllWordsPlayed() {
-        List<Move> wordsPlayed = testPlayer.getHistory().getMovesWithWordPlayed();
+        List<Move> wordsPlayed = testPlayer.getWordsPlayed();
         assertTrue(wordsPlayed.isEmpty());
         // uses selected tiles within player, doesn't need non null tiles selected to make a move
         game.logWord(testPlayer, getStringFromLetters(p1Letters), 7, 7, 10, Direction.RIGHT);
-        wordsPlayed = testPlayer.getHistory().getMovesWithWordPlayed();
+        wordsPlayed = testPlayer.getWordsPlayed();
         assertEquals(wordsPlayed.size(), 1);
 
         game.logWord(testPlayer, getStringFromLetters(p1Letters), 0, 4, 15, Direction.RIGHT);
@@ -131,7 +131,7 @@ public class HistoryTest {
         testPlayer.selectTile(1);
 
         game.logWord(testPlayer, getStringFromLetters(p1Letters), 0, 0, 5, Direction.DOWN);
-        wordsPlayed = testPlayer.getHistory().getMovesWithWordPlayed();
+        wordsPlayed = testPlayer.getWordsPlayed();
         assertEquals(wordsPlayed.size(), 3);
         assertEquals(wordsPlayed.get(0).getMoveType(), MoveType.PLAY_WORD);
         assertEquals(wordsPlayed.get(0).getPointsForMove(), 10);
@@ -147,18 +147,18 @@ public class HistoryTest {
     public void testGetMovesWithWordsPlayedSomeAreSwapsAndSkips() {
         // Adds move that isn't a word played [1]
         game.logSkippedTurn(testPlayer);
-        assertTrue(testPlayer.getHistory().getMovesWithWordPlayed().isEmpty());
+        assertTrue(testPlayer.getWordsPlayed().isEmpty());
        // game.getTileBag();.drawTiles(testPlayer);
         //logs word played [1]
         game.logWord(testPlayer, (getStringFromLetters(testPlayer.getTilesOnRack())), 7,7,10,Direction.DOWN);
-        assertEquals(testPlayer.getHistory().getMovesWithWordPlayed().size(), 1);
+        assertEquals(testPlayer.getWordsPlayed().size(), 1);
         // Adds move that isn't a word played [2]
         game.logSkippedTurn(testPlayer);
         // Adds move that isn't a word played [3]
         game.logSkippedTurn(testPlayer);
         //logs word played [2]
         game.logWord(testPlayer, (getStringFromLetters(testPlayer.getTilesOnRack())), 9, 9, 14, Direction.RIGHT);
-        assertEquals(testPlayer.getHistory().getMovesWithWordPlayed().size(), 2);
+        assertEquals(testPlayer.getWordsPlayed().size(), 2);
     }   
     
 }

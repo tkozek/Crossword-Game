@@ -29,7 +29,7 @@ public class ScrabbleGameTest {
         game.addPlayer(player);
         assertEquals(game.getNumPlayers(), 1);
         assertEquals(game.getPlayers().get(0), player);
-        assertTrue(game.getHistory().getMoves().isEmpty());    
+        assertTrue(game.getMoves().isEmpty());    
         //!!! ToDo Override board and tilebag.equals    
         //assertTrue(game.getBoard().equals(new Board()));
         //assertTrue(game.getTileBag().equals(new TileBag()));
@@ -52,12 +52,12 @@ public class ScrabbleGameTest {
 
         Move play = new Move(player.getPlayerName(), getStringFromLetters(lettersToPlay), 7, 7, 10, Direction.DOWN);
         game.addMove(play);
-        List<Move> moves = game.getHistory().getMoves();
+        List<Move> moves = game.getMoves();
         assertEquals(moves.size(), 1);
         assertEquals(moves.get(0), play);
         Move skip = new Move(player.getPlayerName());
         game.addMove(skip);
-        moves = game.getHistory().getMoves();
+        moves = game.getMoves();
         assertEquals(moves.size(), 2);
         assertEquals(moves.get(1), skip);
         assertEquals(moves.get(0), play);
@@ -112,7 +112,7 @@ public class ScrabbleGameTest {
             player.selectTile(i);
         }
         assertEquals(32, game.playWord(player, 7, 7, Direction.DOWN));
-        assertEquals(1, game.getHistory().getMoves().size());
+        assertEquals(1, game.getMoves().size());
         assertEquals(1, player.getMoves().size());
         assertEquals(player.getNumTilesOnRack(), 7);
         assertEquals(game.getTileBag().numTilesRemaining(), 100 - 7);

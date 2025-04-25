@@ -165,8 +165,6 @@ public class ScrabbleVisualApp extends ScrabbleUserInterface {
         loadOrPlayFrame.setVisible(true);
     }
 
-
-
     //REQUIRES: newGameButton and loadGameButton have been initialized
     //MODIFIES: newGameButton and loadGameButton 
     //EFFECTS: adds action listeners for newGameButton and loadGameButton 
@@ -257,8 +255,6 @@ public class ScrabbleVisualApp extends ScrabbleUserInterface {
                 }
             }
         });
-
-        
         addPlayerButton = new JButton("Add player with name in textbox");
         startButton = new JButton("Start Game");
         addNameActionListeners();
@@ -681,9 +677,6 @@ public class ScrabbleVisualApp extends ScrabbleUserInterface {
             System.out.println("Unable to write to file " + filePath);
         }
     }
-
-
-
     
     // MODIFIES: this
     // EFFECTS: Adds panel representing player's tiles
@@ -827,7 +820,7 @@ public class ScrabbleVisualApp extends ScrabbleUserInterface {
     private void addMovesTab(Player player) {
         movesPanel = new JPanel();
         String summary = "";
-        for (Move move : player.getHistory().getMoves()) {
+        for (Move move : player) {
             switch (move.getMoveType()) {
                 case PLAY_WORD:
                     summary = game.getWordDescription(move, player);
@@ -843,7 +836,6 @@ public class ScrabbleVisualApp extends ScrabbleUserInterface {
                     break;
             }
             JTextArea moveSummary = getFormattedTextArea(summary, 100);
-            
             movesPanel.add(moveSummary);
             movesPanel.setMaximumSize(new Dimension(200,500));
             movesPanel.setBorder(BorderFactory.createLineBorder(Color.black));
@@ -894,14 +886,14 @@ public class ScrabbleVisualApp extends ScrabbleUserInterface {
             public void actionPerformed(ActionEvent e) {
                 resetTab(wordsPanel);
                 if (wordFilterField.getText().trim().isEmpty()) {
-                    for (Move move : player.getMoves()) {
+                    for (Move move : player) {
                         if (move.getMoveType() == MoveType.PLAY_WORD) {
                             wordsPanel.add(getFormattedTextArea(game.getWordDescription(move, player), 100));
                         }
                     }
                 } else {
                     char letter = wordFilterField.getText().trim().toUpperCase().charAt(0);
-                    List<Move> words = player.getHistory().getWordsContainingLetter(letter);
+                    List<Move> words = player.getWordsContainingLetter(letter);
                     if (words.isEmpty()) {
                         wordsPanel.add(getFormattedTextArea("You haven't played a word with that letter", 100));
                     } else {

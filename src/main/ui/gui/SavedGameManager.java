@@ -26,27 +26,6 @@ public class SavedGameManager {
         return getMostRecentSave();
     }
 
-    private static String getMostRecentSave() {
-        File saveDir = new File(SAVED_FILES_DIR);
-        if (!saveDir.exists() || !saveDir.isDirectory()) {
-            return null;
-        }
-        File[] files = saveDir.listFiles();
-        if (files == null || files.length == 0) {
-            return null;
-        }
-
-        File latestFile = files[0];
-        for (int i = 1; i < files.length; i++) {
-            if (files[i].lastModified() > latestFile.lastModified()) {
-                latestFile = files[i];
-            }
-        }
-        Path basePath = Paths.get(SAVED_FILES_DIR).toAbsolutePath().normalize();
-        Path fullPath = Paths.get(latestFile.getAbsolutePath()).normalize();
-        return SAVED_FILES_DIR + basePath.relativize(fullPath).toString();
-    }
-
     public static String[] getAllSaveFiles() {
         File saveDir = new File(SAVED_FILES_DIR);
         if (!saveDir.exists() || !saveDir.isDirectory()) {
@@ -67,5 +46,26 @@ public class SavedGameManager {
 
     public static String getSavedGamesDirectory() {
         return SAVED_FILES_DIR;
+    }
+
+    private static String getMostRecentSave() {
+        File saveDir = new File(SAVED_FILES_DIR);
+        if (!saveDir.exists() || !saveDir.isDirectory()) {
+            return null;
+        }
+        File[] files = saveDir.listFiles();
+        if (files == null || files.length == 0) {
+            return null;
+        }
+
+        File latestFile = files[0];
+        for (int i = 1; i < files.length; i++) {
+            if (files[i].lastModified() > latestFile.lastModified()) {
+                latestFile = files[i];
+            }
+        }
+        Path basePath = Paths.get(SAVED_FILES_DIR).toAbsolutePath().normalize();
+        Path fullPath = Paths.get(latestFile.getAbsolutePath()).normalize();
+        return SAVED_FILES_DIR + basePath.relativize(fullPath).toString();
     }
 }

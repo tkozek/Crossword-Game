@@ -52,7 +52,7 @@ public class JsonReaderTest extends JsonTest {
             // Override Board.equals() and update line below this
             assertNotNull(game.getBoard());
             assertEquals(game.getTileBag().getCurrentLetterFrequencies(), testBag.getInitialLetterFrequencies());
-            assertEquals(game.getHistory().getMoves().size(), 3);
+            assertEquals(game.getMoves().size(), 3);
             Player player = game.getPlayers().get(0);
             assertEquals(player.getPlayerName(), "Trevor");
             assertEquals(player.getPointsThisGame(), 0);
@@ -75,7 +75,7 @@ public class JsonReaderTest extends JsonTest {
 
             assertEquals(game.getTileBag().numTilesRemaining(), 100 - 7 * 2 - 2 - 5);
 
-            assertEquals(game.getHistory().getMoves().size(), 2);
+            assertEquals(game.getMoves().size(), 2);
             Player player = game.getPlayers().get(0);
             assertEquals(player.getPlayerName(), "Tester");
             assertEquals(player.getPointsThisGame(), 10);
@@ -103,7 +103,7 @@ public class JsonReaderTest extends JsonTest {
 
             assertEquals(game.getTileBag().numTilesRemaining(), 0);
 
-            assertEquals(game.getHistory().getMoves().size(), 16);
+            assertEquals(game.getMoves().size(), 16);
             Player player;
             List<Integer> endScores = new ArrayList<>();
             endScores.add(-16);

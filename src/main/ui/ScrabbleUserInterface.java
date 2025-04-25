@@ -26,7 +26,6 @@ public abstract class ScrabbleUserInterface {
                     + " points this game.\n");
         }
     }
-    
 
     // REQUIRES: user has quit application or the game has ended.
     // EFFECTS: prints event log to console

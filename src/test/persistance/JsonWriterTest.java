@@ -55,7 +55,7 @@ public class JsonWriterTest extends JsonTest {
             writer.close();
             JsonReader reader = new JsonReader("./data/testWriterInitialGame.json");
             game = reader.read();
-            assertTrue(game.getHistory().getMoves().isEmpty());
+            assertTrue(game.getMoves().isEmpty());
             TileBag bagThatWasReadFromJson = game.getTileBag();
             assertEquals(bagThatWasReadFromJson.getCurrentLetterFrequencies(), tileBag.getCurrentLetterFrequencies());
         } catch (IOException e) {
@@ -110,9 +110,9 @@ public class JsonWriterTest extends JsonTest {
             // Check board updated correctly
             assertEquals(firstPlacedLetter.getCharacter(), letter1Char);
             // 1 play 1 skip
-            History newGameHistory = game.getHistory();
-            assertEquals(newGameHistory.getMoves().size(), 1);
-            Move firstMove = newGameHistory.getMoves().get(0);
+            List<Move> newGameHistory = game.getMoves();
+            assertEquals(newGameHistory.size(), 1);
+            Move firstMove = newGameHistory.get(0);
             assertEquals(firstMove.getMoveType(), MoveType.PLAY_WORD);
         } catch (IOException e) {
             fail("Exception should not have been thrown");
@@ -220,8 +220,8 @@ public class JsonWriterTest extends JsonTest {
             writer.close();
             JsonReader reader = new JsonReader("./data/testWriteMoveComprehensive.json");
             game = reader.read();
-            List<Move> p1Moves = game.getPlayerByName("Tester").getHistory().getMoves();
-            List<Move> p2Moves = game.getPlayerByName("John").getHistory().getMoves();
+            List<Move> p1Moves = game.getPlayerByName("Tester").getMoves();
+            List<Move> p2Moves = game.getPlayerByName("John").getMoves();
 
             assertEquals(p1Moves.size(), 4);
             assertEquals(p1Moves.get(0).getMoveType(), MoveType.SWAP_TILES);

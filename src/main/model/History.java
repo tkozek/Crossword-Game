@@ -1,6 +1,7 @@
 package model;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import model.move.Move;
@@ -8,7 +9,7 @@ import model.move.MoveType;
 
 // Represents a Player's history, which includes
 // a list of their moves across their games
-public class History {
+public class History implements Iterable<Move> {
 
     private List<Move> moveHistory;
 
@@ -25,7 +26,7 @@ public class History {
     // moves which used the given letter at least once
     public List<Move> getWordsContainingLetter(char letter) {
         List<Move> movesWithLetter = new ArrayList<>();
-        List<Move> playedWords = this.getMovesWithWordPlayed();
+        List<Move> playedWords = this.getWordsPlayed();
         for (Move move : playedWords) {
             if (move.moveContainsLetter(letter)) {
                 movesWithLetter.add(move);
@@ -44,10 +45,9 @@ public class History {
     // EFFECTS: Returns only the moves where a word was 
     // played. Excludes any turns which were swaps
     // or skips
-    public List<Move> getMovesWithWordPlayed() {
-        List<Move> allMoves = this.moveHistory;
+    public List<Move> getWordsPlayed() {
         List<Move> wordsPlayed = new ArrayList<>();
-        for (Move move : allMoves) {
+        for (Move move : this) {
             if (move.getMoveType() == MoveType.PLAY_WORD) {
                 wordsPlayed.add(move);
             }
@@ -63,4 +63,8 @@ public class History {
         return null; // !!! TODO remove player's sense of history
     }
 
+    @Override
+    public Iterator<Move> iterator() {
+        return moveHistory.iterator();
+    }
 }

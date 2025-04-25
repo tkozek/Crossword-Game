@@ -372,6 +372,10 @@ public class ScrabbleGame implements JsonWritable<JSONObject> {
         return this.players.size();
     }
 
+    public List<Move> getMoves() {
+        return history.getMoves();
+    }
+
     // MODIFIES: this, player, EventLog
     // EFFECTS: adds this move to both the game's and the player's history,
     // and adds relevant Event to EventLog.
@@ -417,7 +421,7 @@ public class ScrabbleGame implements JsonWritable<JSONObject> {
     // as a JSONArray
     private JSONArray historyToJson() {
         JSONArray jsonArray = new JSONArray();
-        for (Move move : history.getMoves()) {
+        for (Move move : history) {
             jsonArray.put(move.toJson());
         }
         return jsonArray;

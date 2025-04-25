@@ -3,6 +3,7 @@ package model;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -11,12 +12,13 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import model.move.Move;
+import model.move.MoveType;
 import model.tile.LetterTile;
 import persistance.JsonWritable;
 
 // Represents a player in the Scrabble Game
 
-public class Player implements JsonWritable<JSONObject>  {
+public class Player implements JsonWritable<JSONObject>, Iterable<Move> {
  
     private String name;
     private History history;
@@ -45,6 +47,11 @@ public class Player implements JsonWritable<JSONObject>  {
         json.put("tileRack", tileRackToJson());
         return json;
     }
+
+    @Override
+    public Iterator<Move> iterator() {
+        return history.iterator();
+    }   
 
     // EFFECTS: returns deep copy of given list of letters.
     public List<LetterTile> copyLetterTiles(List<LetterTile> lettersToCopy) {
@@ -127,6 +134,22 @@ public class Player implements JsonWritable<JSONObject>  {
         return this.selectedTiles;
     }
 
+    // REQUIRES: letter is uppercase,
+    //      between 'A' to 'Z' or '-'
+    // EFFECTS: Filters player's words played and returns
+    // them in order least to most recent, only including
+    // moves which used the given letter at least once
+    public List<Move> getWordsContainingLetter(char letter) {
+        return history.getWordsContainingLetter(letter);
+    }
+
+    // EFFECTS: Returns only the moves where a word was 
+    // played. Excludes any turns which were swaps
+    // or skips
+    public List<Move> getWordsPlayed() {
+        return history.getWordsPlayed();
+    }
+
     //EFFECTS: returns chars corresponding to letters 
     //      on the player's tile rack
     public List<LetterTile> getTilesOnRack() {
@@ -185,5 +208,5 @@ public class Player implements JsonWritable<JSONObject>  {
             json.put(letter.toJson());
         }
         return json;
-    }    
+    } 
 }

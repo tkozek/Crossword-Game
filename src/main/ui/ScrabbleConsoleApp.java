@@ -247,7 +247,7 @@ public class ScrabbleConsoleApp extends ScrabbleUserInterface {
         System.out.println("Enter a character to view all your words played which contained that character");
         String entry = scanner.nextLine().toUpperCase();
         Character character = entry.charAt(0);
-        List<Move> moves = player.getHistory().getWordsContainingLetter(character);
+        List<Move> moves = player.getWordsContainingLetter(character);
         if (moves.isEmpty()) {
             System.out.println("You haven't played any words containing " + character.toString());
         } else {
@@ -279,9 +279,8 @@ public class ScrabbleConsoleApp extends ScrabbleUserInterface {
     // in order, including playing words,
     // swaps, skips
     private void printAllMovesSummary(Player player) {
-        List<Move> allMoves = player.getMoves();
         String description = "";
-        for (Move move : allMoves) {
+        for (Move move : player) {
             switch (move.getMoveType()) {
                 case PLAY_WORD:
                     description = game.getWordDescription(move, player);
@@ -304,7 +303,7 @@ public class ScrabbleConsoleApp extends ScrabbleUserInterface {
     // EFFECTS: prints summary of all
     // words played by the player.
     private void printWordsPlayed(Player player) {
-        List<Move> wordsPlayed = player.getHistory().getMovesWithWordPlayed();
+        List<Move> wordsPlayed = player.getWordsPlayed();
         for (Move word : wordsPlayed) {
             System.out.println(game.getWordDescription(word, player));
         }
