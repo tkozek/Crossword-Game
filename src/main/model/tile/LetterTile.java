@@ -16,6 +16,7 @@ public class LetterTile implements Tile, JsonWritable<JSONObject> {
         this.character = character;
         this.points = points;
     }
+    
 
     // EFFECTS: Creates deep copy of letter
     public LetterTile(LetterTile letter) {

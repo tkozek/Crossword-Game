@@ -52,7 +52,11 @@ public class HistoryTest {
     @Test
     public void testConstructor() {
         assertTrue(history.getMoves().isEmpty());
-        assertTrue(history.getWordsContainingLetter('A').isEmpty());
+        try {
+            assertTrue(history.getWordsContainingLetter('A').isEmpty());
+        } catch (Exception e) {
+            fail();
+        }
     }
 
     @Test
@@ -76,33 +80,39 @@ public class HistoryTest {
 
     @Test
     public void testGetListOfMoveContainingLetterOneMove() {
-        List<LetterTile> playedLetters = new ArrayList<>();
-        playedLetters.add(a1);
-        playedLetters.add(z1);
-        Move doesntHaveB = new Move(testPlayer.getPlayerName(), getStringFromLetters(playedLetters), 3, 5, 13, Direction.DOWN);
+        Move doesntHaveB;
+        List<LetterTile> letters = new ArrayList<>();
+        letters.add(a1);
+        letters.add(z1);
+        doesntHaveB = new Move(testPlayer.getPlayerName(), getStringFromLetters(letters), 3, 5, 13, Direction.DOWN);
         history.addMove(doesntHaveB);
         assertEquals(history.getMoves().size(), 1);
+        
         assertEquals(0, history.getWordsContainingLetter('B').size());
         assertEquals(1, history.getWordsContainingLetter('A').size());
         assertEquals(1, history.getWordsContainingLetter('Z').size());
+        
     }
     
     @Test
     public void testGetListOfMoveContainingLetterTwoMoves() {
-        List<LetterTile> playedLetters = new ArrayList<>();
-        playedLetters.add(a1);
-        playedLetters.add(b1); // AB
-        Move doesntHaveZ = new Move(testPlayer.getPlayerName(), getStringFromLetters(playedLetters), 7,9, 8,Direction.RIGHT);
+        List<LetterTile> letters = new ArrayList<>();
+        Move doesntHaveB;
+        Move doesntHaveZ;
+        letters.add(a1);
+        letters.add(b1); // AB
+        doesntHaveZ = new Move(testPlayer.getPlayerName(), getStringFromLetters(letters), 7,9, 8,Direction.RIGHT);
         history.addMove(doesntHaveZ);
 
-        List<LetterTile> playedLetters2 = new ArrayList<>();
-        playedLetters2.add(a1);
-        playedLetters2.add(z1); //AZ
+        List<LetterTile> letters2 = new ArrayList<>();
+        letters2.add(a1);
+        letters2.add(z1); //AZ
 
-        Move doesntHaveB = new Move(testPlayer.getPlayerName(), getStringFromLetters(playedLetters2), 3, 5, 13, Direction.DOWN);
+        doesntHaveB = new Move(testPlayer.getPlayerName(), getStringFromLetters(letters2), 3, 5, 13, Direction.DOWN);
         history.addMove(doesntHaveB);
         assertEquals(history.getMoves().size(), 2);
         //BOTH HAVE A
+        
         assertEquals(history.getWordsContainingLetter('A').size(), 2);
         //One has B and One has Z
         assertEquals(history.getWordsContainingLetter('B').size(),1);
@@ -114,6 +124,7 @@ public class HistoryTest {
         assertEquals(doesntHaveZ, history.getWordsContainingLetter('A').get(0));
 
         assertEquals(history.getWordsContainingLetter('B').get(0), doesntHaveZ);
+        
     }
 
     @Test

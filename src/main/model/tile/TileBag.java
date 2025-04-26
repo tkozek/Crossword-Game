@@ -48,13 +48,8 @@ public class TileBag implements JsonWritable<JSONObject> {
     //EFFECTS: Removes LetterTiles from the tile bag until
     //     player's tile rack has Player.MAX_NUM_TILES tiles, 
     //     or the tile bag
-    //     is empty. Returns number of tiles drawn.
-    //     OR
-    //     Returns -1 if draw pile is empty before removing any tiles
+    //     is empty. Returns number of tiles drawn
     public int drawTiles(Player player) {
-        if (drawPile.size() == 0) {
-            return -1;
-        }
         int numTilesAdded = 0;
         int nextTileIndex;
         LetterTile nextTile;

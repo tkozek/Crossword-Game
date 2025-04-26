@@ -11,6 +11,8 @@ import java.util.Set;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import model.exceptions.InvalidLetterException;
+import model.exceptions.SelectedTileOutOfBoundsException;
 import model.move.Move;
 import model.tile.LetterTile;
 import persistance.JsonWritable;
@@ -63,6 +65,9 @@ public class Player implements JsonWritable<JSONObject>, Iterable<Move> {
     // MODIFIES: this
     // EFFECTS: returns true if tile at index was successfully selected
     public boolean selectTile(int index) {
+        if (index < 0 || index >= tileRack.size()) {
+            throw new SelectedTileOutOfBoundsException(this.name, index);
+        }
         if (!selectedTiles.contains(tileRack.get(index))) {
             this.selectedTiles.add(tileRack.get(index));
             return true;
@@ -127,8 +132,6 @@ public class Player implements JsonWritable<JSONObject>, Iterable<Move> {
         return this.selectedTiles;
     }
 
-    // REQUIRES: letter is uppercase,
-    //      between 'A' to 'Z' or '-'
     // EFFECTS: Filters player's words played and returns
     // them in order least to most recent, only including
     // moves which used the given letter at least once

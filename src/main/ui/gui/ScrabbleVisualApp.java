@@ -20,6 +20,8 @@ import java.io.IOException;
 
 import model.*;
 import model.board.*;
+import model.exceptions.BoardSectionUnavailableException;
+import model.exceptions.InvalidLetterException;
 import model.tile.*;
 import model.move.*;
 import ui.ScrabbleConsoleApp;
@@ -417,13 +419,7 @@ public class ScrabbleVisualApp extends ScrabbleUserInterface {
     private void addMoveListeners(Player player) {
         playButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                game.playWord(player, startRow, startCol, dir);
-                frame.setVisible(false);
-                if (player.outOfTiles()) {
-                    handleEndGame(player);
-                } else {
-                    handleGame(game.getPlayerIndex(player) + 1);
-                }
+                confirmWordPlacement(player);
             }
         });
         swapButton.addActionListener(new ActionListener() {
@@ -443,19 +439,59 @@ public class ScrabbleVisualApp extends ScrabbleUserInterface {
         previewButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 SwingUtilities.invokeLater(() -> {
-                    frame.remove(boardPanel);
-                    frame.add(getPreviewBoardPanel(player), BorderLayout.CENTER);
-                    repaintAndRevalidate(boardPanel);
-                    SwingUtilities.invokeLater(() -> {
-                        frame.remove(rackPanel);
-                        frame.add(getConfirmOrCancelRackPanel(player), BorderLayout.SOUTH);
-                        repaintAndRevalidate(rackPanel);
+                    try {
+                        frame.remove(boardPanel);
+                        frame.add(getPreviewBoardPanel(player), BorderLayout.CENTER);
                         repaintAndRevalidate(boardPanel);
-                    });
+                        SwingUtilities.invokeLater(() -> {
+                            frame.remove(rackPanel);
+                            frame.add(getConfirmOrCancelRackPanel(player), BorderLayout.SOUTH);
+                            repaintAndRevalidate(rackPanel);
+                            repaintAndRevalidate(boardPanel);
+                        });
+                    } catch (BoardSectionUnavailableException exception) {
+                        System.out.println("\n" + exception.getMessage());
+                        SwingUtilities.invokeLater(() -> {
+                            frame.remove(rackPanel);
+                            frame.remove(boardPanel);
+                            player.clearSelectedTiles();
+                            frame.add(getBoardPanel(), BorderLayout.CENTER);
+                            frame.add(getRackPanel(player), BorderLayout.SOUTH);
+                            repaintAndRevalidate(rackPanel);
+                            repaintAndRevalidate(boardPanel);
+                        });
+                    }
                 });   
             }
         });
     }
+
+    private void confirmWordPlacement(Player player) {
+        try {
+            game.playWord(player, startRow, startCol, dir);
+            frame.setVisible(false);
+            if (player.outOfTiles()) {
+                handleEndGame(player);
+            } else {
+                handleGame(game.getPlayerIndex(player) + 1);
+            }
+        } catch (BoardSectionUnavailableException e) {
+            // System.out.println("\n" + e.getMessage());
+            // handleGame(game.getPlayerIndex(player));
+            System.out.println("\n" + e.getMessage());
+            SwingUtilities.invokeLater(() -> {
+                frame.remove(rackPanel);
+                frame.remove(boardPanel);
+                player.clearSelectedTiles();
+                frame.add(getBoardPanel(), BorderLayout.CENTER);
+                frame.add(getRackPanel(player), BorderLayout.SOUTH);
+                repaintAndRevalidate(rackPanel);
+                repaintAndRevalidate(boardPanel);
+            });
+        }
+    }
+
+    
 
     // EFFECTS: returns JPanel representing Player's rack and available options,
     // along with confirm or cancel buttons.
@@ -468,13 +504,7 @@ public class ScrabbleVisualApp extends ScrabbleUserInterface {
 
         confirm.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                game.playWord(player, startRow, startCol, dir);
-                frame.setVisible(false);
-                if (player.outOfTiles()) {
-                    handleEndGame(player);
-                } else {
-                    handleGame(game.getPlayerIndex(player) + 1);
-                }
+                confirmWordPlacement(player);
             }
         });
         cancel.addActionListener(new ActionListener() {
@@ -483,8 +513,8 @@ public class ScrabbleVisualApp extends ScrabbleUserInterface {
                     frame.remove(rackPanel);
                     frame.remove(boardPanel);
                     player.clearSelectedTiles();
-                    frame.add(getRackPanel(player), BorderLayout.SOUTH);
                     frame.add(getBoardPanel(), BorderLayout.CENTER);
+                    frame.add(getRackPanel(player), BorderLayout.SOUTH);
                     repaintAndRevalidate(rackPanel);
                     repaintAndRevalidate(boardPanel);
                 });
@@ -599,8 +629,8 @@ public class ScrabbleVisualApp extends ScrabbleUserInterface {
                     frame.remove(rackPanel);
                     frame.remove(boardPanel);
                     player.clearSelectedTiles();
-                    frame.add(getRackPanel(player), BorderLayout.SOUTH);
                     frame.add(getBoardPanel(), BorderLayout.CENTER);
+                    frame.add(getRackPanel(player), BorderLayout.SOUTH);
                     repaintAndRevalidate(rackPanel);
                     repaintAndRevalidate(boardPanel);
                 });
@@ -708,7 +738,7 @@ public class ScrabbleVisualApp extends ScrabbleUserInterface {
 
     // MODIFIES: this
     // EFFECTS: Adds panel representing the current board to the frame
-    private JPanel getPreviewBoardPanel(Player player) {
+    private JPanel getPreviewBoardPanel(Player player) throws BoardSectionUnavailableException {
         boardPanel = new JPanel();
         boardPanel.setLayout(new GridLayout(Board.BOARD_LENGTH, Board.BOARD_LENGTH));
         boardPanel.setPreferredSize(new Dimension(BOARD_PANEL_LENGTH, BOARD_PANEL_LENGTH));
@@ -858,13 +888,18 @@ public class ScrabbleVisualApp extends ScrabbleUserInterface {
                     }
                 } else {
                     char letter = wordFilterField.getText().trim().toUpperCase().charAt(0);
-                    List<Move> words = player.getWordsContainingLetter(letter);
-                    if (words.isEmpty()) {
-                        wordsPanel.add(getFormattedTextArea("You haven't played a word with that letter", 100));
-                    } else {
-                        for (Move word : words) {
-                            wordsPanel.add(getFormattedTextArea(game.getWordDescription(word, player), 100));
+                    List<Move> words;
+                    try {
+                        words = player.getWordsContainingLetter(letter);
+                        if (words.isEmpty()) {
+                            wordsPanel.add(getFormattedTextArea("You haven't played a word with that letter", 100));
+                        } else {
+                            for (Move word : words) {
+                                wordsPanel.add(getFormattedTextArea(game.getWordDescription(word, player), 100));
+                            }
                         }
+                    } catch (InvalidLetterException exception) {
+                        wordsPanel.add(getFormattedTextArea(exception.getMessage(), 100));
                     }
                     repaintAndRevalidate(wordsPanel);
                 }

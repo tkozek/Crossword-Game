@@ -6,6 +6,7 @@ import java.util.Set;
 import org.json.JSONArray;
 
 import model.Direction;
+import model.exceptions.BoardSectionUnavailableException;
 import model.tile.LetterTile;
 import model.tile.Tile;
 import model.tile.TileType;
@@ -87,7 +88,11 @@ public class Board implements JsonWritable<JSONArray> {
     //EFFECTS: Places selected letters on board beginning at start position
     //         and going in specified direction. 
     //         returns points earned from the word
-    public int playWord(List<LetterTile> letters, int startRow, int startCol, Direction dir) {
+    public int playWord(List<LetterTile> letters, int startRow, int startCol, Direction dir) 
+            throws BoardSectionUnavailableException {
+        if (!sectionIsAvailable(letters, startRow, startCol, dir)) {
+            throw new BoardSectionUnavailableException(startRow, startCol, dir);
+        }
         int rowInc = (dir == Direction.DOWN) ? 1 : 0;
         int colInc = (dir == Direction.RIGHT) ? 1 : 0;
         int score = scoreWord(letters, startRow, startCol, rowInc, colInc);

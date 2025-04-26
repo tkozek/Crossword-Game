@@ -54,7 +54,7 @@ public class TileBagTest {
     public void testEmptyDrawPile() {
         game.getTileBag().emptyDrawPile();
         assertEquals(0, game.getTileBag().numTilesRemaining());
-        assertEquals(-1, game.getTileBag().drawTiles(testPlayer));
+        assertEquals(0, game.getTileBag().drawTiles(testPlayer));
 
     }
     

@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import model.exceptions.BoardSectionUnavailableException;
 import model.move.Move;
 import model.move.MoveType;
 import model.tile.LetterTile;
@@ -111,7 +112,11 @@ public class ScrabbleGameTest {
         for (int i = 0; i < 5; i++) {
             player.selectTile(i);
         }
-        assertEquals(32, game.playWord(player, 7, 7, Direction.DOWN));
+        try {
+            assertEquals(32, game.playWord(player, 7, 7, Direction.DOWN));
+        } catch (BoardSectionUnavailableException e) {
+            fail();
+        }
         assertEquals(1, game.getMoves().size());
         assertEquals(1, player.getMoves().size());
         assertEquals(player.getNumTilesOnRack(), 7);
@@ -132,7 +137,11 @@ public class ScrabbleGameTest {
         for (int i = 0; i < 4; i++) {
             player.selectTile(i);
         }
-        assertEquals(18, game.playWord(player, 11, 8, Direction.RIGHT));
+        try {
+            assertEquals(18, game.playWord(player, 11, 8, Direction.RIGHT));
+        } catch (BoardSectionUnavailableException e) {
+            fail();
+        }
         assertEquals(player.getNumTilesOnRack(), 7);
         for (int i = 0; i < 7; i++) {
             player.selectTile(i);
@@ -144,7 +153,11 @@ public class ScrabbleGameTest {
         for (int i = 0; i < 3; i++) {
             player.selectTile(i);
         }
-        assertEquals(8, game.playWord(player, 10, 10, Direction.RIGHT));
+        try {
+            assertEquals(8, game.playWord(player, 10, 10, Direction.RIGHT));
+        } catch (BoardSectionUnavailableException e) {
+            fail();
+        }
     }
 
     @Test

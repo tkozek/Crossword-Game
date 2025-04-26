@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import model.exceptions.InvalidLetterException;
 import model.move.Move;
 import model.move.MoveType;
 
@@ -25,6 +26,9 @@ public class History implements Iterable<Move> {
     // them in order least to most recent, only including
     // moves which used the given letter at least once
     public List<Move> getWordsContainingLetter(char letter) {
+        if (!((letter>='A' && letter <= 'Z') || letter == '-')) {
+            throw new InvalidLetterException(letter);
+        }
         List<Move> movesWithLetter = new ArrayList<>();
         List<Move> playedWords = this.getWordsPlayed();
         for (Move move : playedWords) {

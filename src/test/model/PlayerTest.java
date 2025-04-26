@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import model.exceptions.BoardSectionUnavailableException;
 import model.move.MoveType;
 import model.tile.LetterTile;
 import model.tile.TileBag;
@@ -263,7 +264,12 @@ public class PlayerTest {
         testPlayer.selectTile(1);
         List<LetterTile> lettersToSwap = testPlayer.getSelectedTiles();
         assertEquals(testPlayer.getMoves().get(0).getPointsForMove(), 0);
-        game.getBoard().playWord(lettersToSwap, 0, 0, Direction.DOWN);
+        
+        try {
+            game.getBoard().playWord(lettersToSwap, 0, 0, Direction.DOWN);
+        } catch (BoardSectionUnavailableException e) {
+            fail();
+        }
         List<LetterTile> tilesAfterSwap = testPlayer.getTilesOnRack();
         game.logSwap(testPlayer, getStringFromLetters(lettersToSwap), getStringFromLetters(tilesAfterSwap));
         assertEquals(testPlayer.getMoves().size(), 2);

@@ -3,6 +3,8 @@ package model.move;
 import org.json.JSONObject;
 
 import model.Direction;
+import model.exceptions.InvalidLetterException;
+import model.exceptions.MoveTypeMismatchException;
 import persistance.JsonWritable;
 
 // A move made by a player, either a word played or a swap
@@ -31,8 +33,7 @@ public class Move implements JsonWritable<JSONObject> {
     public Move(String player, String swappedLetters, String postSwapLetters) {
         this.moveType = MoveType.SWAP_TILES;
         this.playerName = player;
-        swappedLetters += postSwapLetters;
-        this.lettersInvolved = swappedLetters;
+        this.lettersInvolved = swappedLetters + postSwapLetters;
         this.pointsForMove = 0;
     }
 
@@ -75,11 +76,15 @@ public class Move implements JsonWritable<JSONObject> {
         return json;
     }
 
-    // REQUIRES: MoveType is PLAY_WORD, letter is 
-    // uppercase between 'A' to 'Z' or '-'
     // EFFECTS: returns true if at least one 
     // letter in the move matches the given letter.
     public boolean moveContainsLetter(char letter) {
+        if (moveType != MoveType.PLAY_WORD) {
+            throw new MoveTypeMismatchException("moveContainsLetter", moveType);
+        }
+        if (!((letter>='A' && letter <= 'Z') || letter == '-')) {
+            throw new InvalidLetterException(letter);
+        }
         int length = lettersInvolved.length();
         for (int i = 0; i < length; i++) {
             if (lettersInvolved.charAt(i) == letter) {
@@ -109,8 +114,10 @@ public class Move implements JsonWritable<JSONObject> {
         return this.lettersInvolved;
     }
 
-    // REQUIRES: getMoveType() == MoveType.PLAY_WORD
     public Direction getDirection() {
+        if (moveType != MoveType.PLAY_WORD) {
+            throw new MoveTypeMismatchException("getDirection", moveType);
+        }
         return this.direction;
     }
 
@@ -122,15 +129,19 @@ public class Move implements JsonWritable<JSONObject> {
         return this.startCol;
     }
 
-    // REQUIRES: this is an END_GAME_ADJUSTMENT
     public String getLastPlayerName() {
+        if (moveType != MoveType.END_GAME_ADJUSTMENT) {
+            throw new MoveTypeMismatchException("getLastPlayerName", moveType);
+        }        
         return lastPlayer;
     }
 
-    // REQUIRES: this is a move of type PLAY_WORD
     // MODIFIES: input JSONObject
     // EFFECTS: adds information about this move to JSONObject
     private void playWordToJson(JSONObject json) {
+        if (moveType != MoveType.PLAY_WORD) {
+            throw new MoveTypeMismatchException("playWordToJson", moveType);
+        }
         json.put("LettersPlayed", lettersInvolved);
         json.put("Row", startRow);
         json.put("Col", startCol);
@@ -139,18 +150,22 @@ public class Move implements JsonWritable<JSONObject> {
         json.put("Direction", dir);
     }
 
-    // REQUIRES: this is a move of type SWAP_TILES
     // MODIFIES: input JSONObject
     // EFFECTS: adds information about this move to JSONObject
     private void swapTilesToJson(JSONObject json) {
+        if (moveType != MoveType.SWAP_TILES) {
+            throw new MoveTypeMismatchException("swapTilesToJson", moveType);
+        }
         json.put("InitialLetters", lettersInvolved.substring(0,7));
         json.put("AfterSwapLetters", lettersInvolved.substring(7,lettersInvolved.length()));
     }
 
-    // REQUIRES: this is a move of type END_GAME_ADJUSTMENT
     // MODIFIES: input JSONObject
     // EFFECTS: adds information about this move to JSONObject
     private void endGameAdjustmentToJson(JSONObject json) {
+        if (moveType != MoveType.END_GAME_ADJUSTMENT) {
+            throw new MoveTypeMismatchException("endGameAdjustmentToJson", moveType);
+        }        
         json.put("FinalPlayer", lastPlayer);
         json.put("LettersAccountedFor", lettersInvolved);
         json.put("ChangeInPoints", pointsForMove);

@@ -9,6 +9,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import model.board.Board;
+import model.exceptions.BoardSectionUnavailableException;
 import model.move.Move;
 import model.tile.LetterTile;
 import model.tile.Tile;
@@ -60,7 +61,7 @@ public class ScrabbleGame implements JsonWritable<JSONObject> {
     // EFFECTS: plays players selected tiles in desired manner on board,
     // logs the move to EventLog, player history and game history. Replenishes player's tile
     // rack, returns score.
-    public int playWord(Player player, int row, int col, Direction dir) {
+    public int playWord(Player player, int row, int col, Direction dir) throws BoardSectionUnavailableException {
         String lettersPlayed = "";
         for (LetterTile letter : player.getSelectedTiles()) {
             lettersPlayed += letter.toDisplay();
@@ -176,7 +177,7 @@ public class ScrabbleGame implements JsonWritable<JSONObject> {
         updateHistoriesAndEventLog(endGameAdjustment, player);
     }
 
-    public String[][] previewBoardDisplay(Player player, int row, int column, Direction dir) {
+    public String[][] previewBoardDisplay(Player player, int row, int column, Direction dir) throws BoardSectionUnavailableException {
         Board copyBoard = new Board(board);
         copyBoard.playWord(player.getSelectedTiles(), row, column, dir);
         String[][] previewDisplay = new String[Board.BOARD_LENGTH][Board.BOARD_LENGTH];

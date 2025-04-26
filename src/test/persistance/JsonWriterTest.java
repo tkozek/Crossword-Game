@@ -8,6 +8,7 @@ import model.Direction;
 import model.Player;
 import model.ScrabbleGame;
 import model.board.Board;
+import model.exceptions.BoardSectionUnavailableException;
 import model.move.Move;
 import model.move.MoveType;
 import model.tile.LetterTile;
@@ -79,7 +80,12 @@ public class JsonWriterTest extends JsonTest {
             List<LetterTile> selectedTiles = player.getSelectedTiles();
             LetterTile letter1 = new LetterTile(selectedTiles.get(0));
             // 
-            int score = board.playWord(selectedTiles, 7, 7, Direction.DOWN);
+            int score = 0;
+            try {
+                score = board.playWord(selectedTiles, 7, 7, Direction.DOWN);
+            } catch (BoardSectionUnavailableException e) {
+                fail();
+            }
             // log word logs it to player's game too
             game.logWord(player, getStringFromLetters(selectedTiles), 7, 7, score, Direction.DOWN);
             player.removeSelectedTiles();
@@ -172,7 +178,7 @@ public class JsonWriterTest extends JsonTest {
             assertEquals(copyP1Moves.size(), player.getMoves().size());
             assertEquals(copyP2Moves.size(), player2.getMoves().size());
 
-            assertEquals(copyP1Moves.get(0).getDirection(), p1Moves.get(0).getDirection());
+            assertEquals(copyP1Moves.get(0).getPointsForMove(), p1Moves.get(0).getPointsForMove());
             assertEquals(copyP2Moves.get(0).getPointsForMove(), p2Moves.get(0).getPointsForMove());
         } catch (IOException e) {
             fail("Exception should not have been thrown");
@@ -259,8 +265,12 @@ public class JsonWriterTest extends JsonTest {
             for (int i = 0; i < TileBag.MAX_NUM_PLAYER_TILES; i++) {
                 player1.selectTile(i);
             } 
-            
-            int scoreForP1Word = game.playWord(player1, 7, 7, Direction.DOWN);
+            int scoreForP1Word = 0;
+            try {
+                scoreForP1Word = game.playWord(player1, 7, 7, Direction.DOWN);
+            } catch (BoardSectionUnavailableException e) {
+                fail();
+            }
             int pointValOnP2Rack = getTotalValueFromLetters(player2.getTilesOnRack());
             int pointValOnP3Rack = getTotalValueFromLetters(player3.getTilesOnRack());
             

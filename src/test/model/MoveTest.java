@@ -54,6 +54,7 @@ public class MoveTest {
         assertEquals(playWord.getPointsForMove(), 10);
         assertEquals(playWord.getLettersInvolved(), getStringFromLetters(p1Letters));
         assertEquals(playWord.getDirection(),Direction.DOWN);
+        
         assertTrue(playWord.moveContainsLetter(firstChar)); 
         boolean allTrue = true;
         alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ-";
@@ -65,6 +66,7 @@ public class MoveTest {
         }
         // Move cannot contain all possible letters since tileRack is less than the size of the alphabet
         assertFalse(allTrue);
+        
     }
     
     @Test
@@ -78,9 +80,13 @@ public class MoveTest {
     
     @Test
     public void testConstructorForEndGameAdjustment() {
-        endGameLoser = new Move(testPlayer.getPlayerName(), testPlayer2.getPlayerName(), getStringFromLetters(p1Letters), -7);
+        String p1Name = testPlayer.getPlayerName();
+        String p2Name = testPlayer2.getPlayerName();
+
+        endGameLoser = new Move(p1Name, p2Name, getStringFromLetters(p1Letters), -7);
         assertEquals(endGameLoser.getMoveType(), MoveType.END_GAME_ADJUSTMENT);
-        endGameWinner = new Move(testPlayer2.getPlayerName(), testPlayer2.getPlayerName(), getStringFromLetters(p1Letters), 7);
+
+        endGameWinner = new Move(p2Name, p2Name, getStringFromLetters(p1Letters), 7);
         assertEquals(endGameWinner.getMoveType(),MoveType.END_GAME_ADJUSTMENT);;
     }
 

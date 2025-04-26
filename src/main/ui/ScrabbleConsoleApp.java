@@ -7,6 +7,9 @@ import java.io.IOException;
 
 import model.*;
 import model.board.*;
+import model.exceptions.BoardSectionUnavailableException;
+import model.exceptions.InvalidLetterException;
+import model.exceptions.SelectedTileOutOfBoundsException;
 import model.move.Move;
 import model.tile.*;
 import persistance.*;
@@ -243,12 +246,26 @@ public class ScrabbleConsoleApp extends ScrabbleUserInterface {
     // which contains their input letter, or indicates of 
     // no such words exist.
     private void handleShowFilteredMoves(Player player) {
-        System.out.println("Enter a character to view all your words played which contained that character");
-        String entry = scanner.nextLine().toUpperCase();
-        Character character = entry.charAt(0);
-        List<Move> moves = player.getWordsContainingLetter(character);
+        boolean validInput = false;
+        List<Move> moves = null;
+        char entry = ' ';
+        while (!validInput) {
+            System.out.println("Enter a character to view all your words played which contained that character");
+            String input = scanner.nextLine().toUpperCase();
+            if (input.isEmpty()) {
+                System.out.println("Empty selection is invalid \n");
+                continue;
+            }
+            entry = input.charAt(0);
+            try {
+                moves = player.getWordsContainingLetter(entry);
+                validInput = true;
+            } catch (InvalidLetterException e) {
+                System.out.println(e.getMessage());
+            }
+        }
         if (moves.isEmpty()) {
-            System.out.println("You haven't played any words containing " + character.toString());
+            System.out.println("You haven't played any words containing " + String.valueOf(entry));
         } else {
             for (Move move : moves) {
                 System.out.println(game.getWordDescription(move, player));
@@ -315,9 +332,12 @@ public class ScrabbleConsoleApp extends ScrabbleUserInterface {
             System.out.println("Enter the index of the tiles you'd like to play, in the order they form your word "
                     + "or enter C to confirm");
             if (scanner.hasNextInt()) {
-                player.selectTile(scanner.nextInt() - 1);
-                System.out.println("So far you've selected: ");
-                printSelectedTiles(player);
+                try {
+                    player.selectTile(scanner.nextInt() - 1);
+                } catch (SelectedTileOutOfBoundsException e) {
+                    System.out.println(e.getMessage());
+                }
+                printSelectedTilesMessage(player);
             } else if (scanner.hasNext("C")) {
                 handlePositionAndDirectionSelection(player);
                 break;
@@ -336,24 +356,37 @@ public class ScrabbleConsoleApp extends ScrabbleUserInterface {
     // prints error message if instructions were invalid
     private void handlePositionAndDirectionSelection(Player player) {
         adjustScanner();
-        System.out.println("Enter the row index you'd like to start your word at \n ");
-        int row = scanner.nextInt();
-        System.out.println("Enter the column index you'd like to start your word at");
-        int col = scanner.nextInt();
-        scanner.nextLine();
-        System.out.println("Now enter direction (R)ight or (D)own (default)");
-        Direction dir = (scanner.nextLine().toLowerCase().equals("r")) ? Direction.RIGHT : Direction.DOWN;
-        if (game.getBoard().sectionIsAvailable(player.getSelectedTiles(), row, col, dir)) {
-            int score = game.playWord(player, row, col, dir);
-            System.out.println("\nYour new tiles are:");
-            getTilePrintOut(player);
-            System.out.println(player.getPlayerName() + " earned " + score + " points!");
-            System.out.println(player.getPlayerName() + " now has " + player.getPointsThisGame() + " points \n");
-        } else {
-            System.out.println("Can't play that word there");
-            player.clearSelectedTiles();
-            handlePlay(player);
+        boolean validInput = false;
+        int row;
+        int col;
+        Direction dir;
+        int score = 0;
+        while (!validInput) {
+            System.out.println("Enter the row index you'd like to start your word at \n ");
+            row = scanner.nextInt();
+            System.out.println("Enter the column index you'd like to start your word at");
+            col = scanner.nextInt();
+            scanner.nextLine();
+            System.out.println("Now enter direction (R)ight or (D)own (default)");
+            dir = (scanner.nextLine().toLowerCase().equals("r")) ? Direction.RIGHT : Direction.DOWN;
+            try {
+                score = game.playWord(player, row, col, dir);
+                validInput = true;
+            } catch (BoardSectionUnavailableException e) {
+                System.out.println(e.getMessage());
+            }
         }
+        printPlayerSummaryAfterWordPlayed(player, score);
+        // System.out.println("Can't play that word there");
+        // player.clearSelectedTiles();
+        // handlePlay(player);
+    }
+
+    private void printPlayerSummaryAfterWordPlayed(Player player, int score) {
+        System.out.println("\nYour new tiles are:");
+        getTilePrintOut(player);
+        System.out.println(player.getPlayerName() + " earned " + score + " points!");
+        System.out.println(player.getPlayerName() + " now has " + player.getPointsThisGame() + " points \n");
     }
 
     // MODIFIES: player, tileBag
@@ -365,8 +398,7 @@ public class ScrabbleConsoleApp extends ScrabbleUserInterface {
             System.out.println("Enter indices for tiles to swap, C to confirm, or any other character to cancel");
             if (scanner.hasNextInt()) {
                 player.selectTile(scanner.nextInt() - 1);
-                System.out.println("So far you've selected: ");
-                printSelectedTiles(player);
+                printSelectedTilesMessage(player);
             } else if (scanner.hasNext("C")) {
                 game.swapTiles(player);
                 System.out.println("\n Your new tiles are: ");
@@ -399,7 +431,8 @@ public class ScrabbleConsoleApp extends ScrabbleUserInterface {
     }
 
     //EFFECTS: Prints out selected tiles for player
-    private void printSelectedTiles(Player player) {
+    private void printSelectedTilesMessage(Player player) {
+        System.out.println("So far you've selected: ");
         String tilePrintOut = "";
         List<LetterTile> playersSelectedLetters = player.getSelectedTiles();
         for (LetterTile letter : playersSelectedLetters) {

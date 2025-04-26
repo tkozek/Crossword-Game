@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 
 import model.Direction;
 import model.Player;
+import model.exceptions.BoardSectionUnavailableException;
 import model.tile.LetterTile;
 import model.tile.TileBag;
 import model.tile.TileType;
@@ -77,7 +78,11 @@ public class BoardTest {
 
         boolean isAvailable = board.sectionIsAvailable(letters, 7,7,Direction.RIGHT);
         assertTrue(isAvailable);
-        board.playWord(letters, 7, 7, Direction.RIGHT);
+        try {
+            board.playWord(letters, 7, 7, Direction.RIGHT);
+        } catch (BoardSectionUnavailableException e) {
+            fail();
+        }
         isAvailable = board.sectionIsAvailable(letters, 7,7,Direction.RIGHT);
         assertFalse(isAvailable);
 
@@ -153,7 +158,11 @@ public class BoardTest {
     @Test
     public void testSectionNotAvailableTileWasPlayed() {
         assertEquals(letters.size(),7);
-        board.playWord(letters, 0,0,Direction.DOWN);
+        try {
+            board.playWord(letters, 0,0,Direction.DOWN);
+        } catch (BoardSectionUnavailableException e) {
+            fail();
+        }
         assertFalse(board.sectionIsAvailable(letters, 0,0, Direction.DOWN));
         //(startRow,startCol) taken for both sets of arguments
         assertFalse(board.sectionIsAvailable(letters, 0,0, Direction.RIGHT));
@@ -163,7 +172,11 @@ public class BoardTest {
     @Test
     public void testSectionAvailableSkipOverOneAndMultipleLetters() {
         assertEquals(letters.size(),7);
-        board.playWord(letters, 4,4,Direction.DOWN);
+        try {
+            board.playWord(letters, 4,4,Direction.DOWN);
+        } catch (BoardSectionUnavailableException e) {
+            fail();
+        }
         assertTrue(board.sectionIsAvailable(letters, 4,0, Direction.RIGHT));
         // Letters already placed from (4,4) to (10,4), should place from (0,4) to (3,4) and (11,4) to (13,4)
         assertTrue(board.sectionIsAvailable(letters, 0,4, Direction.DOWN));
@@ -173,7 +186,11 @@ public class BoardTest {
     @Test
     public void testSectionAvailableVariousCases() {
         assertEquals(letters.size(),7);
-        board.playWord(letters, 7,7,Direction.DOWN);
+        try {
+            board.playWord(letters, 7,7,Direction.DOWN);
+        } catch (BoardSectionUnavailableException e) {
+            fail();
+        }
         // can place from (7,1) to (7,6), and at (7,8)
         assertTrue(board.sectionIsAvailable(letters, 7,1, Direction.RIGHT));
         // can place from (1,7) to (6,7) and at (15,7)
@@ -189,11 +206,14 @@ public class BoardTest {
     @Test
     public void testSectionAvailableSkipMultipleSectionsTrue() {
         assertEquals(letters.size(),7);
-        board.playWord(letters, 6,6,Direction.DOWN);
-
-        board.playWord(letters, 6,8,Direction.DOWN);
-
-        board.playWord(letters, 6,11,Direction.DOWN);
+        try {
+            board.playWord(letters, 6,6,Direction.DOWN);
+            board.playWord(letters, 6,8,Direction.DOWN);
+            board.playWord(letters, 6,11,Direction.DOWN);
+        } catch (BoardSectionUnavailableException e) {
+            fail();
+        }
+        
         // Exactly enough space to fit after jumping over the 3 existing letters
         assertTrue(board.sectionIsAvailable(letters, 6, 5, Direction.RIGHT));
         // One extra space than needed
@@ -207,10 +227,12 @@ public class BoardTest {
     @Test
     public void testSectionIsAvailableSkipOneGroupOfTwoTiles() {
         assertEquals(letters.size(),7);
-        board.playWord(letters, 8,6,Direction.RIGHT);
-
-        board.playWord(letters, 9,6,Direction.RIGHT);
-
+        try {
+            board.playWord(letters, 8,6,Direction.RIGHT);
+            board.playWord(letters, 9,6,Direction.RIGHT);
+        } catch (BoardSectionUnavailableException e) {
+            fail();
+        }
         // One too few spaces
         assertFalse(board.sectionIsAvailable(letters, 7,7, Direction.DOWN));
         assertFalse(board.sectionIsAvailable(letters, 7,9, Direction.DOWN));
@@ -234,8 +256,11 @@ public class BoardTest {
 
         assertFalse(board.sectionIsAvailable(letters, 9,9, Direction.DOWN));
         assertFalse(board.sectionIsAvailable(letters, 9,9, Direction.RIGHT));
-
-        board.playWord(letters, 7, 7, Direction.RIGHT);
+        try {
+            board.playWord(letters, 7, 7, Direction.RIGHT);
+        } catch (BoardSectionUnavailableException e) {
+            fail();
+        }
         assertTrue(board.sectionIsAvailable(letters, 1,14, Direction.DOWN));
         // Places 6 tiles starting at (1,13), places 7th tiles at (8,13)
         assertTrue(board.sectionIsAvailable(letters, 1,13, Direction.DOWN));
@@ -288,7 +313,11 @@ public class BoardTest {
         // Add lettertile B to toAdd
         toAdd.add(b1);
         // Play word "B" at 7,7 (direction is arbitrary)
-        board.playWord(toAdd,7,7, Direction.DOWN);
+        try {
+            board.playWord(toAdd,7,7, Direction.DOWN);
+        } catch (BoardSectionUnavailableException e) {
+            fail();
+        }
         // Now our Map shouldnt be empty
         Map<Character,Integer> counts = board.getNumEachCharOnBoard();
 
@@ -308,9 +337,13 @@ public class BoardTest {
         toAdd.add(a1);
         toAdd.add(z1);
         // Play word "AZ" at 7,7 ; 7,8
-        board.playWord(toAdd,7,7, Direction.RIGHT);
-        toAdd2.add(b1);
-        board.playWord(toAdd2, 0,0, Direction.DOWN);
+        try {
+            board.playWord(toAdd,7,7, Direction.RIGHT);
+            toAdd2.add(b1);
+            board.playWord(toAdd2, 0,0, Direction.DOWN);
+        } catch (BoardSectionUnavailableException e) {
+            fail();
+        }
         // Now our Map should have A, B, Z keys
         Map<Character,Integer> counts = board.getNumEachCharOnBoard();
 
@@ -336,9 +369,13 @@ public class BoardTest {
         toAdd.add(a2);
         toAdd.add(z1);
         // Play word "AZ" at 7,7 ; 7,8
-        board.playWord(toAdd,6,8, Direction.RIGHT);
-        toAdd2.add(b1);
-        board.playWord(toAdd2, 0,0, Direction.DOWN);
+        try {
+            board.playWord(toAdd,6,8, Direction.RIGHT);
+            toAdd2.add(b1);
+            board.playWord(toAdd2, 0,0, Direction.DOWN);
+        } catch (BoardSectionUnavailableException e) {
+            fail();
+        }
         // Now our Map should have A, B, Z keys
         Map<Character,Integer> counts = board.getNumEachCharOnBoard();
 
@@ -376,13 +413,17 @@ public class BoardTest {
         bat.add(b1);
         bat.add(a1);
         bat.add(t1);
-        assertEquals(10, board.playWord(bat, 7, 7, Direction.RIGHT));
-        List<LetterTile> soy = new ArrayList<>();
-        soy.add(s1);
-        soy.add(o1);
-        soy.add(y1);
-        // BATS for 6 plus SOY for 6
-        assertEquals(12, board.playWord(soy, 7, 10, Direction.DOWN));
+        try {
+            assertEquals(10, board.playWord(bat, 7, 7, Direction.RIGHT));
+            List<LetterTile> soy = new ArrayList<>();
+            soy.add(s1);
+            soy.add(o1);
+            soy.add(y1);
+            // BATS for 6 plus SOY for 6
+            assertEquals(12, board.playWord(soy, 7, 10, Direction.DOWN));
+        } catch (BoardSectionUnavailableException e) {
+            fail();
+        }
     }
 
     @Test
@@ -398,10 +439,13 @@ public class BoardTest {
         yet.add(e1);
         List<LetterTile> justH = new ArrayList<>();
         justH.add(h1);
-        assertEquals(12, board.playWord(boat, 7,7, Direction.RIGHT));
-        assertEquals(6, board.playWord(yet, 5, 10, Direction.DOWN));
-
-        assertEquals(10, board.playWord(justH, 6, 9, Direction.DOWN));
+        try {
+            assertEquals(12, board.playWord(boat, 7,7, Direction.RIGHT));
+            assertEquals(6, board.playWord(yet, 5, 10, Direction.DOWN));
+            assertEquals(10, board.playWord(justH, 6, 9, Direction.DOWN));
+        } catch (BoardSectionUnavailableException e) {
+            fail();
+        }
     }
 
     @Test
@@ -419,9 +463,13 @@ public class BoardTest {
         tool.add(o1);
         tool.add(l1);
 
-        assertEquals(22, board.playWord(chore, 7,7, Direction.DOWN));
-        // Must jump over CHORE's 'O'
-        assertEquals(6, board.playWord(tool, 9, 6, Direction.RIGHT));
+        try {
+            assertEquals(22, board.playWord(chore, 7,7, Direction.DOWN));
+            // Must jump over CHORE's 'O'
+            assertEquals(6, board.playWord(tool, 9, 6, Direction.RIGHT));
+        } catch (BoardSectionUnavailableException e) {
+            fail();
+        }
 
         LetterTile boardTile97 = (LetterTile) board.getTileAtPositionOnBoard(9, 7);
         LetterTile boardTile98 = (LetterTile) board.getTileAtPositionOnBoard(9, 8);
@@ -446,11 +494,14 @@ public class BoardTest {
         tool.add(l1);
         List<LetterTile> justA = new ArrayList<>();
         justA.add(a1);
-
-        assertEquals(22, board.playWord(chore, 7,7, Direction.DOWN));
-        assertEquals(6, board.playWord(tool, 9, 6, Direction.RIGHT));
-        // FORMS AH and AT
-        assertEquals(9, board.playWord(justA, 8, 6, Direction.RIGHT));
+        try {
+            assertEquals(22, board.playWord(chore, 7,7, Direction.DOWN));
+            assertEquals(6, board.playWord(tool, 9, 6, Direction.RIGHT));
+            // FORMS AH and AT
+            assertEquals(9, board.playWord(justA, 8, 6, Direction.RIGHT));
+        } catch (BoardSectionUnavailableException e) {
+            fail();
+        }
     }
 
     @Test
@@ -460,13 +511,18 @@ public class BoardTest {
         hang.add(a1);
         hang.add(n1);
         hang.add(g1);
-        assertEquals(16, board.playWord(hang, 7, 4, Direction.RIGHT));
-        List<LetterTile> change = new ArrayList<>();
-        change.add(c1);
-        change.add(e1);
-        // Adds C to start and E to the end of HANG to make CHANGE. Double letter applied
-        // to C, double word not applied since it was already applied to HANG
-        assertEquals(15, board.playWord(change, 7, 3, Direction.RIGHT));
+        
+        try {
+            assertEquals(16, board.playWord(hang, 7, 4, Direction.RIGHT));
+            List<LetterTile> change = new ArrayList<>();
+            change.add(c1);
+            change.add(e1);
+            // Adds C to start and E to the end of HANG to make CHANGE. Double letter applied
+            // to C, double word not applied since it was already applied to HANG
+            assertEquals(15, board.playWord(change, 7, 3, Direction.RIGHT));
+        } catch (BoardSectionUnavailableException e) {
+            fail();
+        }
         LetterTile boardTile73 = (LetterTile) board.getTileAtPositionOnBoard(7, 3);
         LetterTile boardTile74 = (LetterTile) board.getTileAtPositionOnBoard(7, 4);
         LetterTile boardTile78 = (LetterTile) board.getTileAtPositionOnBoard(7, 8);
@@ -485,24 +541,26 @@ public class BoardTest {
         hang.add(a1);
         hang.add(n1);
         hang.add(g1);
-        board.playWord(hang, 7, 4, Direction.RIGHT);
-        List<LetterTile> steak = new ArrayList<>();
-        steak.add(s1);
-        steak.add(t1);
-        steak.add(e1);
-        steak.add(k1);
-
-        assertEquals(11, board.playWord(steak, 4, 5, Direction.DOWN));
-        LetterTile boardTile75 = (LetterTile) board.getTileAtPositionOnBoard(7, 5);
-        assertEquals(boardTile75.getCharacter(), 'A');
-        List<LetterTile> ate = new ArrayList<>();
-        ate.add(new LetterTile('A'));
-        ate.add(new LetterTile('E'));
-        assertEquals(3, board.playWord(ate, 5, 4, Direction.RIGHT));
-        
-        List<LetterTile> justA = new ArrayList<>();
-        justA.add(new LetterTile('A'));
-        assertEquals(8, board.playWord(justA, 4, 4, Direction.RIGHT));
+        try {
+            board.playWord(hang, 7, 4, Direction.RIGHT);
+            List<LetterTile> steak = new ArrayList<>();
+            steak.add(s1);
+            steak.add(t1);
+            steak.add(e1);
+            steak.add(k1);
+            assertEquals(11, board.playWord(steak, 4, 5, Direction.DOWN));
+            LetterTile boardTile75 = (LetterTile) board.getTileAtPositionOnBoard(7, 5);
+            assertEquals(boardTile75.getCharacter(), 'A');
+            List<LetterTile> ate = new ArrayList<>();
+            ate.add(new LetterTile('A'));
+            ate.add(new LetterTile('E'));
+            assertEquals(3, board.playWord(ate, 5, 4, Direction.RIGHT));
+            List<LetterTile> justA = new ArrayList<>();
+            justA.add(new LetterTile('A'));
+            assertEquals(8, board.playWord(justA, 4, 4, Direction.RIGHT));
+        } catch (BoardSectionUnavailableException e) {
+            fail();
+        }
     }
 
     @Test
@@ -512,13 +570,17 @@ public class BoardTest {
         hang.add(a1);
         hang.add(n1);
         hang.add(g1);
-        board.playWord(hang, 11, 14, Direction.DOWN);
-        List<LetterTile> stek = new ArrayList<>();
-        stek.add(s1);
-        stek.add(t1);
-        stek.add(e1);
-        stek.add(k1);
-
-        assertEquals(11, board.playWord(stek, 14, 10, Direction.RIGHT));
+        
+        try {
+            board.playWord(hang, 11, 14, Direction.DOWN);
+            List<LetterTile> stek = new ArrayList<>();
+            stek.add(s1);
+            stek.add(t1);
+            stek.add(e1);
+            stek.add(k1);
+            assertEquals(11, board.playWord(stek, 14, 10, Direction.RIGHT));
+        } catch (BoardSectionUnavailableException e) {
+            fail();
+        }
     }
 }
