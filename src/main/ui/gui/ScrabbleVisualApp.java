@@ -42,6 +42,9 @@ public class ScrabbleVisualApp extends ScrabbleUserInterface {
     private static final int BOARD_PANEL_LENGTH = Board.BOARD_LENGTH * TILE_SIZE;
     private static final int REQUEST_NAMES_FRAME_WIDTH = 1000 * 2 / 3;
     private static final int REQUEST_NAMES_FRAME_HEIGHT = 100;
+    private static final int INFO_TABS_WIDTH = 175;
+    private static final int MOVE_SUMMARY_PADDING = 10;
+    private static final Font MOVE_FONT = new Font("Arial", Font.ITALIC, 12);
     private static final Font TILE_FONT = new Font("Arial", Font.BOLD, 14);
     //private static final int REMAINING_TILE_PRINTOUT_HEIGHT = 20;
     private static final Color DOUBLE_LETTER_COLOR = new Color(173, 216, 230);
@@ -792,7 +795,7 @@ public class ScrabbleVisualApp extends ScrabbleUserInterface {
     private JPanel getInfoPanel(Player player) {
         infoPanel = new JPanel();
         infoPanel.setLayout(new CardLayout());
-        infoPanel.setPreferredSize(new Dimension(175, FRAME_SIDE_LENGTH));
+        infoPanel.setPreferredSize(new Dimension(INFO_TABS_WIDTH, FRAME_SIDE_LENGTH));
         infoTabs = new JTabbedPane();
         addMovesTab(player);
         addWordsTab(player);
@@ -832,7 +835,7 @@ public class ScrabbleVisualApp extends ScrabbleUserInterface {
                     summary = game.getEndGameDescription(move, player);
                     break;
             }
-            JTextArea moveSummary = getFormattedTextArea(summary, 100);
+            JTextArea moveSummary = getFormattedTextArea(summary, MOVE_FONT);
             movesPanel.add(moveSummary);
             movesPanel.setMaximumSize(new Dimension(200,500));
             movesPanel.setBorder(BorderFactory.createLineBorder(Color.black));
@@ -841,15 +844,25 @@ public class ScrabbleVisualApp extends ScrabbleUserInterface {
     }
 
     // EFFECTS: returns JTextArea with given text and standardized formatting
-    private JTextArea getFormattedTextArea(String text, int height) {
+    private JTextArea getFormattedTextArea(String text, Font font) {
         JTextArea textArea = new JTextArea(text);
-        textArea.setFont(new Font("Arial", Font.ITALIC, 12));
+        textArea.setFont(MOVE_FONT);
+        int height = getTextboxHeight(textArea, text, INFO_TABS_WIDTH - MOVE_SUMMARY_PADDING, font);
         textArea.setLineWrap(true);
         textArea.setWrapStyleWord(true);
         textArea.setCaretPosition(0);
         textArea.setEditable(false);
-        textArea.setPreferredSize(new Dimension(150, height));
+        textArea.setPreferredSize(new Dimension(INFO_TABS_WIDTH - MOVE_SUMMARY_PADDING, height));
         return textArea;
+    }
+
+    // EFFECTS: returns textbox height required based on length of input text and font used
+    private int getTextboxHeight(JComponent component, String text, int containerWidth, Font font) {
+        FontMetrics metric = component.getFontMetrics(font);
+        int width = metric.charWidth('A');
+        int h = metric.getHeight();
+        double textBoxHeight = (text.length() * width * h / containerWidth);
+        return (int) textBoxHeight;
     }
 
     // MODIFIES: Tabbed Information Pane      
@@ -883,7 +896,7 @@ public class ScrabbleVisualApp extends ScrabbleUserInterface {
                 if (wordFilterField.getText().trim().isEmpty()) {
                     for (Move move : player) {
                         if (move.getMoveType() == MoveType.PLAY_WORD) {
-                            wordsPanel.add(getFormattedTextArea(game.getWordDescription(move, player), 100));
+                            wordsPanel.add(getFormattedTextArea(game.getWordDescription(move, player), MOVE_FONT));
                         }
                     }
                 } else {
@@ -892,14 +905,14 @@ public class ScrabbleVisualApp extends ScrabbleUserInterface {
                     try {
                         words = player.getWordsContainingLetter(letter);
                         if (words.isEmpty()) {
-                            wordsPanel.add(getFormattedTextArea("You haven't played a word with that letter", 100));
+                            wordsPanel.add(getFormattedTextArea("You haven't played a word with that letter", MOVE_FONT));
                         } else {
                             for (Move word : words) {
-                                wordsPanel.add(getFormattedTextArea(game.getWordDescription(word, player), 100));
+                                wordsPanel.add(getFormattedTextArea(game.getWordDescription(word, player), MOVE_FONT));
                             }
                         }
                     } catch (InvalidLetterException exception) {
-                        wordsPanel.add(getFormattedTextArea(exception.getMessage(), 100));
+                        wordsPanel.add(getFormattedTextArea(exception.getMessage(), MOVE_FONT));
                     }
                     repaintAndRevalidate(wordsPanel);
                 }
@@ -931,15 +944,15 @@ public class ScrabbleVisualApp extends ScrabbleUserInterface {
                 if (searchLetterCountsField.getText().trim().isEmpty()) {
                     for (Map.Entry<Character, Integer> entry : distributionMap.entrySet()) {
                         letterDistributionPanel.add(getFormattedTextArea(entry.getKey() + " : " 
-                                + entry.getValue(), 20));
+                                + entry.getValue(), MOVE_FONT));
                     }
                 } else {
                     char key = searchLetterCountsField.getText().toUpperCase().trim().charAt(0);
                     String count = String.valueOf(distributionMap.get(key));
                     if (count == "null") {
-                        letterDistributionPanel.add(getFormattedTextArea("Invalid letter: " + key, 20));
+                        letterDistributionPanel.add(getFormattedTextArea("Invalid letter: " + key, MOVE_FONT));
                     } else {
-                        letterDistributionPanel.add(getFormattedTextArea(key + " : " + count, 20));
+                        letterDistributionPanel.add(getFormattedTextArea(key + " : " + count, MOVE_FONT));
                     }
                     repaintAndRevalidate(letterDistributionPanel);
                 }
