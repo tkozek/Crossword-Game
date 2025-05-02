@@ -82,7 +82,7 @@ public class Move implements JsonWritable<JSONObject> {
         if (moveType != MoveType.PLAY_WORD) {
             throw new MoveTypeMismatchException("moveContainsLetter", moveType);
         }
-        if (!((letter>='A' && letter <= 'Z') || letter == '-')) {
+        if (!((letter >= 'A' && letter <= 'Z') || letter == '-')) {
             throw new InvalidLetterException(letter);
         }
         int length = lettersInvolved.length();

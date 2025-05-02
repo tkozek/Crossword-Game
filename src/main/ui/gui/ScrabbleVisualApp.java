@@ -935,7 +935,12 @@ public class ScrabbleVisualApp extends ScrabbleUserInterface {
                     }
                 } else {
                     char key = searchLetterCountsField.getText().toUpperCase().trim().charAt(0);
-                    letterDistributionPanel.add(getFormattedTextArea(key + " : " + distributionMap.get(key), 20));
+                    String count = String.valueOf(distributionMap.get(key));
+                    if (count == "null") {
+                        letterDistributionPanel.add(getFormattedTextArea("Invalid letter: " + key, 20));
+                    } else {
+                        letterDistributionPanel.add(getFormattedTextArea(key + " : " + count, 20));
+                    }
                     repaintAndRevalidate(letterDistributionPanel);
                 }
             }

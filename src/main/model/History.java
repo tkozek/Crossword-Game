@@ -26,7 +26,7 @@ public class History implements Iterable<Move> {
     // them in order least to most recent, only including
     // moves which used the given letter at least once
     public List<Move> getWordsContainingLetter(char letter) {
-        if (!((letter>='A' && letter <= 'Z') || letter == '-')) {
+        if (!((letter >= 'A' && letter <= 'Z') || letter == '-')) {
             throw new InvalidLetterException(letter);
         }
         List<Move> movesWithLetter = new ArrayList<>();

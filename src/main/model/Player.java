@@ -11,7 +11,6 @@ import java.util.Set;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import model.exceptions.InvalidLetterException;
 import model.exceptions.SelectedTileOutOfBoundsException;
 import model.move.Move;
 import model.tile.LetterTile;
