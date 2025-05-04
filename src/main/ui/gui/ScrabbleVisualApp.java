@@ -43,7 +43,7 @@ public class ScrabbleVisualApp extends ScrabbleUserInterface {
     private static final int REQUEST_NAMES_FRAME_WIDTH = 1000 * 2 / 3;
     private static final int REQUEST_NAMES_FRAME_HEIGHT = 100;
     private static final int INFO_TABS_WIDTH = 175;
-    private static final int MOVE_SUMMARY_PADDING = 10;
+    private static final int MOVE_SUMMARY_PADDING = 25;
     private static final Font MOVE_FONT = new Font("Arial", Font.ITALIC, 12);
     private static final Font TILE_FONT = new Font("Arial", Font.BOLD, 14);
     //private static final int REMAINING_TILE_PRINTOUT_HEIGHT = 20;
@@ -68,6 +68,8 @@ public class ScrabbleVisualApp extends ScrabbleUserInterface {
     private JPanel wordsPanel;
     private JButton searchWordsButton;
     private JTextField wordFilterField;
+    private JScrollPane wordsScrollPane;
+    private JPanel wordTab;
     private JPanel letterDistributionPanel;
     private JButton searchLetterCountsButton;
     private JTextField searchLetterCountsField;
@@ -174,13 +176,13 @@ public class ScrabbleVisualApp extends ScrabbleUserInterface {
     private void addStartMenuListeners() {
         newGame.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                loadOrPlayFrame.setVisible(false);
+                loadOrPlayFrame.dispose();
                 initializeNewGame();
             }
         });
         continueGame.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                loadOrPlayFrame.setVisible(false);
+                loadOrPlayFrame.dispose();
                 loadLastSavedGame(); 
             }
         });
@@ -277,7 +279,7 @@ public class ScrabbleVisualApp extends ScrabbleUserInterface {
         });        
         startButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                playerNameFrame.setVisible(false);
+                playerNameFrame.dispose();
                 gameRunning = true;
                 handleGame(0);
             }
@@ -428,14 +430,14 @@ public class ScrabbleVisualApp extends ScrabbleUserInterface {
         swapButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 game.swapTiles(player);
-                frame.setVisible(false);
+                frame.dispose();
                 handleGame(game.getPlayerIndex(player) + 1);
             }
         });
         skipButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 game.logSkippedTurn(player);
-                frame.setVisible(false);
+                frame.dispose();
                 handleGame(game.getPlayerIndex(player) + 1);
             }
         });
@@ -472,7 +474,7 @@ public class ScrabbleVisualApp extends ScrabbleUserInterface {
     private void confirmWordPlacement(Player player) {
         try {
             game.playWord(player, startRow, startCol, dir);
-            frame.setVisible(false);
+            frame.dispose();
             if (player.outOfTiles()) {
                 handleEndGame(player);
             } else {
@@ -542,7 +544,7 @@ public class ScrabbleVisualApp extends ScrabbleUserInterface {
         terminalUIButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 game.setCurrentPlayer(player);
-                frame.setVisible(false);
+                frame.dispose();
                 new ScrabbleConsoleApp(game);
                 gameRunning = false;
             }
@@ -819,6 +821,7 @@ public class ScrabbleVisualApp extends ScrabbleUserInterface {
     // EFFECTs: adds a panel to show summary of all moves to the information tabbed pane
     private void addMovesTab(Player player) {
         movesPanel = new JPanel();
+        movesPanel.setLayout(new BoxLayout(movesPanel, BoxLayout.Y_AXIS));
         String summary = "";
         for (Move move : player) {
             switch (move.getMoveType()) {
@@ -838,9 +841,14 @@ public class ScrabbleVisualApp extends ScrabbleUserInterface {
             JTextArea moveSummary = getFormattedTextArea(summary, MOVE_FONT);
             movesPanel.add(moveSummary);
             movesPanel.setMaximumSize(new Dimension(200,500));
-            movesPanel.setBorder(BorderFactory.createLineBorder(Color.black));
+           // movesPanel.setBorder(BorderFactory.createLineBorder(Color.black));
         }
-        infoTabs.add(movesPanel, "My Move History");
+        JScrollPane scrollPane = new JScrollPane(movesPanel);
+        scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+        scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
+        
+
+        infoTabs.add(scrollPane, "My Move History");
     }
 
     // EFFECTS: returns JTextArea with given text and standardized formatting
@@ -850,9 +858,15 @@ public class ScrabbleVisualApp extends ScrabbleUserInterface {
         int height = getTextboxHeight(textArea, text, INFO_TABS_WIDTH - MOVE_SUMMARY_PADDING, font);
         textArea.setLineWrap(true);
         textArea.setWrapStyleWord(true);
-        textArea.setCaretPosition(0);
+        //textArea.setCaretPosition(0);
         textArea.setEditable(false);
-        textArea.setPreferredSize(new Dimension(INFO_TABS_WIDTH - MOVE_SUMMARY_PADDING, height));
+        textArea.setPreferredSize(new Dimension(INFO_TABS_WIDTH - MOVE_SUMMARY_PADDING, height + 10));
+        textArea.setMaximumSize(new Dimension(Integer.MAX_VALUE, height + 10));
+        //textArea.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
+        textArea.setBorder(BorderFactory.createCompoundBorder(
+                    BorderFactory.createLineBorder(Color.BLACK),
+                    BorderFactory.createEmptyBorder(5, 5, 5, 5)));
+        
         return textArea;
     }
 
@@ -862,13 +876,21 @@ public class ScrabbleVisualApp extends ScrabbleUserInterface {
         int width = metric.charWidth('A');
         int h = metric.getHeight();
         double textBoxHeight = (text.length() * width * h / containerWidth);
-        return (int) textBoxHeight;
+        return Math.max(h - 5, (int) textBoxHeight);
     }
 
     // MODIFIES: Tabbed Information Pane      
     // EFFECTs: adds a panel to show filtered word summary to the information tabbed pane
     private void addWordsTab(Player player) {
+        wordTab = new JPanel(new BorderLayout());
+        JPanel wordPanelButtons = new JPanel();
+
         wordsPanel = new JPanel();
+
+        wordsPanel.setLayout(new BoxLayout(wordsPanel, BoxLayout.Y_AXIS));
+        wordsPanel.setMaximumSize(new Dimension(Integer.MAX_VALUE, wordsPanel.getPreferredSize().height));
+        wordsPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
+
         searchWordsButton = new JButton("Search");
         wordFilterField = new JTextField(SEARCH_WORDS_DEFAULT_DISPLAY_TEXT, 2);
         addSearchWordsButtonListener(player);   
@@ -882,9 +904,17 @@ public class ScrabbleVisualApp extends ScrabbleUserInterface {
             public void focusLost(FocusEvent e) {
             }
         });
-        wordsPanel.add(wordFilterField);
-        wordsPanel.add(searchWordsButton);
-        infoTabs.add(wordsPanel, "Word Filter");
+        wordPanelButtons.add(wordFilterField);
+        wordPanelButtons.add(searchWordsButton);
+
+        wordsScrollPane = new JScrollPane(wordsPanel);
+        wordsScrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+        wordsScrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
+
+        wordTab.add(wordPanelButtons, BorderLayout.NORTH);
+        wordTab.add(wordsScrollPane, BorderLayout.CENTER);
+
+        infoTabs.add(wordTab, "Word Filter");
     }
 
     // MODIFIES: search filtered words button
@@ -915,6 +945,12 @@ public class ScrabbleVisualApp extends ScrabbleUserInterface {
                         wordsPanel.add(getFormattedTextArea(exception.getMessage(), MOVE_FONT));
                     }
                     repaintAndRevalidate(wordsPanel);
+                    SwingUtilities.invokeLater(() -> {
+                        SwingUtilities.invokeLater(() -> {
+                            JScrollBar verticalBar = wordsScrollPane.getVerticalScrollBar();
+                            verticalBar.setValue(verticalBar.getMaximum());
+                        });
+                    });
                 }
             }
         });
@@ -982,8 +1018,8 @@ public class ScrabbleVisualApp extends ScrabbleUserInterface {
     // MODIFIES: panel
     // EFFECTS: repaints and revalidates the panel
     private void repaintAndRevalidate(JComponent component) {
-        component.repaint();
         component.revalidate();
+        component.repaint();
     }
 
     // MODIFIES: this
