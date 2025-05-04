@@ -22,6 +22,9 @@ public class ScrabbleGame implements JsonWritable<JSONObject> {
     private History history;
     private List<Player> players;
     private int currentPlayerIndex;
+    private int startRow = 7;
+    private int startCol = 7;
+    private Direction dir = Direction.DOWN;
 
     // Represents a Scrabble game and its assets,
     // including the current board, tile bag, 
@@ -54,6 +57,26 @@ public class ScrabbleGame implements JsonWritable<JSONObject> {
         return json;
     }
 
+
+    // REQUIRES: Players selected tiles can be played on this board
+    // starting at (startRow, startCol) and proceeding in given direction
+    // MODIFIES: this, player, board, tileBag, EventLog
+    // EFFECTS: plays players selected tiles in desired manner on board,
+    // logs the move to EventLog, player history and game history. Replenishes player's tile
+    // rack, returns score.
+    public int playWord(Player player) throws BoardSectionUnavailableException {
+        String lettersPlayed = "";
+        for (LetterTile letter : player.getSelectedTiles()) {
+            lettersPlayed += letter.toDisplay();
+        }
+        int score = board.playWord(player.getSelectedTiles(), startRow, startCol, dir);
+        Move wordPlayed = new Move(player.getPlayerName(), lettersPlayed, startRow, startCol, score, dir);
+        updateHistoriesAndEventLog(wordPlayed, player);
+        player.removeSelectedTiles();
+        player.addPoints(score);
+        tileBag.drawTiles(player);
+        return score;
+    }
 
     // REQUIRES: Players selected tiles can be played on this board
     // starting at (row, col) and proceeding in given direction
@@ -177,9 +200,9 @@ public class ScrabbleGame implements JsonWritable<JSONObject> {
         updateHistoriesAndEventLog(endGameAdjustment, player);
     }
 
-    public String[][] previewBoardDisplay(Player player, int row, int column, Direction dir) throws BoardSectionUnavailableException {
+    public String[][] previewBoardDisplay(Player player) throws BoardSectionUnavailableException {
         Board copyBoard = new Board(board);
-        copyBoard.playWord(player.getSelectedTiles(), row, column, dir);
+        copyBoard.playWord(player.getSelectedTiles(), startRow, startCol, dir);
         String[][] previewDisplay = new String[Board.BOARD_LENGTH][Board.BOARD_LENGTH];
         for (int i = 0; i < Board.BOARD_LENGTH; i++) {
             for (int j = 0; j < Board.BOARD_LENGTH; j++) {
@@ -343,6 +366,32 @@ public class ScrabbleGame implements JsonWritable<JSONObject> {
     public int getPlayerIndex(Player player) {
         return players.indexOf(player);
     }
+
+    public void setStartRow(int startRow) { 
+        this.startRow = startRow;
+    }
+
+    public void setStartCol(int startCol) { 
+        this.startCol = startCol;
+    }
+
+    public Direction getDirection() {
+        return this.dir;
+    }
+
+    public void setDirection(Direction dir) {
+        this.dir = dir;
+    }
+
+    public int getStartRow() { 
+        return startRow;    
+    }
+
+    public int getStartCol() { 
+        return startCol;
+    }
+
+
 
     // REQUIRES: this.getPlayers() contains player
     // MODIFIES: this

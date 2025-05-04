@@ -19,7 +19,6 @@ import java.io.File;
 import java.io.IOException;
 
 import model.*;
-import model.board.*;
 import model.exceptions.BoardSectionUnavailableException;
 import model.exceptions.InvalidLetterException;
 import model.tile.*;
@@ -38,20 +37,14 @@ public class ScrabbleVisualApp extends ScrabbleUserInterface {
 
     private static final String REQUEST_PLAYER_NAME_TEXT = "Type player name then click add";
     private static final int FRAME_SIDE_LENGTH = 1000;
-    private static final int TILE_SIZE = 30;
-    private static final int BOARD_PANEL_LENGTH = Board.BOARD_LENGTH * TILE_SIZE;
+    
     private static final int REQUEST_NAMES_FRAME_WIDTH = 1000 * 2 / 3;
     private static final int REQUEST_NAMES_FRAME_HEIGHT = 100;
     private static final int INFO_TABS_WIDTH = 175;
     private static final int MOVE_SUMMARY_PADDING = 25;
     private static final Font MOVE_FONT = new Font("Arial", Font.ITALIC, 12);
-    private static final Font TILE_FONT = new Font("Arial", Font.BOLD, 14);
     //private static final int REMAINING_TILE_PRINTOUT_HEIGHT = 20;
-    private static final Color DOUBLE_LETTER_COLOR = new Color(173, 216, 230);
-    private static final Color TRIPLE_LETTER_COLOR = new Color(5, 127, 187);
-    private static final Color DOUBLE_WORD_COLOR =  Color.PINK;
-    private static final Color TRIPLE_WORD_COLOR = new Color(255, 0, 0);
-    private static final Color DEFAULT_BOARD_SPACE_COLOR = new Color(190, 171, 141);
+    
     private static final Color DEFAULT_LETTER_TILE_COLOR = new Color(244, 217, 138);
     private static final Color SELECTED_TILE_BORDER_COLOR = new Color(128, 0, 128);
     private static final String SEARCH_WORDS_DEFAULT_DISPLAY_TEXT = "";//"Enter a letter, then press 'search' " 
@@ -59,7 +52,7 @@ public class ScrabbleVisualApp extends ScrabbleUserInterface {
     private static final String SEARCH_REMAINING_COUNTS_DEFAULT_DISPLAY_TEXT = "";
     //"Enter a letter to get its remaining "+ "count in draw pile and opponent racks\n or blank to see all";
 
-    private JPanel boardPanel;
+    private BoardPanel boardPanel;
     private JPanel rackPanel;
     private JPanel scorePanel;
 
@@ -113,16 +106,12 @@ public class ScrabbleVisualApp extends ScrabbleUserInterface {
     private JButton directionToggle;
     private JButton clearSelections;
     private JPanel actionPanel;
-    private int startRow;
-    private int startCol;
-    private Direction dir;
 
     private String lastGamePath;
 
     // EFFECTS: Loads start menu frame to user screen.
     public ScrabbleVisualApp() {
         super();
-        dir = Direction.DOWN;
         initializeStartMenu();
     }
 
@@ -131,7 +120,6 @@ public class ScrabbleVisualApp extends ScrabbleUserInterface {
         this.game = game;
         this.numPlayers = game.getNumPlayers();
         this.gameRunning = true;
-        dir = Direction.DOWN;
         handleGame(game.getCurrentPlayerIndex());
     }
 
@@ -229,7 +217,6 @@ public class ScrabbleVisualApp extends ScrabbleUserInterface {
         this.game = new ScrabbleGame();
         this.numPlayers = 0;
         requestPlayerNames();
-        // !!! TODO add exception handling
     }
 
     // MODIFIES: this
@@ -376,7 +363,7 @@ public class ScrabbleVisualApp extends ScrabbleUserInterface {
         skipButton = new JButton("Skip");
 
         terminalUIButton = new JButton("Terminal UI");
-        String directionString = (dir == Direction.DOWN) ? "Down" : "Right";
+        String directionString = (game.getDirection() == Direction.DOWN) ? "Down" : "Right";
         directionToggle = new JButton(directionString);
         clearSelections = new JButton("Clear");
 
@@ -386,8 +373,7 @@ public class ScrabbleVisualApp extends ScrabbleUserInterface {
                 SwingUtilities.invokeLater(() -> {
                     frame.remove(rackPanel);
                     frame.add(getSaveAndQuitRackPanel(player), BorderLayout.SOUTH);
-                    repaintAndRevalidate(rackPanel);
-                    repaintAndRevalidate(boardPanel);
+                    revalidateAndRepaint(rackPanel);
                 });
                 //handleSave(player);
                 //printEventLog();
@@ -445,25 +431,23 @@ public class ScrabbleVisualApp extends ScrabbleUserInterface {
             public void actionPerformed(ActionEvent e) {
                 SwingUtilities.invokeLater(() -> {
                     try {
-                        frame.remove(boardPanel);
-                        frame.add(getPreviewBoardPanel(player), BorderLayout.CENTER);
-                        repaintAndRevalidate(boardPanel);
+                        revalidateAndRepaint(boardPanel);
+                        boardPanel.updateToPreviewBoard(game, player);
                         SwingUtilities.invokeLater(() -> {
                             frame.remove(rackPanel);
                             frame.add(getConfirmOrCancelRackPanel(player), BorderLayout.SOUTH);
-                            repaintAndRevalidate(rackPanel);
-                            repaintAndRevalidate(boardPanel);
+                            revalidateAndRepaint(rackPanel);
+                            revalidateAndRepaint(boardPanel);
                         });
                     } catch (BoardSectionUnavailableException exception) {
                         System.out.println("\n" + exception.getMessage());
                         SwingUtilities.invokeLater(() -> {
                             frame.remove(rackPanel);
-                            frame.remove(boardPanel);
                             player.clearSelectedTiles();
-                            frame.add(getBoardPanel(), BorderLayout.CENTER);
+                            boardPanel.updateBoard(game);
                             frame.add(getRackPanel(player), BorderLayout.SOUTH);
-                            repaintAndRevalidate(rackPanel);
-                            repaintAndRevalidate(boardPanel);
+                            revalidateAndRepaint(rackPanel);
+                            revalidateAndRepaint(boardPanel);
                         });
                     }
                 });   
@@ -473,7 +457,7 @@ public class ScrabbleVisualApp extends ScrabbleUserInterface {
 
     private void confirmWordPlacement(Player player) {
         try {
-            game.playWord(player, startRow, startCol, dir);
+            game.playWord(player);
             frame.dispose();
             if (player.outOfTiles()) {
                 handleEndGame(player);
@@ -486,12 +470,11 @@ public class ScrabbleVisualApp extends ScrabbleUserInterface {
             System.out.println("\n" + e.getMessage());
             SwingUtilities.invokeLater(() -> {
                 frame.remove(rackPanel);
-                frame.remove(boardPanel);
                 player.clearSelectedTiles();
-                frame.add(getBoardPanel(), BorderLayout.CENTER);
                 frame.add(getRackPanel(player), BorderLayout.SOUTH);
-                repaintAndRevalidate(rackPanel);
-                repaintAndRevalidate(boardPanel);
+                revalidateAndRepaint(rackPanel);
+                boardPanel.updateBoard(game);
+                revalidateAndRepaint(boardPanel);
             });
         }
     }
@@ -516,12 +499,11 @@ public class ScrabbleVisualApp extends ScrabbleUserInterface {
             public void actionPerformed(ActionEvent e) {
                 SwingUtilities.invokeLater(() -> {
                     frame.remove(rackPanel);
-                    frame.remove(boardPanel);
                     player.clearSelectedTiles();
-                    frame.add(getBoardPanel(), BorderLayout.CENTER);
                     frame.add(getRackPanel(player), BorderLayout.SOUTH);
-                    repaintAndRevalidate(rackPanel);
-                    repaintAndRevalidate(boardPanel);
+                    boardPanel.updateBoard(game);
+                    revalidateAndRepaint(rackPanel);
+                    revalidateAndRepaint(boardPanel);
                 });
             }
         });
@@ -551,9 +533,10 @@ public class ScrabbleVisualApp extends ScrabbleUserInterface {
         });
         directionToggle.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                Direction newDirection = (dir == Direction.DOWN) ? Direction.RIGHT : Direction.DOWN;
-                dir = newDirection;
-                String newText = (dir == Direction.DOWN) ? "Down" : "Right";
+                Direction oldDirection = game.getDirection();
+                Direction newDirection = (oldDirection == Direction.DOWN) ? Direction.RIGHT : Direction.DOWN;
+                game.setDirection(newDirection);
+                String newText = (newDirection == Direction.DOWN) ? "Down" : "Right";
                 directionToggle.setText(newText);
             }
         });
@@ -563,7 +546,7 @@ public class ScrabbleVisualApp extends ScrabbleUserInterface {
                 SwingUtilities.invokeLater(() -> {
                     frame.remove(rackPanel);
                     frame.add(getRackPanel(player), BorderLayout.SOUTH);
-                    repaintAndRevalidate(rackPanel);
+                    revalidateAndRepaint(rackPanel);
                 });                
             }
         });
@@ -632,12 +615,9 @@ public class ScrabbleVisualApp extends ScrabbleUserInterface {
             public void actionPerformed(ActionEvent e) {
                 SwingUtilities.invokeLater(() -> {
                     frame.remove(rackPanel);
-                    frame.remove(boardPanel);
                     player.clearSelectedTiles();
-                    frame.add(getBoardPanel(), BorderLayout.CENTER);
                     frame.add(getRackPanel(player), BorderLayout.SOUTH);
-                    repaintAndRevalidate(rackPanel);
-                    repaintAndRevalidate(boardPanel);
+                    revalidateAndRepaint(rackPanel);
                 });
             }
         });
@@ -717,79 +697,8 @@ public class ScrabbleVisualApp extends ScrabbleUserInterface {
     // MODIFIES: this
     // EFFECTS: Adds panel representing the current board to the frame
     private JPanel getBoardPanel() {
-        boardPanel = new JPanel();
-        boardPanel.setLayout(new GridLayout(Board.BOARD_LENGTH, Board.BOARD_LENGTH));
-        boardPanel.setPreferredSize(new Dimension(BOARD_PANEL_LENGTH, BOARD_PANEL_LENGTH));
-        for (int i = 0; i < Board.BOARD_LENGTH; i++) {
-            for (int j = 0; j < Board.BOARD_LENGTH; j++) {
-                String toDisplay = game.getTileAtPositionOnBoard(i, j).toDisplay();
-                JButton tile = new JButton(toDisplay);
-                tile.setBackground(selectBoardTileColor(toDisplay));
-                tile.setBorder(BorderFactory.createLineBorder(Color.BLACK));
-                tile.setFont(TILE_FONT);
-                final int row = i;
-                final int col = j;
-                tile.addActionListener(new ActionListener() {
-                    public void actionPerformed(ActionEvent e) {
-                        startRow = row;
-                        startCol = col;
-                    }
-                });
-                boardPanel.add(tile);
-            }
-        }
+        boardPanel = new BoardPanel(game);
         return boardPanel;
-    }
-
-    // MODIFIES: this
-    // EFFECTS: Adds panel representing the current board to the frame
-    private JPanel getPreviewBoardPanel(Player player) throws BoardSectionUnavailableException {
-        boardPanel = new JPanel();
-        boardPanel.setLayout(new GridLayout(Board.BOARD_LENGTH, Board.BOARD_LENGTH));
-        boardPanel.setPreferredSize(new Dimension(BOARD_PANEL_LENGTH, BOARD_PANEL_LENGTH));
-        String[][] previewBoardDisplay = game.previewBoardDisplay(player, startRow, startCol, dir);
-        for (int i = 0; i < Board.BOARD_LENGTH; i++) {
-            for (int j = 0; j < Board.BOARD_LENGTH; j++) {
-                String toDisplay = previewBoardDisplay[i][j];
-                
-                JButton tile = new JButton(toDisplay);
-                tile.setBackground(selectBoardTileColor(toDisplay));
-                tile.setBorder(BorderFactory.createLineBorder(Color.BLACK));
-                if (!(toDisplay.equals(game.getTileAtPositionOnBoard(i, j).toDisplay()))) {
-                    tile.setBorder(BorderFactory.createLineBorder(Color.ORANGE));
-                }
-                tile.setFont(TILE_FONT);
-                boardPanel.add(tile);
-            }
-        }
-        return boardPanel;
-    }
-
-    // EFFECTS: returns appropriate display color given
-    // displayString which corresponds to a tile on the board
-    private Color selectBoardTileColor(String displayString) {
-        Color color;
-        switch (displayString) {
-            case "DLS":
-                color = DOUBLE_LETTER_COLOR;
-                break;
-            case "DWS":
-                color = DOUBLE_WORD_COLOR;
-                break;
-            case "TLS":
-                color = TRIPLE_LETTER_COLOR;
-                break;
-            case "TWS":
-                color = TRIPLE_WORD_COLOR;
-                break;
-            case " ":
-                color = DEFAULT_BOARD_SPACE_COLOR;
-                break;
-            default:
-                color = DEFAULT_LETTER_TILE_COLOR;
-                break;
-        }
-        return color;
     }
 
     // MODIFIES: this
@@ -847,7 +756,6 @@ public class ScrabbleVisualApp extends ScrabbleUserInterface {
         scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
         scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
         
-
         infoTabs.add(scrollPane, "My Move History");
     }
 
@@ -944,7 +852,7 @@ public class ScrabbleVisualApp extends ScrabbleUserInterface {
                     } catch (InvalidLetterException exception) {
                         wordsPanel.add(getFormattedTextArea(exception.getMessage(), MOVE_FONT));
                     }
-                    repaintAndRevalidate(wordsPanel);
+                    revalidateAndRepaint(wordsPanel);
                     SwingUtilities.invokeLater(() -> {
                         SwingUtilities.invokeLater(() -> {
                             JScrollBar verticalBar = wordsScrollPane.getVerticalScrollBar();
@@ -964,7 +872,7 @@ public class ScrabbleVisualApp extends ScrabbleUserInterface {
                 panel.remove(component);
             }
         }
-        repaintAndRevalidate(panel);
+        revalidateAndRepaint(panel);
     }
 
     // MODIFIES: Tabbed Information Pane      
@@ -990,7 +898,7 @@ public class ScrabbleVisualApp extends ScrabbleUserInterface {
                     } else {
                         letterDistributionPanel.add(getFormattedTextArea(key + " : " + count, MOVE_FONT));
                     }
-                    repaintAndRevalidate(letterDistributionPanel);
+                    revalidateAndRepaint(letterDistributionPanel);
                 }
             }
         });
@@ -1017,7 +925,7 @@ public class ScrabbleVisualApp extends ScrabbleUserInterface {
 
     // MODIFIES: panel
     // EFFECTS: repaints and revalidates the panel
-    private void repaintAndRevalidate(JComponent component) {
+    private void revalidateAndRepaint(JComponent component) {
         component.revalidate();
         component.repaint();
     }
