@@ -11,7 +11,6 @@ import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 
-import model.Player;
 import model.ScrabbleGame;
 import model.board.Board;
 import model.exceptions.BoardSectionUnavailableException;
@@ -38,7 +37,7 @@ public class BoardPanel extends JPanel {
     }
 
     public void updateBoard(ScrabbleGame game) {
-        this.removeAll();
+        removeAll();
         for (int i = 0; i < Board.BOARD_LENGTH; i++) {
             for (int j = 0; j < Board.BOARD_LENGTH; j++) {
                 String toDisplay = game.getTileAtPositionOnBoard(i, j).toDisplay();
@@ -59,9 +58,9 @@ public class BoardPanel extends JPanel {
         }
     }
 
-    public void updateToPreviewBoard(ScrabbleGame game, Player player) throws BoardSectionUnavailableException {
-        this.removeAll();
-        String[][] previewBoardDisplay = game.previewBoardDisplay(player);
+    public void updateToPreviewBoard(ScrabbleGame game) throws BoardSectionUnavailableException {
+        removeAll();
+        String[][] previewBoardDisplay = game.previewBoardDisplay();
         for (int i = 0; i < Board.BOARD_LENGTH; i++) {
             for (int j = 0; j < Board.BOARD_LENGTH; j++) {
                 String toDisplay = previewBoardDisplay[i][j];

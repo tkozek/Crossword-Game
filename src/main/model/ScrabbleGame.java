@@ -103,6 +103,15 @@ public class ScrabbleGame implements JsonWritable<JSONObject> {
     //EFFECTS: Adds specified tiles back to common draw bag, then replaces
     //          same number of tiles with random tiles from draw bag.
     //          logs this move for both the player's history and its own
+    public void swapTiles() {
+        swapTiles(getCurrentPlayer());
+    }
+
+    //REQUIRES: number of selected tiles <= tileBag.size()
+    //MODIFIES: this, tileBag
+    //EFFECTS: Adds specified tiles back to common draw bag, then replaces
+    //          same number of tiles with random tiles from draw bag.
+    //          logs this move for both the player's history and its own
     public void swapTiles(Player player) {
         String preSwapLetters = "";
         for (LetterTile letter : player.getTilesOnRack()) {
@@ -178,6 +187,14 @@ public class ScrabbleGame implements JsonWritable<JSONObject> {
     // MODIFIES: this, player, EventLog
     // EFFECTS; logs a skipped turn in this history
     // and this player's history, and the EventLog
+    public void logSkippedTurn() {
+        logSkippedTurn(getCurrentPlayer());
+    }
+
+    // REQUIRES: getPlayers() contains player
+    // MODIFIES: this, player, EventLog
+    // EFFECTS; logs a skipped turn in this history
+    // and this player's history, and the EventLog
     public void logSkippedTurn(Player player) {
         player.clearSelectedTiles();
         Move skip = new Move(player.getPlayerName());
@@ -198,6 +215,10 @@ public class ScrabbleGame implements JsonWritable<JSONObject> {
     public void logEndGameAdjustment(Player player, Player lastPlayer, String letters, int pointChange) {
         Move endGameAdjustment = new Move(player.getPlayerName(), lastPlayer.getPlayerName(), letters, pointChange);
         updateHistoriesAndEventLog(endGameAdjustment, player);
+    }
+
+    public String[][] previewBoardDisplay() throws BoardSectionUnavailableException {
+        return previewBoardDisplay(getCurrentPlayer());
     }
 
     public String[][] previewBoardDisplay(Player player) throws BoardSectionUnavailableException {
@@ -391,7 +412,9 @@ public class ScrabbleGame implements JsonWritable<JSONObject> {
         return startCol;
     }
 
-
+    public Player getCurrentPlayer() {
+        return this.players.get(currentPlayerIndex);
+    }
 
     // REQUIRES: this.getPlayers() contains player
     // MODIFIES: this
@@ -400,11 +423,14 @@ public class ScrabbleGame implements JsonWritable<JSONObject> {
         this.currentPlayerIndex = players.indexOf(player);
     }
 
-    // REQUIRES: 0 <= firstPlayerIndex < getNumPlayers()
     // MODIFIES: this
     // EFFECTS: sets first player index using index of players
     public void setCurrentPlayerIndex(int currentPlayerIndex) {
-        this.currentPlayerIndex = currentPlayerIndex;
+        this.currentPlayerIndex = currentPlayerIndex % players.size();
+    }
+
+    public void nextPlayer() {
+        setCurrentPlayerIndex(currentPlayerIndex + 1);
     }
 
     // EFFECTS: returns number of players in the game.

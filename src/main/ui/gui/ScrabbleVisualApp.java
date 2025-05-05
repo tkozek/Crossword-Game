@@ -21,7 +21,6 @@ import java.io.IOException;
 import model.*;
 import model.exceptions.BoardSectionUnavailableException;
 import model.exceptions.InvalidLetterException;
-import model.tile.*;
 import model.move.*;
 import ui.ScrabbleConsoleApp;
 import ui.ScrabbleUserInterface;
@@ -30,7 +29,7 @@ import persistance.JsonReader;
 import persistance.JsonWriter;
 
 // A Graphical user interface for Scrabble
-public class ScrabbleVisualApp extends ScrabbleUserInterface {
+public class ScrabbleVisualApp extends ScrabbleUserInterface implements GUIListener {
     
     //private static final String JSON_STORE = "./data/savedgames/gameToPlayTest.json";
     private static final String JSON_STORE = "./data/savedgames/defaultSaveFile.json";
@@ -45,16 +44,14 @@ public class ScrabbleVisualApp extends ScrabbleUserInterface {
     private static final Font MOVE_FONT = new Font("Arial", Font.ITALIC, 12);
     //private static final int REMAINING_TILE_PRINTOUT_HEIGHT = 20;
     
-    private static final Color DEFAULT_LETTER_TILE_COLOR = new Color(244, 217, 138);
-    private static final Color SELECTED_TILE_BORDER_COLOR = new Color(128, 0, 128);
     private static final String SEARCH_WORDS_DEFAULT_DISPLAY_TEXT = "";//"Enter a letter, then press 'search' " 
                // + " to \ndisplay all words with that letter";
     private static final String SEARCH_REMAINING_COUNTS_DEFAULT_DISPLAY_TEXT = "";
     //"Enter a letter to get its remaining "+ "count in draw pile and opponent racks\n or blank to see all";
 
     private BoardPanel boardPanel;
-    private JPanel rackPanel;
-    private JPanel scorePanel;
+    private RackPanel rackPanel;
+    private ScorePanel scorePanel;
 
     private JPanel infoPanel;
     private JPanel movesPanel;
@@ -69,12 +66,6 @@ public class ScrabbleVisualApp extends ScrabbleUserInterface {
     private JTabbedPane infoTabs;
 
     private JFrame frame;
-    
-    private JButton saveAndQuit;
-    private JButton saveAsAndQuit;
-    private JButton quitWithoutSaving;
-    private JPanel saveSaveAsPanel;
-    private JPanel quitOrCancelPanel;
     private JFileChooser fileChooser;
 
     private JLabel coverPhoto;
@@ -91,21 +82,7 @@ public class ScrabbleVisualApp extends ScrabbleUserInterface {
     private JTextField nameInput;
     private JButton addPlayerButton;
     private JButton startButton;
-
-    private JButton confirm;
-    private JButton cancel;
-
-    private JPanel moveButtons;
-    private JPanel otherOptionButtons;
-    private JButton playButton;
-    private JButton swapButton;
-    private JButton skipButton;
-    private JButton previewButton;
-    private JButton terminalUIButton;
-    
     private JButton directionToggle;
-    private JButton clearSelections;
-    private JPanel actionPanel;
 
     private String lastGamePath;
 
@@ -120,7 +97,7 @@ public class ScrabbleVisualApp extends ScrabbleUserInterface {
         this.game = game;
         this.numPlayers = game.getNumPlayers();
         this.gameRunning = true;
-        handleGame(game.getCurrentPlayerIndex());
+        initializeNewGame();
     }
 
     // MODIFIES: this
@@ -165,7 +142,7 @@ public class ScrabbleVisualApp extends ScrabbleUserInterface {
         newGame.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 loadOrPlayFrame.dispose();
-                initializeNewGame();
+                requestPlayerNames();
             }
         });
         continueGame.addActionListener(new ActionListener() {
@@ -190,7 +167,7 @@ public class ScrabbleVisualApp extends ScrabbleUserInterface {
             JsonReader jsonReader = new JsonReader(lastGamePath);
             game = jsonReader.read();
             this.numPlayers = game.getNumPlayers();
-            handleGame(game.getCurrentPlayerIndex());
+            initializeNewGame();
         } catch (IOException e) {
             System.out.println("Unable to read game from file: " + lastGamePath);
         }
@@ -205,7 +182,7 @@ public class ScrabbleVisualApp extends ScrabbleUserInterface {
             JsonReader jsonReader = new JsonReader(selectedFileName);
             game = jsonReader.read();
             this.numPlayers = game.getNumPlayers();
-            handleGame(game.getCurrentPlayerIndex());
+            initializeNewGame();
         } catch (IOException e) {
             System.out.println("Unable to read game from file: " + selectedFileName);
         }
@@ -214,14 +191,39 @@ public class ScrabbleVisualApp extends ScrabbleUserInterface {
     // MODIFIES: scrabbleGame
     // EFFECTS: creates assets for a new game and prompts user input for setup parameters
     private void initializeNewGame() {
-        this.game = new ScrabbleGame();
-        this.numPlayers = 0;
-        requestPlayerNames();
+        frame = new JFrame("Scrabble Game");
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setLayout(new BorderLayout());
+
+        initializePanels();
+
+        Double scorePanelWidth = scorePanel.getPreferredSize().getWidth();
+        frame.setSize(FRAME_SIDE_LENGTH - 15 + scorePanelWidth.intValue(), FRAME_SIDE_LENGTH);
+
+        frame.add(boardPanel, BorderLayout.CENTER);
+        frame.add(rackPanel, BorderLayout.SOUTH); //curPlayer
+        frame.add(scorePanel, BorderLayout.WEST);
+        frame.add(getInfoPanel(game.getCurrentPlayer()), BorderLayout.EAST); //curPlayer
+        ActionPanel actionPanel = rackPanel.getActionPanel();
+        revalidateAndRepaint(actionPanel);
+        revalidateAndRepaint(rackPanel);
+        frame.revalidate();
+        frame.repaint();
+        frame.setVisible(true);
+        handleGame();
+    }
+
+    private void initializePanels() {
+        scorePanel = new ScorePanel(game);
+        boardPanel = new BoardPanel(game);
+        rackPanel = new RackPanel(game, this);
     }
 
     // MODIFIES: this
     // EFFECTS: Prompts player to enter players' names in the desired order of play.
     private void requestPlayerNames() {
+        this.game = new ScrabbleGame();
+        this.numPlayers = 0;
         playerNameFrame = new JFrame("Request Player Names");
         playerNameFrame.setSize(REQUEST_NAMES_FRAME_WIDTH, REQUEST_NAMES_FRAME_HEIGHT);
         
@@ -268,7 +270,7 @@ public class ScrabbleVisualApp extends ScrabbleUserInterface {
             public void actionPerformed(ActionEvent e) {
                 playerNameFrame.dispose();
                 gameRunning = true;
-                handleGame(0);
+                initializeNewGame();
             }
         });
     }
@@ -296,182 +298,160 @@ public class ScrabbleVisualApp extends ScrabbleUserInterface {
     // MODIFIES: player
     // EFFECTS: Manages order of turn taking, and ensures player's draw new tiles
     // when they are supposed to
-    private void handleGame(int nextPlayer) {
-        int index = nextPlayer % numPlayers;
-        frame = new JFrame("Scrabble Game");
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setLayout(new BorderLayout());
-        updateScorePanel(game);
-        Double scorePanelWidth = scorePanel.getPreferredSize().getWidth();
-        frame.setSize(FRAME_SIDE_LENGTH - 15 + scorePanelWidth.intValue(), FRAME_SIDE_LENGTH);
-        Player playerToPlayNext = game.getPlayerByIndex(index); //curPlayer
+    private void handleGame() {   
+        Player playerToPlayNext = game.getCurrentPlayer(); //curPlayer
         game.drawTiles(playerToPlayNext); //curPlayer
-        
-        frame.add(getBoardPanel(), BorderLayout.CENTER);
-        frame.add(getRackPanel(playerToPlayNext), BorderLayout.SOUTH); //curPlayer
-        frame.add(scorePanel, BorderLayout.WEST);
+        scorePanel.updateScorePanel(game); 
+        boardPanel.updateBoard(game);
+        rackPanel.updateRackPanel(game, true);
+        frame.remove(infoPanel);
         frame.add(getInfoPanel(playerToPlayNext), BorderLayout.EAST); //curPlayer
+
+        //
         
+        frame.revalidate();
         frame.repaint();
-        frame.setVisible(true);
     }
 
-    // EFFECTS: adds players' names to along with their score
-    // to scorePanel in the format name: score
-    private void updateScorePanel(ScrabbleGame scrabbleGame) {
-        scorePanel = new JPanel();
-        scorePanel.setLayout(new BoxLayout(scorePanel, BoxLayout.Y_AXIS));
-        JLabel scoreLabel = new JLabel("<html><u>Scoreboard</u></html>");
-        scoreLabel.setFont(new Font("Dialog", Font.BOLD, 14));
-        scorePanel.add(scoreLabel);
-        Map<String, Integer> playerScoreMap = game.getPlayerScoreMap();
-        for (Map.Entry<String, Integer> entry : playerScoreMap.entrySet()) {
-            JLabel playerLabel = new JLabel(entry.getKey() + ": " + entry.getValue());
-            scorePanel.add(playerLabel);
-        }
+    @Override
+    public void openSaveMenuActionListener() {
+        SwingUtilities.invokeLater(() -> {
+            rackPanel.updateToSaveAndQuitRackPanel(game);
+            revalidateAndRepaint(rackPanel);
+        });
     }
 
-    // MODIFIES: this
-    // EFFECTS: loads panel with player's tiles, along with their available action buttons
-    private JPanel getRackPanel(Player player) {
-        rackPanel = new JPanel();
-        rackPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
-        actionPanel = new JPanel();
-        actionPanel.setLayout(new BoxLayout(actionPanel, BoxLayout.Y_AXIS));
-        addActionButtons(player);
-        List<LetterTile> letters = player.getTilesOnRack();
-        int numLetters = letters.size();
-        for (int i = 0; i < numLetters; i++) {
-            rackPanel.add(createTilePanel(player, letters.get(i), i));
-        }
-        return rackPanel;
+    @Override
+    public void saveAndQuitActionListener() {
+        SwingUtilities.invokeLater(() -> {
+            handleSave();
+            printEventLog();
+            System.exit(0);
+        });
     }
 
-    // MODIFIES: this
-    // EFFECTS: loads panel with available action buttons
-    private void addActionButtons(Player player) {
-        moveButtons = new JPanel();
-        otherOptionButtons = new JPanel();
 
-        moveButtons.setLayout(new BoxLayout(moveButtons, BoxLayout.X_AXIS));
-        otherOptionButtons.setLayout(new BoxLayout(otherOptionButtons, BoxLayout.X_AXIS));
-        moveButtons.setAlignmentX(Component.CENTER_ALIGNMENT);
-        otherOptionButtons.setAlignmentX(Component.CENTER_ALIGNMENT);
-        previewButton = new JButton("Preview");
-        playButton = new JButton("Play");
-        swapButton = new JButton("Swap");
-        skipButton = new JButton("Skip");
 
-        terminalUIButton = new JButton("Terminal UI");
-        String directionString = (game.getDirection() == Direction.DOWN) ? "Down" : "Right";
-        directionToggle = new JButton(directionString);
-        clearSelections = new JButton("Clear");
+    @Override
+    public void saveAsAndQuitActionListener() {
+        SwingUtilities.invokeLater(() -> {
+            fileChooser = new JFileChooser(SavedGameManager.getSavedGamesDirectory());
+            fileChooser.setDialogTitle(("Save game as"));
+            int result = fileChooser.showSaveDialog(frame);
+            if (result == JFileChooser.APPROVE_OPTION) {
+                File selectedFile = fileChooser.getSelectedFile();
+                if (!selectedFile.getName().endsWith(".json")) {
+                    selectedFile = new File(selectedFile.getAbsolutePath() + ".json");
+                }
+                handleSave(selectedFile.getAbsolutePath());
+                System.out.println("Saving Game as : " + selectedFile.getName());
+                printEventLog();
+                System.exit(0);
+            }
+        });
+    }
 
-        saveAndQuit = new JButton("Save and Quit");
-        saveAndQuit.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
+    @Override
+    public void quitWithoutSavingActionListener() {
+        printEventLog();
+        System.exit(0);
+    }
+
+    @Override
+    public void cancelButtonActionListener() {
+        SwingUtilities.invokeLater(() -> {
+            game.getCurrentPlayer().clearSelectedTiles();
+            rackPanel.updateRackPanel(game, true);
+            boardPanel.updateBoard(game);
+            revalidateAndRepaint(rackPanel);
+            revalidateAndRepaint(boardPanel);
+        });
+    }
+
+    @Override
+    public void confirmedWordPlacementActionListener() {
+        confirmWordPlacement(game.getCurrentPlayer());
+    }
+
+    @Override
+    public void swapButtonActionListener() {
+        game.swapTiles();
+        game.nextPlayer();
+        handleGame();
+    }
+
+    @Override
+    public void skipButtonActionListener() {
+        game.logSkippedTurn();
+        game.nextPlayer();
+        handleGame();
+    }
+
+    @Override
+    public void previewButtonActionListener() {
+        SwingUtilities.invokeLater(() -> {
+            try {
+                revalidateAndRepaint(boardPanel);
+                boardPanel.updateToPreviewBoard(game);
                 SwingUtilities.invokeLater(() -> {
-                    frame.remove(rackPanel);
-                    frame.add(getSaveAndQuitRackPanel(player), BorderLayout.SOUTH);
+                    rackPanel.updateToPreviewPanel(game);
                     revalidateAndRepaint(rackPanel);
+                    revalidateAndRepaint(boardPanel);
                 });
-                //handleSave(player);
-                //printEventLog();
-                //System.exit(0);
-            }
-        });
-        addMoveListeners(player);
-        addOtherOptionsListeners(player);
-        addButtonsToActionPanel();
-    }
-
-    // MODIFIES: this
-    // EFFECTS: puts available action buttons into appropriate panels
-    private void addButtonsToActionPanel() {
-        moveButtons.add(playButton);
-        moveButtons.add(swapButton);
-        moveButtons.add(skipButton);
-        moveButtons.add(previewButton);
-        
-        otherOptionButtons.add(directionToggle);
-        otherOptionButtons.add(clearSelections);
-        otherOptionButtons.add(terminalUIButton);
-        otherOptionButtons.add(saveAndQuit);
-    
-        actionPanel.add(moveButtons);
-        actionPanel.add(otherOptionButtons);
-        
-        rackPanel.add(actionPanel);
-    }
-
-    // REQUIRES: play, swap, and skip buttons have been initialized
-    // MODIFIES: this
-    // EFFECTS: adds play, swap, and skip action listeners
-    private void addMoveListeners(Player player) {
-        playButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                confirmWordPlacement(player);
-            }
-        });
-        swapButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                game.swapTiles(player);
-                frame.dispose();
-                handleGame(game.getPlayerIndex(player) + 1);
-            }
-        });
-        skipButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                game.logSkippedTurn(player);
-                frame.dispose();
-                handleGame(game.getPlayerIndex(player) + 1);
-            }
-        });
-        previewButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
+            } catch (BoardSectionUnavailableException exception) {
+                System.out.println("\n" + exception.getMessage());
                 SwingUtilities.invokeLater(() -> {
-                    try {
-                        revalidateAndRepaint(boardPanel);
-                        boardPanel.updateToPreviewBoard(game, player);
-                        SwingUtilities.invokeLater(() -> {
-                            frame.remove(rackPanel);
-                            frame.add(getConfirmOrCancelRackPanel(player), BorderLayout.SOUTH);
-                            revalidateAndRepaint(rackPanel);
-                            revalidateAndRepaint(boardPanel);
-                        });
-                    } catch (BoardSectionUnavailableException exception) {
-                        System.out.println("\n" + exception.getMessage());
-                        SwingUtilities.invokeLater(() -> {
-                            frame.remove(rackPanel);
-                            player.clearSelectedTiles();
-                            boardPanel.updateBoard(game);
-                            frame.add(getRackPanel(player), BorderLayout.SOUTH);
-                            revalidateAndRepaint(rackPanel);
-                            revalidateAndRepaint(boardPanel);
-                        });
-                    }
-                });   
+                    game.getCurrentPlayer().clearSelectedTiles();
+                    boardPanel.updateBoard(game);
+                    rackPanel.updateRackPanel(game, true);
+                    revalidateAndRepaint(rackPanel);
+                    revalidateAndRepaint(boardPanel);
+                });
             }
-        });
+        });   
+    }
+
+    @Override
+    public void terminalUIButtonActionListener() {
+        frame.dispose();
+        new ScrabbleConsoleApp(game);
+        gameRunning = false;
+    }
+
+    @Override
+    public void directionToggleActionListener() {
+        Direction oldDirection = game.getDirection();
+        Direction newDirection = (oldDirection == Direction.DOWN) ? Direction.RIGHT : Direction.DOWN;
+        game.setDirection(newDirection);
+        String newText = (newDirection == Direction.DOWN) ? "Down" : "Right";
+        rackPanel.updateDirection(newText);
+    }
+
+    @Override
+    public void clearSelectionsActionListener() {
+        game.getCurrentPlayer().clearSelectedTiles();
+        SwingUtilities.invokeLater(() -> {
+            rackPanel.updateRackPanel(game, true);
+            revalidateAndRepaint(rackPanel);
+        });                
     }
 
     private void confirmWordPlacement(Player player) {
         try {
             game.playWord(player);
-            frame.dispose();
             if (player.outOfTiles()) {
                 handleEndGame(player);
             } else {
-                handleGame(game.getPlayerIndex(player) + 1);
+                game.nextPlayer();
+                handleGame();
             }
         } catch (BoardSectionUnavailableException e) {
             // System.out.println("\n" + e.getMessage());
             // handleGame(game.getPlayerIndex(player));
             System.out.println("\n" + e.getMessage());
             SwingUtilities.invokeLater(() -> {
-                frame.remove(rackPanel);
                 player.clearSelectedTiles();
-                frame.add(getRackPanel(player), BorderLayout.SOUTH);
+                rackPanel.updateRackPanel(game, false);
                 revalidateAndRepaint(rackPanel);
                 boardPanel.updateBoard(game);
                 revalidateAndRepaint(boardPanel);
@@ -479,168 +459,11 @@ public class ScrabbleVisualApp extends ScrabbleUserInterface {
         }
     }
 
-    
-
-    // EFFECTS: returns JPanel representing Player's rack and available options,
-    // along with confirm or cancel buttons.
-    private JPanel getConfirmOrCancelRackPanel(Player player) {
-        rackPanel = new JPanel();
-        actionPanel = new JPanel();
-        actionPanel.setLayout(new BoxLayout(actionPanel, BoxLayout.Y_AXIS));
-        confirm = new JButton("Confirm");
-        cancel = new JButton("Cancel");
-
-        confirm.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                confirmWordPlacement(player);
-            }
-        });
-        cancel.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                SwingUtilities.invokeLater(() -> {
-                    frame.remove(rackPanel);
-                    player.clearSelectedTiles();
-                    frame.add(getRackPanel(player), BorderLayout.SOUTH);
-                    boardPanel.updateBoard(game);
-                    revalidateAndRepaint(rackPanel);
-                    revalidateAndRepaint(boardPanel);
-                });
-            }
-        });
-        actionPanel.add(confirm);
-        actionPanel.add(cancel);
-        rackPanel.add(actionPanel);
-        List<LetterTile> letters = player.getTilesOnRack();
-        for (int i = 0; i < letters.size(); i++) {
-            rackPanel.add(createTilePanelNotClickable(player, letters.get(i), i));
-        }
-        return rackPanel;
-    }
-
-    // REQUIRES: toggleDirectionButton, and clearSelectionsButton 
-    // have been initialized
-    // MODIFIES: this
-    // EFFECTS: adds clear selected tiles, direction, save and quit,
-    // and quit without saving action listeners.
-    private void addOtherOptionsListeners(Player player) {
-        terminalUIButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                game.setCurrentPlayer(player);
-                frame.dispose();
-                new ScrabbleConsoleApp(game);
-                gameRunning = false;
-            }
-        });
-        directionToggle.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                Direction oldDirection = game.getDirection();
-                Direction newDirection = (oldDirection == Direction.DOWN) ? Direction.RIGHT : Direction.DOWN;
-                game.setDirection(newDirection);
-                String newText = (newDirection == Direction.DOWN) ? "Down" : "Right";
-                directionToggle.setText(newText);
-            }
-        });
-        clearSelections.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                player.clearSelectedTiles();
-                SwingUtilities.invokeLater(() -> {
-                    frame.remove(rackPanel);
-                    frame.add(getRackPanel(player), BorderLayout.SOUTH);
-                    revalidateAndRepaint(rackPanel);
-                });                
-            }
-        });
-        //addSaveAndQuitActionListeners(player);
-    }
-
-    // MODIFIES: this
-    // EFFECTS: adds save and quit, and quit without saving action listeners.
-    private void addSaveAndQuitActionListeners(Player player) {
-        saveAndQuit.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                handleSave(player);
-                printEventLog();
-                System.exit(0);
-            }
-        });
-        saveAsAndQuit.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                SwingUtilities.invokeLater(() -> {
-                    fileChooser = new JFileChooser(SavedGameManager.getSavedGamesDirectory());
-                    fileChooser.setDialogTitle(("Save game as"));
-                    int result = fileChooser.showSaveDialog(frame);
-                    if (result == JFileChooser.APPROVE_OPTION) {
-                        File selectedFile = fileChooser.getSelectedFile();
-                        if (!selectedFile.getName().endsWith(".json")) {
-                            selectedFile = new File(selectedFile.getAbsolutePath() + ".json");
-                        }
-                        handleSave(player, selectedFile.getAbsolutePath());
-                        System.out.println("Saving Game as : " + selectedFile.getName());
-                        printEventLog();
-                        System.exit(0);
-                    }
-                });
-            }
-        });
-        quitWithoutSaving.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                printEventLog();
-                System.exit(0);
-            }
-        });
-    }
-
-    // EFFECTS: returns JPanel representing Player's rack and available options,
-    // along with various save and quit options.
-    private JPanel getSaveAndQuitRackPanel(Player player) {
-        rackPanel = new JPanel();
-        rackPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
-        actionPanel = new JPanel();
-        actionPanel.setLayout(new BoxLayout(actionPanel, BoxLayout.Y_AXIS));
-       // saveSaveAsPanel = new JPanel(new BoxLayout(saveSaveAsPanel, BoxLayout.X_AXIS));
-        saveSaveAsPanel = new JPanel();
-        quitOrCancelPanel = new JPanel();
-        saveSaveAsPanel.setLayout(new BoxLayout(saveSaveAsPanel, BoxLayout.X_AXIS));
-        quitOrCancelPanel.setLayout(new BoxLayout(quitOrCancelPanel, BoxLayout.X_AXIS));
-
-        saveSaveAsPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
-        quitOrCancelPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
-
-        saveAndQuit = new JButton("Save & Quit");
-        saveAsAndQuit = new JButton("Save as & Quit");
-        quitWithoutSaving = new JButton("Quit without Saving");
-        addSaveAndQuitActionListeners(player);
-        cancel = new JButton("Cancel");
-        cancel.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                SwingUtilities.invokeLater(() -> {
-                    frame.remove(rackPanel);
-                    player.clearSelectedTiles();
-                    frame.add(getRackPanel(player), BorderLayout.SOUTH);
-                    revalidateAndRepaint(rackPanel);
-                });
-            }
-        });
-        saveSaveAsPanel.add(saveAndQuit);
-        saveSaveAsPanel.add(saveAsAndQuit);
-        quitOrCancelPanel.add(quitWithoutSaving);
-        quitOrCancelPanel.add(cancel);
-        actionPanel.add(saveSaveAsPanel);
-        actionPanel.add(quitOrCancelPanel);
-        rackPanel.add(actionPanel);
-        List<LetterTile> letters = player.getTilesOnRack();
-        for (int i = 0; i < letters.size(); i++) {
-            rackPanel.add(createTilePanelNotClickable(player, letters.get(i), i));
-        }
-        return rackPanel;
-    }
-
     // MODIFIES: scrabbleGame
     // EFFECTS: Saves game to file
-    private void handleSave(Player player) {
+    private void handleSave() {
         try {
             JsonWriter jsonWriter = new JsonWriter(JSON_STORE);
-            game.setCurrentPlayer(player);
             jsonWriter.open();
             jsonWriter.write(game);
             jsonWriter.close();
@@ -652,10 +475,9 @@ public class ScrabbleVisualApp extends ScrabbleUserInterface {
 
     // MODIFIES: scrabbleGame
     // EFFECTS: Saves game to file
-    private void handleSave(Player player, String filePath) {
+    private void handleSave(String filePath) {
         try {
             JsonWriter jsonWriter = new JsonWriter(filePath);
-            game.setCurrentPlayer(player);
             jsonWriter.open();
             jsonWriter.write(game);
             jsonWriter.close();
@@ -665,42 +487,6 @@ public class ScrabbleVisualApp extends ScrabbleUserInterface {
         }
     }
     
-    // MODIFIES: this
-    // EFFECTS: Adds panel representing player's tiles to the frame
-    private JButton createTilePanel(Player player, LetterTile letter, int letterIndex) {
-        JButton tileButton = new JButton(letter.toDisplay());
-        tileButton.setPreferredSize(new Dimension(40, 40));
-        tileButton.setBorder(BorderFactory.createLineBorder(Color.BLACK));
-        tileButton.setBackground(DEFAULT_LETTER_TILE_COLOR);
-        tileButton.setFont(new Font("Arial", Font.BOLD, 16));
-        tileButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                player.selectTile(letterIndex);
-                tileButton.setBorder(BorderFactory.createLineBorder(SELECTED_TILE_BORDER_COLOR));
-            }
-        });
-        return tileButton;
-    }
-
-    // MODIFIES: this
-    // EFFECTS: Adds panel representing player's tiles to the frame
-    private JButton createTilePanelNotClickable(Player player, LetterTile letter, int letterIndex) {
-        JButton tileButton = new JButton(letter.toDisplay());
-        tileButton.setPreferredSize(new Dimension(40, 40));
-        tileButton.setBorder(BorderFactory.createLineBorder(Color.BLACK));
-        tileButton.setBackground(DEFAULT_LETTER_TILE_COLOR);
-        tileButton.setFont(new Font("Arial", Font.BOLD, 16));
-        
-        return tileButton;
-    }
-    
-    // MODIFIES: this
-    // EFFECTS: Adds panel representing the current board to the frame
-    private JPanel getBoardPanel() {
-        boardPanel = new BoardPanel(game);
-        return boardPanel;
-    }
-
     // MODIFIES: this
     // EFFECTS: adds tabbed information panel to frame
     private JPanel getInfoPanel(Player player) {
