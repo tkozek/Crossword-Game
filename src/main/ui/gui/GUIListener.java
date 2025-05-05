@@ -1,6 +1,6 @@
 package ui.gui;
 
-public interface GUIListener {
+public interface GuiListener {
 
     void openSaveMenuActionListener();
 
@@ -25,4 +25,8 @@ public interface GUIListener {
     void directionToggleActionListener();
 
     void clearSelectionsActionListener();
+
+    // void searchLetterCountsActionListener();
+
+    // // void searchLetterCountsFocusGainedListener();
 }

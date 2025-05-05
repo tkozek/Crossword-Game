@@ -36,9 +36,9 @@ public class ActionPanel extends JPanel {
     private JButton quitWithoutSaving; 
 
 
-    private GUIListener listener;
+    private GuiListener listener;
 
-    public ActionPanel(ScrabbleGame game, GUIListener listener) {
+    public ActionPanel(ScrabbleGame game, GuiListener listener) {
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         updateActionPanel(game);
         this.listener = listener;

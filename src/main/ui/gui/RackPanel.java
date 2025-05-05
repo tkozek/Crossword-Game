@@ -23,9 +23,9 @@ public class RackPanel extends JPanel {
     private static final Color SELECTED_TILE_BORDER_COLOR = new Color(128, 0, 128);
 
     private ActionPanel actionPanel;
-    private GUIListener listener;
+    private GuiListener listener;
 
-    public RackPanel(ScrabbleGame game, GUIListener listener) {
+    public RackPanel(ScrabbleGame game, GuiListener listener) {
         setLayout(new FlowLayout(FlowLayout.CENTER));
         this.actionPanel = new ActionPanel(game, listener);
         this.listener = listener;        

@@ -1,18 +1,12 @@
 package ui.gui;
 
-import java.util.List;
-import java.util.Map;
-
 import javax.swing.*;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
-import java.awt.event.FocusListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.io.File;
@@ -20,8 +14,6 @@ import java.io.IOException;
 
 import model.*;
 import model.exceptions.BoardSectionUnavailableException;
-import model.exceptions.InvalidLetterException;
-import model.move.*;
 import ui.ScrabbleConsoleApp;
 import ui.ScrabbleUserInterface;
 
@@ -29,62 +21,38 @@ import persistance.JsonReader;
 import persistance.JsonWriter;
 
 // A Graphical user interface for Scrabble
-public class ScrabbleVisualApp extends ScrabbleUserInterface implements GUIListener {
+public class ScrabbleVisualApp extends ScrabbleUserInterface implements GuiListener {
     
-    //private static final String JSON_STORE = "./data/savedgames/gameToPlayTest.json";
     private static final String JSON_STORE = "./data/savedgames/defaultSaveFile.json";
-
     private static final String REQUEST_PLAYER_NAME_TEXT = "Type player name then click add";
     private static final int FRAME_SIDE_LENGTH = 1000;
     
     private static final int REQUEST_NAMES_FRAME_WIDTH = 1000 * 2 / 3;
     private static final int REQUEST_NAMES_FRAME_HEIGHT = 100;
-    private static final int INFO_TABS_WIDTH = 175;
-    private static final int MOVE_SUMMARY_PADDING = 25;
-    private static final Font MOVE_FONT = new Font("Arial", Font.ITALIC, 12);
     //private static final int REMAINING_TILE_PRINTOUT_HEIGHT = 20;
     
-    private static final String SEARCH_WORDS_DEFAULT_DISPLAY_TEXT = "";//"Enter a letter, then press 'search' " 
-               // + " to \ndisplay all words with that letter";
-    private static final String SEARCH_REMAINING_COUNTS_DEFAULT_DISPLAY_TEXT = "";
-    //"Enter a letter to get its remaining "+ "count in draw pile and opponent racks\n or blank to see all";
-
-    private BoardPanel boardPanel;
-    private RackPanel rackPanel;
-    private ScorePanel scorePanel;
-
-    private JPanel infoPanel;
-    private JPanel movesPanel;
-    private JPanel wordsPanel;
-    private JButton searchWordsButton;
-    private JTextField wordFilterField;
-    private JScrollPane wordsScrollPane;
-    private JPanel wordTab;
-    private JPanel letterDistributionPanel;
-    private JButton searchLetterCountsButton;
-    private JTextField searchLetterCountsField;
-    private JTabbedPane infoTabs;
-
-    private JFrame frame;
-    private JFileChooser fileChooser;
-
     private JLabel coverPhoto;
     private JFrame loadOrPlayFrame;
     private JButton newGame;
     private JButton continueGame;
     private JButton loadSelected;
-    private JComboBox saveGameDropdown;
-
-    private String selectedFileName;
 
     private JFrame playerNameFrame;
     private JPanel addPlayerPanel;
     private JTextField nameInput;
     private JButton addPlayerButton;
     private JButton startButton;
-    private JButton directionToggle;
 
-    private String lastGamePath;
+    private BoardPanel boardPanel;
+    private RackPanel rackPanel;
+    private ScorePanel scorePanel;
+    private InformationPanel infoPanel;
+
+    private JFrame frame;
+    private JFileChooser fileChooser;
+    private JComboBox<String> saveGameDropdown;
+    private String selectedFileName;
+    private String lastGamePath;  
 
     // EFFECTS: Loads start menu frame to user screen.
     public ScrabbleVisualApp() {
@@ -201,12 +169,10 @@ public class ScrabbleVisualApp extends ScrabbleUserInterface implements GUIListe
         frame.setSize(FRAME_SIDE_LENGTH - 15 + scorePanelWidth.intValue(), FRAME_SIDE_LENGTH);
 
         frame.add(boardPanel, BorderLayout.CENTER);
-        frame.add(rackPanel, BorderLayout.SOUTH); //curPlayer
+        frame.add(rackPanel, BorderLayout.SOUTH);
         frame.add(scorePanel, BorderLayout.WEST);
-        frame.add(getInfoPanel(game.getCurrentPlayer()), BorderLayout.EAST); //curPlayer
-        ActionPanel actionPanel = rackPanel.getActionPanel();
-        revalidateAndRepaint(actionPanel);
-        revalidateAndRepaint(rackPanel);
+        frame.add(infoPanel, BorderLayout.EAST); 
+
         frame.revalidate();
         frame.repaint();
         frame.setVisible(true);
@@ -217,6 +183,7 @@ public class ScrabbleVisualApp extends ScrabbleUserInterface implements GUIListe
         scorePanel = new ScorePanel(game);
         boardPanel = new BoardPanel(game);
         rackPanel = new RackPanel(game, this);
+        infoPanel = new InformationPanel(game, this);
     }
 
     // MODIFIES: this
@@ -227,8 +194,38 @@ public class ScrabbleVisualApp extends ScrabbleUserInterface implements GUIListe
         playerNameFrame = new JFrame("Request Player Names");
         playerNameFrame.setSize(REQUEST_NAMES_FRAME_WIDTH, REQUEST_NAMES_FRAME_HEIGHT);
         
-        addPlayerPanel = new JPanel();
         nameInput = new JTextField(REQUEST_PLAYER_NAME_TEXT);
+        addPlayerButton = new JButton("Add player with name in textbox");
+        startButton = new JButton("Start Game");
+        
+        addRequestNamesListeners();
+
+        addPlayerPanel = new JPanel();
+        addPlayerPanel.add(nameInput);
+        addPlayerPanel.add(addPlayerButton);
+        addPlayerPanel.add(startButton);
+
+        playerNameFrame.add(addPlayerPanel);
+        playerNameFrame.setVisible(true);
+    }
+
+    // MODIFIES: add Player and confirm Players buttons, input player name textfield
+    // EFFECTS: adds ActionListeners to addPlayerButton and confirmAllPlayersButton,
+    //         and adds FocusListener to nameInput textfield
+    private void addRequestNamesListeners() {
+        addPlayerButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                addPlayer();
+                nameInput.setText(REQUEST_PLAYER_NAME_TEXT);
+            }
+        });        
+        startButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                playerNameFrame.dispose();
+                gameRunning = true;
+                initializeNewGame();
+            }
+        });
         nameInput.addKeyListener(new KeyListener() {
             @Override
             public void keyTyped(KeyEvent e) {
@@ -246,38 +243,6 @@ public class ScrabbleVisualApp extends ScrabbleUserInterface implements GUIListe
                 }
             }
         });
-        addPlayerButton = new JButton("Add player with name in textbox");
-        startButton = new JButton("Start Game");
-        addNameActionListeners();
-        addNameFocusListeners();
-        addPlayerPanel.add(nameInput);
-        addPlayerPanel.add(addPlayerButton);
-        addPlayerPanel.add(startButton);
-        playerNameFrame.add(addPlayerPanel);
-        playerNameFrame.setVisible(true);
-    }
-
-    // MODIFIES: add Player and confirm Players buttons
-    // EFFECTS: adds ActionListeners to addPlayerButton and confirmAllPlayersButton
-    private void addNameActionListeners() {
-        addPlayerButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                addPlayer();
-                nameInput.setText(REQUEST_PLAYER_NAME_TEXT);
-            }
-        });        
-        startButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                playerNameFrame.dispose();
-                gameRunning = true;
-                initializeNewGame();
-            }
-        });
-    }
-
-    // MODIFIES: input player name textfield
-    // EFFECTS: adds FocusListener to requestPlayerNameText
-    private void addNameFocusListeners() {
         nameInput.addFocusListener(new FocusAdapter() {
             @Override
             public void focusGained(FocusEvent e) {
@@ -298,19 +263,44 @@ public class ScrabbleVisualApp extends ScrabbleUserInterface implements GUIListe
     // MODIFIES: player
     // EFFECTS: Manages order of turn taking, and ensures player's draw new tiles
     // when they are supposed to
-    private void handleGame() {   
-        Player playerToPlayNext = game.getCurrentPlayer(); //curPlayer
-        game.drawTiles(playerToPlayNext); //curPlayer
+    private void handleGame() {
+        game.drawTiles(game.getCurrentPlayer()); 
         scorePanel.updateScorePanel(game); 
         boardPanel.updateBoard(game);
         rackPanel.updateRackPanel(game, true);
-        frame.remove(infoPanel);
-        frame.add(getInfoPanel(playerToPlayNext), BorderLayout.EAST); //curPlayer
+        infoPanel.updateInfoPanel(game);
 
-        //
-        
         frame.revalidate();
         frame.repaint();
+    }
+
+    
+    // MODIFIES: scrabbleGame
+    // EFFECTS: Saves game to file
+    private void handleSave() {
+        try {
+            JsonWriter jsonWriter = new JsonWriter(JSON_STORE);
+            jsonWriter.open();
+            jsonWriter.write(game);
+            jsonWriter.close();
+            // !!! ToDo Add "Okay" button to click before closing
+        } catch (IOException e) {
+            System.out.println("Unable to write to file " + JSON_STORE);
+        }
+    }
+
+    // MODIFIES: scrabbleGame
+    // EFFECTS: Saves game to file
+    private void handleSave(String filePath) {
+        try {
+            JsonWriter jsonWriter = new JsonWriter(filePath);
+            jsonWriter.open();
+            jsonWriter.write(game);
+            jsonWriter.close();
+            // !!! ToDo Add "Okay" button to click before closing
+        } catch (IOException e) {
+            System.out.println("Unable to write to file " + filePath);
+        }
     }
 
     @Override
@@ -329,8 +319,6 @@ public class ScrabbleVisualApp extends ScrabbleUserInterface implements GUIListe
             System.exit(0);
         });
     }
-
-
 
     @Override
     public void saveAsAndQuitActionListener() {
@@ -391,12 +379,9 @@ public class ScrabbleVisualApp extends ScrabbleUserInterface implements GUIListe
     public void previewButtonActionListener() {
         SwingUtilities.invokeLater(() -> {
             try {
-                revalidateAndRepaint(boardPanel);
                 boardPanel.updateToPreviewBoard(game);
                 SwingUtilities.invokeLater(() -> {
                     rackPanel.updateToPreviewPanel(game);
-                    revalidateAndRepaint(rackPanel);
-                    revalidateAndRepaint(boardPanel);
                 });
             } catch (BoardSectionUnavailableException exception) {
                 System.out.println("\n" + exception.getMessage());
@@ -404,9 +389,10 @@ public class ScrabbleVisualApp extends ScrabbleUserInterface implements GUIListe
                     game.getCurrentPlayer().clearSelectedTiles();
                     boardPanel.updateBoard(game);
                     rackPanel.updateRackPanel(game, true);
-                    revalidateAndRepaint(rackPanel);
-                    revalidateAndRepaint(boardPanel);
                 });
+            } finally {
+                revalidateAndRepaint(rackPanel);
+                revalidateAndRepaint(boardPanel);
             }
         });   
     }
@@ -446,267 +432,15 @@ public class ScrabbleVisualApp extends ScrabbleUserInterface implements GUIListe
                 handleGame();
             }
         } catch (BoardSectionUnavailableException e) {
-            // System.out.println("\n" + e.getMessage());
-            // handleGame(game.getPlayerIndex(player));
             System.out.println("\n" + e.getMessage());
             SwingUtilities.invokeLater(() -> {
                 player.clearSelectedTiles();
-                rackPanel.updateRackPanel(game, false);
-                revalidateAndRepaint(rackPanel);
+                rackPanel.updateRackPanel(game, true);
                 boardPanel.updateBoard(game);
+                revalidateAndRepaint(rackPanel);
                 revalidateAndRepaint(boardPanel);
             });
         }
-    }
-
-    // MODIFIES: scrabbleGame
-    // EFFECTS: Saves game to file
-    private void handleSave() {
-        try {
-            JsonWriter jsonWriter = new JsonWriter(JSON_STORE);
-            jsonWriter.open();
-            jsonWriter.write(game);
-            jsonWriter.close();
-            // !!! ToDo Add "Okay" button to click before closing
-        } catch (IOException e) {
-            System.out.println("Unable to write to file " + JSON_STORE);
-        }
-    }
-
-    // MODIFIES: scrabbleGame
-    // EFFECTS: Saves game to file
-    private void handleSave(String filePath) {
-        try {
-            JsonWriter jsonWriter = new JsonWriter(filePath);
-            jsonWriter.open();
-            jsonWriter.write(game);
-            jsonWriter.close();
-            // !!! ToDo Add "Okay" button to click before closing
-        } catch (IOException e) {
-            System.out.println("Unable to write to file " + filePath);
-        }
-    }
-    
-    // MODIFIES: this
-    // EFFECTS: adds tabbed information panel to frame
-    private JPanel getInfoPanel(Player player) {
-        infoPanel = new JPanel();
-        infoPanel.setLayout(new CardLayout());
-        infoPanel.setPreferredSize(new Dimension(INFO_TABS_WIDTH, FRAME_SIDE_LENGTH));
-        infoTabs = new JTabbedPane();
-        addMovesTab(player);
-        addWordsTab(player);
-        addLetterDistributionTab(player);
-
-        infoTabs.addChangeListener(new ChangeListener() {
-            public void stateChanged(ChangeEvent e) {
-                int selectedIndex = infoTabs.getSelectedIndex();
-                if (selectedIndex == 2) {
-                    resetTab(letterDistributionPanel);
-                } else if (selectedIndex == 1) {
-                    resetTab(wordsPanel);
-                } 
-            }
-        });
-        infoPanel.add(infoTabs);
-        return infoPanel;
-    }
-
-    // MODIFIES: Tabbed Information Pane      
-    // EFFECTs: adds a panel to show summary of all moves to the information tabbed pane
-    private void addMovesTab(Player player) {
-        movesPanel = new JPanel();
-        movesPanel.setLayout(new BoxLayout(movesPanel, BoxLayout.Y_AXIS));
-        String summary = "";
-        for (Move move : player) {
-            switch (move.getMoveType()) {
-                case PLAY_WORD:
-                    summary = game.getWordDescription(move, player);
-                    break;
-                case SWAP_TILES:
-                    summary = game.getSwapDescription(move, player);
-                    break;
-                case SKIP:
-                    summary = game.getSkipDescription(move, player);
-                    break;
-                case END_GAME_ADJUSTMENT:
-                    summary = game.getEndGameDescription(move, player);
-                    break;
-            }
-            JTextArea moveSummary = getFormattedTextArea(summary, MOVE_FONT);
-            movesPanel.add(moveSummary);
-            movesPanel.setMaximumSize(new Dimension(200,500));
-           // movesPanel.setBorder(BorderFactory.createLineBorder(Color.black));
-        }
-        JScrollPane scrollPane = new JScrollPane(movesPanel);
-        scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-        scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
-        
-        infoTabs.add(scrollPane, "My Move History");
-    }
-
-    // EFFECTS: returns JTextArea with given text and standardized formatting
-    private JTextArea getFormattedTextArea(String text, Font font) {
-        JTextArea textArea = new JTextArea(text);
-        textArea.setFont(MOVE_FONT);
-        int height = getTextboxHeight(textArea, text, INFO_TABS_WIDTH - MOVE_SUMMARY_PADDING, font);
-        textArea.setLineWrap(true);
-        textArea.setWrapStyleWord(true);
-        //textArea.setCaretPosition(0);
-        textArea.setEditable(false);
-        textArea.setPreferredSize(new Dimension(INFO_TABS_WIDTH - MOVE_SUMMARY_PADDING, height + 10));
-        textArea.setMaximumSize(new Dimension(Integer.MAX_VALUE, height + 10));
-        //textArea.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
-        textArea.setBorder(BorderFactory.createCompoundBorder(
-                    BorderFactory.createLineBorder(Color.BLACK),
-                    BorderFactory.createEmptyBorder(5, 5, 5, 5)));
-        
-        return textArea;
-    }
-
-    // EFFECTS: returns textbox height required based on length of input text and font used
-    private int getTextboxHeight(JComponent component, String text, int containerWidth, Font font) {
-        FontMetrics metric = component.getFontMetrics(font);
-        int width = metric.charWidth('A');
-        int h = metric.getHeight();
-        double textBoxHeight = (text.length() * width * h / containerWidth);
-        return Math.max(h - 5, (int) textBoxHeight);
-    }
-
-    // MODIFIES: Tabbed Information Pane      
-    // EFFECTs: adds a panel to show filtered word summary to the information tabbed pane
-    private void addWordsTab(Player player) {
-        wordTab = new JPanel(new BorderLayout());
-        JPanel wordPanelButtons = new JPanel();
-
-        wordsPanel = new JPanel();
-
-        wordsPanel.setLayout(new BoxLayout(wordsPanel, BoxLayout.Y_AXIS));
-        wordsPanel.setMaximumSize(new Dimension(Integer.MAX_VALUE, wordsPanel.getPreferredSize().height));
-        wordsPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
-
-        searchWordsButton = new JButton("Search");
-        wordFilterField = new JTextField(SEARCH_WORDS_DEFAULT_DISPLAY_TEXT, 2);
-        addSearchWordsButtonListener(player);   
-        wordFilterField.addFocusListener(new FocusListener() {
-            @Override
-            public void focusGained(FocusEvent e) {
-                wordFilterField.setText("");
-            }
-
-            @Override
-            public void focusLost(FocusEvent e) {
-            }
-        });
-        wordPanelButtons.add(wordFilterField);
-        wordPanelButtons.add(searchWordsButton);
-
-        wordsScrollPane = new JScrollPane(wordsPanel);
-        wordsScrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-        wordsScrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
-
-        wordTab.add(wordPanelButtons, BorderLayout.NORTH);
-        wordTab.add(wordsScrollPane, BorderLayout.CENTER);
-
-        infoTabs.add(wordTab, "Word Filter");
-    }
-
-    // MODIFIES: search filtered words button
-    // EFFECTS: adds action listener to the button in Filtered Words tab
-    private void addSearchWordsButtonListener(Player player) {
-        searchWordsButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                resetTab(wordsPanel);
-                if (wordFilterField.getText().trim().isEmpty()) {
-                    for (Move move : player) {
-                        if (move.getMoveType() == MoveType.PLAY_WORD) {
-                            wordsPanel.add(getFormattedTextArea(game.getWordDescription(move, player), MOVE_FONT));
-                        }
-                    }
-                } else {
-                    char letter = wordFilterField.getText().trim().toUpperCase().charAt(0);
-                    List<Move> words;
-                    try {
-                        words = player.getWordsContainingLetter(letter);
-                        if (words.isEmpty()) {
-                            wordsPanel.add(getFormattedTextArea("You haven't played a word with that letter", MOVE_FONT));
-                        } else {
-                            for (Move word : words) {
-                                wordsPanel.add(getFormattedTextArea(game.getWordDescription(word, player), MOVE_FONT));
-                            }
-                        }
-                    } catch (InvalidLetterException exception) {
-                        wordsPanel.add(getFormattedTextArea(exception.getMessage(), MOVE_FONT));
-                    }
-                    revalidateAndRepaint(wordsPanel);
-                    SwingUtilities.invokeLater(() -> {
-                        SwingUtilities.invokeLater(() -> {
-                            JScrollBar verticalBar = wordsScrollPane.getVerticalScrollBar();
-                            verticalBar.setValue(verticalBar.getMaximum());
-                        });
-                    });
-                }
-            }
-        });
-    }
-
-    // MODIFIES: panel
-    // EFFECTS: removes all JTextArea components from panel
-    private void resetTab(JPanel panel) {
-        for (Component component : panel.getComponents()) {
-            if (component instanceof JTextArea) {
-                panel.remove(component);
-            }
-        }
-        revalidateAndRepaint(panel);
-    }
-
-    // MODIFIES: Tabbed Information Pane      
-    // EFFECTs: adds a panel to show remaining tile counts to the information tabbed pane
-    private void addLetterDistributionTab(Player player) {
-        letterDistributionPanel = new JPanel();
-        Map<Character, Integer> distributionMap = game.getNumEachCharInBagAndOpponents(player);
-        searchLetterCountsButton = new JButton("Search");
-        searchLetterCountsField = new JTextField(SEARCH_REMAINING_COUNTS_DEFAULT_DISPLAY_TEXT, 2);
-        searchLetterCountsButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                resetTab(letterDistributionPanel);
-                if (searchLetterCountsField.getText().trim().isEmpty()) {
-                    for (Map.Entry<Character, Integer> entry : distributionMap.entrySet()) {
-                        letterDistributionPanel.add(getFormattedTextArea(entry.getKey() + " : " 
-                                + entry.getValue(), MOVE_FONT));
-                    }
-                } else {
-                    char key = searchLetterCountsField.getText().toUpperCase().trim().charAt(0);
-                    String count = String.valueOf(distributionMap.get(key));
-                    if (count == "null") {
-                        letterDistributionPanel.add(getFormattedTextArea("Invalid letter: " + key, MOVE_FONT));
-                    } else {
-                        letterDistributionPanel.add(getFormattedTextArea(key + " : " + count, MOVE_FONT));
-                    }
-                    revalidateAndRepaint(letterDistributionPanel);
-                }
-            }
-        });
-        addLetterDistributionFocusListener();
-        letterDistributionPanel.add(searchLetterCountsField);
-        letterDistributionPanel.add(searchLetterCountsButton);
-        infoTabs.add(letterDistributionPanel, "Letter Distribution");
-    }
-
-    // MODIFIES: remaining tile counts textfield
-    // EFFECTS: searchRemainingCountsTextField has been initialized
-    private void addLetterDistributionFocusListener() {
-        searchLetterCountsField.addFocusListener(new FocusListener() {
-            @Override
-            public void focusGained(FocusEvent e) {
-                searchLetterCountsField.setText("");
-            }
-
-            @Override
-            public void focusLost(FocusEvent e) {
-            }
-        });
     }
 
     // MODIFIES: panel
