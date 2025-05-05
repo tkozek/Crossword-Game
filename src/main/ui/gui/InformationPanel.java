@@ -61,15 +61,15 @@ public class InformationPanel extends JPanel {
     private JTextField searchLetterCountsField;
 
     private JScrollPane wordsScrollPane;
-
-
+    private JScrollPane letterScrollPane;
+    private JPanel letterSearchPanel;
+    private JPanel letterTab;
 
     public InformationPanel(ScrabbleGame game, GuiListener listener) {
         this.listener = listener;
         setLayout(new CardLayout());
         setPreferredSize(new Dimension(INFO_TABS_WIDTH, FRAME_SIDE_LENGTH));
         infoTabs = new JTabbedPane();
-        
     }
 
     public void updateInfoPanel(ScrabbleGame game) {
@@ -198,15 +198,25 @@ public class InformationPanel extends JPanel {
     }
 
     private void addLetterDistributionTab(ScrabbleGame game) {
-        letterDistributionPanel = new JPanel();
+        
         searchLetterCountsButton = new JButton("Search");
         searchLetterCountsField = new JTextField(SEARCH_REMAINING_COUNTS_DEFAULT_DISPLAY_TEXT, 2);
+        letterSearchPanel = new JPanel();
+        letterSearchPanel.add(searchLetterCountsField);
+        letterSearchPanel.add(searchLetterCountsButton);
 
+        letterDistributionPanel = new JPanel();
+        letterDistributionPanel.setLayout(new BoxLayout(letterDistributionPanel, BoxLayout.Y_AXIS));
+
+        letterScrollPane = new JScrollPane(letterDistributionPanel);
+        letterScrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+        letterScrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
+
+        letterTab = new JPanel(new BorderLayout());
+        letterTab.add(letterSearchPanel, BorderLayout.NORTH);
+        letterTab.add(letterScrollPane, BorderLayout.CENTER);
         addLetterDistributionListeners(game);
-        
-        letterDistributionPanel.add(searchLetterCountsField);
-        letterDistributionPanel.add(searchLetterCountsButton);
-        infoTabs.add(letterDistributionPanel, "Letter Distribution");
+        infoTabs.add(letterTab, "Letter Distribution");
     }
 
     private void addLetterDistributionListeners(ScrabbleGame game) {
@@ -287,10 +297,5 @@ public class InformationPanel extends JPanel {
     private void revalidateAndRepaint(JComponent component) {
         component.revalidate();
         component.repaint();
-    }
-
-
-    
-
-    
+    }    
 }

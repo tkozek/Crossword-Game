@@ -30,7 +30,6 @@ public class RackPanel extends JPanel {
         this.actionPanel = new ActionPanel(game, listener);
         this.listener = listener;        
         updateRackPanel(game, true);
-        
     }
 
     public void updateRackPanel(ScrabbleGame game, boolean tilesClickable) {
@@ -49,7 +48,6 @@ public class RackPanel extends JPanel {
         this.removeAll();
         this.updateRackPanel(game, false);
         actionPanel.updateActionPanelToSaveAndQuit();
-        
     }
 
     public void updateToPreviewPanel(ScrabbleGame game) {
