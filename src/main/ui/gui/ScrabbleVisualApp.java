@@ -183,7 +183,7 @@ public class ScrabbleVisualApp extends ScrabbleUserInterface implements GuiListe
         scorePanel = new ScorePanel(game);
         boardPanel = new BoardPanel(game);
         rackPanel = new RackPanel(game, this);
-        infoPanel = new InformationPanel(game, this);
+        infoPanel = new InformationPanel(game);
     }
 
     // MODIFIES: this
@@ -365,6 +365,7 @@ public class ScrabbleVisualApp extends ScrabbleUserInterface implements GuiListe
     public void swapButtonActionListener() {
         game.swapTiles();
         game.nextPlayer();
+        showWaitingScreen();
         handleGame();
     }
 
@@ -372,6 +373,7 @@ public class ScrabbleVisualApp extends ScrabbleUserInterface implements GuiListe
     public void skipButtonActionListener() {
         game.logSkippedTurn();
         game.nextPlayer();
+        showWaitingScreen();
         handleGame();
     }
 
@@ -429,6 +431,7 @@ public class ScrabbleVisualApp extends ScrabbleUserInterface implements GuiListe
                 handleEndGame(player);
             } else {
                 game.nextPlayer();
+                showWaitingScreen();
                 handleGame();
             }
         } catch (BoardSectionUnavailableException e) {
@@ -450,6 +453,11 @@ public class ScrabbleVisualApp extends ScrabbleUserInterface implements GuiListe
         component.repaint();
     }
 
+    private void showWaitingScreen() {
+        String waitingMessage = game.getCensoredLastMoveDescription();
+        BlurOverlayUtil.showBlurOverlay(frame, waitingMessage);
+    }
+
     // MODIFIES: this
     // EFFECTS: adds a new player to the game
     // who's name is the text currently in 
@@ -463,4 +471,8 @@ public class ScrabbleVisualApp extends ScrabbleUserInterface implements GuiListe
     public static void main(String[] args) {
         new ScrabbleVisualApp();
     }
+
+    
 }
+
+    

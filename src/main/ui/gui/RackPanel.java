@@ -23,12 +23,10 @@ public class RackPanel extends JPanel {
     private static final Color SELECTED_TILE_BORDER_COLOR = new Color(128, 0, 128);
 
     private ActionPanel actionPanel;
-    private GuiListener listener;
 
     public RackPanel(ScrabbleGame game, GuiListener listener) {
         setLayout(new FlowLayout(FlowLayout.CENTER));
         this.actionPanel = new ActionPanel(game, listener);
-        this.listener = listener;        
         updateRackPanel(game, true);
     }
 
@@ -45,13 +43,11 @@ public class RackPanel extends JPanel {
     }
 
     public void updateToSaveAndQuitRackPanel(ScrabbleGame game) {
-        this.removeAll();
         this.updateRackPanel(game, false);
         actionPanel.updateActionPanelToSaveAndQuit();
     }
 
     public void updateToPreviewPanel(ScrabbleGame game) {
-        this.removeAll();
         this.updateRackPanel(game, false);
         actionPanel.updateToPreviewPanel();
     }
@@ -67,7 +63,6 @@ public class RackPanel extends JPanel {
                 public void actionPerformed(ActionEvent e) {
                     player.selectTile(letterIndex);
                     tileButton.setBorder(BorderFactory.createLineBorder(SELECTED_TILE_BORDER_COLOR));
-                    // TODO notify main GUI so that tiles are repaint/revalidated
                 }
             });
         }

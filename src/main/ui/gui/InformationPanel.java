@@ -45,8 +45,7 @@ public class InformationPanel extends JPanel {
     //"Enter a letter to get its remaining "+ "count in draw pile and opponent racks\n or blank to see all";
     private static final Font MOVE_FONT = new Font("Arial", Font.ITALIC, 12);
     private static final int MOVE_SUMMARY_PADDING = 25;
-
-    private GuiListener listener;
+    
     private JTabbedPane infoTabs;
     private JPanel movesPanel;
     private JPanel wordTab;
@@ -65,8 +64,7 @@ public class InformationPanel extends JPanel {
     private JPanel letterSearchPanel;
     private JPanel letterTab;
 
-    public InformationPanel(ScrabbleGame game, GuiListener listener) {
-        this.listener = listener;
+    public InformationPanel(ScrabbleGame game) {
         setLayout(new CardLayout());
         setPreferredSize(new Dimension(INFO_TABS_WIDTH, FRAME_SIDE_LENGTH));
         infoTabs = new JTabbedPane();
@@ -97,26 +95,15 @@ public class InformationPanel extends JPanel {
         String summary = "";
         Player player = game.getCurrentPlayer();
         for (Move move : player) {
-            switch (move.getMoveType()) {
-                case PLAY_WORD:
-                    summary = game.getWordDescription(move, player);
-                    break;
-                case SWAP_TILES:
-                    summary = game.getSwapDescription(move, player);
-                    break;
-                case SKIP:
-                    summary = game.getSkipDescription(move, player);
-                    break;
-                case END_GAME_ADJUSTMENT:
-                    summary = game.getEndGameDescription(move, player);
-                    break;
-            }
+            summary = game.getMoveDescription(move);
             JTextArea moveSummary = getFormattedTextArea(summary, MOVE_FONT);
             movesPanel.add(moveSummary);
             movesPanel.setMaximumSize(new Dimension(200,500));
            // movesPanel.setBorder(BorderFactory.createLineBorder(Color.black));
         }
         JScrollPane movesScrollPane = new JScrollPane(movesPanel);
+        movesScrollPane.getVerticalScrollBar().setUnitIncrement(16);
+        
         movesScrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
         movesScrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
         
@@ -137,6 +124,9 @@ public class InformationPanel extends JPanel {
         wordsPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
 
         wordsScrollPane = new JScrollPane(wordsPanel);
+
+        wordsScrollPane.getVerticalScrollBar().setUnitIncrement(16);
+
         wordsScrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
         wordsScrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
 
@@ -198,7 +188,6 @@ public class InformationPanel extends JPanel {
     }
 
     private void addLetterDistributionTab(ScrabbleGame game) {
-        
         searchLetterCountsButton = new JButton("Search");
         searchLetterCountsField = new JTextField(SEARCH_REMAINING_COUNTS_DEFAULT_DISPLAY_TEXT, 2);
         letterSearchPanel = new JPanel();
@@ -262,13 +251,14 @@ public class InformationPanel extends JPanel {
         textArea.setWrapStyleWord(true);
         //textArea.setCaretPosition(0);
         textArea.setEditable(false);
+        textArea.setFocusable(false); 
+        
         textArea.setPreferredSize(new Dimension(INFO_TABS_WIDTH - MOVE_SUMMARY_PADDING, height + 10));
         textArea.setMaximumSize(new Dimension(Integer.MAX_VALUE, height + 10));
         //textArea.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
         textArea.setBorder(BorderFactory.createCompoundBorder(
                     BorderFactory.createLineBorder(Color.BLACK),
                     BorderFactory.createEmptyBorder(5, 5, 5, 5)));
-        
         return textArea;
     }
 

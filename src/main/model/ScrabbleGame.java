@@ -245,7 +245,7 @@ public class ScrabbleGame implements JsonWritable<JSONObject> {
         String direction = (word.getDirection() == Direction.RIGHT) ? "to the right" : "down";
         String points = String.valueOf(word.getPointsForMove());
         printout += wordString + " starting at " + coordinates + " and moving " 
-                + direction + " earning " + points + " points.";
+                + direction + ", earning " + points + " points.";
         return printout;
     }
 
@@ -263,6 +263,8 @@ public class ScrabbleGame implements JsonWritable<JSONObject> {
                  + postSwapLetters + ", earning " + points + " points.";
         return printout;
     }
+
+
 
     // REQUIRES: MoveType is SKIP
     // EFFECTS: returns summary of a skipped turn
@@ -289,6 +291,39 @@ public class ScrabbleGame implements JsonWritable<JSONObject> {
             scores.put(player.getPlayerName(), player.getPointsThisGame());
         }
         return scores;
+    }
+
+    public String getCensoredLastMoveDescription() {
+        Move mostRecentMove = history.getLastMove();
+        Player mostRecentPlayer = getPlayerByName(mostRecentMove.getPlayerName());
+        switch (mostRecentMove.getMoveType()) {
+            case SWAP_TILES:
+                return mostRecentPlayer.getPlayerName() + " swapped their tiles.";
+            case SKIP:
+                return mostRecentPlayer.getPlayerName() + " skipped their turn.";
+            default:
+                return getMoveDescription(mostRecentMove);
+        }
+    }
+
+    public String getMoveDescription(Move move) {
+        String summary = "";
+        Player player = getPlayerByName(move.getPlayerName());
+        switch (move.getMoveType()) {
+            case PLAY_WORD:
+                summary = getWordDescription(move, player);
+                break;
+            case SWAP_TILES:
+                summary = getSwapDescription(move, player);
+                break;
+            case SKIP:
+                summary = getSkipDescription(move, player);
+                break;
+            case END_GAME_ADJUSTMENT:
+                summary = getEndGameDescription(move, player);
+                break;
+        }
+        return summary;
     }
 
     // EFFECTS: Adds up total occurences of every character on board,

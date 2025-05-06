@@ -57,6 +57,10 @@ public class History implements Iterable<Move> {
         }
         return wordsPlayed;
     }
+
+    public Move getLastMove() {
+        return moveHistory.get(moveHistory.size() - 1);
+    }
     
     public List<Move> getMoves() {
         return this.moveHistory;
