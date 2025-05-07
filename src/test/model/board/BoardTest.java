@@ -8,6 +8,7 @@ import model.Direction;
 import model.Player;
 import model.exceptions.BoardSectionUnavailableException;
 import model.tile.LetterTile;
+import model.tile.Tile;
 import model.tile.TileBag;
 import model.tile.TileType;
 
@@ -581,6 +582,56 @@ public class BoardTest {
             assertEquals(11, board.playWord(stek, 14, 10, Direction.RIGHT));
         } catch (BoardSectionUnavailableException e) {
             fail();
+        }
+    }
+
+    @Test
+    public void testBoardCopyConstructor() {
+        List<LetterTile> hang = new ArrayList<>();
+        hang.add(h1);
+        hang.add(a1);
+        hang.add(n1);
+        hang.add(g1);
+        try {
+            board.playWord(hang, 7, 4, Direction.RIGHT);
+            List<LetterTile> steak = new ArrayList<>();
+            steak.add(s1);
+            steak.add(t1);
+            steak.add(e1);
+            steak.add(k1);
+            assertEquals(11, board.playWord(steak, 4, 5, Direction.DOWN));
+            LetterTile boardTile75 = (LetterTile) board.getTileAtPositionOnBoard(7, 5);
+            assertEquals(boardTile75.getCharacter(), 'A');
+            List<LetterTile> ate = new ArrayList<>();
+            ate.add(new LetterTile('A'));
+            ate.add(new LetterTile('E'));
+            assertEquals(3, board.playWord(ate, 5, 4, Direction.RIGHT));
+            List<LetterTile> justA = new ArrayList<>();
+            justA.add(new LetterTile('A'));
+            assertEquals(8, board.playWord(justA, 4, 4, Direction.RIGHT));
+        } catch (BoardSectionUnavailableException e) {
+            fail();
+        }
+        Board board2 = new Board(board);
+        for (int i = 0; i < 15; i++) {
+            for (int j = 0; j < 15; j++) {
+                Tile tile = board.getTileAtPositionOnBoard(i, j);
+                Tile tile2 = board2.getTileAtPositionOnBoard(i, j);
+                assertEquals(tile.toDisplay(), tile2.toDisplay());
+            }
+        } 
+    }
+
+    @Test
+    public void testPlayWordExceptionThrown() {
+        List<LetterTile> hang = new ArrayList<>();
+        hang.add(h1);
+        
+        try {
+            board.playWord(hang, -1, 0, Direction.DOWN);
+            fail();
+        } catch (BoardSectionUnavailableException e) {
+            // pass
         }
     }
 }

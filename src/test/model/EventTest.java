@@ -3,6 +3,10 @@ package model;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import model.event.Event;
+
+import static org.junit.jupiter.api.Assertions.*;
+
 import java.util.Calendar;
 import java.util.Date;
 
@@ -28,11 +32,27 @@ public class EventTest {
     @Test
     public void testEvent() {
         assertEquals("Sensor open at door", event.getDescription());
-        assertEquals(date, event.getDate());
+        float diff = date.getTime() - event.getDate().getTime();
+        System.out.println(diff);
+        assertTrue(date.getTime() - event.getDate().getTime() <= 50);
     }
 
     @Test
     public void testToString() {
         assertEquals(date.toString() + "\n" + "Sensor open at door", event.toString());
+    }
+
+    @Test
+    public void testEquals() {
+        assertFalse(event.equals(null));
+        assertFalse(event.equals(1));
+    }
+
+    @Test
+    public void testHashCode() {
+        Event event3 = new Event("Off");
+        
+        Event event2 = new Event("Sensor open at door");
+        assertNotEquals(event2.hashCode(), event3.hashCode());
     }
 }

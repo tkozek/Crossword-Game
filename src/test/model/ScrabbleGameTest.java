@@ -8,6 +8,7 @@ import model.exceptions.BoardSectionUnavailableException;
 import model.move.Move;
 import model.move.MoveType;
 import model.tile.LetterTile;
+import model.tile.Tile;
 
 import java.util.List;
 import java.util.Map;
@@ -34,6 +35,14 @@ public class ScrabbleGameTest {
         //!!! ToDo Override board and tilebag.equals    
         //assertTrue(game.getBoard().equals(new Board()));
         //assertTrue(game.getTileBag().equals(new TileBag()));
+    }
+
+    @Test
+    public void testLogSkippedTurnCurrentPlayer() {
+        game.addPlayer("Trevor");
+        Player trevor = game.getPlayerByIndex(0);
+        game.logSkippedTurn();
+        assertEquals(1, trevor.getMoves().size());
     }
 
 // EFFECTS: returns list of letter tiles
@@ -117,6 +126,10 @@ public class ScrabbleGameTest {
         } catch (BoardSectionUnavailableException e) {
             fail();
         }
+        Tile tile = game.getTileAtPositionOnBoard(7, 7);
+        assertEquals(3, tile.getPoints());
+        assertEquals("B", tile.toDisplay());
+
         assertEquals(1, game.getMoves().size());
         assertEquals(1, player.getMoves().size());
         assertEquals(player.getNumTilesOnRack(), 7);
@@ -161,6 +174,74 @@ public class ScrabbleGameTest {
     }
 
     @Test
+    public void testScorePerpendicularConnectedByBlankOverloadedPlayWord() {
+        player.addTile(new LetterTile('B', 3));
+        player.addTile(new LetterTile('R', 1));
+        player.addTile(new LetterTile('I', 1));
+        player.addTile(new LetterTile('N', 1));
+        player.addTile(new LetterTile('K', 5));
+        
+        for (int i = 0; i < 5; i++) {
+            player.selectTile(i);
+        }
+        try {
+            game.setStartRow(7);
+            game.setStartCol(7);
+            game.setDirection(Direction.DOWN);
+            assertEquals(32, game.playWord(player));
+        } catch (BoardSectionUnavailableException e) {
+            fail();
+        }
+        assertEquals(1, game.getMoves().size());
+        assertEquals(1, player.getMoves().size());
+        assertEquals(player.getNumTilesOnRack(), 7);
+        assertEquals(game.getTileBag().numTilesRemaining(), 100 - 7);
+        assertEquals(32, player.getPointsThisGame());
+
+        for (int i = 0; i < 7; i++) {
+            player.selectTile(i);
+        }
+        player.removeSelectedTiles();
+        assertEquals(player.getNumTilesOnRack(), 0);
+        player.addTile(new LetterTile('I', 1));
+        player.addTile(new LetterTile('T', 1));
+        player.addTile(new LetterTile('E', 1));
+        player.addTile(new LetterTile('S', 1));
+
+        assertEquals(player.getNumTilesOnRack(), 4);
+        for (int i = 0; i < 4; i++) {
+            player.selectTile(i);
+        }
+        try {
+            game.setStartRow(11);
+            game.setStartCol(8);
+            game.setDirection(Direction.RIGHT);
+            assertEquals(18, game.playWord(player));
+        } catch (BoardSectionUnavailableException e) {
+            fail();
+        }
+        assertEquals(player.getNumTilesOnRack(), 7);
+        for (int i = 0; i < 7; i++) {
+            player.selectTile(i);
+        }
+        player.removeSelectedTiles();
+        player.addTile(new LetterTile('-'));
+        player.addTile(new LetterTile('I'));
+        player.addTile(new LetterTile('T'));
+        for (int i = 0; i < 3; i++) {
+            player.selectTile(i);
+        }
+        try {
+            game.setStartRow(10);
+            game.setStartCol(10);
+            game.setDirection(Direction.RIGHT);
+            assertEquals(8, game.playWord(player));
+        } catch (BoardSectionUnavailableException e) {
+            fail();
+        }
+    }
+
+    @Test
     public void testEndGameAdjustments() {
         game.addPlayer(player);
         game.addPlayer(player2);
@@ -198,5 +279,68 @@ public class ScrabbleGameTest {
         player2.setPoints(3);
         p3.setPoints(1);
         assertEquals(player2, game.getHighestScoringPlayer());
+        game.setCurrentPlayerIndex(0);
+        assertEquals(0, game.getCurrentPlayerIndex());
+        game.nextPlayer();
+        assertEquals(1, game.getCurrentPlayerIndex());
+        game.nextPlayer();
+        assertEquals(2, game.getCurrentPlayerIndex());
+        game.nextPlayer();
+        assertEquals(0, game.getCurrentPlayerIndex());
+    }
+
+    @Test
+    public void testGetCensoredLastMoveDescription() {
+        game.addPlayer(player);
+        game.logSkippedTurn(player);
+        assertEquals("playerTest skipped their turn.", game.getCensoredLastMoveDescription());
+        game.swapTiles(player);
+        assertEquals("playerTest swapped their tiles.", game.getCensoredLastMoveDescription());
+    }
+
+    @Test
+    public void testGetMoveDescription() {
+        game.addPlayer(player);
+        game.logSkippedTurn(player);
+        assertEquals("playerTest skipped their turn.", game.getCensoredLastMoveDescription());
+        game.swapTiles(player);
+        assertEquals("playerTest swapped their tiles.", game.getCensoredLastMoveDescription());
+    }
+
+    @Test
+    public void testGetScoreMap() {
+        Player p3 = new Player("trevor");
+
+        game.addPlayer(player);
+        game.addPlayer(player2);
+        game.addPlayer(p3); 
+
+        player.setPoints(2);
+        player2.setPoints(3);
+        p3.setPoints(1);
+        
+        Map<String, Integer> scores = game.getPlayerScoreMap();
+        assertEquals(2, scores.get("playerTest"));
+        assertEquals(3, scores.get("P"));
+        assertEquals(1, scores.get("trevor"));
+    }
+
+    @Test
+    public void testCoordinateSettersGetters() {
+        assertEquals(7, game.getStartRow());
+        assertEquals(7, game.getStartCol());
+        game.setStartRow(10);
+        game.setStartCol(9);
+        assertEquals(10, game.getStartRow());
+        assertEquals(9, game.getStartCol());
+    }
+
+    @Test
+    public void testSetAndGetDirection() {
+        assertEquals(Direction.DOWN, game.getDirection());
+        game.setDirection(Direction.RIGHT);
+        assertEquals(Direction.RIGHT, game.getDirection());
+        game.setDirection(Direction.DOWN);
+        assertEquals(Direction.DOWN, game.getDirection());
     }
 }

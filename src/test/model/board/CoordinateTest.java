@@ -321,4 +321,17 @@ public class CoordinateTest {
         c2 = new Coordinate(12,4);
         assertNotEquals(c1.hashCode(),c2.hashCode());
     }
+
+    @Test
+    public void testEqualsNull() {
+        c1 = new Coordinate(1,2);
+        c2 = null;
+        assertFalse(c1.equals(c2));
+    }
+
+    @Test
+    public void testEqualsDifferentClass() {
+        c1 = new Coordinate(1,2);
+        assertFalse(c1.equals(2));
+    }
 }

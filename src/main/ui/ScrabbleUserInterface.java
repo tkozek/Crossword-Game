@@ -1,12 +1,11 @@
 package ui;
 
-import model.EventLog;
 import model.Player;
 import model.ScrabbleGame;
+import model.event.Event;
+import model.event.EventLog;
 
 import java.util.List;
-
-import model.Event;
 
 // Represents a user interface for Scrabble
 public abstract class ScrabbleUserInterface {

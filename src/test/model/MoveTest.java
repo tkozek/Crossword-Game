@@ -4,6 +4,8 @@ import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import model.exceptions.InvalidLetterException;
+import model.exceptions.MoveTypeMismatchException;
 import model.move.*;
 import model.tile.LetterTile;
 
@@ -104,6 +106,83 @@ public class MoveTest {
         assertFalse(testPlayer.getPlayerName().equals(endGame.getLastPlayerName()));
     }
 
+    @Test
+    public void testGetLastPlayerNameWrongMoveType() {
+        Move skip = new Move(testPlayer.getPlayerName());
+        try {
+            skip.getLastPlayerName();
+            fail();
+        } catch (MoveTypeMismatchException e) {
+            assertNotEquals(skip.getMoveType(), MoveType.END_GAME_ADJUSTMENT);
+        }
+    }
+
+    
+
+    @Test
+    public void testGetDirectionWrongMoveType() {
+        Move skip = new Move(testPlayer.getPlayerName());
+        try {
+            skip.getDirection();
+            fail();
+        } catch (MoveTypeMismatchException e) {
+            assertNotEquals(skip.getMoveType(), MoveType.PLAY_WORD);
+        }
+    }
+
+    @Test
+    public void testMoveContainsLetterBlank() {
+        playWord = new Move(testPlayer.getPlayerName(), "-", 7,7, 0, Direction.DOWN);
+        char letter = '-';
+        try {
+            assertTrue(playWord.moveContainsLetter(letter));
+        } catch (Exception e) {
+            fail();
+        } 
+    }
+
+    @Test
+    public void testMoveContainsLetterInvalidMoveType() {
+        Move skip = new Move(testPlayer.getPlayerName());
+        char letter = 'A';
+        try {
+            skip.moveContainsLetter(letter);
+            fail();
+        } catch (InvalidLetterException e) {
+            fail();
+        } catch (MoveTypeMismatchException e) {
+            assertNotEquals(skip.getMoveType(), MoveType.PLAY_WORD);
+        }
+    }
+    
+    @Test
+    public void testMoveContainsLetterInvalidLetter() {
+        playWord = new Move(testPlayer.getPlayerName(), getStringFromLetters(p1Letters), 1,8, 10, Direction.DOWN);
+        char letter = '3';
+        try {
+            playWord.moveContainsLetter(letter);
+            fail();
+        } catch (InvalidLetterException e) {
+            assertFalse(((letter >= 'A' && letter <= 'Z') || letter == '-'));
+        } catch (MoveTypeMismatchException e) {
+            fail();        
+        }
+    }
+
+    @Test
+    public void testMoveContainsLetterInvalidMoveTypeAndInvalidLetter() {
+        Move skip = new Move(testPlayer.getPlayerName());
+        char letter = '~';
+        try {
+            skip.moveContainsLetter(letter);
+            fail("Should have thrown an Exception");
+        } catch (InvalidLetterException e) {
+            fail("Should have thrown InvalidLetterException first");
+        } catch (MoveTypeMismatchException e) {
+            assertNotEquals(skip.getMoveType(), MoveType.PLAY_WORD);
+        }
+    }
+
     // EFFECTS: returns list of letter tiles
     // based on input string
     private String getStringFromLetters(List<LetterTile> letters) {
@@ -113,4 +192,6 @@ public class MoveTest {
         }
         return result;
     }   
+
+    
 }

@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import model.exceptions.InvalidLetterException;
 import model.move.Move;
 import model.move.MoveType;
 import model.tile.LetterTile;
@@ -103,6 +104,7 @@ public class HistoryTest {
         letters.add(b1); // AB
         doesntHaveZ = new Move(testPlayer.getPlayerName(), getStringFromLetters(letters), 7,9, 8,Direction.RIGHT);
         history.addMove(doesntHaveZ);
+        assertEquals(history.getLastMove(), doesntHaveZ);
 
         List<LetterTile> letters2 = new ArrayList<>();
         letters2.add(a1);
@@ -172,4 +174,29 @@ public class HistoryTest {
         assertEquals(testPlayer.getWordsPlayed().size(), 2);
     }   
     
+    @Test
+    public void testWordsContainingInvalidLetter() {
+        List<Move> moves = null;
+        try {
+            moves = history.getWordsContainingLetter('a');
+            fail();
+        } catch (InvalidLetterException e) {
+            // pass
+            assertNull(moves);
+        }
+        try {
+            moves = history.getWordsContainingLetter('z');
+            fail();
+        } catch (InvalidLetterException e) {
+            // pass
+            assertNull(moves);
+        }
+        try {
+            moves = history.getWordsContainingLetter('%');
+            fail();
+        } catch (InvalidLetterException e) {
+            // pass
+            assertNull(moves);
+        }
+    }
 }

@@ -5,6 +5,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import model.exceptions.BoardSectionUnavailableException;
+import model.exceptions.SelectedTileOutOfBoundsException;
+import model.move.Move;
 import model.move.MoveType;
 import model.tile.LetterTile;
 import model.tile.TileBag;
@@ -12,7 +14,9 @@ import model.tile.TileBag;
 
 import java.util.List;
 import java.util.Map;
+import java.util.NoSuchElementException;
 import java.util.ArrayList;
+import java.util.Iterator;
 
 public class PlayerTest {
     
@@ -31,6 +35,22 @@ public class PlayerTest {
         assertEquals(0, testPlayer.getMoves().size());
         assertEquals(0, testPlayer.getNumTilesOnRack());
         assertEquals("Trevor", testPlayer.getPlayerName());
+    }
+
+    @Test
+    public void testSelectTileExceptionThrown() {
+        try {
+            testPlayer.selectTile(-1);
+            fail();
+        } catch (SelectedTileOutOfBoundsException e) {
+            assertEquals(0, testPlayer.getSelectedTiles().size());
+        }
+        try {
+            testPlayer.selectTile(8);
+            fail();
+        } catch (SelectedTileOutOfBoundsException e) {
+            assertEquals(0, testPlayer.getSelectedTiles().size());
+        }
     }
 
     @Test
@@ -114,6 +134,7 @@ public class PlayerTest {
 
     @Test
     public void testSwapZeroTiles() {
+        game.addPlayer(testPlayer);
         assertEquals(testPlayer.getNumTilesOnRack(), 0);
         game.drawTiles(testPlayer);
         assertEquals(testPlayer.getNumTilesOnRack(), TileBag.MAX_NUM_PLAYER_TILES);
@@ -124,9 +145,12 @@ public class PlayerTest {
         int numTilesToSwap  = selectedLetters.size();
         assertEquals(numTilesToSwap,0);
         game.swapTiles(testPlayer);
-
         List<LetterTile> postSwapLetters = testPlayer.getTilesOnRack();
+        assertEquals(postSwapLetters,initialLetters);
         
+        game.setCurrentPlayer(testPlayer);
+        game.swapTiles();
+        postSwapLetters = testPlayer.getTilesOnRack();
         assertEquals(postSwapLetters,initialLetters);
     }
 
@@ -187,8 +211,6 @@ public class PlayerTest {
         assertTrue(testPlayer.getSelectedTiles().isEmpty());
     }
 
-    
-
     @Test
     public void testGetNumEachCharOnMyRackEmptyRack() {
         assertEquals(0, testPlayer.getTilesOnRack().size());
@@ -242,7 +264,6 @@ public class PlayerTest {
         assertEquals(10, testPlayer.getPointsThisGame());
         testPlayer.addPoints(30);
         assertEquals(40, testPlayer.getPointsThisGame());
-
     }
     
     @Test 
@@ -275,6 +296,22 @@ public class PlayerTest {
         assertEquals(testPlayer.getMoves().size(), 2);
         assertEquals(testPlayer.getMoves().get(1).getMoveType(), MoveType.SWAP_TILES);
         assertEquals(testPlayer.getMoves().get(1).getPointsForMove(), 0);
+        Iterator<Move> itr = testPlayer.iterator();
+        int count = 0;
+        while (itr.hasNext()) {
+            itr.next();
+            count++;
+        }
+        assertEquals(2, count);
+        assertFalse(itr.hasNext());
+        try {
+            itr.next();
+            fail();
+        } catch (NoSuchElementException e) {
+            // pass
+        }
+        
+
     }
 }
 

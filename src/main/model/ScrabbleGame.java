@@ -9,6 +9,8 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import model.board.Board;
+import model.event.Event;
+import model.event.EventLog;
 import model.exceptions.BoardSectionUnavailableException;
 import model.move.Move;
 import model.tile.LetterTile;
@@ -403,12 +405,6 @@ public class ScrabbleGame implements JsonWritable<JSONObject> {
         return this.tileBag;
     }
 
-    // EFFECTS: returns the history of all
-    // moves played by players during this game
-    public History getHistory() {
-        return this.history;
-    }
-
     // EFFECTS: returns players associated with this game
     public List<Player> getPlayers() {
         return this.players;
@@ -461,7 +457,11 @@ public class ScrabbleGame implements JsonWritable<JSONObject> {
     // MODIFIES: this
     // EFFECTS: sets first player index using index of players
     public void setCurrentPlayerIndex(int currentPlayerIndex) {
-        this.currentPlayerIndex = currentPlayerIndex % players.size();
+        if (!players.isEmpty()) {
+            this.currentPlayerIndex = currentPlayerIndex % players.size();
+        } else {
+            this.currentPlayerIndex = 0;
+        }
     }
 
     public void nextPlayer() {

@@ -149,10 +149,6 @@ public class Player implements JsonWritable<JSONObject>, Iterable<Move> {
         return this.tileRack;
     }
 
-    public History getHistory() {
-        return this.history;
-    }
-
     public List<Move> getMoves() {
         return this.history.getMoves();
     }
