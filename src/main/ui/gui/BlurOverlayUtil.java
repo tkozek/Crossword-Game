@@ -20,19 +20,8 @@ public class BlurOverlayUtil {
             JRootPane root = frame.getRootPane();
             Point contentLocation = root.getLocationOnScreen();
             Dimension contentSize = root.getSize();
-            // Adjust manually here
-            contentLocation.translate(8, 8); // Tune these values based on what you see
-
-
-// Optionally shrink the size if the image is too large
-            contentSize.setSize(contentSize.width + 8, contentSize.height +8); // Adjust as needed
-
-///
-            Rectangle contentBounds = new Rectangle(contentLocation, contentSize);
-            //
-
-
-                
+            contentSize.setSize(contentSize.width + 8, contentSize.height +8);
+            Rectangle contentBounds = new Rectangle(contentLocation, contentSize);               
 
             BufferedImage screenshot = new Robot().createScreenCapture(contentBounds);
             BufferedImage blurred = blurImage(screenshot, 6); // Adjust blur level here

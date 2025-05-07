@@ -121,6 +121,7 @@ public class ScrabbleVisualApp extends ScrabbleUserInterface implements GuiListe
         });
         loadSelected.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
+                loadOrPlayFrame.dispose();
                 loadSelectedGame();
             }
         });

@@ -654,6 +654,14 @@
             "LettersPlayed": "DATEUUR",
             "Row": 3,
             "Direction": "R"
+        },
+        {
+            "PlayerName": "trevor",
+            "MoveType": "SKIP"
+        },
+        {
+            "PlayerName": "trevor",
+            "MoveType": "SKIP"
         }
     ],
     "Players": [{

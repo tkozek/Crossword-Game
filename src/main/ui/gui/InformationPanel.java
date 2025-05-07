@@ -37,6 +37,7 @@ import model.move.MoveType;
 
 public class InformationPanel extends JPanel {
 
+    private static final String PADDING = "             ";
     private static final int FRAME_SIDE_LENGTH = 1000;
     private static final int INFO_TABS_WIDTH = 175;
     private static final String SEARCH_WORDS_DEFAULT_DISPLAY_TEXT = "";//"Enter a letter, then press 'search' " 
@@ -106,6 +107,10 @@ public class InformationPanel extends JPanel {
         
         movesScrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
         movesScrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
+        SwingUtilities.invokeLater(() -> {
+            movesScrollPane.getVerticalScrollBar().setValue(0);
+        });
+        
         
         infoTabs.add(movesScrollPane, "My Move History");
     }
@@ -134,6 +139,10 @@ public class InformationPanel extends JPanel {
         wordTab.add(wordPanelButtons, BorderLayout.NORTH);
         wordTab.add(wordsScrollPane, BorderLayout.CENTER);
 
+        SwingUtilities.invokeLater(() -> {
+            wordsScrollPane.getVerticalScrollBar().setValue(0);
+        });
+
         infoTabs.add(wordTab, "Word Filter");
 
         addFilteredWordsListeners(game);
@@ -150,6 +159,9 @@ public class InformationPanel extends JPanel {
                             wordsPanel.add(getFormattedTextArea(game.getWordDescription(move, player), MOVE_FONT));
                         }
                     }
+                    SwingUtilities.invokeLater(() -> {
+                        wordsScrollPane.getVerticalScrollBar().setValue(0);
+                    });
                 } else {
                     char letter = wordFilterField.getText().trim().toUpperCase().charAt(0);
                     List<Move> words;
@@ -161,17 +173,14 @@ public class InformationPanel extends JPanel {
                             for (Move word : words) {
                                 wordsPanel.add(getFormattedTextArea(game.getWordDescription(word, player), MOVE_FONT));
                             }
+                            SwingUtilities.invokeLater(() -> {
+                                wordsScrollPane.getVerticalScrollBar().setValue(0);
+                            });
                         }
                     } catch (InvalidLetterException exception) {
                         wordsPanel.add(getFormattedTextArea(exception.getMessage(), MOVE_FONT));
                     }
                     revalidateAndRepaint(wordsPanel);
-                    SwingUtilities.invokeLater(() -> {
-                        SwingUtilities.invokeLater(() -> {
-                            JScrollBar verticalBar = wordsScrollPane.getVerticalScrollBar();
-                            verticalBar.setValue(verticalBar.getMaximum());
-                        });
-                    });
                 }
             }
         });
@@ -268,7 +277,7 @@ public class InformationPanel extends JPanel {
         int width = metric.charWidth('A');
         int h = metric.getHeight();
         double textBoxHeight = (text.length() * width * h / containerWidth);
-        return Math.max(h - 5, (int) textBoxHeight);
+        return Math.max(h, (int) textBoxHeight);
     }
 
     // MODIFIES: panel
