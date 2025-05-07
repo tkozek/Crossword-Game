@@ -1,6 +1,5 @@
 # *Scrabble* in Java
 
-## Proposal
 - **What will the application do?**
 
 This project will be a re-creation of the game *Scrabble*, made within Java. *Scrabble* is a turn based game where players draw letter tiles at random until they have 7 tiles on their tile rack or the bag of tiles is empty. Players take turns placing their letters on a board to form words and score points. Each letter has a preassigned value, and there are special spaces on the board which can multiply either letter or word scores the first time a tile is played on them. Play ends when any player has no tiles left on their tile rack to play, and the bag of random tiles to draw from is empty. Any unplayed tiles from the remaining players are then totalled and subtracted from their corresponding player's score. The combined value of unplayed tiles is then added to the score of the player who made the final move.
@@ -10,21 +9,6 @@ The game will be played between two or more players locally. Initially, the game
 - **Why did I choose to create this?**
 
 This project is of interest to me since *Scrabble* was one of my favorite board games as a kid, and I still enjoy it. Furthermore, I dislike how the online or mobile application versions of *Scrabble* I have used automatically indicate to the user whether the word they have played is valid. This fundamentally changes how the game is played compared to the version with a physical board since it allows players to guess and check words as many times as they would like without any consequence.
-
-## User Stories
-1. As a user I want to be able to create a new board.
-
-2. As a user I want to be able to move letters from my tile rack onto the board.
-
-3. As a user I want to have the appropriate number of letters added to my rack at the start of my first turn, or after I play a word.
-
-4. As a user I want to be able to view the remaining quantity of each letter tile, combined between my opponents' tile racks and the draw bag.
-
-5. As a user, when I play a word I want to have it added to my history of words played, including its letters, start and end coordinates and its points.
-
-6. As a user I'd like to have the option to quit my game, and be prompted to see if I want to save it.
-
-7. As a user when I run the application I'd like to have the choice between continuing a previous, unfinished game, or starting a new game.
 
 ## Instructions for End User
 
@@ -52,7 +36,7 @@ press "Search" while the textbox is empty, or enter a specific character into th
 14. If you are tired of playing, then can look towards the bottom of the "Scrabble Game" frame to find the appropriate buttons. 
 Namely, if you'd like to save the game then press "Save and Quit", if you don't want to save then press "Quit without Saving".
 
-## Phase 4: Task 2
+## Event Logging Demo
 Wed Mar 26 13:32:22 PDT 2025  
 Player1 played CODE starting at (7,7) and moving to the right earning 14 points.    
 Wed Mar 26 13:32:31 PDT 2025  
@@ -74,18 +58,3 @@ Player1 swapped tiles. Their tiles before swapping were: ONQINIO and their tiles
 Wed Mar 26 13:34:06 PDT 2025  
 Player2 played MI starting at (9,6) and moving to the right earning 5 points.  
 ![Board Example](data/images/eventLogExampleBoard.png)
-
-## Phase 4: Task 3
-If I had more time to work on the project I would refactor the UI package to have an abstract class, called ScrabbleUserInterface. Then both ScrabbleVisualApp and ScrabbleConsoleApp would  
-extend this abstract class. This would allow me to reduce repetition of fields, and repetitive game logic code. Additionally, this centralizes those repetitive components, so that  
-design choices which make sense to share between the two interfaces remain in sync. 
-
-I might also refactor to make History specific to ScrabbleGame, rather than to both Player and ScrabbleGame. Then History could simply filter itself to present moves from a given Player,
-providing the same functionality that currently exists. This removes unnecessary coupling between Player and History. 
-
-I would remove the JsonReader, JsonWriter, Board, TileBag, and List<Player> fields from all UI classes. I would instead have the given UI class call ScrabbleGame to access ScrabbleGame's board, tileBag, etc.  
-When the user indicates they want to save or load, I would then instantiate a new JsonReader or JsonWriter for the specified file location. This reduces coupling, and allows greater flexibility in terms of save location. If the user  
-wants to manually input their save location, then it doesn't make sense to instantiate a Writer with some predetermined writing destination before the user even indicates they need to write. There may be many instances of the UI classes  
-where the user doesn't need to write, so it doesn't make sense to always instantiate these objects on startup.
-
-I may refactor to have the Board and TileBag classes employ the Singleton design pattern, since their state is supposed to be shared between all players.
