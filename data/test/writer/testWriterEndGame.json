@@ -112,7 +112,7 @@
         " ",
         " ",
         " ",
-        "DWS",
+        "S",
         " ",
         " ",
         " ",
@@ -127,7 +127,7 @@
         " ",
         " ",
         "DLS",
-        " ",
+        "D",
         "DLS",
         " ",
         " ",
@@ -142,22 +142,22 @@
         " ",
         "TLS",
         " ",
+        "B",
+        " ",
+        "TLS",
+        " ",
         " ",
         " ",
         "TLS",
         " ",
         " ",
         " ",
-        "TLS",
-        " ",
-        " ",
-        " ",
         " ",
         " ",
         "DWS",
         " ",
         " ",
-        " ",
+        "B",
         " ",
         " ",
         "DWS",
@@ -172,7 +172,7 @@
         " ",
         " ",
         " ",
-        "DLS",
+        "R",
         " ",
         " ",
         " ",
@@ -187,7 +187,7 @@
         " ",
         " ",
         "DLS",
-        " ",
+        "C",
         "DLS",
         " ",
         " ",
@@ -202,7 +202,7 @@
         " ",
         "TLS",
         " ",
-        " ",
+        "Z",
         " ",
         "TLS",
         " ",
@@ -226,48 +226,71 @@
         " ",
         "TWS"
     ],
-    "TileBag": {
-        "A": 8,
-        "B": 2,
-        "C": 2,
-        "D": 3,
-        "E": 12,
-        "F": 1,
-        "G": 3,
-        "H": 2,
-        "I": 9,
-        "J": 1,
-        "K": 1,
-        "L": 4,
-        "M": 2,
-        "N": 6,
-        "O": 8,
-        "P": 2,
-        "Q": 1,
-        "R": 4,
-        "S": 4,
-        "T": 6,
-        "U": 4,
-        "V": 2,
-        "W": 2,
-        "X": 1,
-        "Z": 1,
-        "-": 2
-    },
+    "TileBag": {},
     "CurrentPlayer": 0,
-    "GameName": "game",
-    "History": [],
-    "Players": [{
-        "score": 0,
-        "name": "lkn",
-        "tileRack": [
-            {"D": 2},
-            {"Y": 4},
-            {"R": 1},
-            {"A": 1},
-            {"R": 1},
-            {"Y": 4},
-            {"F": 4}
-        ]
-    }]
+    "History": [
+        {
+            "Col": 7,
+            "Points": 48,
+            "PlayerName": "Player1",
+            "MoveType": "PLAY_WORD",
+            "LettersPlayed": "SDBBRCZ",
+            "Row": 7,
+            "Direction": "D"
+        },
+        {
+            "LettersAccountedFor": "ATAFNRU",
+            "FinalPlayer": "Player1",
+            "ChangeInPoints": -10,
+            "PlayerName": "Player2",
+            "MoveType": "END_GAME_ADJUSTMENT"
+        },
+        {
+            "LettersAccountedFor": "CAYGNEL",
+            "FinalPlayer": "Player1",
+            "ChangeInPoints": -13,
+            "PlayerName": "Player3",
+            "MoveType": "END_GAME_ADJUSTMENT"
+        },
+        {
+            "LettersAccountedFor": "ATAFNRUCAYGNEL",
+            "FinalPlayer": "Player1",
+            "ChangeInPoints": 23,
+            "PlayerName": "Player1",
+            "MoveType": "END_GAME_ADJUSTMENT"
+        }
+    ],
+    "Players": [
+        {
+            "score": 71,
+            "name": "Player1",
+            "tileRack": []
+        },
+        {
+            "score": -10,
+            "name": "Player2",
+            "tileRack": [
+                {"A": 1},
+                {"T": 1},
+                {"A": 1},
+                {"F": 4},
+                {"N": 1},
+                {"R": 1},
+                {"U": 1}
+            ]
+        },
+        {
+            "score": -13,
+            "name": "Player3",
+            "tileRack": [
+                {"C": 3},
+                {"A": 1},
+                {"Y": 4},
+                {"G": 2},
+                {"N": 1},
+                {"E": 1},
+                {"L": 1}
+            ]
+        }
+    ]
 }

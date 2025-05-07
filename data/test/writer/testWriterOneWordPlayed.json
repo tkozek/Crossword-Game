@@ -112,7 +112,7 @@
         " ",
         " ",
         " ",
-        "DWS",
+        "O",
         " ",
         " ",
         " ",
@@ -227,108 +227,54 @@
         "TWS"
     ],
     "TileBag": {
-        "A": 7,
+        "A": 9,
         "B": 2,
         "C": 2,
-        "D": 3,
-        "E": 10,
+        "D": 4,
+        "E": 11,
         "F": 2,
         "G": 3,
-        "H": 1,
+        "H": 2,
         "I": 7,
+        "J": 1,
         "K": 1,
         "L": 4,
         "M": 2,
         "N": 6,
-        "O": 8,
+        "O": 6,
         "P": 2,
         "Q": 1,
         "R": 6,
-        "S": 3,
+        "S": 4,
         "T": 5,
-        "U": 2,
+        "U": 4,
         "V": 2,
-        "W": 2,
+        "W": 1,
         "X": 1,
-        "Y": 1,
+        "Y": 2,
         "Z": 1,
         "-": 2
     },
     "CurrentPlayer": 0,
-    "History": [
-        {
-            "PlayerName": "Tester",
-            "AfterSwapLetters": "DTSAHIE",
-            "InitialLetters": "TEOILYT",
-            "MoveType": "SWAP_TILES"
-        },
-        {
-            "PlayerName": "John",
-            "AfterSwapLetters": "UJAEIUY",
-            "InitialLetters": "RXWREBR",
-            "MoveType": "SWAP_TILES"
-        },
-        {
-            "PlayerName": "Tester",
-            "AfterSwapLetters": "DTSAHIE",
-            "InitialLetters": "TEOILYT",
-            "MoveType": "SWAP_TILES"
-        },
-        {
-            "PlayerName": "John",
-            "AfterSwapLetters": "UJAEIUY",
-            "InitialLetters": "RXWREBR",
-            "MoveType": "SWAP_TILES"
-        },
-        {
-            "PlayerName": "Tester",
-            "MoveType": "SKIP"
-        },
-        {
-            "Col": 7,
-            "Points": 70,
-            "PlayerName": "John",
-            "MoveType": "PLAY_WORD",
-            "LettersPlayed": "UJAEIUY",
-            "Row": 7,
-            "Direction": "D"
-        },
-        {
-            "Col": 7,
-            "Points": 60,
-            "PlayerName": "Tester",
-            "MoveType": "PLAY_WORD",
-            "LettersPlayed": "",
-            "Row": 6,
-            "Direction": "R"
-        }
-    ],
-    "Players": [
-        {
-            "score": 0,
-            "name": "Tester",
-            "tileRack": [
-                {"D": 2},
-                {"T": 1},
-                {"S": 1},
-                {"A": 1},
-                {"H": 4},
-                {"I": 1},
-                {"E": 1}
-            ]
-        },
-        {
-            "score": 0,
-            "name": "John",
-            "tileRack": [
-                {"U": 1},
-                {"J": 8},
-                {"A": 1},
-                {"E": 1},
-                {"I": 1},
-                {"U": 1},
-                {"Y": 4}
-            ]
-        }
-    ]
+    "History": [{
+        "Col": 7,
+        "Points": 2,
+        "PlayerName": "Tester",
+        "MoveType": "PLAY_WORD",
+        "LettersPlayed": "O",
+        "Row": 7,
+        "Direction": "D"
+    }],
+    "Players": [{
+        "score": 0,
+        "name": "Tester",
+        "tileRack": [
+            {"I": 1},
+            {"T": 1},
+            {"I": 1},
+            {"O": 1},
+            {"E": 1},
+            {"W": 4}
+        ]
+    }]
 }

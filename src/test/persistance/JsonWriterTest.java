@@ -49,11 +49,11 @@ public class JsonWriterTest extends JsonTest {
     @Test
     public void testWriterInitialGame() {
         try {
-            JsonWriter writer = new JsonWriter("./data/testWriterInitialGame.json");
+            JsonWriter writer = new JsonWriter("./data/test/writer/testWriterInitialGame.json");
             writer.open();
             writer.write(game);
             writer.close();
-            JsonReader reader = new JsonReader("./data/testWriterInitialGame.json");
+            JsonReader reader = new JsonReader("./data/test/writer/testWriterInitialGame.json");
             game = reader.read();
             assertTrue(game.getMoves().isEmpty());
             TileBag bagThatWasReadFromJson = game.getTileBag();
@@ -91,11 +91,11 @@ public class JsonWriterTest extends JsonTest {
             player.removeSelectedTiles();
             // expect there to be one letters played there that match
             // and expect tileBag to be missing the 7 originally drawn tiles      
-            JsonWriter writer = new JsonWriter("./data/testWriterOneWordPlayed.json");
+            JsonWriter writer = new JsonWriter("./data/test/writer/testWriterOneWordPlayed.json");
             writer.open();
             writer.write(game);
             writer.close();
-            JsonReader reader = new JsonReader("./data/testWriterOneWordPlayed.json");
+            JsonReader reader = new JsonReader("./data/test/writer/testWriterOneWordPlayed.json");
             game = reader.read();
             assertEquals(game.getTileBag().numTilesRemaining(), TileBag.TOTAL_LETTERS_INITIALLY - 7);
             Map<Character, Integer> readTileBagCounts = game.getTileBag().getCurrentLetterFrequencies();
@@ -153,11 +153,11 @@ public class JsonWriterTest extends JsonTest {
 
             game.logSwap(player, getStringFromLetters(p1InitLetters), getStringFromLetters(p1FinalLetters));
             game.logSwap(player2, getStringFromLetters(p2InitLetters), getStringFromLetters(p2FinalLetters));
-            JsonWriter writer = new JsonWriter("./data/testWriterTwoPlayersEachSwapped.json");
+            JsonWriter writer = new JsonWriter("./data/test/writer/testWriterTwoPlayersEachSwapped.json");
             writer.open();
             writer.write(game);
             writer.close();
-            JsonReader reader = new JsonReader("./data/testWriterTwoPlayersEachSwapped.json");
+            JsonReader reader = new JsonReader("./data/test/writer/testWriterTwoPlayersEachSwapped.json");
             game = reader.read();
             Player copyP1 = game.getPlayerByName("Tester");
             Player copyP2 = game.getPlayerByName("John");
@@ -219,11 +219,11 @@ public class JsonWriterTest extends JsonTest {
             game.logWord(player2, getStringFromLetters(player2.getSelectedTiles()), 7, 7, 70, Direction.DOWN); //3rd
             game.logWord(player, getStringFromLetters(player.getSelectedTiles()), 6, 7, 60, Direction.RIGHT); //4th
 
-            JsonWriter writer = new JsonWriter("./data/testWriteMoveComprehensive.json");
+            JsonWriter writer = new JsonWriter("./data/test/writer/testWriteMoveComprehensive.json");
             writer.open();
             writer.write(game);
             writer.close();
-            JsonReader reader = new JsonReader("./data/testWriteMoveComprehensive.json");
+            JsonReader reader = new JsonReader("./data/test/writer/testWriteMoveComprehensive.json");
             game = reader.read();
             List<Move> p1Moves = game.getPlayerByName("Tester").getMoves();
             List<Move> p2Moves = game.getPlayerByName("John").getMoves();
@@ -276,11 +276,11 @@ public class JsonWriterTest extends JsonTest {
             
             game.performEndGameAdjustments(player1);
             assertEquals(player1.getMoves().get(1).getMoveType(), MoveType.END_GAME_ADJUSTMENT);
-            JsonWriter writer = new JsonWriter("./data/testWriterEndGame.json");
+            JsonWriter writer = new JsonWriter("./data/test/writer/testWriterEndGame.json");
             writer.open();
             writer.write(game);
             writer.close();
-            JsonReader reader = new JsonReader("./data/testWriterEndGame.json");
+            JsonReader reader = new JsonReader("./data/test/writer/testWriterEndGame.json");
             game = reader.read();
             Player p1 = game.getPlayerByName("Player1");
             Player p2 = game.getPlayerByName("Player2");

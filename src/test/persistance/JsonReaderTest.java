@@ -32,7 +32,7 @@ public class JsonReaderTest extends JsonTest {
 
     @Test
     public void testReaderEmptyGame() {
-        JsonReader reader = new JsonReader("./data/emptyGame.json");
+        JsonReader reader = new JsonReader("./data/test/reader/testReadEmptyGame.json");
         try {
             ScrabbleGame game = reader.read();
             assertEquals(game.getNumPlayers(), 0);
@@ -44,7 +44,7 @@ public class JsonReaderTest extends JsonTest {
 
     @Test
     public void testReaderStartOfGame() {
-        JsonReader reader = new JsonReader("./data/testReaderThreePlayersThreeMovesEmptyRacksFullBag.json");
+        JsonReader reader = new JsonReader("./data/test/reader/testReaderThreePlayersThreeMovesEmptyRacksFullBag.json");
         testBag = new TileBag();
         try {
             ScrabbleGame game = reader.read();
@@ -64,7 +64,7 @@ public class JsonReaderTest extends JsonTest {
 
     @Test
     public void testReaderTwoPlayersTwoMovesFullTileRacks() {
-        JsonReader reader = new JsonReader("./data/testReaderTwoWordsPlayedFullRacks.json");
+        JsonReader reader = new JsonReader("./data/test/reader/testReaderTwoWordsPlayedFullRacks.json");
         testBag = new TileBag();
         try {
             ScrabbleGame game = reader.read();
@@ -92,7 +92,7 @@ public class JsonReaderTest extends JsonTest {
     
     @Test
     public void testReaderEndGame() {
-        JsonReader reader = new JsonReader("./data/testReadEndGame.json");
+        JsonReader reader = new JsonReader("./data/test/reader/testReadEndGame.json");
         testBag = new TileBag();
         try {
             ScrabbleGame game = reader.read();

@@ -73,7 +73,7 @@ Wed Mar 26 13:33:47 PDT 2025
 Player1 swapped tiles. Their tiles before swapping were: ONQINIO and their tiles after swapping were ONUNNSV, earning 0 points.  
 Wed Mar 26 13:34:06 PDT 2025  
 Player2 played MI starting at (9,6) and moving to the right earning 5 points.  
-![Board Example](data/eventLogExampleBoard.png)
+![Board Example](data/images/eventLogExampleBoard.png)
 
 ## Phase 4: Task 3
 If I had more time to work on the project I would refactor the UI package to have an abstract class, called ScrabbleUserInterface. Then both ScrabbleVisualApp and ScrabbleConsoleApp would  
