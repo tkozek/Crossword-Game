@@ -75,7 +75,7 @@ public class ScrabbleVisualApp extends ScrabbleUserInterface implements GuiListe
         loadOrPlayFrame = new JFrame("Start Menu");
         loadOrPlayFrame.setSize(FRAME_SIDE_LENGTH, FRAME_SIDE_LENGTH);
 
-        Image originalImage = new ImageIcon("./data/startMenuBackgroundPhoto.jpg").getImage();
+        Image originalImage = new ImageIcon("./data/images/startMenuBackgroundPhoto.jpg").getImage();
         Image scaledImage = originalImage.getScaledInstance(FRAME_SIDE_LENGTH, FRAME_SIDE_LENGTH, Image.SCALE_SMOOTH);
         ImageIcon newIcon = new ImageIcon(scaledImage);
 

@@ -2,39 +2,40 @@
 
 - **What will the application do?**
 
-This project will be a re-creation of the game *Scrabble*, made within Java. *Scrabble* is a turn based game where players draw letter tiles at random until they have 7 tiles on their tile rack or the bag of tiles is empty. Players take turns placing their letters on a board to form words and score points. Each letter has a preassigned value, and there are special spaces on the board which can multiply either letter or word scores the first time a tile is played on them. Play ends when any player has no tiles left on their tile rack to play, and the bag of random tiles to draw from is empty. Any unplayed tiles from the remaining players are then totalled and subtracted from their corresponding player's score. The combined value of unplayed tiles is then added to the score of the player who made the final move.
+This project is a re-creation of the game *Scrabble*, made within Java. *Scrabble* is a turn based game where players draw letter tiles at random until they have 7 tiles on their tile rack or the bag of tiles is empty. Players take turns placing their letters on a board to form words and score points. Each letter has a preassigned value, and there are special spaces on the board which can multiply either letter or word scores the first time a tile is played on them. Play ends when any player has no tiles left on their tile rack to play, and the bag of random tiles to draw from is empty. Any unplayed tiles from the remaining players are then totalled and subtracted from their corresponding player's score. The combined value of unplayed tiles is then added to the score of the player who made the final move.
 
-The game will be played between two or more players locally. Initially, the game will be playable through the command line, where players will select where to place their tiles on the board using a (row, column) coordinate system. Once this is fully functional, a graphical user interface will be developed.
+The game is played between two or more players locally. The game is playable either through the command line or through a graphical user interface, and users have the option to switch between these interfaces as they please.
 
 - **Why did I choose to create this?**
 
 This project is of interest to me since *Scrabble* was one of my favorite board games as a kid, and I still enjoy it. Furthermore, I dislike how the online or mobile application versions of *Scrabble* I have used automatically indicate to the user whether the word they have played is valid. This fundamentally changes how the game is played compared to the version with a physical board since it allows players to guess and check words as many times as they would like without any consequence.
 
-## Instructions for End User
+## Instructions
 
-1. Run the program from ScrabbleVisualApp.java to open the Graphical User Interface.
-Here you will see the visual component of the application, which is a background image on the "Start Menu" frame.
-2. Select whether you would like to load your saved game or play a new game.
-3. If you selected play a new game then a new frame will pop up for you to input player names in the desired order of play.
-4. Type the first player's name, then click "Add player with name in textbox".
-5. Repeat step 4 until all desired players have been added. Then click "Start Game" to begin playing. 
-6. Now a new frame will appear titled "Scrabble Game".
-7. To add a move to a your player's history, you may either play a word, swap tiles, or skip your turn. 
-8. To play a word, click on the tiles in your rack in the order you'd like to place them. At some point before clicking "Play",
- you must click the space on the board where you would like to start your turn from. There is a button which will either display as "Down" or "Right".
- Click this button to toggle the direction your tiles will be placed in. Whichever is currently displayed is the currently selected direction.
- 9. The board will update to reflect the tiles you've now placed,
- and replacement tiles will be drawn onto your rack provided that tiles remain in the draw pile. Your score will update in the top left of the frame. 
-10. To swap you select the tiles you'd like to get rid of, then click "Swap".
-11. To skip, simply press "Skip".
-12. For any move you make, its summary will be visible to the right, under "All Moves", which is displayed by default. If you would 
-like to view only words, then you can press the "Filtered Words" tab, then if you press "Search" while the textbox is clear, all your 
-words will display. If you want to only view words with a certain letter, then you can enter that letter in the textbox then click "Search".
-13. If you would like to know how many of a given tile remains unplayed, between your opponents' tile racks and the draw pile, then you can
-click on the "Remaining Tile Counts" tab towards right of the frame. This functions similarly to viewing filtered words. To view all tile counts
-press "Search" while the textbox is empty, or enter a specific character into the textbox to view only that character's count after you press "Search". 
-14. If you are tired of playing, then can look towards the bottom of the "Scrabble Game" frame to find the appropriate buttons. 
-Namely, if you'd like to save the game then press "Save and Quit", if you don't want to save then press "Quit without Saving".
+1. Run the program from ScrabbleVisualApp.java to open the Graphical User Interface. \
+***Note:*** Run ScrabbleConsoleApp.java to begin with the Terminal UI, or press the 'Terminal UI' button from within the GUI. Terminal UI instructions are self-contained within that mode.
+2.  Select whether you would like to begin a new game; continue your last game; or load a specific saved game after selecting it from the drop-down menu at the bottom of the window.
+3. If you selected play a new game then a window will pop up for you to input player names in the desired order of play.
+4. Type the first player's name, then click 'Add player with name in textbox', or press 'ENTER' on your keyboard.
+5. Repeat step 4 until all desired players have been added. Then click 'Start Game' to begin playing. 
+6. Now a new window will open titled "Scrabble Game".
+7. *To play a word :* Click on the tiles in your rack in the order they form your word. At some point before clicking 'Play',
+ you must click the space on the board where you would like to start your turn from. There is a button in the bottom panel which will either display 'Down' or 'Right'.
+ Click this button to toggle the direction your tiles will be placed in. Whichever is currently displayed is the currently selected direction. If you want to review your selections before playing the word you may press 'Preview' to see a preview, then either 'Confirm' or 'Cancel' the move.
+8. *To swap tiles* : Select the tiles you'd like to get rid of, then click 'Swap'. a tile's border color changes once it is selected, but this is sometimes difficult to see depending on your monitor settings, blue light filters etc. If you are ever unsure of your selection you may press the 'Clear' button then reselect the tiles
+9. *To skip*, simply press 'Skip'.
+10. *How to view your move summary:*For any move you make, its summary will be visible towards the right of the window, under "All Moves", which is displayed by default. 
+11. *How to view your words played:* Press the "Filtered Words" tab, then press 'Search' while the textbox is clear to have all your words display. If you want to only view words with a certain letter, then you can enter that letter in the textbox before clicking 'Search'.
+12. *How to see how many tiles remain:* If you would like to know how many of a given tile remains unplayed, between your opponents' tile racks and the draw pile, then you can click on the "Letter Distribution" tab towards right of the window. To view all tile counts
+press 'Search' while the textbox is empty, or enter a specific character into the textbox to view only that character's count after you press 'Search'. 
+13. *How to Save/Quit:* If you are tired of playing, then can press the 'Save and quit' button near the bottom of the window. This will open up a new panel of buttons where you may choose to 'Save and quit', 'quit without saving', 'Save as and Quit', or 'Cancel'. If you click 'Save as and Quit' then a file explorer window will pop up allowing you to title you saved game.
+14. When you exit the game an Event Log will print to the console summarizing the moves which occured in this session (not the entire game). This summary is uncensored so it will include details of player swaps, which you may not want to spend time reviewing if you plan on continuing the game later.
+
+## Additional Notes on Game Instructions ##
+-If you press 'Preview' then 'Cancel' your selected tiles will become unselected. \
+-If you attempt an illegal word placement your tile selections will be cleared and an error message will print to the console. You may then reattempt your turn. \
+-Searches in the Letter Distribution and Filtered Words tabs are case-insensitive. \
+-If multiple characters are entered into a search field then only the first character is used for the query. 
 
 ## Event Logging Demo
 Wed Mar 26 13:32:22 PDT 2025  
