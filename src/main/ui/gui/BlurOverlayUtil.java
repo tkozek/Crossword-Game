@@ -12,8 +12,6 @@ import java.awt.image.*;
 public class BlurOverlayUtil {
 
     private static final Font MESSAGE_FONT = new Font("SansSerif", Font.BOLD, 22);
-    private static final int INFO_TABS_WIDTH = 175;
-    private static final int MOVE_SUMMARY_PADDING = 25;
 
     public static void showBlurOverlay(JFrame frame, String message) {
         try {
@@ -26,15 +24,10 @@ public class BlurOverlayUtil {
             BufferedImage screenshot = new Robot().createScreenCapture(contentBounds);
             BufferedImage blurred = blurImage(screenshot, 6); // Adjust blur level here
 
-            // Create glass pane
             JPanel glass = new JPanel() {
                 protected void paintComponent(Graphics g) {
                     super.paintComponent(g);
                     g.drawImage(blurred, 0, 0, getWidth(), getHeight(), null);
-                    
-                    // Optional: draw a dark overlay on top of blur
-                    // g.setColor(new Color(0, 0, 0, 80));
-                    // g.fillRect(0, 0, getWidth(), getHeight());
                 }
             };
 
@@ -45,9 +38,6 @@ public class BlurOverlayUtil {
             textPane.setText(toDisplay);
             textPane.setFont(MESSAGE_FONT);
             textPane.setOpaque(false);
-           // int height = getTextboxHeight(glass, toDisplay, INFO_TABS_WIDTH + 100, MESSAGE_FONT);
-            // textArea.setLineWrap(true);
-            // textArea.setWrapStyleWord(true);
             
             textPane.setEditable(false);
             textPane.setFocusable(false); 
@@ -58,8 +48,6 @@ public class BlurOverlayUtil {
             
             textPane.setPreferredSize(new Dimension(frame.getWidth() * 2 / 3, frame.getHeight() / 2));
             textPane.setMaximumSize(new Dimension(Integer.MAX_VALUE, Integer.MAX_VALUE));
-        
-            // glass.add(label);
             glass.add(textPane);
 
             glass.addKeyListener(new KeyAdapter() {
@@ -73,7 +61,21 @@ public class BlurOverlayUtil {
             
             glass.addMouseListener(new MouseAdapter() {
                 @Override
-                public void mouseClicked(MouseEvent e) {
+                public void mousePressed(MouseEvent e) {
+                    hideBlurOverlay(frame);
+                }
+            });
+
+            frame.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mousePressed(MouseEvent e) {
+                    hideBlurOverlay(frame);
+                }
+            });
+
+            textPane.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mousePressed(MouseEvent e) {
                     hideBlurOverlay(frame);
                 }
             });
@@ -87,15 +89,6 @@ public class BlurOverlayUtil {
             e.printStackTrace();
         }
     }
-
-    // // EFFECTS: returns textbox height required based on length of input text and font used
-    // private static int getTextboxHeight(JComponent component, String text, int containerWidth, Font font) {
-    //     FontMetrics metric = component.getFontMetrics(font);
-    //     int width = metric.charWidth('A');
-    //     int h = metric.getHeight();
-    //     double textBoxHeight = (text.length() * width * h / containerWidth);
-    //     return Math.max(h - 5, (int) textBoxHeight);
-    // }
 
     public static void hideBlurOverlay(JFrame frame) {
         Component glass = frame.getGlassPane();

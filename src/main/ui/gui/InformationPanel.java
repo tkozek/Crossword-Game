@@ -19,7 +19,7 @@ import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
-import javax.swing.JScrollBar;
+
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextArea;
@@ -37,7 +37,6 @@ import model.move.MoveType;
 
 public class InformationPanel extends JPanel {
 
-    private static final String PADDING = "             ";
     private static final int FRAME_SIDE_LENGTH = 1000;
     private static final int INFO_TABS_WIDTH = 175;
     private static final String SEARCH_WORDS_DEFAULT_DISPLAY_TEXT = "";//"Enter a letter, then press 'search' " 

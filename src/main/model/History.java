@@ -66,10 +66,6 @@ public class History implements Iterable<Move> {
         return this.moveHistory;
     }
 
-    public List<Move> getMoves(Player player) {
-        return null; // !!! TODO remove player's sense of history
-    }
-
     @Override
     public Iterator<Move> iterator() {
         return moveHistory.iterator();

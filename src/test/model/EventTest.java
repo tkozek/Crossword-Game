@@ -51,7 +51,6 @@ public class EventTest {
     @Test
     public void testHashCode() {
         Event event3 = new Event("Off");
-        
         Event event2 = new Event("Sensor open at door");
         assertNotEquals(event2.hashCode(), event3.hashCode());
     }

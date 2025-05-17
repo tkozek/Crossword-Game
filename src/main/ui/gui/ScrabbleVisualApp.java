@@ -284,7 +284,6 @@ public class ScrabbleVisualApp extends ScrabbleUserInterface implements GuiListe
             jsonWriter.open();
             jsonWriter.write(game);
             jsonWriter.close();
-            // !!! ToDo Add "Okay" button to click before closing
         } catch (IOException e) {
             System.out.println("Unable to write to file " + JSON_STORE);
         }
@@ -298,7 +297,6 @@ public class ScrabbleVisualApp extends ScrabbleUserInterface implements GuiListe
             jsonWriter.open();
             jsonWriter.write(game);
             jsonWriter.close();
-            // !!! ToDo Add "Okay" button to click before closing
         } catch (IOException e) {
             System.out.println("Unable to write to file " + filePath);
         }
