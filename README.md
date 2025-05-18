@@ -20,10 +20,10 @@ This project is of interest to me since *Scrabble* was one of my favorite board 
 ![Player name entry window](data/images/player_name_entry_window.png)
 5. Repeat step 4 until all desired players have been added. Then click 'Start Game' to begin playing. 
 6. Now a new window will open for gameplay.
-![New Game Window](data/images/new_game_window.png)
+![New Game Window](data/images/gui/new_game_window.png)
 7. *To play a word :* Click on the tiles in your rack in the order they form your word. At some point before clicking 'Play',
- you must click the space on the board where you would like to start your turn from. There is a button in the bottom panel which will either display 'Down' or 'Right'. ![Down button](data/images/down_button.png)
- ![Right button](data/images/right_button.png)
+ you must click the space on the board where you would like to start your turn from. There is a button in the bottom panel which will either display 'Down' or 'Right'. ![Down button](data/images/gui/down_button.png)
+ ![Right button](data/images/gui/right_button.png)
  Click this button to toggle the direction your tiles will be placed in. Whichever is currently displayed is the currently selected direction. If you want to review your selections before playing the word you may press 'Preview' to see a preview, then either 'Confirm' or 'Cancel' the move.
 8. *To swap tiles* : Select the tiles you'd like to get rid of, then click 'Swap'. a tile's border color changes once it is selected, but this is sometimes difficult to see depending on your monitor settings, blue light filters etc. If you are ever unsure of your selection you may press the 'Clear' button then reselect the tiles.
 9. *To skip*, simply press 'Skip'.
