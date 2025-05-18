@@ -25,8 +25,4 @@ public interface GuiListener {
     void directionToggleActionListener();
 
     void clearSelectionsActionListener();
-
-    // void searchLetterCountsActionListener();
-
-    // // void searchLetterCountsFocusGainedListener();
 }
