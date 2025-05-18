@@ -263,9 +263,8 @@ public class ScrabbleGame implements JsonWritable<JSONObject> {
         int halfLength = preAndPostLetters.length() / 2;
         String preSwapLetters = preAndPostLetters.substring(0, halfLength);
         String postSwapLetters = preAndPostLetters.substring(halfLength);
-        String points = String.valueOf(swap.getPointsForMove());
         printout += "Their tiles before swapping were: " + preSwapLetters + " and their tiles after swapping were " 
-                 + postSwapLetters + ", earning " + points + " points.";
+                 + postSwapLetters + ".";
         return printout;
     }
 
@@ -492,7 +491,7 @@ public class ScrabbleGame implements JsonWritable<JSONObject> {
                 description = getWordDescription(move, player);
                 break;
             case SWAP_TILES:
-                description = getSwapDescription(move, player);
+                description = player.getPlayerName() + " swapped their tiles.";
                 break;   
             case SKIP:
                 description = getSkipDescription(move, player);

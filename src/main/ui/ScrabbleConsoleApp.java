@@ -20,7 +20,6 @@ import ui.gui.ScrabbleVisualApp;
 // Represents a game of Scrabble
 public class ScrabbleConsoleApp extends ScrabbleUserInterface {
 
-    private static final String JSON_STORE = "./data/savedgames/gameToPlayTest.json";
     private static final String GREETING_TEXT = "Welcome to Scrabble in Java";
     private static final String START_MENU_PROMPT = "(L)oad your old game or (p)lay a new one?";
     private static final int BOARD_LENGTH = 15;
@@ -221,7 +220,7 @@ public class ScrabbleConsoleApp extends ScrabbleUserInterface {
     // would like to view about the game, displays that.
     private void handleViewings(Player player) {
         System.out.println("\n Type whether you'd like to view current (b)oard, (w)ords played, all (m)oves,"
-                + " (f)iltered moves, (r)emaining tile counts, or anything else to cancel");
+                + " (f)iltered words, (r)emaining tile counts, or anything else to cancel");
         switch (scanner.nextLine().toLowerCase()) {
             case "b":
                 getBoardPrintOut(game.getBoard());

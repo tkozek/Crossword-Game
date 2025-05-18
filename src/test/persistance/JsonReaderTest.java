@@ -22,11 +22,13 @@ public class JsonReaderTest extends JsonTest {
     @Test
     public void testReaderNonExistentFile() {
         JsonReader reader = new JsonReader("./data/iwillnevernameafilethis.json");
+        ScrabbleGame game = null;
         try {
-            ScrabbleGame game = reader.read();
+            game = reader.read();
             fail("IOException expected");
         } catch (IOException e) {
-            // passes test if it catches an exemption thrown
+            assertTrue(game == null);
+            // passes test if it catches an exception thrown
         }
     }
 
