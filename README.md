@@ -8,7 +8,7 @@ The game is played between two or more players locally. The game is playable eit
 
 - **Why did I choose to create this?**
 
-This project is of interest to me since *Scrabble* was one of my favorite board games as a kid, and I still enjoy it. Furthermore, I dislike how the online or mobile application versions of *Scrabble* I have used automatically indicate to the user whether the word they have played is valid. This fundamentally changes how the game is played compared to the version with a physical board since it allows players to guess and check words as many times as they would like without any consequence.
+This project is of interest to me since *Scrabble* was one of my favorite board games as a kid, and I still enjoy it. Furthermore, I dislike how the online or mobile application versions of *Scrabble* I have used automatically indicate to the user whether the word they have played is valid. This fundamentally changes how the game is played compared to the version with a physical board since it allows players to guess and check words as many times as they would like without a penalty.
 
 ## Instructions
 
@@ -25,10 +25,11 @@ This project is of interest to me since *Scrabble* was one of my favorite board 
 7. ***To play a word :*** Click on the tiles in your rack in the order they form your word. At some point before clicking 'Play',
  you must click the space on the board where you would like to start your turn from. There is a button in the bottom panel which will either display 'Down' or 'Right'. 
 
- ![Down button](data/images/gui/down_button.png) ![Right button](data/images/gui/right_button.png)
+   ![Down button](data/images/gui/down_button.png) ![Right button](data/images/gui/right_button.png)
 
->Click this button to toggle the direction your tiles will be placed in. Whichever is currently displayed is the currently selected direction. 
->If you want to review your selections before playing the word you may press 'Preview' to see a preview, then either 'Confirm' or  'Cancel' the move.
+   Click this button to toggle the direction your tiles will be placed in. Whichever is currently displayed is the currently selected direction. 
+    
+   If you want to review your selections before playing the word you may press 'Preview' to see a preview, then either 'Confirm' or  'Cancel' the move.
 
 8. ***To swap tiles*** : Select the tiles you'd like to get rid of, then click 'Swap'. A tile's border color changes once it is selected, but this is sometimes difficult to see depending on your monitor settings, blue light filters, etc. If you are ever unsure of your selection you may press the 'Clear' button then reselect the tiles.
 
@@ -40,7 +41,7 @@ This project is of interest to me since *Scrabble* was one of my favorite board 
 ![Filtered Words Example](data/images/gui/word_filter_example.png) 
 
 12. ***How to see how many tiles remain:*** If you would like to know how many of a given tile remains unplayed, between your opponents' tile racks and the draw pile, then you can click on the "Letter Distribution" tab towards right of the window. To view all tile counts press 'Search' while the textbox is empty, or enter a specific character into the textbox to view only that character's count after you press 'Search'.\
-![Letter Distribution top half](data/images/gui/letter_distribution_top_half.png) ![Letter Distribution bottom half](data/images/gui/letter_distribution_bottom_half.png)
+![Letter Distribution top half](data/images/gui/letter_distribution.png)
 
 13. ***How to Save/Quit:*** If you want to stop playing, then can press the 'Save and Quit' button near the bottom of the window. This will open up a new panel of buttons where you may choose to 'Save & Quit', 'Save as & Quit', 'Quit without Saving', or 'Cancel'. \
 ![Save & Quit Panel](data/images/gui/save_and_quit_panel.png)
@@ -58,9 +59,13 @@ This project is of interest to me since *Scrabble* was one of my favorite board 
 
 
 ## Terminal UI Visual Example
-![Terminal UI example](data/images/terminal/terminalUI_example.png) ![Terminal UI Moves](data/images/terminal/terminalUI_moves.png)
+![Terminal UI example](data/images/terminal/terminalUI_example.png) 
 
-![Words Played Terminal example](data/images/terminal/terminalUI_words.png) ![Filtered Words Terminal example](data/images/terminal/terminalUI_filteredWords.png) 
+![Terminal UI Moves](data/images/terminal/terminalUI_moves.png)
+
+![Words Played Terminal example](data/images/terminal/terminalUI_words.png) 
+
+![Filtered Words Terminal example](data/images/terminal/terminalUI_filteredWords.png) 
 
 ![Terminal UI Letter Distribution](data/images/terminal/terminalUI_letter_dist.png)
 
