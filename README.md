@@ -27,7 +27,7 @@ This project is of interest to me since *Scrabble* was one of my favorite board 
 
  ![Down button](data/images/gui/down_button.png) ![Right button](data/images/gui/right_button.png)
 
- Click this button to toggle the direction your tiles will be placed in. Whichever is currently displayed is the currently selected direction. If you want to review your selections before playing the word you may press 'Preview' to see a preview, then either 'Confirm' or 'Cancel' the move.
+    Click this button to toggle the direction your tiles will be placed in. Whichever is currently displayed is the currently selected direction. If you want to review your selections before playing the word you may press 'Preview' to see a preview, then either 'Confirm' or 'Cancel' the move.
 
 8. ***To swap tiles*** : Select the tiles you'd like to get rid of, then click 'Swap'. A tile's border color changes once it is selected, but this is sometimes difficult to see depending on your monitor settings, blue light filters, etc. If you are ever unsure of your selection you may press the 'Clear' button then reselect the tiles.
 
