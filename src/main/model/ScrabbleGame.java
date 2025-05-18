@@ -72,6 +72,9 @@ public class ScrabbleGame implements JsonWritable<JSONObject> {
             lettersPlayed += letter.toDisplay();
         }
         int score = board.playWord(player.getSelectedTiles(), startRow, startCol, dir);
+        if (lettersPlayed.length() == 7) {
+            score += 50;
+        }
         Move wordPlayed = new Move(player.getPlayerName(), lettersPlayed, startRow, startCol, score, dir);
         updateHistoriesAndEventLog(wordPlayed, player);
         player.removeSelectedTiles();

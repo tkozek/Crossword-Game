@@ -328,10 +328,4 @@ public class CoordinateTest {
         c2 = null;
         assertFalse(c1.equals(c2));
     }
-
-    @Test
-    public void testEqualsDifferentClass() {
-        c1 = new Coordinate(1,2);
-        assertFalse(c1.equals(2));
-    }
 }

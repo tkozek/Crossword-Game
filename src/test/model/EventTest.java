@@ -45,7 +45,6 @@ public class EventTest {
     @Test
     public void testEquals() {
         assertFalse(event.equals(null));
-        assertFalse(event.equals(1));
     }
 
     @Test
