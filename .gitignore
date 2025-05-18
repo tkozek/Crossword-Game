@@ -1,2 +1,3 @@
 *.class
 data/test/writer/*.json
+!data/test/writer/.gitkeep
